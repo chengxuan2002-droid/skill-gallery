@@ -1,0 +1,512 @@
+# Skill Gallery
+
+个人 AI Agent Skill 收藏夹——统一管理、快速查找、跨平台复用、一键分享。
+
+> 🔗 [在线浏览](https://your-username.github.io/skill-gallery/)
+
+## ✨ 特性
+
+- **统一格式** — 所有 skill 以 markdown + YAML frontmatter 存储，结构清晰
+- **全文搜索** — 按名称、描述、标签、正文内容秒级检索
+- **多维筛选** — 按标签、平台、来源多维度过滤
+- **多格式导出** — 一键导出为 Codex、Claude Code 等平台格式
+- **零依赖** — 纯静态站点，不需要构建工具链
+- **暗色模式** — 跟随系统，也可手动切换
+
+---
+
+## 🚀 快速开始
+
+### 本地预览
+
+```bash
+# 1. 构建搜索索引
+node scripts/build-index.js
+
+# 2. 启动本地服务器
+python3 -m http.server 8000
+
+# 3. 打开浏览器访问
+# http://localhost:8000
+```
+
+### 部署到 GitHub Pages
+
+#### 第一步：创建 GitHub 仓库
+
+1. 打开 [github.com/new](https://github.com/new)
+2. Repository name 填 `skill-gallery`（或你喜欢的名字）
+3. 选择 Public（公开，才能用 GitHub Pages 免费托管）
+4. **不要**勾选 Initialize with README（本地已经有了）
+5. 点击 Create repository
+
+#### 第二步：推送本地代码到 GitHub
+
+回到终端，在项目目录下执行：
+
+```bash
+# 1. 初始化 git（如果还没初始化）
+git init
+
+# 2. 添加所有文件
+git add .
+
+# 3. 第一次提交
+git commit -m "init: skill gallery"
+
+# 4. 重命名主分支为 main
+git branch -M main
+
+# 5. 关联远程仓库（把下面的用户名和仓库名换成你自己的）
+git remote add origin https://github.com/<你的用户名>/skill-gallery.git
+
+# 6. 推送到 GitHub
+git push -u origin main
+```
+
+> 💡 如果你用 SSH 方式，远程地址换成：`git@github.com:<你的用户名>/skill-gallery.git`
+
+#### 第三步：启用 GitHub Pages
+
+1. 打开你的仓库页面：`https://github.com/<你的用户名>/skill-gallery`
+2. 点击顶部 **Settings**
+3. 左侧菜单找到 **Pages**
+4. **Build and deployment → Source** 选择 **Deploy from a branch**
+5. **Branch** 选择 **main** 分支，目录选 **/ (root)**
+6. 点击 Save
+7. 等 1-2 分钟，页面顶部会显示你的站点地址，形如：
+   `https://<你的用户名>.github.io/skill-gallery/`
+
+#### 第四步：后续更新
+
+以后添加了新 skill，只需：
+
+```bash
+node scripts/build-index.js          # 重建索引
+git add skills/new-skill.md assets/search-index.json
+git commit -m "add: new skill"
+git push
+```
+
+GitHub Pages 会自动更新，通常几十秒内生效。
+
+---
+
+## 📖 使用教程
+
+### 一、添加 Skill
+
+所有 skill 都存放在 `skills/` 目录下，每个 skill 是一个 `.md` 文件。文件名即 `slug`（URL 中显示的标识），只用小写字母、数字和短横线。
+
+添加流程：**新建文件 → 填写内容 → 重建索引 → 提交推送**
+
+```bash
+# 1. 新建 skill 文件
+vim skills/my-new-skill.md
+
+# 2. 重建搜索索引
+node scripts/build-index.js
+
+# 3. 提交
+git add skills/my-new-skill.md assets/search-index.json
+git commit -m "add: my new skill"
+git push
+```
+
+下面按不同来源分别给出示例：
+
+---
+
+#### 方式 1：自建 Skill
+
+自己写的 skill，从本地直接添加。
+
+**示例：** 新建 `skills/git-workflow.md`
+
+```markdown
+---
+name: Git 工作流助手
+description: 规范化的 Git 分支、提交、PR 工作流指导
+tags: [git, workflow, 协作]
+platforms: [codex, claude-code, generic]
+source: self-built
+author: 你的名字
+created_at: 2026-08-02
+updated_at: 2026-08-02
+usage_notes: |
+  团队协作时特别有用，统一 PR 描述格式。
+  注意先确认团队用的是 GitFlow 还是 Trunk Based。
+---
+
+# Git 工作流助手
+
+帮助遵循规范的 Git 工作流。
+
+## 提交规范
+
+使用 Conventional Commits 格式：
+
+```
+<type>(<scope>): <subject>
+
+<body>
+```
+
+类型说明：
+- `feat` - 新功能
+- `fix` - 修复 bug
+- `docs` - 文档变更
+- `style` - 格式调整
+- `refactor` - 重构
+- `test` - 测试相关
+- `chore` - 构建/工具链
+```
+
+> **来源标记说明：** `source: self-built` 表示自建
+
+---
+
+#### 方式 2：从 GitHub 发现的 Skill
+
+在 GitHub 上看到好的 skill，把内容收录进来。
+
+**示例：** 收录一个 GitHub 上的测试 skill
+
+1. 找到原始文件（如 `https://github.com/someone/repo/blob/main/skills/test-driven.md`）
+2. 复制内容，新建 `skills/test-driven-development.md`
+3. 填写 frontmatter，标注来源
+
+```markdown
+---
+name: 测试驱动开发指南
+description: TDD 红绿重构循环的完整实践流程
+tags: [testing, tdd, workflow]
+platforms: [codex, generic]
+source: github
+source_url: https://github.com/someone/repo/blob/main/skills/test-driven.md
+author: Someone
+created_at: 2026-07-20
+updated_at: 2026-07-28
+usage_notes: |
+  适合新功能开发时用。
+  老旧代码先补集成测试再重构。
+---
+
+# 测试驱动开发
+
+TDD 的核心循环：红 → 绿 → 重构。
+
+## 红（Red）
+
+先写一个会失败的测试，描述你想要的行为。
+
+## 绿（Green）
+
+用最少的代码让测试通过。
+
+## 重构（Refactor）
+
+在测试保护下优化代码结构。
+```
+
+> **来源标记说明：** `source: github` + `source_url` 填写原始链接
+
+---
+
+#### 方式 3：Agent 平台自带的 Skill
+
+Codex、Claude Code 等平台内置或官方提供的 skill。
+
+**示例：** 收录 Claude Code 的官方 skill
+
+```markdown
+---
+name: Claude Code 架构师模式
+description: 系统性的软件架构设计流程
+tags: [architecture, design, planning]
+platforms: [claude-code]
+source: platform-native
+source_url: https://docs.anthropic.com/...
+author: Anthropic
+created_at: 2026-06-15
+updated_at: 2026-07-30
+usage_notes: |
+ 做大型重构前先用这个走一遍。
+ 产出的架构文档可以作为后续任务的基础。
+---
+
+# 架构师模式
+
+## 步骤
+
+1. 理解需求和约束
+2. 列出可选方案
+3. 评估权衡
+4. 推荐方案并说明理由
+5. 设计实现路径
+```
+
+> **来源标记说明：** `source: platform-native` 表示平台原生自带
+
+---
+
+#### 方式 4：Skill 市场/平台上发现的
+
+从各种 skill 市场、社区、分享平台上找到的。
+
+**示例：** 收录一个市场上的代码重构 skill
+
+```markdown
+---
+name: 大模型代码重构专家
+description: 针对大模型生成代码的重构和优化方法论
+tags: [refactoring, llm, quality]
+platforms: [codex, claude-code, cursor]
+source: marketplace
+source_url: https://skill-marketplace.example.com/refactor-pro
+author: Marketplace Author
+created_at: 2026-05-10
+updated_at: 2026-08-01
+usage_notes: |
+  LLM 写的代码能用但经常不优雅，
+  用这个 skill 做第二轮优化。
+---
+
+# LLM 代码重构
+
+## 常见问题
+
+1. 命名不规范
+2. 重复逻辑
+3. 错误处理缺失
+4. 测试覆盖不足
+
+## 重构顺序
+
+先补测试 → 再提取函数 → 最后优化结构
+```
+
+> **来源标记说明：** `source: marketplace` 表示来自 skill 市场
+
+---
+
+### 二、Skill 文件格式详解
+
+每个 skill 文件由两部分组成：**YAML frontmatter（元数据）** + **Markdown 正文**
+
+```markdown
+---                    ← frontmatter 开始
+name: Skill 名称
+description: 一句话描述
+tags: [标签1, 标签2]
+...
+---                    ← frontmatter 结束
+
+# Skill 正文标题
+
+正文内容...
+```
+
+#### 字段说明
+
+| 字段 | 必填 | 类型 | 说明 |
+|---|---|---|---|
+| `name` | ✅ | 字符串 | 显示名称 |
+| `description` | ✅ | 字符串 | 一句话摘要，列表页会显示 |
+| `tags` | ✅ | 数组 | 标签，用于分类筛选 |
+| `platforms` | ✅ | 数组 | 适用平台，见下方常用值 |
+| `source` | ✅ | 字符串 | 来源类型，见下方可选值 |
+| `source_url` | ❌ | 字符串 | 原始链接 |
+| `author` | ❌ | 字符串 | 原作者 |
+| `created_at` | ✅ | 日期 | 添加日期 (YYYY-MM-DD) |
+| `updated_at` | ✅ | 日期 | 最后更新日期 |
+| `usage_notes` | ❌ | 多行文本 | 个人使用心得 |
+
+#### `platforms` 常用值
+
+| 值 | 说明 |
+|---|---|
+| `codex` | OpenAI Codex |
+| `claude-code` | Claude Code |
+| `cursor` | Cursor |
+| `cline` | Cline |
+| `generic` | 通用，任何 agent 都能用 |
+| 其他 | 自定义平台名 |
+
+#### `source` 可选值
+
+| 值 | 说明 |
+|---|---|
+| `self-built` | 自己写的 |
+| `github` | GitHub 上发现的 |
+| `marketplace` | skill 市场/平台 |
+| `platform-native` | agent 平台自带 |
+| `other` | 其他来源 |
+
+---
+
+### 三、导出 Skill
+
+在 skill 详情页右上角点击 **"Export ↓"** 按钮，有 4 种导出方式：
+
+---
+
+#### 导出方式 1：Codex SKILL.md
+
+导出为 Codex 原生的 `SKILL.md` 格式（frontmatter + markdown 正文）。
+
+**使用方法：**
+1. 点击 "Codex SKILL.md" → 自动下载 `.md` 文件
+2. 将文件放入你的 Codex skills 目录
+3. 重启 Codex 即可使用
+
+**示例输出（节选）：**
+```markdown
+---
+name: Systematic Debugging
+description: Step-by-step debugging workflow...
+tags: [debugging, workflow, problem-solving]
+platforms: [codex, claude-code, generic]
+source: self-built
+author: Your Name
+created_at: 2026-08-02
+updated_at: 2026-08-02
+usage_notes: |
+  Most useful for bugs that are hard to reproduce.
+  Always start with reproduction steps before diving into code.
+---
+
+# Systematic Debugging
+
+A rigorous, step-by-step approach to debugging any software issue.
+...
+```
+
+> 💡 我们的统一格式本身就基于 Codex 格式设计，所以导出几乎是原样输出，兼容性最好。
+
+---
+
+#### 导出方式 2：Claude Code 格式
+
+导出为 Claude Code 友好的 markdown 格式（去掉 frontmatter，用标题+引用结构）。
+
+**使用方法：**
+1. 点击 "Claude Code format" → 自动下载 `.md` 文件
+2. 将文件放入 Claude Code 的 custom skills 目录
+3. 根据需要微调格式
+
+**示例输出（节选）：**
+```markdown
+# Systematic Debugging
+
+> Step-by-step debugging workflow for reproducing and fixing any bug
+
+**Platforms:** codex, claude-code, generic
+
+---
+
+A rigorous, step-by-step approach to debugging any software issue.
+
+## Steps
+...
+```
+
+> ⚠️ 不同 agent 平台格式可能略有差异，导出后可能需要微调。
+
+---
+
+#### 导出方式 3：复制原始 Markdown
+
+一键复制完整的 skill markdown 内容（含 frontmatter）到剪贴板。
+
+**使用场景：**
+- 想快速粘贴到自己的编辑器里修改
+- 想贴到聊天中分享
+- 想在其他工具中使用
+
+**操作：** 点击 "Raw markdown" → 提示 "Copied markdown to clipboard" → 直接粘贴即可
+
+---
+
+#### 导出方式 4：复制分享链接
+
+复制当前 skill 的网页链接，发送给别人直接查看。
+
+**使用场景：**
+- 给朋友推荐某个 skill
+- 在文档中引用
+
+**链接格式：**
+```
+https://your-username.github.io/skill-gallery/#/skill/systematic-debugging
+```
+
+对方打开链接就能直接看到 skill 详情页，也可以自己导出下载。
+
+---
+
+### 四、搜索与筛选
+
+#### 全文搜索
+
+- 在顶部搜索框输入关键词，实时过滤结果
+- 搜索范围：名称、描述、标签、正文内容
+- 支持模糊匹配（拼写小错误也能搜到）
+- 按相关度排序，最匹配的排在前面
+
+#### 标签筛选
+
+- 点击左侧标签可以添加筛选条件
+- 多个标签同时选中时是 **AND** 关系（同时满足所有标签）
+- 再次点击取消筛选
+
+#### 平台筛选
+
+- 点击平台名筛选特定平台的 skill
+- 同样支持多选 AND
+
+#### 排序
+
+- **Recently updated**：按更新时间倒序（默认）
+- **Name (A-Z)**：按名称字母排序
+
+---
+
+### 五、常见问题
+
+**Q: 添加了新 skill 但页面上看不到？**
+A: 记得运行 `node scripts/build-index.js` 重建搜索索引。
+
+**Q: 可以批量导入吗？**
+A: v1 版本只支持手动添加，后续会加入半自动导入脚本。
+
+**Q: 导出的文件在我的 agent 里不能直接用？**
+A: 不同平台格式有差异，导出功能做的是"尽力而为"的转换，可能需要手动微调。详情页顶部有兼容性提示。
+
+**Q: 怎么换主题？**
+A: 点击右上角的 🌙/☀️ 按钮切换，设置会记住。
+
+---
+
+## 📁 项目结构
+
+```
+skill-gallery/
+├── skills/                  # Skill 数据源（唯一）
+│   ├── README.md            # 格式说明
+│   └── *.md                 # 每个 skill 一个文件
+├── assets/
+│   ├── app.js               # 前端逻辑
+│   ├── style.css            # 样式
+│   └── search-index.json    # 构建产物（搜索索引）
+├── scripts/
+│   └── build-index.js       # 构建脚本
+├── index.html               # 页面入口
+├── .nojekyll                # GitHub Pages 配置
+├── specs/                   # 设计文档
+└── README.md
+```
+
+## 📄 许可证
+
+收录的外部 skill 遵循原作者的许可证，详见各 skill 的来源链接。

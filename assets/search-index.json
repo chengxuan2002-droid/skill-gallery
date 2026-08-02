@@ -1,0 +1,65 @@
+[
+  {
+    "slug": "superpower-systematic-debugging",
+    "name": "Systematic Debugging",
+    "description": "Step-by-step debugging workflow for reproducing and fixing any bug",
+    "tags": [
+      "debugging",
+      "workflow",
+      "problem-solving"
+    ],
+    "platforms": [
+      "codex",
+      "claude-code",
+      "generic"
+    ],
+    "source": "self-built",
+    "source_url": null,
+    "author": "Your Name",
+    "created_at": "2026-08-02",
+    "updated_at": "2026-08-02",
+    "usage_notes": "Most useful for bugs that are hard to reproduce.\nAlways start with reproduction steps before diving into code.",
+    "content": "Systematic Debugging\n\nA rigorous, step-by-step approach to debugging any software issue.\n\nSteps\n\nReproduce the bug — Get a reliable reproduction case. If you can't reproduce it, you can't fix it.\nNarrow the scope — Bisect commits, disable features, find the minimal input that triggers it.\nForm a hypothesis — What could cause this behavior? Write it down.\nTest the hypothesis — Add logging, use a debugger, run experiments.\nImplement the fix — Smallest possible change.\nVerify — Confirm the bug is gone and no regressions were introduced.\nAdd a test — Prevent the bug from coming back.\n\nCommon Pitfalls\n\n• Changing multiple things at once\n• Assuming the bug is in someone else's code\n• Skipping reproduction to \"just look at the code\""
+  },
+  {
+    "slug": "code-review-assistant",
+    "name": "Code Review Assistant",
+    "description": "Structured code review checklist and feedback format",
+    "tags": [
+      "code-review",
+      "quality",
+      "best-practices"
+    ],
+    "platforms": [
+      "codex",
+      "claude-code"
+    ],
+    "source": "github",
+    "source_url": "https://github.com/example/code-review-skill",
+    "author": "Example Author",
+    "created_at": "2026-07-15",
+    "updated_at": "2026-08-01",
+    "usage_notes": "Good for PR reviews. Customize the severity rubric to match your team's standards.",
+    "content": "Code Review Assistant\n\nHelps conduct thorough, consistent code reviews.\n\nReview Dimensions\n\n• Correctness: Does the code do what it intends to?\n• Security: Any vulnerabilities or injection risks?\n• Performance: Unnecessary work? O(n²) where it should be O(n)?\n• Readability: Clear naming, consistent style, good comments?\n• Tests: Are there tests? Do they cover the important cases?\n\nFeedback Format\n\nStart with severity:\n• 🔴 Blocking — must fix before merge\n• 🟡 Warning — should fix, discuss if unsure\n• 💡 Suggestion — optional improvement\n• ❓ Question — need clarification"
+  },
+  {
+    "slug": "refactoring-workflow",
+    "name": "Refactoring Workflow",
+    "description": "Safe, incremental refactoring approach that doesn't break things",
+    "tags": [
+      "refactoring",
+      "workflow",
+      "architecture"
+    ],
+    "platforms": [
+      "generic"
+    ],
+    "source": "marketplace",
+    "source_url": "https://marketplace.example.com/refactoring",
+    "author": "Marketplace Author",
+    "created_at": "2026-06-20",
+    "updated_at": "2026-07-10",
+    "usage_notes": "The \"test first\" rule is the most important one.\nDon't refactor code that doesn't have tests — write tests first.",
+    "content": "Refactoring Workflow\n\nSafe refactoring in 6 steps.\n\nSteps\n\nEnsure tests exist — If no tests, write them first. You need a safety net.\nRun tests, confirm they pass — Green baseline.\nMake a small refactoring — One change, one concept.\nRun tests again — Should still pass.\nCommit — Small, atomic commit.\nRepeat — Next small refactoring.\n\nRules\n\n• Never refactor and add features in the same commit\n• If tests fail after a refactoring, revert — don't debug forward\n• Rename before you restructure"
+  }
+]
