@@ -66,6 +66,49 @@ git push -u origin main
 
 > 💡 如果你用 SSH 方式，远程地址换成：`git@github.com:<你的用户名>/skill-gallery.git`
 
+#### 常见问题：HTTPS 推送提示用户名或密码错误
+
+GitHub 已不再支持用登录密码直接 push。HTTPS 方式下，你需要用 **Personal Access Token (PAT)** 代替密码。
+
+**生成 PAT：**
+
+1. 打开 <https://github.com/settings/tokens>
+2. 点击 **Generate new token** → **Generate new token (classic)**
+3. Note 填一个名字（比如 `skill-gallery`）
+4. Expiration 选合适的有效期
+5. 勾选 **repo** 权限
+6. 拉到底部点 **Generate token**
+7. **立即复制保存**（只显示一次，关掉就看不到了）
+
+**推送时输入：**
+
+- **Username**：你的 GitHub 用户名（不是邮箱）
+- **Password**：刚才复制的 PAT（不是登录密码）
+
+**让 git 记住凭证（不用每次输）：**
+
+```bash
+git config --global credential.helper osxkeychain
+# 然后 push 一次输入用户名 + PAT，以后就不用了
+```
+
+**更推荐：配置 SSH（一劳永逸）：**
+
+```bash
+# 生成密钥（一路回车）
+ssh-keygen -t ed25519 -C "你的邮箱"
+
+# 复制公钥内容
+cat ~/.ssh/id_ed25519.pub
+# 粘贴到 https://github.com/settings/keys → New SSH key
+
+# 把远程地址换成 SSH 格式
+git remote set-url origin git@github.com:<你的用户名>/skill-gallery.git
+
+# 以后 push 就不用输密码了
+git push -u origin main
+```
+
 #### 第三步：启用 GitHub Pages
 
 1. 打开你的仓库页面：`https://github.com/<你的用户名>/skill-gallery`
@@ -119,7 +162,11 @@ git push
 
 #### 方式 1：自建 Skill
 
-自己写的 skill，从本地直接添加。
+自己写的 skill，从本地直接添加。支持两种形式：
+
+**形式 A：单文件 Skill**（简单场景，只有一份说明文档）
+
+直接在 `skills/` 下建一个 `.md` 文件即可。
 
 **示例：** 新建 `skills/git-workflow.md`
 
@@ -162,6 +209,55 @@ usage_notes: |
 - `chore` - 构建/工具链
 ```
 
+---
+
+**形式 B：目录型 Skill**（复杂场景，包含脚本、配置等附属文件）
+
+如果你的 skill 带有脚本、配置文件、模板等附属内容，整个目录放进去。
+
+**规则：**
+- 在 `skills/` 下建一个子目录，目录名就是 skill 的 slug
+- 目录里必须有一个 `SKILL.md`（注意全大写）作为主文档
+- 其他文件/子目录随意组织，构建脚本会自动识别并列入"附件文件"
+
+**示例：** 收录本地自建的 `handoff-codex` skill
+
+目录结构：
+
+```
+skills/
+└── handoff-codex/
+    ├── SKILL.md              ← 主文档（必须，含 frontmatter）
+    ├── scripts/
+    │   └── create_handoff.sh ← 附属脚本
+    └── agents/
+        └── openai.yaml       ← 附属配置
+```
+
+`SKILL.md` 的 frontmatter 格式跟单文件完全一致：
+
+```markdown
+---
+name: handoff-codex
+description: 长会话结束前自动生成交接文档，写入项目 handoff/ 目录。
+tags: [productivity, handoff, workflow]
+platforms: [codex]
+source: self-built
+author: chengxuan
+version: 1.0.0
+created_at: 2026-07-20
+updated_at: 2026-08-02
+usage_notes: |
+  适合多轮长对话、暂停工作、或用户说"交接/保存进度/记录一下"时使用。
+---
+
+# Handoff Codex
+
+...正文内容...
+```
+
+> **小提示：** 详情页会显示所有附属文件的下载链接，访问路径为 `skills/<slug>/<文件路径>`。
+>
 > **来源标记说明：** `source: self-built` 表示自建
 
 ---

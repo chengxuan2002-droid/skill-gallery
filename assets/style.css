@@ -522,6 +522,57 @@ body {
 .detail-footer-info a { color: var(--accent); text-decoration: none; }
 .detail-footer-info a:hover { text-decoration: underline; }
 
+
+/* ---- Directory skill badge ---- */
+.badge-dir {
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 0 4px;
+  font-size: 12px;
+}
+
+/* ---- Attached files section ---- */
+.detail-files {
+  margin-top: 24px;
+  padding: 14px 18px;
+  background: var(--bg-muted);
+  border-radius: var(--radius);
+  border-left: 3px solid var(--accent);
+}
+.detail-files h4 {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.file-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.file-list li {
+  margin: 4px 0;
+}
+.file-list a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 14px;
+  font-family: var(--font-mono);
+  transition: background 0.15s;
+}
+.file-list a:hover {
+  background: var(--bg-hover);
+}
+.file-icon { font-size: 14px; }
+.file-name { word-break: break-all; }
+
 .usage-notes {
   margin-top: 24px;
   padding: 14px 18px;

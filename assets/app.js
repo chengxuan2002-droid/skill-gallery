@@ -232,9 +232,12 @@ function renderList() {
 
 function renderCard(skill) {
   const sourceClass = `badge-source-${skill.source}`;
+  const dirBadge = skill.is_dir
+    ? '<span class="badge badge-dir" title="Directory skill with attached files">📁</span>'
+    : '';
   return `
     <div class="skill-card" data-slug="${skill.slug}">
-      <h3 class="skill-card-title">${escapeHtml(skill.name)}</h3>
+      <h3 class="skill-card-title">${escapeHtml(skill.name)} ${dirBadge}</h3>
       <p class="skill-card-desc">${escapeHtml(skill.description)}</p>
       <div class="skill-card-meta">
         ${skill.platforms.slice(0, 3).map(p => `
@@ -382,6 +385,22 @@ function renderDetail() {
         ${marked ? marked.parse(skill.content) : '<p>Loading...</p>'}
       </div>
 
+      ${skill.is_dir && skill.files && skill.files.length > 0 ? `
+        <div class="detail-files">
+          <h4>Attached Files (${skill.files.length})</h4>
+          <ul class="file-list">
+            ${skill.files.map(f => `
+              <li>
+                <a href="skills/${encodeURIComponent(skill.slug)}/${f.split('/').map(encodeURIComponent).join('/')}" target="_blank" rel="noopener">
+                  <span class="file-icon">📄</span>
+                  <span class="file-name">${escapeHtml(f)}</span>
+                </a>
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+      ` : ''}
+
       ${skill.usage_notes ? `
         <div class="usage-notes">
           <h4>Personal Notes</h4>
@@ -391,6 +410,7 @@ function renderDetail() {
 
       <div class="detail-footer-info">
         ${skill.author ? `<p><strong>Author:</strong> ${escapeHtml(skill.author)}</p>` : ''}
+        ${skill.version ? `<p><strong>Version:</strong> v${escapeHtml(skill.version)}</p>` : ''}
         ${skill.source_url ? `<p><strong>Source:</strong> <a href="${escapeHtml(skill.source_url)}" target="_blank" rel="noopener">${escapeHtml(skill.source_url)}</a></p>` : ''}
         <p><strong>Added:</strong> ${formatDate(skill.created_at)} · <strong>Updated:</strong> ${formatDate(skill.updated_at)}</p>
       </div>

@@ -81,44 +81,91 @@ function markdownToText(md) {
     .trim();
 }
 
+// Recursively list all files under a directory, relative paths
+function listFilesRecursive(dir, baseDir) {
+  const results = [];
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    // Skip hidden files (starting with .) like .DS_Store
+    if (entry.name.startsWith('.')) continue;
+    const fullPath = path.join(dir, entry.name);
+    const relPath = path.relative(baseDir, fullPath);
+    if (entry.isDirectory()) {
+      results.push(...listFilesRecursive(fullPath, baseDir));
+    } else {
+      results.push(relPath.split(path.sep).join('/'));
+    }
+  }
+  return results;
+}
+
+// Collect all skill entries: both single-file .md and skill directories
+function collectSkillEntries() {
+  const entries = [];
+  const items = fs.readdirSync(SKILLS_DIR, { withFileTypes: true });
+
+  for (const item of items) {
+    // Single-file skill: *.md but not README.md
+    if (item.isFile() && item.name.endsWith('.md')) {
+      if (item.name.toLowerCase() === 'readme.md') continue;
+      entries.push({
+        type: 'file',
+        slug: item.name.replace(/\.md$/, ''),
+        skillFile: path.join(SKILLS_DIR, item.name),
+        dirPath: null,
+      });
+      continue;
+    }
+
+    // Directory skill: look for SKILL.md inside
+    if (item.isDirectory()) {
+      const skillMd = path.join(SKILLS_DIR, item.name, 'SKILL.md');
+      if (fs.existsSync(skillMd)) {
+        entries.push({
+          type: 'dir',
+          slug: item.name,
+          skillFile: skillMd,
+          dirPath: path.join(SKILLS_DIR, item.name),
+        });
+      }
+      continue;
+    }
+  }
+
+  return entries;
+}
+
 function buildIndex() {
   if (!fs.existsSync(SKILLS_DIR)) {
     console.error('Error: skills/ directory not found');
     process.exit(1);
   }
 
-  const files = fs.readdirSync(SKILLS_DIR).filter(f => {
-    if (!f.endsWith('.md')) return false;
-    if (f.toLowerCase() === 'readme.md') return false;
-    return true;
-  });
-  if (files.length === 0) {
-    console.error('Error: no .md files found in skills/');
+  const entries = collectSkillEntries();
+  if (entries.length === 0) {
+    console.error('Error: no skills found in skills/');
     process.exit(1);
   }
 
   const skills = [];
   let errors = 0;
 
-  for (const file of files) {
-    const slug = file.replace(/\.md$/, '');
-    const filePath = path.join(SKILLS_DIR, file);
-
+  for (const entry of entries) {
     try {
-      const content = fs.readFileSync(filePath, 'utf-8');
+      const content = fs.readFileSync(entry.skillFile, 'utf-8');
       const { meta, body } = parseFrontmatter(content);
 
       // Validate required fields
       const required = ['name', 'description', 'tags', 'platforms', 'source', 'created_at', 'updated_at'];
       const missing = required.filter(k => !(k in meta));
       if (missing.length > 0) {
-        console.error(`Warning: ${file} missing fields: ${missing.join(', ')} — skipping`);
+        console.error(`Warning: ${entry.slug} missing fields: ${missing.join(', ')} — skipping`);
         errors++;
         continue;
       }
 
-      skills.push({
-        slug,
+      const skill = {
+        slug: entry.slug,
         name: meta.name,
         description: meta.description,
         tags: meta.tags,
@@ -126,15 +173,26 @@ function buildIndex() {
         source: meta.source,
         source_url: meta.source_url || null,
         author: meta.author || null,
+        version: meta.version || null,
         created_at: meta.created_at,
         updated_at: meta.updated_at,
         usage_notes: meta.usage_notes || null,
         content: markdownToText(body),
-      });
+        is_dir: entry.type === 'dir',
+      };
 
-      console.log(`  ✓ ${slug}`);
+      // For directory skills, include the list of attached files
+      if (entry.type === 'dir') {
+        const allFiles = listFilesRecursive(entry.dirPath, entry.dirPath);
+        skill.files = allFiles.filter(f => f !== 'SKILL.md');
+      } else {
+        skill.files = [];
+      }
+
+      skills.push(skill);
+      console.log(`  ✓ ${entry.slug}${entry.type === 'dir' ? ` (dir, ${skill.files.length} files)` : ''}`);
     } catch (err) {
-      console.error(`Error parsing ${file}: ${err.message}`);
+      console.error(`Error parsing ${entry.slug}: ${err.message}`);
       errors++;
     }
   }

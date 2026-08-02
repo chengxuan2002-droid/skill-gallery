@@ -1,12 +1,16 @@
 # Skill File Format
 
-Each skill is a markdown file with YAML frontmatter.
+Skills can be stored in two forms:
+
+- **Single-file:** A standalone `.md` file under `skills/`. Good for simple skills.
+- **Directory:** A subdirectory under `skills/` containing a `SKILL.md` plus any attached files (scripts, configs, templates, etc.). Good for complex, self-built skills.
 
 ## Naming
 
-- Filename = slug (URL-friendly identifier)
+- Filename (or directory name) = slug (URL-friendly identifier)
 - Use lowercase letters, numbers, and hyphens only
-- Example: `systematic-debugging.md`
+- Single-file example: `systematic-debugging.md`
+- Directory example: `handoff-codex/SKILL.md`
 
 ## Frontmatter Fields
 
@@ -44,3 +48,19 @@ usage_notes: |
 
 Full skill content in markdown format...
 ```
+
+## Directory Skill Example
+
+For skills with attached files, use a directory:
+
+```
+skills/
+└── my-custom-skill/
+    ├── SKILL.md          ← main document (required, same frontmatter format)
+    ├── scripts/
+    │   └── helper.py     ← attached script
+    └── assets/
+        └── template.txt  ← attached asset
+```
+
+The build script automatically scans all files inside a skill directory and lists them as "Attached Files" on the detail page. `SKILL.md` itself is not included in the file list.
