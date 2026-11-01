@@ -42,7 +42,24 @@
 仅增加开发检查依赖：ESLint 10.14.0、@eslint/js 10.0.1、globals 17.14.0、Prettier 3.9.10、eslint-config-prettier 10.1.8；均为 MIT，精确锁入 package-lock。
 Node 内建测试显式限定受信任目录；安全检查使用独立本地 Gitleaks 8.30.1（MIT）、Semgrep CE 1.183.0（LGPL-2.1）和根 npm audit。
 Semgrep 通过 uv 的独立工具环境安装，不改变站点的 npm 包管理方式；扫描器不进入生产产物。
-此项仅支撑 NFR-003/NFR-006、DEC-005/009，不能替代 C-01/03 内容校验与业务 PoC；Actions、部署及线上监控仍属后续故事。
+此项仅支撑 NFR-003/NFR-006、DEC-005/009，不能替代 C-01/03 内容校验与业务 PoC；首次工程初始化未包含 Actions、部署及线上监控；下述提前建设授权仅覆盖只检查 CI 与现站基础监测，生产发布链仍属 US-003。
+
+### 1.3 提前建设检查 CI 与现站监测（2026-11-02）
+
+用户已授权在业务编码前补齐检查型 CI 和现有网站基础可用性监测，不改变四份 0.2 业务契约或宪章 1.0.0。
+复用 GitHub Actions；与外部监控服务相比，免去额外账号/凭证和后台，代价是定时运行非严格 SLA、通知依赖 GitHub 设置。
+
+- `.github/workflows/quality.yml`：main push、PR、手动触发；固定 Node/npm/uv，复用 npm ci、setup:security、check、security。
+- `.github/workflows/site-monitor.yml`：默认分支定时/手动触发，仅用 Node 读取现站，无依赖安装和发布。
+- `scripts/check-site.js`：固定 https://chengxuan2002-droid.github.io/skill-gallery/，检查首页、app.js、style.css、search-index.json。
+  校验 HTTP 200、匹配 MIME、非空内容；首页身份标识与旧版索引结构可辨识，不能把返回 200 的错误页当作正常。
+- 单请求超时 8 秒，失败重试一次，所有资源分别给出状态；不执行下载的 JS/Skill、不打印响应正文或任意网络错误。
+- 工作流只读权限，checkout 不保留凭证，第三方 Action 固定完整 SHA，PR 不使用特权触发器；无部署、写回、Issue/邮件机器人或原始报告上传。
+- 监测初始建议每 15 分钟、避开整点；以最后选定 workflow cron 为准，不是来源自动更新 Q-004 的周期决定。
+- 失败通过 Actions 运行状态呈现，通知依照维护者自己的 GitHub 设置；未推送默认分支前只算本地配置/验证，不能称定时已启用。
+
+映射 FR-011、NFR-003/004/006、DEC-001/008/009，AC-014 的工程/可用性支撑子集。
+不覆盖浏览器交互、JS 异常采集、完整原件下载一致性或生产发布验收；索引切换新版契约时同步调整监测断言。
 
 ## 2. 架构与外部边界
 

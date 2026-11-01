@@ -220,3 +220,14 @@ US1 迁移查阅 → US2 完整原文与下载 → US3 全失败矩阵 → 跨�
 任务合计 43 项：Setup 3、Foundational 7、US1 14、US2 6、US3 8、Polish 5；18 项标注 [P]。
 这些数量只描述任务拆分，不表示已完成。生成阶段检查格式、连续编号、标签、文件路径、依赖和验收映射；业务通过证据在未来实施时填入 validation。
 不要执行收录 Skill 的脚本/测试，不做全仓 npm 安装或测试发现，不执行 git add .、reset、clean、force push 或自动提交。原件/有损索引/安全展示不能混作同一数据源。
+
+## 提前建设 CI 与基础可用性监测（2026-11-02）
+
+用户单独授权的工程增量；不实现 US-001 业务功能、生产发布或来源更新 Q-004。
+
+- [x] T048 同步 docs/TechnicalSolution.md、docs/AiProgrammingGuide.md 和当前 plan/tasks，明确提前检查 CI 与基础监测边界、错误处理和验收，提交本步。（FR-011、NFR-003/004/006；DEC-001/008/009；AC-014 工程支撑）
+- [ ] T049 在 tests/integration/site-monitor.test.js 用本地 HTTP 服务先验证成功与失败、重试/超时、索引及脱敏，再实现 scripts/check-site.js、package.json 的 monitor:site。（FR-011、NFR-003/004；DEC-008/009；AC-014 可用性支撑）
+- [ ] T050 创建 .github/workflows/quality.yml 与 site-monitor.yml，固定 Action SHA/工具版本、只读权限、无发布/写回；实际静态校验及本地命令验证后提交，远程运行另记。（NFR-003/004/006；DEC-001/008；AC-014 工程支撑）
+- [ ] T051 在 validation/ci-monitor.md 记录现站四资源、完整检查和原件保护，定向更新 README/AGENTS，明确定时启用、通知和远程未验证状态并提交。（FR-011、NFR-003/004/006；DEC-009；AC-014 支撑）
+
+补充后共 51 项，原业务任务编号不变；复选框不替代远程执行证据。
