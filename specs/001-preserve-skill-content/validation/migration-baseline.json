@@ -1,0 +1,71 @@
+{
+  "recordedAt": "2026-11-02",
+  "source": "original-file-bytes",
+  "skills": [
+    {
+      "slug": "superpower-systematic-debugging",
+      "files": [
+        {
+          "path": "skills/superpower-systematic-debugging.md",
+          "size": 1222,
+          "sha256": "80fbf9b38ea4b2671b1372d0fba48b16ab4ecb2c425b6754841462d31d401f78",
+          "executable": false,
+          "mode": "0o644"
+        }
+      ]
+    },
+    {
+      "slug": "code-review-assistant",
+      "files": [
+        {
+          "path": "skills/code-review-assistant.md",
+          "size": 1044,
+          "sha256": "756a8c914c74fdbd520293cd084f4d30a266029a794bdc99ec0586d95b62e39e",
+          "executable": false,
+          "mode": "0o644"
+        }
+      ]
+    },
+    {
+      "slug": "refactoring-workflow",
+      "files": [
+        {
+          "path": "skills/refactoring-workflow.md",
+          "size": 1020,
+          "sha256": "9091ac22fd99222610b49e0f641e406baf7e95826e95727174bae188f5a6e5f8",
+          "executable": false,
+          "mode": "0o644"
+        }
+      ]
+    },
+    {
+      "slug": "handoff-codex",
+      "files": [
+        {
+          "path": "skills/handoff-codex/SKILL.md",
+          "size": 2583,
+          "sha256": "f3c31929920d96ef6cf07411a730a0aa9b6ee2b03aead4ef59e1e50600de9b93",
+          "executable": false,
+          "mode": "0o644"
+        },
+        {
+          "path": "skills/handoff-codex/agents/openai.yaml",
+          "size": 220,
+          "sha256": "b062fba83be145ba258b94ac922ba47adfcc07ef5698168f90a3b880227471cf",
+          "executable": false,
+          "mode": "0o644"
+        },
+        {
+          "path": "skills/handoff-codex/scripts/create_handoff.sh",
+          "size": 1058,
+          "sha256": "f0846e7467d58c733058827a1870e348b19de76a64d4edc458d305ca928b6bfd",
+          "executable": true,
+          "mode": "0o755"
+        }
+      ]
+    }
+  ],
+  "unmanaged": [
+    "skills/office2md/"
+  ]
+}
