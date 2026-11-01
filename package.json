@@ -10,6 +10,7 @@
     "lint": "eslint assets/app.js scripts tests eslint.config.mjs",
     "format:check": "prettier --check index.html assets/app.js assets/style.css scripts tests config eslint.config.mjs .prettierrc.json package.json",
     "test": "node --test tests/unit/*.test.js tests/integration/*.test.js",
+    "monitor:site": "node scripts/check-site.js",
     "setup:security": "node scripts/setup-security-tools.js",
     "security:secrets": "node scripts/check-project.js secrets",
     "security:code": "node scripts/check-project.js code",
