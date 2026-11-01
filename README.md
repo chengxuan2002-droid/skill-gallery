@@ -1,8 +1,43 @@
 # Skill Gallery
 
+## 本地工程开发
+
+固定站点：[Skill Gallery](https://chengxuan2002-droid.github.io/skill-gallery/)，资源前缀为 `/skill-gallery/`。
+本项目已部署；本地初始化不重新建仓、不修改部署地址，也不自动发布。
+
+运行环境：Node **26.3.0**（见 `.node-version`）、npm **11.16.0**。首次安装安全扫描器还需要
+[uv](https://docs.astral.sh/uv/) 和网络；安装器为 Semgrep 选择 Python 3.12.13，工具保存在被忽略的 `.tools/`，不安装收录 Skill 的依赖。
+
+```bash
+npm ci
+npm run setup:security
+npm run check
+npm run security
+```
+
+| 命令 | 用途 |
+|---|---|
+| `npm run lint` | 自有浏览器/Node JS 的 ESLint 检查 |
+| `npm run format:check` | 自有站点与工程文件的只读格式检查 |
+| `npm test` | 显式运行受信任的 unit/integration 测试，包含真实扫描器拒绝样例 |
+| `npm run setup:security` | 安装/核对固定版本 Gitleaks、Semgrep；重复运行复用已匹配工具 |
+| `npm run security:secrets` | 对公开候选和已跟踪原件做脱敏凭证检查 |
+| `npm run security:code` | 对自有 JS 执行本地固定安全规则 |
+| `npm run security:deps` | 审计根锁文件；high/critical 阻断，其他级别报告 |
+| `npm run check` / `npm run security` | 分别汇总规范/测试、安全检查；保留真实失败退出码 |
+
+安全结果只输出规则、位置、级别及状态，不输出凭证或源码片段。
+见[诊断约定](specs/001-preserve-skill-content/validation/diagnostics.md)和[本次验证](specs/001-preserve-skill-content/validation/bootstrap.md)。
+当前审计仍有 6 个 moderate 受影响依赖，无 high/critical；通过阻断阈值不表示零漏洞。
+
+本轮只有工程基线：`npm run build`、正式 preview、迁移、上传及自动更新尚未实现，不能作为可用命令调用。
+旧索引构建只在隔离副本验证，不用它替代保真/完整取用验收；CI、线上监控及生产发布留待后续授权。
+初始化按步骤验证并提交，提交不等于推送或上线。下文保留现有版本和历史部署说明。
+
+
 个人 AI Agent Skill 收藏夹——统一管理、快速查找、跨平台复用、一键分享。
 
-> 🔗 [在线浏览](https://your-username.github.io/skill-gallery/)
+> 🔗 [在线浏览](https://chengxuan2002-droid.github.io/skill-gallery/)
 
 ## ✨ 特性
 
@@ -10,7 +45,7 @@
 - **全文搜索** — 按名称、描述、标签、正文内容秒级检索
 - **多维筛选** — 按标签、平台、来源多维度过滤
 - **多格式导出** — 一键导出为 Codex、Claude Code 等平台格式
-- **零依赖** — 纯静态站点，不需要构建工具链
+- **静态部署** — 原生前端；本地使用 Node 工程检查，不需要后台服务
 - **暗色模式** — 跟随系统，也可手动切换
 
 ---
@@ -30,7 +65,9 @@ python3 -m http.server 8000
 # http://localhost:8000
 ```
 
-### 部署到 GitHub Pages
+### 部署到 GitHub Pages（历史通用说明）
+
+本站已有固定部署地址，下列通用建仓说明不属于当前初始化或发布操作。
 
 #### 第一步：创建 GitHub 仓库
 
@@ -534,7 +571,7 @@ A rigorous, step-by-step approach to debugging any software issue.
 
 **链接格式：**
 ```
-https://your-username.github.io/skill-gallery/#/skill/systematic-debugging
+https://chengxuan2002-droid.github.io/skill-gallery/#/skill/systematic-debugging
 ```
 
 对方打开链接就能直接看到 skill 详情页，也可以自己导出下载。
