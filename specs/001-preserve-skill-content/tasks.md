@@ -210,7 +210,7 @@ US1 迁移查阅 → US2 完整原文与下载 → US3 全失败矩阵 → 跨�
 用户现已授权执行 project-bootstrap 本地工程基线；此前“仅任务生成”的表述描述历史阶段，不限制本轮已授权工程工作。
 保持所有原业务编号与验收范围；不实现 US-001 的功能、CI 或发布。T002/T003 的业务依赖与标准数据夹具仍须后续完成。
 
-- [ ] T044 创建根 package.json/package-lock.json/.node-version 与工程忽略项，精确锁定开发工具，并在隔离副本验证 npm ci。（NFR-003/NFR-006；DEC-005/009；AC-012/014 工程支撑）
+- [x] T044 创建根 package.json/package-lock.json/.node-version 与工程忽略项，精确锁定开发工具，并在隔离副本验证 npm ci。（NFR-003/NFR-006；DEC-005/009；AC-012/014 工程支撑）
 - [ ] T045 添加 eslint.config.mjs、Prettier/EditorConfig 和 tests/unit/bootstrap.test.js、tests/integration/bootstrap.test.js，验证受信任测试发现与规范门禁拒绝行为。（NFR-003/NFR-006；DEC-005；AC-012 工程支撑）
 - [ ] T046 添加 scripts/check-project.js、scripts/setup-security-tools.js 及 config 下固定工具/规则配置，用真实扫描器验证脱敏、失败传播和范围；不实现 C-01 的业务校验器。（NFR-003/NFR-006；DEC-005；AC-012 工程支撑）
 - [ ] T047 定向更新 README.md/AGENTS.md 的真实工程入口，记录 validation/bootstrap.md 的检查结果、拒绝样例、原件核对与未运行项。（NFR-001/NFR-003/NFR-006；DEC-009；AC-001/012/014 工程支撑）
