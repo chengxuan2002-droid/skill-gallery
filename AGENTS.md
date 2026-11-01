@@ -88,6 +88,7 @@ npx ctx7@latest docs <libraryId> "单一概念的具体问题"
 | `npm test` | 仅 tests/unit/*.test.js、tests/integration/*.test.js；先准备本地扫描器，不执行收录测试 |
 | `npm run security:secrets` / `npm run security:code` / `npm run security:deps` | 分别进行脱敏凭证、有限源码规则和根依赖检查 |
 | `npm run check` / `npm run security` | 汇总真实规范/测试与安全检查；失败保留非零退出码 |
+| `npm run monitor:site` | 固定读取现有站点四个地址；超时/重试与内容检查，失败非零，不执行返回内容 |
 
 现有索引构建可能跳过非法条目后仍成功退出，不能仅凭退出码认定内容完整；
 验证构建时优先在隔离副本执行并检查实际输出，避免改动用户数据。
@@ -95,7 +96,12 @@ npx ctx7@latest docs <libraryId> "单一概念的具体问题"
 扫描器版本及来源以 config/security-tools.json 为准。诊断只输出白名单字段；工具缺失、网络/规则/报告失败不能算通过。
 依赖审计 high/critical 阻断，其他级别仍报告；当前有 6 个 moderate 受影响依赖，不能称为零漏洞。
 `npm run build`、正式 preview、迁移和上传 CLI 仍是规划能力；业务依赖/PoC 与业务验收尚待对应任务。
-本轮没有 CI、远程设置、生产监控或发布。实际证据见 specs/001-preserve-skill-content/validation/bootstrap.md。
+首次初始化证据见 specs/001-preserve-skill-content/validation/bootstrap.md。
+用户随后已授权提前建设检查型 CI 与现站基础监测：.github/workflows/quality.yml 复用本地检查，
+site-monitor.yml 以默认分支定时/手动读取现站；完整 SHA 固定、只读权限、无部署/写回，不能改为特权 PR 触发器。
+监测先按推荐每 15 分钟配置，与来源更新 Q-004 无关；每请求 8 秒、失败再试一次，诊断不含响应正文。
+目前只有本地验证和配置提交，未推送/远程启用，未调整通知、分支保护或 Pages；状态以 validation/ci-monitor.md 为准。
+首页标识或索引契约改变时同时更新 scripts/check-site.js 与相应测试；该探测不代替浏览器交互和原件下载保真验收。
 
 功能或缺陷修复先建立能识别错误行为的验证，再实现并执行适用检查；
 重点覆盖保真、打包、迁移、安全、冲突及失败保留。低风险文档/样式调整使用相称检查。

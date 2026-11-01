@@ -31,8 +31,37 @@ npm run security
 当前审计仍有 6 个 moderate 受影响依赖，无 high/critical；通过阻断阈值不表示零漏洞。
 
 本轮只有工程基线：`npm run build`、正式 preview、迁移、上传及自动更新尚未实现，不能作为可用命令调用。
-旧索引构建只在隔离副本验证，不用它替代保真/完整取用验收；CI、线上监控及生产发布留待后续授权。
-初始化按步骤验证并提交，提交不等于推送或上线。下文保留现有版本和历史部署说明。
+旧索引构建只在隔离副本验证，不用它替代保真/完整取用验收；浏览器异常采集与生产发布仍待后续实施。
+初始化按步骤验证并提交，提交不等于推送或上线。
+
+### 检查 CI 与现站基础监测
+
+- [Quality checks](.github/workflows/quality.yml)：main push、PR 和手动触发，安装锁定工具后运行 `npm run check`、`npm run security`。
+- [Site availability](.github/workflows/site-monitor.yml)：默认分支定时/手动运行，只读取既有网站，不安装项目依赖，不部署或写回。
+- 监测先按推荐的每 15 分钟配置，UTC 每小时第 7、22、37、52 分；GitHub 调度可能延迟或跳过，不是严格准点服务。
+
+手动探测当前网站：
+
+```bash
+npm run monitor:site
+```
+
+命令固定读取 `https://chengxuan2002-droid.github.io/skill-gallery/` 的首页、JS、CSS、搜索索引。
+每次请求超时 8 秒，失败重试一次；检查状态码、MIME、非空内容、首页标识及旧版索引结构。
+返回内容始终作为数据，不执行 JS/Skill，不输出正文；本地测试只使用本地 HTTP 服务，不依赖线上站点。
+
+**启用状态：配置已创建并在本地验证，尚未推送，远程 CI/定时监测未验证。**
+经授权推送到默认分支 main、且仓库允许这些 Actions 后，在 Actions 中手动运行两条 workflow 验证；
+确认实际成功后再将 quality 检查配置为合并必需项。本次没有修改分支保护、通知设置或 Pages 配置。
+失败首先表现为 Actions 失败运行；是否收到邮件取决于自己的 GitHub 通知设置，不能把本地测试当通知已送达。
+
+公开仓库长期无活动时，GitHub 可在 60 天后停用定时 workflow，需要维护者重新启用；
+不要通过定期空提交规避停用。说明依据：[定时触发](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)、
+[运行通知](https://docs.github.com/en/actions/concepts/workflows-and-actions/notifications-for-workflow-runs)。
+首页标识或索引切换新版契约时，同步修改监测断言与测试；浏览器交互、JS 异常和完整下载一致性另行验收。
+实测与边界见[CI/监测验证记录](specs/001-preserve-skill-content/validation/ci-monitor.md)。
+
+下文保留现有版本和历史部署说明。
 
 
 个人 AI Agent Skill 收藏夹——统一管理、快速查找、跨平台复用、一键分享。

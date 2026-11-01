@@ -228,6 +228,6 @@ US1 迁移查阅 → US2 完整原文与下载 → US3 全失败矩阵 → 跨�
 - [x] T048 同步 docs/TechnicalSolution.md、docs/AiProgrammingGuide.md 和当前 plan/tasks，明确提前检查 CI 与基础监测边界、错误处理和验收，提交本步。（FR-011、NFR-003/004/006；DEC-001/008/009；AC-014 工程支撑）
 - [x] T049 在 tests/integration/site-monitor.test.js 用本地 HTTP 服务先验证成功与失败、重试/超时、索引及脱敏，再实现 scripts/check-site.js、package.json 的 monitor:site。（FR-011、NFR-003/004；DEC-008/009；AC-014 可用性支撑）
 - [x] T050 创建 .github/workflows/quality.yml 与 site-monitor.yml，固定 Action SHA/工具版本、只读权限、无发布/写回；实际静态校验及本地命令验证后提交，远程运行另记。（NFR-003/004/006；DEC-001/008；AC-014 工程支撑）
-- [ ] T051 在 validation/ci-monitor.md 记录现站四资源、完整检查和原件保护，定向更新 README/AGENTS，明确定时启用、通知和远程未验证状态并提交。（FR-011、NFR-003/004/006；DEC-009；AC-014 支撑）
+- [x] T051 在 validation/ci-monitor.md 记录现站四资源、完整检查和原件保护，定向更新 README/AGENTS，明确定时启用、通知和远程未验证状态并提交。（FR-011、NFR-003/004/006；DEC-009；AC-014 支撑）
 
 补充后共 51 项，原业务任务编号不变；复选框不替代远程执行证据。
