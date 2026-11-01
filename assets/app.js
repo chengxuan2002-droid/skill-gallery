@@ -95,20 +95,20 @@ function updateThemeToggle() {
 // ---------- Filter Logic ----------
 function getAllTags() {
   const tags = new Set();
-  state.skills.forEach(s => s.tags.forEach(t => tags.add(t)));
+  state.skills.forEach((s) => s.tags.forEach((t) => tags.add(t)));
   return Array.from(tags).sort();
 }
 
 function getAllPlatforms() {
   const plats = new Set();
-  state.skills.forEach(s => s.platforms.forEach(p => plats.add(p)));
+  state.skills.forEach((s) => s.platforms.forEach((p) => plats.add(p)));
   return Array.from(plats).sort();
 }
 
 function applyFilters() {
   const q = state.searchQuery.toLowerCase().trim();
 
-  state.filtered = state.skills.filter(skill => {
+  state.filtered = state.skills.filter((skill) => {
     // Tag filter (AND)
     if (state.activeTags.size > 0) {
       for (const tag of state.activeTags) {
@@ -125,14 +125,17 @@ function applyFilters() {
     if (q) {
       if (miniSearch) {
         const results = miniSearch.search(q);
-        const resultSlugs = new Set(results.map(r => state.skills[r.id].slug));
+        const resultSlugs = new Set(results.map((r) => state.skills[r.id].slug));
         if (!resultSlugs.has(skill.slug)) return false;
       } else {
         // Fallback: substring search
         const haystack = (
-          skill.name + ' ' +
-          skill.description + ' ' +
-          skill.tags.join(' ') + ' ' +
+          skill.name +
+          ' ' +
+          skill.description +
+          ' ' +
+          skill.tags.join(' ') +
+          ' ' +
           skill.content
         ).toLowerCase();
         if (!haystack.includes(q)) return false;
@@ -152,7 +155,7 @@ function applyFilters() {
   if (q && miniSearch) {
     const results = miniSearch.search(q);
     const scoreMap = new Map();
-    results.forEach(r => {
+    results.forEach((r) => {
       scoreMap.set(state.skills[r.id].slug, r.score);
     });
     state.filtered.sort((a, b) => (scoreMap.get(b.slug) || 0) - (scoreMap.get(a.slug) || 0));
@@ -185,20 +188,28 @@ function renderList() {
         <div class="filter-section">
           <h3>Platforms</h3>
           <div class="filter-tags" id="platform-filters">
-            ${allPlatforms.map(p => `
+            ${allPlatforms
+              .map(
+                (p) => `
               <span class="filter-tag${state.activePlatforms.has(p) ? ' active' : ''}"
                     data-platform="${escapeHtml(p)}">${escapeHtml(p)}</span>
-            `).join('')}
+            `,
+              )
+              .join('')}
           </div>
         </div>
 
         <div class="filter-section">
           <h3>Tags</h3>
           <div class="filter-tags" id="tag-filters">
-            ${allTags.map(tag => `
+            ${allTags
+              .map(
+                (tag) => `
               <span class="filter-tag${state.activeTags.has(tag) ? ' active' : ''}"
                     data-tag="${escapeHtml(tag)}">${escapeHtml(tag)}</span>
-            `).join('')}
+            `,
+              )
+              .join('')}
           </div>
         </div>
       </aside>
@@ -212,17 +223,21 @@ function renderList() {
           </select>
         </div>
 
-        ${state.filtered.length === 0 ? `
+        ${
+          state.filtered.length === 0
+            ? `
           <div class="empty-state">
             <h3>No skills found</h3>
             <p>Try clearing filters or searching for something else.</p>
             <button id="clear-filters-btn">Clear all filters</button>
           </div>
-        ` : `
+        `
+            : `
           <div class="skill-grid">
             ${state.filtered.map(renderCard).join('')}
           </div>
-        `}
+        `
+        }
       </div>
     </div>
   `;
@@ -240,13 +255,21 @@ function renderCard(skill) {
       <h3 class="skill-card-title">${escapeHtml(skill.name)} ${dirBadge}</h3>
       <p class="skill-card-desc">${escapeHtml(skill.description)}</p>
       <div class="skill-card-meta">
-        ${skill.platforms.slice(0, 3).map(p => `
+        ${skill.platforms
+          .slice(0, 3)
+          .map(
+            (p) => `
           <span class="badge badge-platform">${escapeHtml(p)}</span>
-        `).join('')}
+        `,
+          )
+          .join('')}
         <span class="badge ${sourceClass}">${escapeHtml(skill.source)}</span>
       </div>
       <div class="skill-card-footer">
-        <span>${skill.tags.slice(0, 2).map(t => '#' + escapeHtml(t)).join(' ')}</span>
+        <span>${skill.tags
+          .slice(0, 2)
+          .map((t) => '#' + escapeHtml(t))
+          .join(' ')}</span>
         <span>${formatDate(skill.updated_at)}</span>
       </div>
     </div>
@@ -274,7 +297,7 @@ function attachListHandlers() {
     });
   }
 
-  document.querySelectorAll('.filter-tag[data-tag]').forEach(el => {
+  document.querySelectorAll('.filter-tag[data-tag]').forEach((el) => {
     el.addEventListener('click', () => {
       const tag = el.dataset.tag;
       if (state.activeTags.has(tag)) state.activeTags.delete(tag);
@@ -283,7 +306,7 @@ function attachListHandlers() {
     });
   });
 
-  document.querySelectorAll('.filter-tag[data-platform]').forEach(el => {
+  document.querySelectorAll('.filter-tag[data-platform]').forEach((el) => {
     el.addEventListener('click', () => {
       const p = el.dataset.platform;
       if (state.activePlatforms.has(p)) state.activePlatforms.delete(p);
@@ -310,7 +333,7 @@ function attachListHandlers() {
     });
   }
 
-  document.querySelectorAll('.skill-card').forEach(card => {
+  document.querySelectorAll('.skill-card').forEach((card) => {
     card.addEventListener('click', () => {
       const slug = card.dataset.slug;
       navigateToDetail(slug);
@@ -324,7 +347,7 @@ function navigateToDetail(slug) {
 
 // ---------- Detail View ----------
 function renderDetail() {
-  const skill = state.skills.find(s => s.slug === state.currentSlug);
+  const skill = state.skills.find((s) => s.slug === state.currentSlug);
   if (!skill) {
     app.innerHTML = `
       <div class="detail-view">
@@ -336,7 +359,10 @@ function renderDetail() {
       </div>
     `;
     const backBtn = document.getElementById('detail-back');
-    if (backBtn) backBtn.addEventListener('click', () => { window.location.hash = ''; });
+    if (backBtn)
+      backBtn.addEventListener('click', () => {
+        window.location.hash = '';
+      });
     return;
   }
 
@@ -351,15 +377,23 @@ function renderDetail() {
         <h1 class="detail-title">${escapeHtml(skill.name)}</h1>
         <p class="detail-desc">${escapeHtml(skill.description)}</p>
         <div class="detail-meta-row">
-          ${skill.platforms.map(p => `
+          ${skill.platforms
+            .map(
+              (p) => `
             <span class="badge badge-platform">${escapeHtml(p)}</span>
-          `).join('')}
+          `,
+            )
+            .join('')}
           <span class="badge ${sourceClass}">${escapeHtml(skill.source)}</span>
         </div>
         <div class="detail-meta-row">
-          ${skill.tags.map(t => `
+          ${skill.tags
+            .map(
+              (t) => `
             <span class="badge">#${escapeHtml(t)}</span>
-          `).join('')}
+          `,
+            )
+            .join('')}
         </div>
       </div>
 
@@ -377,7 +411,7 @@ function renderDetail() {
 
       <div class="compat-notice">
         <strong>Compatibility:</strong> This skill works best on
-        ${skill.platforms.map(p => `<code>${escapeHtml(p)}</code>`).join(', ')}.
+        ${skill.platforms.map((p) => `<code>${escapeHtml(p)}</code>`).join(', ')}.
         Other platforms may require format adjustments.
       </div>
 
@@ -385,28 +419,40 @@ function renderDetail() {
         ${marked ? marked.parse(skill.content) : '<p>Loading...</p>'}
       </div>
 
-      ${skill.is_dir && skill.files && skill.files.length > 0 ? `
+      ${
+        skill.is_dir && skill.files && skill.files.length > 0
+          ? `
         <div class="detail-files">
           <h4>Attached Files (${skill.files.length})</h4>
           <ul class="file-list">
-            ${skill.files.map(f => `
+            ${skill.files
+              .map(
+                (f) => `
               <li>
                 <a href="skills/${encodeURIComponent(skill.slug)}/${f.split('/').map(encodeURIComponent).join('/')}" target="_blank" rel="noopener">
                   <span class="file-icon">📄</span>
                   <span class="file-name">${escapeHtml(f)}</span>
                 </a>
               </li>
-            `).join('')}
+            `,
+              )
+              .join('')}
           </ul>
         </div>
-      ` : ''}
+      `
+          : ''
+      }
 
-      ${skill.usage_notes ? `
+      ${
+        skill.usage_notes
+          ? `
         <div class="usage-notes">
           <h4>Personal Notes</h4>
           <p>${escapeHtml(skill.usage_notes).replace(/\n/g, '<br>')}</p>
         </div>
-      ` : ''}
+      `
+          : ''
+      }
 
       <div class="detail-footer-info">
         ${skill.author ? `<p><strong>Author:</strong> ${escapeHtml(skill.author)}</p>` : ''}
@@ -424,9 +470,10 @@ function renderDetail() {
 
 function attachDetailHandlers() {
   const backBtn = document.getElementById('detail-back');
-  if (backBtn) backBtn.addEventListener('click', () => {
-    window.location.hash = '';
-  });
+  if (backBtn)
+    backBtn.addEventListener('click', () => {
+      window.location.hash = '';
+    });
 
   const exportBtn = document.getElementById('export-btn');
   const exportDropdown = document.getElementById('export-dropdown');
@@ -440,7 +487,7 @@ function attachDetailHandlers() {
     });
   }
 
-  document.querySelectorAll('.export-item').forEach(item => {
+  document.querySelectorAll('.export-item').forEach((item) => {
     item.addEventListener('click', () => {
       const format = item.dataset.export;
       handleExport(format);
@@ -451,7 +498,7 @@ function attachDetailHandlers() {
 }
 
 function handleExport(format) {
-  const skill = state.skills.find(s => s.slug === state.currentSlug);
+  const skill = state.skills.find((s) => s.slug === state.currentSlug);
   if (!skill) return;
 
   const rawMd = buildFullMarkdown(skill);
@@ -485,7 +532,7 @@ function buildFullMarkdown(skill) {
   lines.push(`updated_at: ${skill.updated_at}`);
   if (skill.usage_notes) {
     lines.push('usage_notes: |');
-    skill.usage_notes.split('\n').forEach(l => lines.push(`  ${l}`));
+    skill.usage_notes.split('\n').forEach((l) => lines.push(`  ${l}`));
   }
   lines.push('---');
   lines.push('');
@@ -534,7 +581,11 @@ function fallbackCopy(text) {
   ta.style.opacity = '0';
   document.body.appendChild(ta);
   ta.select();
-  try { document.execCommand('copy'); } catch (e) {}
+  try {
+    document.execCommand('copy');
+  } catch {
+    /* Clipboard fallback remains best effort. */
+  }
   document.body.removeChild(ta);
 }
 
@@ -545,7 +596,6 @@ function showToast(message) {
   toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 2000);
 }
-
 
 // ---------- Utilities ----------
 function escapeHtml(str) {

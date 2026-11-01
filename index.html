@@ -1,38 +1,38 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Skill Gallery</title>
-  <link rel="stylesheet" href="assets/style.css">
-</head>
-<body>
-  <header class="app-header">
-    <div class="container header-row">
-      <div>
-        <h1 class="app-title">Skill Gallery</h1>
-        <p class="app-subtitle">Personal collection of useful AI agent skills</p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skill Gallery</title>
+    <link rel="stylesheet" href="assets/style.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="container header-row">
+        <div>
+          <h1 class="app-title">Skill Gallery</h1>
+          <p class="app-subtitle">Personal collection of useful AI agent skills</p>
+        </div>
+        <button id="theme-toggle" class="theme-toggle" title="Toggle theme">🌙</button>
       </div>
-      <button id="theme-toggle" class="theme-toggle" title="Toggle theme">🌙</button>
-    </div>
-  </header>
+    </header>
 
-  <main class="container app-main">
-    <div id="app">
-      <div class="loading">Loading skills...</div>
-    </div>
-  </main>
+    <main class="container app-main">
+      <div id="app">
+        <div class="loading">Loading skills...</div>
+      </div>
+    </main>
 
-  <footer class="app-footer">
-    <div class="container">
-      <span id="skill-count"></span>
-      <span class="footer-sep">·</span>
-      <a href="https://github.com/" target="_blank" rel="noopener">Source</a>
-    </div>
-  </footer>
+    <footer class="app-footer">
+      <div class="container">
+        <span id="skill-count"></span>
+        <span class="footer-sep">·</span>
+        <a href="https://github.com/" target="_blank" rel="noopener">Source</a>
+      </div>
+    </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/minisearch@6.3.0/dist/umd/index.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="assets/app.js"></script>
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/minisearch@6.3.0/dist/umd/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="assets/app.js"></script>
+  </body>
 </html>

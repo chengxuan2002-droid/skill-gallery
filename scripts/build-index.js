@@ -46,7 +46,7 @@ function parseFrontmatter(content) {
       if (!inner) {
         meta[key] = [];
       } else {
-        meta[key] = inner.split(',').map(s => s.trim().replace(/^["']|["']$/g, ''));
+        meta[key] = inner.split(',').map((s) => s.trim().replace(/^["']|["']$/g, ''));
       }
       continue;
     }
@@ -65,19 +65,19 @@ function parseFrontmatter(content) {
 
 function markdownToText(md) {
   return md
-    .replace(/```[\s\S]*?```/g, '')                    // code fences
-    .replace(/`[^`]*`/g, m => m.slice(1, -1))           // inline code → just text
-    .replace(/^#{1,6}\s+/gm, '')                         // headings
-    .replace(/\*\*([^*]+)\*\*/g, '$1')                   // bold
-    .replace(/\*([^*]+)\*/g, '$1')                       // italic
-    .replace(/__([^_]+)__/g, '$1')                       // bold
-    .replace(/_([^_]+)_/g, '$1')                         // italic
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')             // links → text
-    .replace(/^[-*+]\s+/gm, '• ')                        // list bullets
-    .replace(/^\d+\.\s+/gm, '')                          // numbered lists
-    .replace(/^>\s?/gm, '')                              // blockquotes
-    .replace(/^---+$/gm, '')                             // horizontal rules
-    .replace(/\n{3,}/g, '\n\n')                          // collapse blank lines
+    .replace(/```[\s\S]*?```/g, '') // code fences
+    .replace(/`[^`]*`/g, (m) => m.slice(1, -1)) // inline code → just text
+    .replace(/^#{1,6}\s+/gm, '') // headings
+    .replace(/\*\*([^*]+)\*\*/g, '$1') // bold
+    .replace(/\*([^*]+)\*/g, '$1') // italic
+    .replace(/__([^_]+)__/g, '$1') // bold
+    .replace(/_([^_]+)_/g, '$1') // italic
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // links → text
+    .replace(/^[-*+]\s+/gm, '• ') // list bullets
+    .replace(/^\d+\.\s+/gm, '') // numbered lists
+    .replace(/^>\s?/gm, '') // blockquotes
+    .replace(/^---+$/gm, '') // horizontal rules
+    .replace(/\n{3,}/g, '\n\n') // collapse blank lines
     .trim();
 }
 
@@ -156,8 +156,16 @@ function buildIndex() {
       const { meta, body } = parseFrontmatter(content);
 
       // Validate required fields
-      const required = ['name', 'description', 'tags', 'platforms', 'source', 'created_at', 'updated_at'];
-      const missing = required.filter(k => !(k in meta));
+      const required = [
+        'name',
+        'description',
+        'tags',
+        'platforms',
+        'source',
+        'created_at',
+        'updated_at',
+      ];
+      const missing = required.filter((k) => !(k in meta));
       if (missing.length > 0) {
         console.error(`Warning: ${entry.slug} missing fields: ${missing.join(', ')} — skipping`);
         errors++;
@@ -184,13 +192,15 @@ function buildIndex() {
       // For directory skills, include the list of attached files
       if (entry.type === 'dir') {
         const allFiles = listFilesRecursive(entry.dirPath, entry.dirPath);
-        skill.files = allFiles.filter(f => f !== 'SKILL.md');
+        skill.files = allFiles.filter((f) => f !== 'SKILL.md');
       } else {
         skill.files = [];
       }
 
       skills.push(skill);
-      console.log(`  ✓ ${entry.slug}${entry.type === 'dir' ? ` (dir, ${skill.files.length} files)` : ''}`);
+      console.log(
+        `  ✓ ${entry.slug}${entry.type === 'dir' ? ` (dir, ${skill.files.length} files)` : ''}`,
+      );
     } catch (err) {
       console.error(`Error parsing ${entry.slug}: ${err.message}`);
       errors++;
