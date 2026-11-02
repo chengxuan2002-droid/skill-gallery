@@ -100,7 +100,8 @@ npx ctx7@latest docs <libraryId> "单一概念的具体问题"
 用户随后已授权提前建设检查型 CI 与现站基础监测：.github/workflows/quality.yml 复用本地检查，
 site-monitor.yml 以默认分支定时/手动读取现站；完整 SHA 固定、只读权限、无部署/写回，不能改为特权 PR 触发器。
 监测按用户确认每小时一次，与来源更新 Q-004 无关；每请求 8 秒、失败再试一次，诊断不含响应正文。
-目前只有本地验证和配置提交，未推送/远程启用，未调整通知、分支保护或 Pages；状态以 validation/ci-monitor.md 为准。
+用户已明确授权推送并验证。2026-11-02 已推送 main，检查 CI 与首次手动监测在 GitHub runner 上通过，每小时计划已启用；首次定时事件与通知送达未单独验证。
+未调整通知、分支保护或 Pages 配置；实际运行链接见 specs/001-preserve-skill-content/validation/ci-monitor.md。
 首页标识或索引契约改变时同时更新 scripts/check-site.js 与相应测试；该探测不代替浏览器交互和原件下载保真验收。
 
 功能或缺陷修复先建立能识别错误行为的验证，再实现并执行适用检查；

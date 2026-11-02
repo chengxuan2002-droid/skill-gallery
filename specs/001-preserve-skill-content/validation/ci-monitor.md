@@ -50,11 +50,20 @@ README 使用仅含本轮差异的索引版本提交，用户先前的介绍段�
 
 公开接口核实仓库默认分支为 main，并存在 active 的 pages-build-deployment 工作流。
 GitHub 连接器传输失败后使用公开只读接口；Pages 设置接口未能读取，因此不声称已核实其具体发布配置。
-本地提交尚未推送：新的 CI、定时监测和通知送达均未远程验证，也未设置合并必需检查。
-推送 main 可能连带触发既有 Pages 发布，需要遵守 AGENTS 的“不自动推送或发布”约定，单独确认后再启用。
+用户于 2026-11-02 明确授权推送及检查运行，并将监测周期改为每小时一次。
+恢复 SSH 认证后，15 个本地提交已正常快进推送，main 更新至 `7667fb5`，没有 force push；此前未提交的用户资产保持原状。
 
-默认分支存在配置、Actions 允许这些官方 Action 并实际运行后，才可报告远程启用/通过。
-首次启用需核对 Quality checks 和 Site availability 的实际记录；通知和 quality 合并必需项需分别核对维护者设置。
+实际远程验证（同一代码修订 7667fb5）：
+
+- [Quality checks #1](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/41395094243)：push 触发，completed/success。
+  Ubuntu runner 的固定 Node/npm/uv、根安装、扫描器首次安装、check 和 security 各步骤均成功。
+- [Site availability #1](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/41395235887)：从 main 手动触发，completed/success；实际网站检查步骤成功。
+- [既有 Pages 发布](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/41395092606)：本次推送触发，build/deploy/report 均 success，站点地址不变。
+
+GitHub 返回两个新 workflow 均 active；每小时第 7 分的 cron 已位于默认分支并启用。
+首次手动执行证明 runner/网络/内容检查可用，不声称首次 schedule 事件已发生、严格准点或邮件已送达。
+通知设置及 quality 合并必需项本次未调整，需要分别核对维护者设置。后续仅同步说明文件，不修改已验证的工作流/监测代码。
+
 定时事件可能延迟/丢弃，公开仓库无活动 60 天可能自动停用；不通过空提交规避。
 这不是浏览器 E2E、完整下载保真、发布一致性或独立严格可用性 SLA。新版首页/索引契约变更时同步调整监测断言。
 
