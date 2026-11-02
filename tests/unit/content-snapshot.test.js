@@ -94,7 +94,7 @@ test('attachment and empty-directory changes alter the digest', () => {
     assert.notEqual(empty.snapshot.digest, firstDigest);
     assert.deepEqual(empty.snapshot.directories, ['empty-dir']);
   } finally {
-    project.cleanup();
+    project.project.cleanup();
   }
 });
 
@@ -109,7 +109,7 @@ test('mtime and current date do not alter content identity', () => {
     assert.equal(second.snapshot.digest, first.snapshot.digest);
     assert.equal(second.snapshot.recordDigest, first.snapshot.recordDigest);
   } finally {
-    project.cleanup();
+    project.project.cleanup();
   }
 });
 
@@ -139,7 +139,7 @@ test('input changes between read phases fail with E_SOURCE_CHANGED', () => {
     assert.equal(recordChange.ok, false);
     assert.ok(recordChange.diagnostics.some((item) => item.code === 'E_SOURCE_CHANGED'));
   } finally {
-    project.cleanup();
+    project.project.cleanup();
   }
 });
 
@@ -154,6 +154,6 @@ test('reading buffers for parsing does not mutate the snapshot bytes', () => {
     assert.equal(result.snapshot.files[0].bytes.equals(original), true);
     assert.equal(result.snapshot.files[0].bytes.toString('utf8'), main);
   } finally {
-    project.cleanup();
+    project.project.cleanup();
   }
 });
