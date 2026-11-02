@@ -1,4 +1,4 @@
-const { isMap, isScalar, parseDocument } = require('yaml');
+const { isMap, isScalar, isSeq, parseDocument } = require('yaml');
 
 const { createDiagnostic } = require('./diagnostics');
 
@@ -19,9 +19,18 @@ function failure(code, context, message) {
   };
 }
 
-function hasNonStringKeys(contents) {
-  if (!isMap(contents)) return false;
-  return contents.items.some((item) => !isScalar(item.key) || typeof item.key.value !== 'string');
+function hasNonStringKeys(node) {
+  if (isMap(node)) {
+    for (const item of node.items) {
+      if (!isScalar(item.key) || typeof item.key.value !== 'string') return true;
+      if (hasNonStringKeys(item.value)) return true;
+    }
+  } else if (isSeq(node)) {
+    for (const item of node.items) {
+      if (hasNonStringKeys(item)) return true;
+    }
+  }
+  return false;
 }
 
 function readFrontmatter(buffer, context = {}) {
