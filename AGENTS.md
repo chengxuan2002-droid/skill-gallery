@@ -99,7 +99,7 @@ npx ctx7@latest docs <libraryId> "单一概念的具体问题"
 首次初始化证据见 specs/001-preserve-skill-content/validation/bootstrap.md。
 用户随后已授权提前建设检查型 CI 与现站基础监测：.github/workflows/quality.yml 复用本地检查，
 site-monitor.yml 以默认分支定时/手动读取现站；完整 SHA 固定、只读权限、无部署/写回，不能改为特权 PR 触发器。
-监测先按推荐每 15 分钟配置，与来源更新 Q-004 无关；每请求 8 秒、失败再试一次，诊断不含响应正文。
+监测按用户确认每小时一次，与来源更新 Q-004 无关；每请求 8 秒、失败再试一次，诊断不含响应正文。
 目前只有本地验证和配置提交，未推送/远程启用，未调整通知、分支保护或 Pages；状态以 validation/ci-monitor.md 为准。
 首页标识或索引契约改变时同时更新 scripts/check-site.js 与相应测试；该探测不代替浏览器交互和原件下载保真验收。
 

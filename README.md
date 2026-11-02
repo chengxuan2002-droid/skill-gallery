@@ -38,7 +38,7 @@ npm run security
 
 - [Quality checks](.github/workflows/quality.yml)：main push、PR 和手动触发，安装锁定工具后运行 `npm run check`、`npm run security`。
 - [Site availability](.github/workflows/site-monitor.yml)：默认分支定时/手动运行，只读取既有网站，不安装项目依赖，不部署或写回。
-- 监测先按推荐的每 15 分钟配置，UTC 每小时第 7、22、37、52 分；GitHub 调度可能延迟或跳过，不是严格准点服务。
+- 监测按用户确认每小时一次，UTC 每小时第 7 分（北京时间分钟数相同）；GitHub 调度可能延迟或跳过，不是严格准点服务。
 
 手动探测当前网站：
 

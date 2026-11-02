@@ -8,7 +8,7 @@
 
 - `.github/workflows/quality.yml`：main push、PR、手动触发，固定 Node 26.3.0、npm 11.16.0、uv 0.12.3。
   安装根锁与固定扫描器，执行已有 check/security；不使用特权 PR、不保留 checkout 凭证、不共享缓存、不发布/写回/上传原始报告。
-- `.github/workflows/site-monitor.yml`：默认分支定时/手动读取现站，推荐频率暂按 15 分钟，cron 为 `7,22,37,52 * * * *`（UTC）。
+- `.github/workflows/site-monitor.yml`：默认分支定时/手动读取现站，用户已确认改为每小时一次，cron 为 `7 * * * *`（UTC）。
   不需要 npm 安装、凭证或第三方监控 SDK；失败表现为 Actions 失败，邮件等仍取决于维护者自己的通知设置。
 - `scripts/check-site.js` / `npm run monitor:site`：固定站点、四资源、8 秒请求超时、失败重试一次；HTTP/MIME/非空及首页/旧索引结构验证。
   不跟随重定向、不接受任意 URL 命令参数、不执行返回脚本；只输出路径、状态、类型码、HTTP 状态及尝试次数，不输出正文/原始异常。
