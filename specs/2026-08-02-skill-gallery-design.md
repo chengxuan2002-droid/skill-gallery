@@ -1,5 +1,7 @@
 # Skill Gallery 设计文档
 
+> 历史基线（v1）：本文件保留原设计背景。本轮 2026-11-01 改造的现行范围与验收见 [产品需求分析](../docs/DemandAnalysis.md)，实现决策见 [技术方案](../docs/TechnicalSolution.md)，执行规则见 [AI 编程规范](../docs/AiProgrammingGuide.md)。不要按本文件的旧版非目标限制新需求。
+
 > 个人 skill 管理与索引系统：统一入库、快速查找、跨平台复用、易于分享。
 
 ## 1. 项目定位

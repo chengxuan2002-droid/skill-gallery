@@ -61,8 +61,42 @@ npm run monitor:site
 首页标识或索引切换新版契约时，同步修改监测断言与测试；浏览器交互、JS 异常和完整下载一致性另行验收。
 实测与边界见[CI/监测验证记录](specs/001-preserve-skill-content/validation/ci-monitor.md)。
 
+### 换电脑或更换 Code Agent
+
+完整开发基线位于 `codex/development-baseline-20261102` 分支；合入主分支前，直接克隆此分支接续开发：
+
+```bash
+git clone --branch codex/development-baseline-20261102 https://github.com/chengxuan2002-droid/skill-gallery.git
+cd skill-gallery
+```
+
+先安装上文指定的 Node、npm 和 uv，再执行上文的安装、工程及安全检查命令。
+`node_modules/`、`.tools/`、`.env*`、系统杂项和本机凭证不随仓库迁移；GitHub 写入凭证在新电脑独立授权。
+不复制旧电脑的 SSH 私钥、Agent 会话或工具执行授权来替代新环境的授权。
+
+当前功能是 `specs/001-preserve-skill-content`。`.specify/feature.json` 按 Spec Kit 规则保持本机忽略；
+首次在新副本运行以下命令，会检查规划文件并恢复这个本地指针：
+
+```bash
+export SPECIFY_FEATURE_DIRECTORY=specs/001-preserve-skill-content
+bash .specify/scripts/bash/check-prerequisites.sh --json --require-spec --require-tasks --include-tasks
+```
+
+新 Agent 先读 [AGENTS.md](AGENTS.md)、[宪章](.specify/memory/constitution.md)、四份规范和当前功能
+[spec](specs/001-preserve-skill-content/spec.md)、[plan](specs/001-preserve-skill-content/plan.md)、
+[tasks](specs/001-preserve-skill-content/tasks.md)，再核对真实文件与验证记录。
+项目级 Skills 保存在 `.agents/skills/`，Spec Kit 初始化来源记录为 1.2.5/Codex；其他 Agent 若不自动发现，
+应按其机制读取这些文件或配置入口，不能因更换工具而覆盖规范、重新生成任务或重跑 `specify init`。
+可选的 Specify CLI 及其他 Agent 适配器需在新电脑单独安装并验证；现有 Bash 检查不依赖全局 CLI。
+
+本次基线用于接续开发，不表示 US-001 已实现或已完成新的规格一致性分析。
+后续先复核 spec/plan/tasks，再按明确授权实施。交接记录保留在独立交接分支，未收录的 `office2md` 不属于此基线。
+此开发分支不合入 `main`、不修改 Pages 配置；合入前须核对只发布允许公开的静态产物，排除规划和工具资料。
+
 下文保留现有版本和历史部署说明。
 
+
+> 下一轮改造准备（2026-11-01）：[业界调研](docs/IndustryResearch.md) · [产品需求](docs/DemandAnalysis.md) · [技术方案](docs/TechnicalSolution.md) · [AI 编程规范](docs/AiProgrammingGuide.md)。四份文档描述计划，后台、上传命令和自动更新尚未实现；下文仍为现有版本的使用说明。
 
 个人 AI Agent Skill 收藏夹——统一管理、快速查找、跨平台复用、一键分享。
 
