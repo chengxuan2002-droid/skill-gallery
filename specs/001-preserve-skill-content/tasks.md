@@ -32,7 +32,7 @@ description: "US-001 原件保真、图库模型、旧库迁移与完整取用�
 **Purpose**: 在任何源码修改前冻结输入证据，建立能安全运行后续验证的最小工程入口。
 
 - [x] T001 检查 AGENTS.md、git 状态及实际源码；在 specs/001-preserve-skill-content/validation/preflight.md 记录用户已有改动与未跟踪资产保护范围，在 specs/001-preserve-skill-content/validation/migration-baseline.json 固定 spec 表中四 slug、六源文件的路径/大小/SHA-256/执行位及 office2md 未纳管状态；原件只读，不能用旧 assets/search-index.json 生成基线。（FR-011、NFR-001；DEC-009；AC-001）
-- [ ] T002 创建 package.json、package-lock.json、.node-version 并定向补充 .gitignore（仅 node_modules/、dist/、.dist.lock/、.dist.transaction.json、.dist.transaction.tmp-*、.dist.stage-*/、.dist.backup-*/ 等本轮生成路径）：本地 Node 26.3.0、engines >=26.3.0 <27，精确锁定 yaml 2.9.1、marked 18.1.2、sanitize-html 2.18.1、yazl 3.3.1、minisearch 6.3.0，yauzl 3.4.0 仅开发依赖；保留 CommonJS、marked 动态 import；test 仅显式运行 tests/unit/*.test.js 与 tests/integration/*.test.js，不做全仓发现，不安装 Skill 依赖；build/preview 脚本待相应入口实现后接入。（FR-004、NFR-003、NFR-006；DEC-003、DEC-005；AC-002、AC-012）
+- [x] T002 创建 package.json、package-lock.json、.node-version 并定向补充 .gitignore（仅 node_modules/、dist/、.dist.lock/、.dist.transaction.json、.dist.transaction.tmp-*、.dist.stage-*/、.dist.backup-*/ 等本轮生成路径）：本地 Node 26.3.0、engines >=26.3.0 <27，精确锁定 yaml 2.9.1、marked 18.1.2、sanitize-html 2.18.1、yazl 3.3.1、minisearch 6.3.0，yauzl 3.4.0 仅开发依赖；保留 CommonJS、marked 动态 import；test 仅显式运行 tests/unit/*.test.js 与 tests/integration/*.test.js，不做全仓发现，不安装 Skill 依赖；build/preview 脚本待相应入口实现后接入。（FR-004、NFR-003、NFR-006；DEC-003、DEC-005；AC-002、AC-012）
 - [ ] T003 在 tests/support/fixtures.js 建立最小临时项目、摘要和清理辅助，在 tests/fixtures/common/ 放标准单文件与目录型纯数据样例，包含折叠字段、未知嵌套字段、中文/空格路径、代码/表格、许可、空文件/目录及二进制；夹具不得自动纳入正式 catalog，所有凭证样例用明显假值，收录脚本/测试仅作数据。（FR-001、FR-004、NFR-003；DEC-002、DEC-005；AC-001、AC-002、AC-012）
 
 **Checkpoint**: 原件基线已冻结，站点依赖与测试入口可复现；尚未开始任何正式入库或发布。
