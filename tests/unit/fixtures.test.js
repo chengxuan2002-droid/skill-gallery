@@ -47,7 +47,9 @@ test('fixtures retain folded metadata, code blocks, tables and binary bytes', ()
   const project = makeTempProject();
   try {
     const result = copyCommonFixtures(project.root);
-    const single = fs.readFileSync(path.join(result.skillsDir, 'standard-single.md'), 'utf8');
+    const single = fs
+      .readFileSync(path.join(result.skillsDir, 'standard-single.md'), 'utf8')
+      .replace(/\r\n/g, '\n');
     assert.match(single, /^description: >-/m);
     assert.match(single, /仅含标准名称和简介的合法样例/);
     assert.match(single, /```js\nconst message = '你好，世界';/);
