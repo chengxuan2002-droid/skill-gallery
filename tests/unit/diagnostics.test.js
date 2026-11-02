@@ -33,10 +33,10 @@ test('SECRET-01 rejects private key bodies but allows an explicit placeholder', 
 });
 
 test('SECRET-02 boundary is twenty characters and has no placeholder exception', () => {
-  assert.deepEqual(codes(`token: ${secretToken('ghp_', 19)}`), []);
-  assert.deepEqual(codes(`token: ${secretToken('ghp_', 20)}`), ['E_SECRET']);
-  assert.deepEqual(codes(`token: ${secretToken('sk-', 20)}`), ['E_SECRET']);
-  assert.deepEqual(codes(`token: ${secretToken('ghp_', 20).replace('A', 'YOUR_')}`), ['E_SECRET']);
+  assert.deepEqual(codes(secretToken('ghp_', 19)), []);
+  assert.deepEqual(codes(secretToken('ghp_', 20)), ['E_SECRET']);
+  assert.deepEqual(codes(secretToken('sk-', 20)), ['E_SECRET']);
+  assert.deepEqual(codes(secretToken('ghp_', 20).replace('A', 'YOUR_')), ['E_SECRET']);
 });
 
 test('SECRET-03 checks literal assignments, placeholders and does not evaluate expressions', () => {

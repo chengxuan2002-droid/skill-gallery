@@ -54,7 +54,7 @@ test('rejects missing main documents and non-owned content paths', () => {
   try {
     const missing = validateSkillInput({
       projectRoot: project.project.root,
-      record: recordFor('sample-skill', { content_path: 'skills/missing.md' }),
+      record: recordFor('missing-skill'),
     });
     assert.equal(missing.ok, false);
     assert.ok(missing.diagnostics.some((item) => item.code === 'E_MAIN_MISSING'));
