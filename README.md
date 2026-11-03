@@ -33,8 +33,11 @@ Windows 下由 `.gitattributes` 保持项目文本为 LF，测试夹具使用 ju
 `gitleaks.exe`/`semgrep.exe`，但仍需网络。扫描器未安装时，`npm test` 中两项扫描器用例与 `npm run check`
 会失败，不能视为通过；当前环境复核见 [跨平台基线与缺口修正](specs/001-preserve-skill-content/validation/baseline-remediation.md)。
 
-本轮已接入本地 `npm run build` 与 `npm run preview`（仅 `dist`，不发布）；迁移、上传及自动更新尚未实现。
-构建结果仍待 T024 的真实四项闭环验收；浏览器异常采集与生产发布仍待后续实施。
+本轮已接入本地 `npm run build` 与 `npm run preview`（仅 `dist`，不发布）。
+US-001 的内部 US1 切片（T001–T024）已完成本地闭环：四份 catalog、四项迁移、完整 dist 构建、只读预览和旧 Hash 链接已在隔离项目验证
+（见 [US1 迁移验收](specs/001-preserve-skill-content/validation/us1-migration.md)）。
+US2 的完整原文复制/下载反馈、US3 的故障矩阵、Polish 的跨平台与总验收仍未完成；上传、自动更新和生产发布仍待后续故事。
+本地验收使用 Windows + Node 22.21.0；声明的 Node 26.3.0/Linux 由 CI 覆盖，首次结果见下方 T052 run。
 初始化按步骤验证并提交，提交不等于推送或上线。
 
 ### 检查 CI 与现站基础监测
@@ -53,9 +56,11 @@ npm run monitor:site
 每次请求超时 8 秒，失败重试一次；检查状态码、MIME、非空内容、首页标识及旧版索引结构。
 返回内容始终作为数据，不执行 JS/Skill，不输出正文；本地测试只使用本地 HTTP 服务，不依赖线上站点。
 
-**启用状态：已推送到 main；检查 CI 与首次手动网站监测均在 GitHub 上通过，每小时监测计划已启用。**
-2026-11-03 的 workflow 安全扫描补强尚未推送；远程生效与首次运行需推送后在 Actions 确认。
-首次远程运行结果见下方验证记录；quality 合并必需项仍需单独配置。
+**启用状态：main 的检查 CI 与首次手动网站监测已通过，每小时监测计划已启用。**
+2026-11-03 的安全扫描补强已推送到开发分支；[Quality checks #41628358392](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/41628358392)
+在 Node 26.3.0/Linux 上通过，`npm run check`、Gitleaks、Semgrep 与依赖审计四个步骤均成功。
+`main` 尚未合并该补强，默认分支仍使用旧版 quality workflow；`pull_request`/手动触发配置存在但本次未单独执行。
+quality 合并必需项仍需单独配置。
 本次没有修改分支保护、通知设置或 Pages 配置；推送触发的既有 Pages 发布也已成功。
 失败首先表现为 Actions 失败运行；是否收到邮件取决于自己的 GitHub 通知设置，不能把本地测试当通知已送达。
 
@@ -67,7 +72,8 @@ npm run monitor:site
 
 ### 换电脑或更换 Code Agent
 
-完整开发基线位于 `codex/development-baseline-20261102` 分支；合入主分支前，直接克隆此分支接续开发：
+完整开发基线位于 `codex/development-baseline-20261102` 分支；该分支已包含 US1 本地实现与 T052 CI 补强，
+合入主分支前，直接克隆此分支接续开发：
 
 ```bash
 git clone --branch codex/development-baseline-20261102 https://github.com/chengxuan2002-droid/skill-gallery.git
@@ -93,7 +99,7 @@ bash .specify/scripts/bash/check-prerequisites.sh --json --require-spec --requir
 应按其机制读取这些文件或配置入口，不能因更换工具而覆盖规范、重新生成任务或重跑 `specify init`。
 可选的 Specify CLI 及其他 Agent 适配器需在新电脑单独安装并验证；现有 Bash 检查不依赖全局 CLI。
 
-本次基线用于接续开发，不表示 US-001 已实现或已完成新的规格一致性分析。
+本次基线用于接续开发，不表示 US-001 已完成或已通过新的规格一致性分析。
 后续先复核 spec/plan/tasks，再按明确授权实施。交接记录保留在独立交接分支，未收录的 `office2md` 不属于此基线。
 此开发分支不合入 `main`、不修改 Pages 配置；合入前须核对只发布允许公开的静态产物，排除规划和工具资料。
 

@@ -51,7 +51,12 @@ DEC-002、DEC-003、DEC-009，AC-001、AC-002、AC-005，US001-SC-01、US001-SC-
 ## 回归与限制
 
 - `node --test tests/integration/export-regression.test.js`：1 通过、1 按设计跳过；旧缺陷仍可复现。
-- 未运行 US2 的复制/下载反馈、US3 的完整故障矩阵、生产 Pages MIME/缓存或发布；未推送、未发布。
+- 未运行 US2 的复制/下载反馈、US3 的完整故障矩阵、生产 Pages MIME/缓存或发布；对应代码已推送到开发分支，
+  但未合并 main、未发布。
+- 本记录未重跑完整 `npm test`；定向测试见 [us1-test-contracts.md](us1-test-contracts.md)。2026-11-03 开发分支
+  CI [#41628358392](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/41628358392)
+  在 Node 26.3.0/Linux 上完成 96 项测试（95 通过、0 失败、1 跳过），作为全量门禁补充证据；
+  本地 Windows/Node 22.21.0 的扫描器缺失仍是环境限制。
 - Edge headless 只证明脚本执行后 DOM 具备标题/正文/返回/列表/搜索，不替代人工键盘、剪贴板、
   窄屏或视觉验收；Windows 不保留 POSIX 执行位，跨平台 ZIP 模式仍由 T041 验收。
 - 仓库 `catalog/` 与六原件保持 T017/T001 的状态；本记录不改变 site 线上内容。

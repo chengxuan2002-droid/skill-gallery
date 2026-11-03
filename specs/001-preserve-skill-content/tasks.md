@@ -8,7 +8,7 @@ description: "US-001 原件保真、图库模型、旧库迁移与完整取用�
 
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，以及四份 0.2 文档：[调研](../../docs/IndustryResearch.md)、[需求](../../docs/DemandAnalysis.md)、[技术方案](../../docs/TechnicalSolution.md)、[编程规范](../../docs/AiProgrammingGuide.md)。
 
-**Status**: 任务生成于 2026-11-01，2026-11-02 根据分析定向细化 A1/U1/I1；生成阶段未执行实现；2026-11-02 用户另行授权本地工程初始化和逐步提交，实际进度见复选框及工程补充；不迁移、不开展业务实现、不发布。功能标识为 001-preserve-skill-content，2026-11-03 核对实际 Git 分支为 `codex/development-baseline-20261102`（相对远程同名分支未推送）；T002～T010 与跨平台基线修正已完成，证据见 [baseline-remediation.md](validation/baseline-remediation.md)；T011～T024 已完成，US1 本地闭环通过（见 [us1-migration.md](validation/us1-migration.md)）；T025 起未实施。
+**Status**: 任务生成于 2026-11-01，2026-11-02 根据分析定向细化 A1/U1/I1；生成阶段未执行实现。2026-11-02 用户另行授权本地工程初始化和逐步提交；2026-11-03 T001–T024 已完成，T044–T052 已完成本地，T025 起未实施。功能标识为 001-preserve-skill-content；实际 Git 分支为 `codex/development-baseline-20261102`，已推送到远程同名分支（当时 3d479e2），Quality checks #41628358392 在 Node 26.3.0/Linux 通过（96 项，95 通过、0 失败、1 跳过），main 未合并。T002～T010 与跨平台基线修正见 [baseline-remediation.md](validation/baseline-remediation.md)；T011～T024 的 US1 本地闭环见 [us1-migration.md](validation/us1-migration.md)。不声明 US-001 完成或生产发布。
 
 **Tests**: spec 的 Independent Test、Acceptance Scenarios、US001-SC-01～07 明确要求验证；宪章 IX 要求先建立识别错误行为的验证。因此包含契约、保真、故障注入和浏览器任务。新增行为先记录合理失败，再实现并复验；已由共享层覆盖的行为直接复验，不伪造失败，不复制生产转换算法当期望值。
 
@@ -217,10 +217,15 @@ US1 迁移查阅 → US2 完整原文与下载 → US3 全失败矩阵 → 跨�
 
 ## Notes
 
+- T024 的验收记录未重跑完整 `npm test`；2026-11-03 开发分支 CI run #41628358392 在 Node 26.3.0/Linux 上完成
+  96 项测试（95 通过、0 失败、1 跳过），作为全量门禁补充证据。本地 Windows/Node 22.21.0 的扫描器缺失仍是环境限制。
+- T025–T043 的 US2/US3/Polish 尚未实施；当前复选框不表示上游 US-001 整体完成。
+
 ## 工程基线补充（2026-11-02）
 
 用户现已授权执行 project-bootstrap 本地工程基线；此前“仅任务生成”的表述描述历史阶段，不限制本轮已授权工程工作。
-保持所有原业务编号与验收范围；不实现 US-001 的功能、CI 或发布。T002/T003 已于 2026-11-03 完成，证据见 [foundational.md](validation/foundational.md)；T011～T024 已完成，T025 起未实施。
+保持所有原业务编号与验收范围；本工程补充不替代 US-001 业务实现，后续 CI/监测由 T048–T052 单独完成。
+T002/T003 已于 2026-11-03 完成，证据见 [foundational.md](validation/foundational.md)；T011～T024 已完成，T025 起未实施。
 
 - [x] T044 创建根 package.json/package-lock.json/.node-version 与工程忽略项，精确锁定开发工具，并在隔离副本验证 npm ci。（NFR-003/NFR-006；DEC-005/009；AC-012/014 工程支撑）
 - [x] T045 添加 eslint.config.mjs、Prettier/EditorConfig 和 tests/unit/bootstrap.test.js、tests/integration/bootstrap.test.js，验证受信任测试发现与规范门禁拒绝行为。（NFR-003/NFR-006；DEC-005；AC-012 工程支撑）
@@ -250,7 +255,9 @@ US1 迁移查阅 → US2 完整原文与下载 → US3 全失败矩阵 → 跨�
 - [x] T052 修改 .github/workflows/quality.yml：触发所有 push、PR 和手动运行；固定 Ubuntu/Node/npm/uv 与 Action SHA，
   安装固定扫描器后显式执行 `npm run check`、`security:secrets`、`security:code`、`security:deps`，
   各步骤独立执行并由最终门禁汇总失败；更新 README/AGENTS 并新增 validation/ci-security.md。
-  本地完成 YAML/格式/命令验证，远程首次运行待推送后在 Actions 确认。
+  2026-11-03 推送到开发分支后，Quality checks #41628358392 通过：Node 26.3.0、npm 11.16.0、uv 0.12.3，
+  四个检查步骤成功，96 项测试 95 通过、0 失败、1 跳过。main 未合并，默认分支仍用旧 workflow；
+  `pull_request`/手动触发未单独执行。
   （NFR-003/006；DEC-005/009；AC-012/014 工程支撑）
 
 补充后共 52 项，原业务任务编号不变；复选框不替代远程执行证据。

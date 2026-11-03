@@ -91,25 +91,31 @@ npx ctx7@latest docs <libraryId> "单一概念的具体问题"
 | `npm run check` / `npm run security` | 汇总真实规范/测试与安全检查；失败保留非零退出码 |
 | `npm run monitor:site` | 固定读取现有站点四个地址；超时/重试与内容检查，失败非零，不执行返回内容 |
 
-现有索引构建可能跳过非法条目后仍成功退出，不能仅凭退出码认定内容完整；
-验证构建时优先在隔离副本执行并检查实际输出，避免改动用户数据。
+旧版索引构建曾跳过非法条目后仍成功退出；当前 `npm run build` 对非法输入整批失败。
+验证构建时仍优先在隔离副本执行并检查实际输出，避免改动用户数据。
 2026-11-02 已建立根 package/锁、工程测试和本地检查入口，Node 26.3.0、npm 11.16.0；
 扫描器版本及来源以 config/security-tools.json 为准。诊断只输出白名单字段；工具缺失、网络/规则/报告失败不能算通过。
 依赖审计 high/critical 阻断，其他级别仍报告；当前有 6 个 moderate 受影响依赖，不能称为零漏洞。
-`npm run build` 与 `npm run preview` 已接入本地 dist 构建/预览；迁移、上传 CLI、生产发布与业务验收尚待对应任务。
+`npm run build` 与 `npm run preview` 已接入本地 dist 构建/预览；T001–T024 已完成，US1 本地闭环通过
+（见 specs/001-preserve-skill-content/validation/us1-migration.md）；US2/US3/Polish（T025–T043）未实施；
+上传 CLI、自动更新与生产发布仍待后续故事。
 首次初始化证据见 specs/001-preserve-skill-content/validation/bootstrap.md。
 2026-11-03 在 Windows 复核 T002～T010：`.gitattributes` 固定项目文本为 LF，`skills/**` 不做换行转换；
 测试夹具在 Windows 使用 junction，检查入口解析 `npm.cmd` 与扫描器 `.exe`，安装器支持 Windows zip 包但仍需网络。
 本机未安装 Gitleaks/Semgrep，`npm test` 仍有 2 项扫描器用例失败、`npm run check` 非零，安全扫描未通过；
-不能把这些失败算作通过。当前实际 Node 22.21.0 与锁定 26.3.0 不同，未在该基线复验；
-详见 specs/001-preserve-skill-content/validation/baseline-remediation.md。
+不能把这些失败算作通过。当前实际 Node 22.21.0 与锁定 26.3.0 不同，未在该基线本地复验；
+开发分支 CI 已在 Node 26.3.0/Linux 完成全量验证（96 项，95 通过、0 失败、1 跳过），
+详见 specs/001-preserve-skill-content/validation/baseline-remediation.md 与 ci-security.md。
 用户随后已授权提前建设检查型 CI 与现站基础监测：.github/workflows/quality.yml 在所有 push、PR 和手动触发中
 安装固定扫描器，显式执行 npm run check、security:secrets、security:code、security:deps，任一失败汇总为失败，
 不只依赖本机 .tools；site-monitor.yml 以默认分支定时/手动读取现站；完整 SHA 固定、只读权限、无部署/写回，
-不能改为特权 PR 触发器。2026-11-03 的安全扫描补强尚未推送，远程首次运行待推送后验证。
+不能改为特权 PR 触发器。2026-11-03 的安全扫描补强已推送到开发分支；Quality checks #41628358392 通过，
+Node/npm/uv 与四个显式检查步骤均验证。`main` 尚未合并该补强，默认分支仍为旧版 workflow；
+push 路径已验证，PR/手动触发未单独执行。
 监测按用户确认每小时一次，与来源更新 Q-004 无关；每请求 8 秒、失败再试一次，诊断不含响应正文。
 用户已明确授权推送并验证。2026-11-02 已推送 main，检查 CI 与首次手动监测在 GitHub runner 上通过，每小时计划已启用；首次定时事件与通知送达未单独验证。
-未调整通知、分支保护或 Pages 配置；实际运行链接见 specs/001-preserve-skill-content/validation/ci-monitor.md。
+2026-11-03 又推送开发分支 codex/development-baseline-20261102（当时 3d479e2）并验证新 quality workflow；main 未变。
+未调整通知、分支保护或 Pages 配置；实际运行链接见 specs/001-preserve-skill-content/validation/ci-monitor.md 与 ci-security.md。
 首页标识或索引契约改变时同时更新 scripts/check-site.js 与相应测试；该探测不代替浏览器交互和原件下载保真验收。
 
 功能或缺陷修复先建立能识别错误行为的验证，再实现并执行适用检查；

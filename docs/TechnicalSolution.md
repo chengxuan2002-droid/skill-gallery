@@ -1,7 +1,8 @@
 # Skill Gallery 技术方案
 
-> 状态：关键架构决策已确认，可进入开发 · 版本：0.2 · 日期：2026-11-01
-> 基线：[DemandAnalysis.md](DemandAnalysis.md) 0.2。文中的新模块、命令和流水线均为设计，尚未实现。
+> 状态：关键架构决策已确认；US-001 的 US1 切片已本地实现并完成隔离验收 · 版本：0.2 · 日期：2026-11-01（状态补充：2026-11-03）
+> 基线：[DemandAnalysis.md](DemandAnalysis.md) 0.2。除已注明的 US1 实现外，其余模块、命令和流水线仍为设计；
+> M-05～M-07、上传、自动更新与生产发布尚未实现。
 
 本方案按“应用架构 → 管理与使用闭环 → 集成验证”展开。公开站点继续由原生 JS 和 GitHub Pages 承载，后台复用 GitHub 仓库与 Actions；站点原地址不变。Q-001～003 已由用户确认：GitHub 后台、GitHub 首版自动更新、当前单版本并保留 Git 历史。专用管理后台不属于本轮范围，未来变更需先修订 DEC-001、DEC-006。
 
@@ -43,6 +44,12 @@
 Node 内建测试显式限定受信任目录；安全检查使用独立本地 Gitleaks 8.30.1（MIT）、Semgrep CE 1.183.0（LGPL-2.1）和根 npm audit。
 Semgrep 通过 uv 的独立工具环境安装，不改变站点的 npm 包管理方式；扫描器不进入生产产物。
 此项仅支撑 NFR-003/NFR-006、DEC-005/009，不能替代 C-01/03 内容校验与业务 PoC；首次工程初始化未包含 Actions、部署及线上监控；下述提前建设授权仅覆盖只检查 CI 与现站基础监测，生产发布链仍属 US-003。
+
+2026-11-03 US1 实现补充：T011–T024 已完成，新增 `catalog/` 四份记录、四固定路径迁移、完整 dist 构建（索引/详情/raw/ZIP/manifest/事务）、
+只读预览及前端最小适配；隔离验收见 [us1-test-contracts.md](../specs/001-preserve-skill-content/validation/us1-test-contracts.md)、
+[us1-migration.md](../specs/001-preserve-skill-content/validation/us1-migration.md)。
+US2 的完整复制/下载交互、US3 的故障矩阵与 Polish 的跨平台/总验收未完成，不能称上游 US-001 完成。
+T052 quality workflow 已在开发分支的 Node 26.3.0/Linux CI 通过，见 [ci-security.md](../specs/001-preserve-skill-content/validation/ci-security.md)。
 
 ### 1.3 提前建设检查 CI 与现站监测（2026-11-02）
 
@@ -316,7 +323,7 @@ Agent：读取 README → 检查已有凭证和参数 → dry-run → 显式 pub
 | POC-002 子路径与发布触发 | coding agent，US-003 | 本地 `/skill-gallery/` 预览可读；受控测试仓库验证自动提交后显式发布，权限不扩大 | 回到 DEC-008，真实仓库设置由维护者决定 |
 | POC-003 GitHub 固定 SHA 与许可范围 | coding agent，US-006（Q-002 已确认） | 对测试来源完整读文件和二进制，分支/Release/删除文件/限流夹具通过 | 报告不支持的来源，不静默降级抓 HTML |
 
-没有完成远程写入、PoC 或性能实测；本次只做源码审阅、资料核实和已有 JS 语法检查。
+POC-001 已用锁定依赖完成本地夹具验证；POC-002/003、内容发布链的远程写入、部署和性能实测尚未完成。
 
 ## 14. 性能与扩展触发
 
@@ -335,4 +342,4 @@ NFR-002 的 1,000 项/10 MiB/50 次/p95 200ms 为统一候选口径，测法见 
 
 ## 15. 技术准备结论
 
-GitHub 管理、首版 GitHub 自动更新及 Git 历史保留已获用户确认，核心设计可按 US 依赖进入开发。原件保真、图库分离和同快照发布仍需对应 PoC 与 AC 验证；尚未完成业务实现。Q-004 只影响生产定时任务启用。最终准备度及决策状态以 [需求附录](DemandAnalysis.md#questions) 为准。
+GitHub 管理、首版 GitHub 自动更新及 Git 历史保留已获用户确认，核心设计可按 US 依赖进入开发。US-001 的 US1 切片已完成本地实现和隔离验收；US2/US3/Polish、同快照生产发布及其他故事仍未完成。Q-004 只影响生产定时任务启用。最终准备度及决策状态以 [需求附录](DemandAnalysis.md#questions) 为准。

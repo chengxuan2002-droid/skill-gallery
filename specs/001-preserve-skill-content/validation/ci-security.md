@@ -37,11 +37,20 @@
 | 本地扫描器 | 未安装；本地无法执行 Gitleaks/Semgrep，改由 CI 安装执行 |
 | Actionlint | 本机未安装；未把 YAML/Prettier 检查冒充 Actionlint 通过 |
 
-## 远程状态与待验证
+## 远程验证（2026-11-03）
 
-本改动尚未推送；远程 `main` 仍运行旧版 workflow。首次 push 或 PR 后必须在 GitHub Actions 确认：
-runner 安装固定扫描器成功、四个步骤实际执行、最终门禁按失败汇总。未观察前不能声称线上已生效。
-未修改分支保护、通知设置、Pages 或 site-monitor；未创建 PR、未推送、未发布。
+- 推送：`971c795..3d479e2` → `codex/development-baseline-20261102`；`main` 仍为 `365d577`。
+- 运行：[Quality checks #41628358392](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/41628358392)，
+  事件 `push`，`headSha=3d479e23e7543f35f4bef70ce4e4adf3d22aaaf2`，结论 `success`，约 33 秒。
+- 环境：Node 26.3.0、npm 11.16.0、uv 0.12.3；Gitleaks 8.30.1、Semgrep 1.183.0。
+- 步骤：checkout、Node/npm/uv、`npm ci`、扫描器安装、`npm run check`、Gitleaks、Semgrep、依赖审计全部成功；
+  最终汇总门禁因无失败而按条件跳过。
+- 结果：96 项测试中 95 通过、0 失败、1 跳过；Lint/格式通过。Gitleaks 150 个文件无发现；
+  Semgrep 27 个文件无发现；依赖审计 6 个 moderate、无 high/critical。
+- 边界：`main` 未合并，默认分支仍运行旧版 workflow；`pull_request`/`workflow_dispatch` 已配置但未单独执行；
+  最终门禁的失败汇总路径未实测。未修改分支保护、通知、Pages 或 site-monitor，未发布。
+
+本记录证明开发分支 push 路径；PR/手动触发和失败汇总路径仍需单独验证。合并 main 前须按 US-003 的发布链处理，不能把本 run 当作生产发布。
 
 ## 失败与边界
 

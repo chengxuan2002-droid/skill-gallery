@@ -159,4 +159,11 @@ AC-001/002 覆盖本故事规定的完整迁移和取用；AC-005 仅链接与�
 
 监测采用每次 8 秒超时、失败再试一次、固定四资源。用户已确认每小时一次，仅 GitHub 原生运行状态/维护者通知；最终 cron 为 7 * * * *。
 本地测试不能依赖线上站点。代码与网络报告只输出固定类型、路径、HTTP 状态及尝试次数，不输出站点正文和原始错误。
-验收证据写 validation/ci-monitor.md；远程执行与分支保护状态如实分列。原 43 项业务任务、T002/T003 未完成部分不改变。
+验收证据写 validation/ci-monitor.md；远程执行与分支保护状态如实分列。原 43 项业务任务编号不变；T002/T003 的未完成部分后已补齐。
+
+## 实施状态补充（2026-11-03）
+
+T001–T024 已完成，US1 本地闭环通过（[us1-test-contracts.md](validation/us1-test-contracts.md)、[us1-migration.md](validation/us1-migration.md)）；
+T044–T052 已完成本地，T052 已在开发分支 `codex/development-baseline-20261102` 的 Node 26.3.0/Linux CI 通过
+（Quality checks #41628358392，见 [ci-security.md](validation/ci-security.md)）。
+T025–T043（US2、US3、Polish）未实施；不能称上游 US-001 完成或已发布。本次补充不改变原规划的业务契约。
