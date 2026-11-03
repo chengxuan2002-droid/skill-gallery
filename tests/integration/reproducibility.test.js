@@ -4,7 +4,7 @@ const path = require('node:path');
 const test = require('node:test');
 const yauzl = require('yauzl');
 
-const { makeTempProject, sha256 } = require('../support/fixtures');
+const { makeTempProject } = require('../support/fixtures');
 const { buildSite, writeAssets, writeRecord } = require('../support/invalid-batch-project');
 
 const main = [
