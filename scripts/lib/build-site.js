@@ -4,6 +4,7 @@ const path = require('node:path');
 
 const { prepareOutputs } = require('./build-outputs');
 const { contentRevision, loadCatalog, prepareSkills } = require('./build-inputs');
+const { recoverBuildTransaction } = require('./build-recovery');
 const { rasterType, renderMarkdown } = require('./build-render');
 const { abortBuild, acquireBuildLock, commitBuild } = require('./build-transaction');
 const { createDiagnostic } = require('./diagnostics');
@@ -18,6 +19,15 @@ function fail(diagnostics) {
 
 function sha256(bytes) {
   return crypto.createHash('sha256').update(bytes).digest('hex');
+}
+
+function recheckInputs({ projectRoot, records, revision }) {
+  const current = loadCatalog(projectRoot);
+  if (!current.ok) return false;
+  if (JSON.stringify(current.records) !== JSON.stringify(records)) return false;
+  const prepared = prepareSkills(projectRoot, current.records);
+  if (!prepared.ok) return false;
+  return contentRevision(projectRoot, prepared.skills) === revision;
 }
 
 async function renderSkills(skills) {
@@ -147,7 +157,8 @@ async function buildSite({
   }
   const catalog = loadCatalog(projectRoot);
   if (!catalog.ok) return catalog;
-  const prepared = prepareSkills(projectRoot, catalog.records);
+  const records = catalog.records;
+  const prepared = prepareSkills(projectRoot, records);
   if (!prepared.ok) return prepared;
   const rendered = await renderSkills(prepared.skills);
   if (!rendered.ok) return rendered;
@@ -157,6 +168,16 @@ async function buildSite({
   const runId = crypto.randomBytes(16).toString('hex');
   const lock = acquireBuildLock({ parent, runId });
   if (!lock.ok) return fail(lock.diagnostics);
+  const recovered = recoverBuildTransaction({
+    parent,
+    outputName,
+    rename,
+    remove: hooks.remove,
+  });
+  if (!recovered.ok) {
+    abortBuild({ lockDir: lock.lockDir });
+    return fail([diagnostic('E_RECOVERY_REQUIRED', {}, recovered.message)]);
+  }
   const stage = path.join(parent, `.dist.stage-${runId}`);
 
   try {
@@ -179,6 +200,10 @@ async function buildSite({
     }
     if (hooks.beforeCommit) {
       await hooks.beforeCommit({ stage, outputDir: path.join(parent, outputName) });
+    }
+    if (!recheckInputs({ projectRoot, records, revision })) {
+      abortBuild({ lockDir: lock.lockDir, stage });
+      return fail([diagnostic('E_SOURCE_CHANGED', {}, '提交前输入发生变化')]);
     }
     const outputDir = path.join(parent, outputName);
     const hadPrevious = fs.existsSync(outputDir);

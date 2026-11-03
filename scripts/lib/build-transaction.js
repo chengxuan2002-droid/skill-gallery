@@ -27,20 +27,12 @@ function acquireBuildLock({ parent, runId }) {
       path.join(lockDir, 'owner.json'),
       JSON.stringify({ schemaVersion: 1, run_id: runId, pid: process.pid }),
     );
-    if (fs.existsSync(path.join(parent, '.dist.transaction.json'))) {
-      throw new Error('RECOVERY_REQUIRED');
-    }
     return { ok: true, lockDir };
-  } catch (error) {
+  } catch {
     fs.rmSync(lockDir, { recursive: true, force: true });
     return {
       ok: false,
-      diagnostics: [
-        diagnostic(
-          error.message === 'RECOVERY_REQUIRED' ? 'E_RECOVERY_REQUIRED' : 'E_BUILD',
-          error.message === 'RECOVERY_REQUIRED' ? '存在未结束的构建事务' : '构建锁写入失败',
-        ),
-      ],
+      diagnostics: [diagnostic('E_BUILD', '构建锁写入失败')],
     };
   }
 }
@@ -84,6 +76,7 @@ async function commitBuild({
   };
 
   let movedOld = false;
+  let movedNew = false;
   try {
     writeTransaction('prepared');
     writeTransaction('promoting');
@@ -92,9 +85,14 @@ async function commitBuild({
       movedOld = true;
     }
     await rename(stage, outputDir);
+    movedNew = true;
     writeTransaction('promoted');
   } catch {
     try {
+      if (movedNew && fs.existsSync(outputDir)) {
+        await rename(outputDir, stage);
+        movedNew = false;
+      }
       if (movedOld && fs.existsSync(backupDir)) await rename(backupDir, outputDir);
       abortBuild({ lockDir: path.join(parent, '.dist.lock'), stage });
       fs.rmSync(transactionPath, { force: true });
