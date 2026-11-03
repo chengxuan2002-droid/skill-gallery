@@ -17,3 +17,17 @@ NFR-001、NFR-003、NFR-006，DEC-002、DEC-003、DEC-005、DEC-009，AC-001、A
 这是 T014/T015 尚未实现的预期红灯，不代表测试断言本身失败。
 
 预期实现：T014 提供 `validateCatalogRecord`，T015 提供 `resolveCatalogRecord`。
+
+## T012 四项迁移契约
+
+文件：`tests/integration/migration.test.js`。在隔离项目复制四项六原件、标准样例与 office2md 哨兵，
+覆盖默认 `--dry-run` 零写入、`--write` 恰好四项、二次一致 noop、差异冲突保护、非法/缺失原件整批失败、
+目标被占用时不留下部分新记录、office2md/标准样例不成为正式记录、原件摘要不变，以及
+`--dry-run` 与 `--write` 互斥。
+
+命令：`node --test tests/integration/migration.test.js`
+
+结果：exit 1，7/7 失败；首因 `AssertionError: scripts/migrate-catalog.js 尚未实现`。
+这是 T016 尚未实现的预期红灯。
+
+预期实现：T016 提供四固定路径迁移入口；T017 才生成正式四份 catalog 记录。
