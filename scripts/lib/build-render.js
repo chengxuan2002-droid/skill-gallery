@@ -126,10 +126,21 @@ function missingAnchorTexts(tokens, aliases) {
   return missing;
 }
 
+function hasControlCharacter(value) {
+  for (const character of value) {
+    if (character.codePointAt(0) < 0x20 || character === '\u007f') return true;
+  }
+  return false;
+}
+
 function localReferencePath(value, options) {
   if (typeof value !== 'string' || value.length === 0) return null;
   if (value.startsWith('#') || value.startsWith('?')) return null;
   if (/^https?:\/\//i.test(value)) return null;
+  if (/^[A-Za-z]:[\\/]/.test(value)) {
+    options.errors.push(diagnostic('E_PATH', options.relativePath, '本地引用不能包含盘符'));
+    return null;
+  }
   if (/^[a-z][a-z0-9+.-]*:/i.test(value)) return null;
   const withoutFragment = value.split('#')[0].split('?')[0];
   if (!withoutFragment) return null;
@@ -138,6 +149,15 @@ function localReferencePath(value, options) {
     decoded = decodeURIComponent(withoutFragment);
   } catch {
     options.errors.push(diagnostic('E_PATH', options.relativePath, '引用编码不合法'));
+    return null;
+  }
+  if (
+    decoded.startsWith('/') ||
+    decoded.startsWith('\\') ||
+    decoded.includes('\\') ||
+    hasControlCharacter(decoded)
+  ) {
+    options.errors.push(diagnostic('E_PATH', options.relativePath, '本地引用包含越界路径'));
     return null;
   }
   const relative = path.posix.normalize(path.posix.join(options.baseDir, decoded));
@@ -167,6 +187,10 @@ function resolveReference(value, options) {
     return hash === -1 ? '#' : resolveFragment(value.slice(hash), options.aliases);
   }
   if (/^https?:\/\//i.test(value)) return value;
+  if (/^[A-Za-z]:[\\/]/.test(value)) {
+    options.errors.push(diagnostic('E_PATH', options.relativePath, '本地引用不能包含盘符'));
+    return null;
+  }
   if (/^[a-z][a-z0-9+.-]*:/i.test(value)) return null;
   const relative = localReferencePath(value, options);
   if (relative === null) return null;
