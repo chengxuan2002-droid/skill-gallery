@@ -91,3 +91,28 @@ frontmatter 同名/别名回退、`declared_version` 的 catalog → version →
 四份记录均通过 `validateCatalogRecord`，`source_tracking` 全为 null，`license` 未伪造；
 slug/content_path 保持原值。与旧索引的显示名、简介、标签、平台、来源、链接、作者、版本、日期和用法逐项一致；
 六项原件 SHA-256 与 `migration-baseline.json` 一致。`office2md` 与标准样例未生成记录。
+
+## T018 C-03 投影、渲染与打包
+
+文件：`scripts/lib/build-render.js`、`build-archive.js`、`build-outputs.js`、`build-inputs.js`、`build-site.js`。
+实现 frontmatter 正文渲染、活动内容清理、标题顺序 ID 与别名、Markdown 本地引用校验、
+原字节 `.bin`、栅格媒体签名副本、目录根 ZIP、PublicFile 与站点相对 URL；缺失本地附件整批失败。
+
+命令：`node --test tests/unit/build-render.test.js` 与 `node --test tests/integration/build-contract.test.js`
+
+结果：build-render 5/5、build-contract 5/5 通过。另用临时目录型 Skill 验证图片写入 `media/<slug>/<sha>.png`，
+详情 `media_url` 与文件存在；单文件样例不拥有邻接附件，符合 C-01。
+
+## T019 索引、详情与 manifest
+
+由 `build-outputs.js` 生成 `assets/search-index.json`、`details/<slug>.json` 与 `manifest.json`；
+三者共享 `contentRevision`，索引/详情/manifest 的 digest 一致，manifest 覆盖除自身外的全部产物。
+`build-inputs.js` 的 `contentRevision` 使用记录、快照 digest、网页资产、依赖锁、策略与运行时标识，
+不含私有绝对路径或日期。验证：`build-contract.test.js` 第 1、2 项通过。
+
+## T020 构建事务与回滚
+
+由 `build-transaction.js` 实现 `.dist.lock/owner.json`、`.dist.transaction.json`、按 run_id 派生的
+stage/backup、prepared/promoting/promoted 记录，以及旧输出→backup、stage→dist 的切换；
+第二次 rename 失败时恢复 backup，首次失败不留 dist，清理成功报告 `cleanup_status=complete`。
+验证：`build-contract.test.js` 第 3～5 项通过。
