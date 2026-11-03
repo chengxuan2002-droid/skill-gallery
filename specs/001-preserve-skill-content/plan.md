@@ -168,4 +168,5 @@ T044–T052 已完成本地，T052 已在开发分支 `codex/development-baselin
 （Quality checks #41628358392 与 US2 后 #41639767607，见 [ci-security.md](validation/ci-security.md)）。
 T025–T030（US2）已完成本地实现，浏览器与分发验收见 [us2-browser.md](validation/us2-browser.md)；
 T031–T038（US3）已完成本地故障/安全验收，见 [us3-failures.md](validation/us3-failures.md)；
-T039–T043（Polish）未实施；不能称上游 US-001 完成或已发布。本次补充不改变原规划的业务契约。
+T039/T040/T042/T043 已完成；T041 仅 Linux/WSL 完成，macOS 未运行。不能称上游 US-001 完成或已发布。
+本次补充不改变原规划的业务契约。

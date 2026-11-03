@@ -9,7 +9,8 @@ US001-SC-04、US001-SC-07。本记录不表示上游 US-001 整体完成、已�
 
 - Windows 11；Node 22.21.0、npm 10.9.4；Microsoft Edge 156.0.4314.58 headless。
 - 使用临时项目、隔离 dist、真实 ZIP/raw 文件与本地 preview；不执行收录 Skill 的脚本。
-- 未安装本机 Gitleaks/Semgrep；完整 `npm test` 的 2 项扫描器用例仍失败，不能算作通过。
+- 验收时先未安装本机 Gitleaks/Semgrep；随后安装固定版本，Windows 全量测试改为 138/137/0/1，
+  `security:secrets` 与 `security:code` 通过；依赖审计仍 `AUDIT_UNAVAILABLE`。
 - 用户要求本轮不推送、不发布；因此没有新增 GitHub Actions 运行，CI 结果仍停留在 US2 时点。
 
 ## 自动化结果
@@ -22,7 +23,7 @@ US001-SC-04、US001-SC-07。本记录不表示上游 US-001 整体完成、已�
 | `node --test tests/integration/build-recovery.test.js` | 4/4 通过；prepared 旧输出保留、dist 缺失恢复 backup、候选回滚、promoted 保留候选、损坏产物拒绝、首次构建清理候选 |
 | `node --test tests/integration/untrusted-content.test.js` | 6/6 通过；脚本/iframe/object/form/事件/style/危险 URL/伪造 id/name 清理，raw/SVG/脚本仅作数据，栅格签名，preview `.bin` MIME，文件与 catalog 凭证拒绝及占位放行 |
 | 上述 US3 相关测试汇总 | 52/52 通过 |
-| `npm test` | 135 项中 132 通过、2 失败、1 跳过；两项失败为本机未安装 Gitleaks/Semgrep |
+| `npm test` | 安装扫描器前 135/132/2/1；安装固定 Gitleaks/Semgrep 后 138/137/0/1 |
 | `npm run lint` / `npm run format:check` | exit 0 |
 | `npm run build` | exit 0，`status=built`、`cleanup_status=complete`，contentRevision `07bd1a2ad1e61e6b7d6e42bdbe62a4f3f300d40e85539fa4cb27116e9f9b5c1d` |
 

@@ -1,6 +1,6 @@
 # Skill Gallery AI 编程规范
 
-> 状态：可进入开发；US-001 的 US1/US2/US3 切片已本地实现，Polish 未完成 · 版本：0.2 · 日期：2026-11-01（状态补充：2026-11-03）
+> 状态：可进入开发；US-001 的 US1/US2/US3 切片已本地实现，T041 macOS 未运行 · 版本：0.2 · 日期：2026-11-01（状态补充：2026-11-04）
 > 输入基线：[IndustryResearch.md](IndustryResearch.md)、[DemandAnalysis.md](DemandAnalysis.md)、[TechnicalSolution.md](TechnicalSolution.md)，均为 0.2。
 
 ## 1. 实施总览
@@ -102,7 +102,7 @@ python3 -m http.server 8000
 | 层级 | 必测行为 | 命令状态与完成证据 |
 |---|---|---|
 | 现有语法 | 站点与构建脚本 | `node --check` 可用于单文件；完整检查以 `npm run lint` 为准 |
-| 单元/契约 | 元数据、slug 冲突、YAML、digest、搜索、排序、路径与输出状态 | `npm test` 已建立；US1/US2/US3 测试通过；US3 后本地 135 项中 132 通过、2 失败（扫描器缺失）、1 跳过；CI #41639767607 仍为 US2 时点 100 项 99 通过、0 失败、1 跳过 |
+| 单元/契约 | 元数据、slug 冲突、YAML、digest、搜索、排序、路径与输出状态 | `npm test` 已建立；US1/US2/US3 测试通过；US3 后本机 138 项中 137 通过、0 失败、1 跳过（扫描器已装）；干净 Linux 副本未装扫描器时 2 项失败；CI #41639767607 仍为 US2 时点 100 项 99 通过、0 失败、1 跳过 |
 | 内容集成 | 保真、ZIP 解包、二进制、附件删除、迁移、恶意 Markdown | `npm test` 已可执行；US1/US2/US3 迁移、保真、ZIP、下载、故障恢复与安全夹具通过 |
 | 构建 | 干净 checkout 全量校验、静态白名单、索引/详情同快照 | `npm ci`、`npm run build` 已接入并在隔离四项项目验证；生产发布未验证 |
 | E2E/视觉 | 检索组合、详情、复制、窄屏、键盘和旧链接 | US2/US3 Edge headless 浏览器与安全验收见 specs/001-preserve-skill-content/validation/us2-browser.md、us3-failures.md；完整视觉/性能未验收 |
@@ -213,7 +213,7 @@ AC-001、AC-002、AC-005、AC-012，以及 docs/TechnicalSolution.md 的 DEC-002
 | 产物 | 阶段/责任角色 | 完成条件 | 当前状态 |
 |---|---|---|---|
 | 四份规划文档 | 本次准备/规划 Agent | 依据、契约、任务、验收可追溯，未决明确 | 0.2 已同步三个关键决策；其余为待实现设计基线 |
-| 原件库及图库记录 | US-001/coding agent | 迁移和保真 AC 通过 | 四份 catalog 已生成；US1 迁移/保真、US3 故障/安全验收通过；Polish 未完成 |
+| 原件库及图库记录 | US-001/coding agent | 迁移和保真 AC 通过 | 四份 catalog 已生成；US1 迁移/保真、US3 故障/安全验收通过；T041 macOS 未运行 |
 | 静态界面与下载 | US-001、US-002/coding agent | 搜索详情完整可用、截图和性能报告 | US1 最小列表/详情、US2 完整复制/下载与 US3 安全展示/取用已验收；完整视觉/性能未验收 |
 | 手动/命令维护与 README | US-004、US-005/coding agent | 两入口发布闭环与认证通过 | 未实现 |
 | 定期升级与恢复 | US-006/coding agent | 单版本与失败保留验证 | 未实现 |

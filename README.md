@@ -38,7 +38,8 @@ US-001 的内部 US1 切片（T001–T024）已完成本地闭环：四份 catal
 （见 [US1 迁移验收](specs/001-preserve-skill-content/validation/us1-migration.md)）。
 US2 的完整查阅、复制和下载已实现并完成本地浏览器验收（见 [US2 验收](specs/001-preserve-skill-content/validation/us2-browser.md)）；
 US3 的非法内容、路径攻击、构建故障与恢复已完成本地验收（见 [US3 验收](specs/001-preserve-skill-content/validation/us3-failures.md)）；
-Polish 的跨平台与总验收仍未完成；上传、自动更新和生产发布仍待后续故事。
+T039/T040/T042/T043 已完成，T041 仅 Linux/WSL 通过、macOS 未运行；最终差异见
+[最终复核](specs/001-preserve-skill-content/validation/final-review.md)。上传、自动更新和生产发布仍待后续故事。
 本地验收使用 Windows + Node 22.21.0；声明的 Node 26.3.0/Linux 由 CI 覆盖，结果见下方 T052 run。
 初始化按步骤验证并提交，提交不等于推送或上线。
 

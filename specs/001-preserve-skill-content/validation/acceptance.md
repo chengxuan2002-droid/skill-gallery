@@ -20,7 +20,8 @@ NFR-001、NFR-003、NFR-006，AC-001、AC-002、AC-005、AC-012、AC-014 本地�
 | `node scripts/migrate-catalog.js --dry-run` | exit 0；`dry_run`，4 项，诊断空 |
 | `node scripts/migrate-catalog.js --write` | exit 0；`noop`，`verified`，4 项，未覆盖已有记录 |
 | `node scripts/build-index.js` | exit 0；`built`、`cleanup_status=complete`，contentRevision `1411cac17c3d289fae5d53a470453e59d7b9bf66a0cf696e778cd3d84ed84788` |
-| `node --test tests/unit/*.test.js tests/integration/*.test.js` | 138 项中 135 通过、2 失败、1 跳过；两项失败为本机未安装 Gitleaks/Semgrep |
+| `node --test tests/unit/*.test.js tests/integration/*.test.js`（干净 Linux 副本，未装扫描器） | 138 项中 135 通过、2 失败、1 跳过；两项失败为本机未安装 Gitleaks/Semgrep |
+| 同命令（Windows 本地，`npm run setup:security` 后） | 138 项中 137 通过、0 失败、1 跳过；Gitleaks/Semgrep 已安装通过 |
 | 分发/复现/恢复定向测试 | 23/23 通过 |
 | `node scripts/preview.js` + `curl` | 首页 200 `text/html`；app.js 200 `application/javascript`；`.bin` 200 `application/octet-stream`；dist 外 404 |
 
@@ -60,7 +61,8 @@ Windows Node 22 构建的 contentRevision 与本记录不同，因为运行时�
 - **T041 macOS 未运行**；Linux/WSL 已通过，但 T041 仍不完整，不能称 macOS 验证通过。
 - 未验证生产 GitHub Pages 的 MIME、缓存、直接资源响应头、授权恢复或部署回滚；这些属于 US-003/发布前门禁。
 - 未实现/未验证上传 CLI、GitHub 后台维护、自动更新、发布和 Q-004 调度。
-- 本机 Gitleaks/Semgrep 未安装，`npm test` 仍有 2 项失败；CI 本次未推送，不能用本地结果冒充远程全部通过。
+- Windows 本地已安装固定 Gitleaks/Semgrep，`npm test` 为 138/137/0/1，`security:secrets` 与 `security:code` 无发现；
+  依赖审计仍 `AUDIT_UNAVAILABLE`。干净 Linux 副本未装扫描器，仍有 2 项失败；CI 本次未推送，不能用本地结果冒充远程全部通过。
 - NFR-002 的 1,000 项/10 MiB/p95 与 NFR-005 的完整 360/768/1440、键盘/读屏/多浏览器验收未执行。
 - Windows 不保留 POSIX 执行位；Linux WSL 的 ZIP 模式已验证，macOS 未验证；未测试断电/强杀和网络文件系统。
 - 两次 rename 的短暂间隙仍存在；恢复依赖 C-03 锁/事务记录和人工核对。

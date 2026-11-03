@@ -8,7 +8,10 @@ description: "US-001 原件保真、图库模型、旧库迁移与完整取用�
 
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，以及四份 0.2 文档：[调研](../../docs/IndustryResearch.md)、[需求](../../docs/DemandAnalysis.md)、[技术方案](../../docs/TechnicalSolution.md)、[编程规范](../../docs/AiProgrammingGuide.md)。
 
-**Status**: 任务生成于 2026-11-01，2026-11-02 根据分析定向细化 A1/U1/I1；生成阶段未执行实现。2026-11-02 用户另行授权本地工程初始化和逐步提交；2026-11-03 T001–T024 已完成，T025–T030 已完成本地验收，T031–T038 已完成本地验收，T044–T052 已完成本地，T039 起未实施。功能标识为 001-preserve-skill-content；实际 Git 分支为 `codex/development-baseline-20261102`，已推送到远程同名分支（US1 时点 3d479e2；US2 后 86eac60），Quality checks #41628358392（US1 时点 96 项，95 通过、0 失败、1 跳过）与 #41639767607（US2 后 100 项，99 通过、0 失败、1 跳过）均在 Node 26.3.0/Linux 通过，main 未合并。T002～T010 与跨平台基线修正见 [baseline-remediation.md](validation/baseline-remediation.md)；T011～T024 的 US1 本地闭环见 [us1-migration.md](validation/us1-migration.md)；T025–T030 的 US2 浏览器/分发验收见 [us2-browser.md](validation/us2-browser.md)；T031–T038 的 US3 故障/安全验收见 [us3-failures.md](validation/us3-failures.md)。US3 未推送，不声明 US-001 完成或生产发布。
+**Status**: 任务生成于 2026-11-01，2026-11-02 根据分析定向细化 A1/U1/I1；生成阶段未执行实现。2026-11-02 用户另行授权本地工程初始化和逐步提交；2026-11-03 T001–T024 已完成，T025–T030 已完成本地验收，T031–T038 已完成本地验收，T044–T052 已完成本地；T039/T040/T042/T043 已完成，T041 仅 Linux 完成、macOS 未运行。功能标识为 001-preserve-skill-content；实际 Git 分支为 `codex/development-baseline-20261102`，已推送到远程同名分支（US1 时点 3d479e2；US2 后 86eac60），Quality checks #41628358392（US1 时点 96 项，95 通过、0 失败、1 跳过）与 #41639767607（US2 后 100 项，99 通过、0 失败、1 跳过）均在 Node 26.3.0/Linux 通过，main 未合并。T002～T010 与跨平台基线修正见 [baseline-remediation.md](validation/baseline-remediation.md)；T011～T024 的 US1 本地闭环见 [us1-migration.md](validation/us1-migration.md)；T025–T030 的 US2 浏览器/分发验收见 [us2-browser.md](validation/us2-browser.md)；T031–T038 的 US3 故障/安全验收见 [us3-failures.md](validation/us3-failures.md)；
+T042 的本地验收汇总见 [acceptance.md](validation/acceptance.md)，T043 的最终差异复核见
+[final-review.md](validation/final-review.md)，T041 的 Linux/macOS 状态见 [platform.md](validation/platform.md)。
+本轮未推送，不声明 US-001 完成或生产发布。
 
 **Tests**: spec 的 Independent Test、Acceptance Scenarios、US001-SC-01～07 明确要求验证；宪章 IX 要求先建立识别错误行为的验证。因此包含契约、保真、故障注入和浏览器任务。新增行为先记录合理失败，再实现并复验；已由共享层覆盖的行为直接复验，不伪造失败，不复制生产转换算法当期望值。
 
@@ -143,7 +146,7 @@ description: "US-001 原件保真、图库模型、旧库迁移与完整取用�
 - [x] T040 [P] 仅更新 README.md、AGENTS.md 中本轮已实现并验证的依赖、原件/catalog、限额、迁移/测试/构建/dist 子路径预览与 C-03 遗留锁人工核对/保留事务后重跑的恢复步骤（不新增强制 CLI），说明固定凭证规则/占位边界与标题锚点；明确本地 built 及提交后 cleanup_status=pending、原件非执行、生产 MIME/缓存后续门禁；上传 CLI、GitHub 后台/自动更新/发布仍按现状标规划，不写已可用假命令，不改四份 0.2 主文档的业务范围。（FR-011、NFR-003、NFR-006；DEC-002、DEC-005、DEC-009；AC-012、AC-014 本地部分）
 - [ ] T041 在 specs/001-preserve-skill-content/validation/platform.md 记录同 Node 基线的 macOS 与 Linux ZIP 路径/0644-0755/二进制及 rename/回滚/中断恢复实测；缺环境或未通过必须记未运行/失败并保留此项未完成，不能用单平台结果声称跨平台通过，也不为验证擅自执行远程写入或部署。（FR-004、FR-011、NFR-001、NFR-006；DEC-002、DEC-009；AC-002、AC-012）
 - [x] T042 完整执行 specs/001-preserve-skill-content/quickstart.md 的适用步骤，在 specs/001-preserve-skill-content/validation/acceptance.md 汇总 npm ci/npm test/迁移/构建/预览的实际命令和退出码、Node/浏览器/平台版本、四项/下载/解包/失败保护证据；逐项判定 US001-SC-01～07，未运行或未达标不勾通过，不能以语法或任务勾选替代验收。（FR-001、FR-004、FR-011、NFR-001、NFR-003、NFR-006；DEC-002、DEC-003、DEC-005、DEC-009；AC-001、AC-002、AC-005、AC-012、AC-014 本地部分）
-- [ ] T043 对照 T001 与 specs/001-preserve-skill-content/validation/acceptance.md 复核最终差异：六原件/office2md/无关用户改动未动、无凭证/额外依赖/全仓格式化、只定向改动计划内文件、旧根索引未被新构建改写；明确四旧链接和当前单版本成立、Git 历史未清除、站点未发布，列出生产 Pages MIME/直接资源安全/缓存/授权恢复及 Q-004 后续门禁；不创建提交、PR 或部署。（FR-011、NFR-001、NFR-003、NFR-006；DEC-005、DEC-009；AC-001、AC-005、AC-012、AC-014 本地部分）
+- [x] T043 对照 T001 与 specs/001-preserve-skill-content/validation/acceptance.md 复核最终差异：六原件/office2md/无关用户改动未动、无凭证/额外依赖/全仓格式化、只定向改动计划内文件、旧根索引未被新构建改写；明确四旧链接和当前单版本成立、Git 历史未清除、站点未发布，列出生产 Pages MIME/直接资源安全/缓存/授权恢复及 Q-004 后续门禁；不创建提交、PR 或部署。（FR-011、NFR-001、NFR-003、NFR-006；DEC-005、DEC-009；AC-001、AC-005、AC-012、AC-014 本地部分）
 
 ## Dependencies & Execution Order
 
@@ -218,10 +221,11 @@ US1 迁移查阅 → US2 完整原文与下载 → US3 全失败矩阵 → 跨�
 ## Notes
 
 - T024 的验收记录未重跑完整 `npm test`；2026-11-03 开发分支 CI run #41628358392 在 Node 26.3.0/Linux 上完成
-  96 项测试（95 通过、0 失败、1 跳过），作为全量门禁补充证据。本地 Windows/Node 22.21.0 的扫描器缺失仍是环境限制。
+  96 项测试（95 通过、0 失败、1 跳过），作为全量门禁补充证据。2026-11-04 本机已安装固定扫描器，
+  Windows `npm test` 为 138/137/0/1；干净 Linux 副本未装扫描器时仍有 2 项失败。
 - T025–T030 的 US2 已完成本地验收（见 [us2-browser.md](validation/us2-browser.md)）；T031–T038 的 US3
-  已完成本地验收（见 [us3-failures.md](validation/us3-failures.md)），但未推送；T039–T043 的 Polish 尚未实施，
-  当前复选框不表示上游 US-001 整体完成。
+  已完成本地验收（见 [us3-failures.md](validation/us3-failures.md)），但未推送；T039/T040/T042/T043 已完成，
+  T041 macOS 未运行，当前复选框不表示上游 US-001 整体完成。
 
 ## 工程基线补充（2026-11-02）
 

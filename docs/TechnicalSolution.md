@@ -52,7 +52,7 @@ US2 的完整查阅、复制和下载已完成本地实现与浏览器验收，�
 [us2-browser.md](../specs/001-preserve-skill-content/validation/us2-browser.md)；
 US3 的非法内容、路径攻击、构建故障与恢复已完成本地验收，见
 [us3-failures.md](../specs/001-preserve-skill-content/validation/us3-failures.md)；
-Polish 的跨平台/总验收未完成，不能称上游 US-001 完成。
+T039/T040/T042/T043 已完成，T041 仅 Linux/WSL 通过、macOS 未运行，不能称上游 US-001 完成。
 T052 quality workflow 已在开发分支的 Node 26.3.0/Linux CI 通过，见 [ci-security.md](../specs/001-preserve-skill-content/validation/ci-security.md)。
 
 ### 1.3 提前建设检查 CI 与现站监测（2026-11-02）
@@ -346,4 +346,4 @@ NFR-002 的 1,000 项/10 MiB/50 次/p95 200ms 为统一候选口径，测法见 
 
 ## 15. 技术准备结论
 
-GitHub 管理、首版 GitHub 自动更新及 Git 历史保留已获用户确认，核心设计可按 US 依赖进入开发。US-001 的 US1/US2/US3 切片已完成本地实现和隔离/浏览器/故障验收；Polish、同快照生产发布及其他故事仍未完成。Q-004 只影响生产定时任务启用。最终准备度及决策状态以 [需求附录](DemandAnalysis.md#questions) 为准。
+GitHub 管理、首版 GitHub 自动更新及 Git 历史保留已获用户确认，核心设计可按 US 依赖进入开发。US-001 的 US1/US2/US3 切片已完成本地实现和隔离/浏览器/故障验收；T041 macOS、同快照生产发布及其他故事仍未完成。Q-004 只影响生产定时任务启用。最终准备度及决策状态以 [需求附录](DemandAnalysis.md#questions) 为准。
