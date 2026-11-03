@@ -8,7 +8,7 @@ description: "US-001 原件保真、图库模型、旧库迁移与完整取用�
 
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，以及四份 0.2 文档：[调研](../../docs/IndustryResearch.md)、[需求](../../docs/DemandAnalysis.md)、[技术方案](../../docs/TechnicalSolution.md)、[编程规范](../../docs/AiProgrammingGuide.md)。
 
-**Status**: 任务生成于 2026-11-01，2026-11-02 根据分析定向细化 A1/U1/I1；生成阶段未执行实现；2026-11-02 用户另行授权本地工程初始化和逐步提交，实际进度见复选框及工程补充；不迁移、不开展业务实现、不发布。功能标识为 001-preserve-skill-content，2026-11-03 核对实际 Git 分支为 `codex/development-baseline-20261102`（相对远程同名分支未推送）；T002～T010 与跨平台基线修正已完成，证据见 [baseline-remediation.md](validation/baseline-remediation.md)；T011 起未实施。
+**Status**: 任务生成于 2026-11-01，2026-11-02 根据分析定向细化 A1/U1/I1；生成阶段未执行实现；2026-11-02 用户另行授权本地工程初始化和逐步提交，实际进度见复选框及工程补充；不迁移、不开展业务实现、不发布。功能标识为 001-preserve-skill-content，2026-11-03 核对实际 Git 分支为 `codex/development-baseline-20261102`（相对远程同名分支未推送）；T002～T010 与跨平台基线修正已完成，证据见 [baseline-remediation.md](validation/baseline-remediation.md)；T011～T013 测试契约已完成并以预期红灯记录，T014 起未实施。
 
 **Tests**: spec 的 Independent Test、Acceptance Scenarios、US001-SC-01～07 明确要求验证；宪章 IX 要求先建立识别错误行为的验证。因此包含契约、保真、故障注入和浏览器任务。新增行为先记录合理失败，再实现并复验；已由共享层覆盖的行为直接复验，不伪造失败，不复制生产转换算法当期望值。
 
