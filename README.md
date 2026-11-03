@@ -38,7 +38,7 @@ US-001 的内部 US1 切片（T001–T024）已完成本地闭环：四份 catal
 （见 [US1 迁移验收](specs/001-preserve-skill-content/validation/us1-migration.md)）。
 US2 的完整查阅、复制和下载已实现并完成本地浏览器验收（见 [US2 验收](specs/001-preserve-skill-content/validation/us2-browser.md)）；
 US3 的故障矩阵、Polish 的跨平台与总验收仍未完成；上传、自动更新和生产发布仍待后续故事。
-本地验收使用 Windows + Node 22.21.0；声明的 Node 26.3.0/Linux 由 CI 覆盖，首次结果见下方 T052 run。
+本地验收使用 Windows + Node 22.21.0；声明的 Node 26.3.0/Linux 由 CI 覆盖，结果见下方 T052 run。
 初始化按步骤验证并提交，提交不等于推送或上线。
 
 ### 检查 CI 与现站基础监测
@@ -58,8 +58,9 @@ npm run monitor:site
 返回内容始终作为数据，不执行 JS/Skill，不输出正文；本地测试只使用本地 HTTP 服务，不依赖线上站点。
 
 **启用状态：main 的检查 CI 与首次手动网站监测已通过，每小时监测计划已启用。**
-2026-11-03 的安全扫描补强已推送到开发分支；[Quality checks #41628358392](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/41628358392)
-在 Node 26.3.0/Linux 上通过，`npm run check`、Gitleaks、Semgrep 与依赖审计四个步骤均成功。
+2026-11-03 的安全扫描补强已推送到开发分支；US1 时点 [Quality checks #41628358392](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/41628358392)
+与 US2 后 [Quality checks #41639767607](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/41639767607)
+均在 Node 26.3.0/Linux 上通过，`npm run check`、Gitleaks、Semgrep 与依赖审计四个步骤均成功。
 `main` 尚未合并该补强，默认分支仍使用旧版 quality workflow；`pull_request`/手动触发配置存在但本次未单独执行。
 quality 合并必需项仍需单独配置。
 本次没有修改分支保护、通知设置或 Pages 配置；推送触发的既有 Pages 发布也已成功。

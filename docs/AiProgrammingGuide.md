@@ -102,7 +102,7 @@ python3 -m http.server 8000
 | 层级 | 必测行为 | 命令状态与完成证据 |
 |---|---|---|
 | 现有语法 | 站点与构建脚本 | `node --check` 可用于单文件；完整检查以 `npm run lint` 为准 |
-| 单元/契约 | 元数据、slug 冲突、YAML、digest、搜索、排序、路径与输出状态 | `npm test` 已建立；US1/US2 测试通过；US2 后本地 100 项中 97 通过、2 失败（扫描器缺失）、1 跳过，CI 待推送复验 |
+| 单元/契约 | 元数据、slug 冲突、YAML、digest、搜索、排序、路径与输出状态 | `npm test` 已建立；US1/US2 测试通过；US2 后本地 100 项中 97 通过、2 失败（扫描器缺失）、1 跳过；CI #41639767607 为 100 项 99 通过、0 失败、1 跳过 |
 | 内容集成 | 保真、ZIP 解包、二进制、附件删除、迁移、恶意 Markdown | `npm test` 已可执行；US1/US2 迁移、保真、ZIP、下载与失败保留测试通过；US3 夹具未建立 |
 | 构建 | 干净 checkout 全量校验、静态白名单、索引/详情同快照 | `npm ci`、`npm run build` 已接入并在隔离四项项目验证；生产发布未验证 |
 | E2E/视觉 | 检索组合、详情、复制、窄屏、键盘和旧链接 | US2 Edge headless 浏览器验收见 specs/001-preserve-skill-content/validation/us2-browser.md；完整视觉/性能未验收 |

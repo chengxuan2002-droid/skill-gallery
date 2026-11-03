@@ -21,6 +21,7 @@ US001-SC-02、US001-SC-03。本记录不表示上游 US-001 整体完成或已�
 | `node --test tests/integration/distribution.test.js` | exit 0；4/4 通过。单文件原名/raw/摘要；目录 ZIP 根、附件、许可、二进制、空目录、执行位；PublicFile URL 边界；前端模块参与 contentRevision |
 | `node --test tests/integration/build-contract.test.js tests/integration/distribution.test.js tests/integration/preview.test.js tests/unit/build-render.test.js` | exit 0；17/17 通过 |
 | `npm test` | exit 1；100 项中 97 通过、2 失败、1 跳过；两项失败为本机未安装 Gitleaks/Semgrep，非 US2 断言失败 |
+| 开发分支 CI #41639767607 | exit 0；Node 26.3.0/Linux，100 项测试 99 通过、0 失败、1 跳过；四个检查步骤成功 |
 | `npm run lint` / `npm run format:check` | exit 0 |
 
 ## 浏览器场景

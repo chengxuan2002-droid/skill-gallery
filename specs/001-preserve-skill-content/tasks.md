@@ -8,7 +8,7 @@ description: "US-001 原件保真、图库模型、旧库迁移与完整取用�
 
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，以及四份 0.2 文档：[调研](../../docs/IndustryResearch.md)、[需求](../../docs/DemandAnalysis.md)、[技术方案](../../docs/TechnicalSolution.md)、[编程规范](../../docs/AiProgrammingGuide.md)。
 
-**Status**: 任务生成于 2026-11-01，2026-11-02 根据分析定向细化 A1/U1/I1；生成阶段未执行实现。2026-11-02 用户另行授权本地工程初始化和逐步提交；2026-11-03 T001–T024 已完成，T025–T030 已完成本地验收，T044–T052 已完成本地，T031 起未实施。功能标识为 001-preserve-skill-content；实际 Git 分支为 `codex/development-baseline-20261102`，已推送到远程同名分支（当时 3d479e2），Quality checks #41628358392 在 Node 26.3.0/Linux 通过（96 项，95 通过、0 失败、1 跳过），main 未合并。T002～T010 与跨平台基线修正见 [baseline-remediation.md](validation/baseline-remediation.md)；T011～T024 的 US1 本地闭环见 [us1-migration.md](validation/us1-migration.md)；T025–T030 的 US2 浏览器/分发验收见 [us2-browser.md](validation/us2-browser.md)。不声明 US-001 完成或生产发布。
+**Status**: 任务生成于 2026-11-01，2026-11-02 根据分析定向细化 A1/U1/I1；生成阶段未执行实现。2026-11-02 用户另行授权本地工程初始化和逐步提交；2026-11-03 T001–T024 已完成，T025–T030 已完成本地验收，T044–T052 已完成本地，T031 起未实施。功能标识为 001-preserve-skill-content；实际 Git 分支为 `codex/development-baseline-20261102`，已推送到远程同名分支（US1 时点 3d479e2；US2 后 86eac60），Quality checks #41628358392（US1 时点 96 项，95 通过、0 失败、1 跳过）与 #41639767607（US2 后 100 项，99 通过、0 失败、1 跳过）均在 Node 26.3.0/Linux 通过，main 未合并。T002～T010 与跨平台基线修正见 [baseline-remediation.md](validation/baseline-remediation.md)；T011～T024 的 US1 本地闭环见 [us1-migration.md](validation/us1-migration.md)；T025–T030 的 US2 浏览器/分发验收见 [us2-browser.md](validation/us2-browser.md)。不声明 US-001 完成或生产发布。
 
 **Tests**: spec 的 Independent Test、Acceptance Scenarios、US001-SC-01～07 明确要求验证；宪章 IX 要求先建立识别错误行为的验证。因此包含契约、保真、故障注入和浏览器任务。新增行为先记录合理失败，再实现并复验；已由共享层覆盖的行为直接复验，不伪造失败，不复制生产转换算法当期望值。
 
@@ -256,9 +256,9 @@ T002/T003 已于 2026-11-03 完成，证据见 [foundational.md](validation/foun
 - [x] T052 修改 .github/workflows/quality.yml：触发所有 push、PR 和手动运行；固定 Ubuntu/Node/npm/uv 与 Action SHA，
   安装固定扫描器后显式执行 `npm run check`、`security:secrets`、`security:code`、`security:deps`，
   各步骤独立执行并由最终门禁汇总失败；更新 README/AGENTS 并新增 validation/ci-security.md。
-  2026-11-03 推送到开发分支后，Quality checks #41628358392 通过：Node 26.3.0、npm 11.16.0、uv 0.12.3，
-  四个检查步骤成功，96 项测试 95 通过、0 失败、1 跳过。main 未合并，默认分支仍用旧 workflow；
-  `pull_request`/手动触发未单独执行。
+  2026-11-03 推送到开发分支后，Quality checks #41628358392（US1 时点）与 #41639767607（US2 后）通过：
+  Node 26.3.0、npm 11.16.0、uv 0.12.3，四个检查步骤成功；US2 后 100 项测试 99 通过、0 失败、1 跳过。
+  main 未合并，默认分支仍用旧 workflow；`pull_request`/手动触发未单独执行。
   （NFR-003/006；DEC-005/009；AC-012/014 工程支撑）
 
 补充后共 52 项，原业务任务编号不变；复选框不替代远程执行证据。

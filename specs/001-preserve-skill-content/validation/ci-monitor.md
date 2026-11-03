@@ -73,5 +73,5 @@ GitHub 返回两个新 workflow 均 active；每小时第 7 分的 cron 已位�
 [Actionlint](https://github.com/rhysd/actionlint/blob/main/docs/usage.md)。
 
 2026-11-03 后续：quality.yml 已改为所有 push/PR 显式执行 Gitleaks、Semgrep 和依赖审计，并已推送到开发分支；
-Quality checks #41628358392 通过，详见 [ci-security.md](ci-security.md)。main 仍运行旧版 workflow，
-站点监测计划未变。
+Quality checks #41628358392（US1 时点）与 #41639767607（US2 后）通过，详见 [ci-security.md](ci-security.md)。
+main 仍运行旧版 workflow，站点监测计划未变。

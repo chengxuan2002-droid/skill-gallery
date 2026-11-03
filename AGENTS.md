@@ -105,15 +105,16 @@ npx ctx7@latest docs <libraryId> "单一概念的具体问题"
 测试夹具在 Windows 使用 junction，检查入口解析 `npm.cmd` 与扫描器 `.exe`，安装器支持 Windows zip 包但仍需网络。
 本机未安装 Gitleaks/Semgrep，`npm test` 仍有 2 项扫描器用例失败、`npm run check` 非零，安全扫描未通过；
 不能把这些失败算作通过。当前实际 Node 22.21.0 与锁定 26.3.0 不同，未在该基线本地复验；
-开发分支 CI 已在 Node 26.3.0/Linux 完成 US1 时点全量验证（96 项，95 通过、0 失败、1 跳过）；
-US2 后本地 `npm test` 为 100 项，97 通过、2 失败（本机扫描器缺失）、1 跳过，推送后由 CI 复验。
+开发分支 CI 已在 Node 26.3.0/Linux 完成 US1 时点验证（96 项，95 通过、0 失败、1 跳过）；
+US2 后 CI #41639767607 为 100 项，99 通过、0 失败、1 跳过；本机同版本测试因扫描器缺失为
+97 通过、2 失败、1 跳过，不能把本机失败算作 CI 失败。
 详见 specs/001-preserve-skill-content/validation/baseline-remediation.md 与 ci-security.md。
 用户随后已授权提前建设检查型 CI 与现站基础监测：.github/workflows/quality.yml 在所有 push、PR 和手动触发中
 安装固定扫描器，显式执行 npm run check、security:secrets、security:code、security:deps，任一失败汇总为失败，
 不只依赖本机 .tools；site-monitor.yml 以默认分支定时/手动读取现站；完整 SHA 固定、只读权限、无部署/写回，
-不能改为特权 PR 触发器。2026-11-03 的安全扫描补强已推送到开发分支；Quality checks #41628358392 通过，
-Node/npm/uv 与四个显式检查步骤均验证。`main` 尚未合并该补强，默认分支仍为旧版 workflow；
-push 路径已验证，PR/手动触发未单独执行。
+不能改为特权 PR 触发器。2026-11-03 的安全扫描补强已推送到开发分支；Quality checks #41628358392
+（US1 时点）与 #41639767607（US2 后）均通过，Node/npm/uv 与四个显式检查步骤均验证。
+`main` 尚未合并该补强，默认分支仍为旧版 workflow；push 路径已验证，PR/手动触发未单独执行。
 监测按用户确认每小时一次，与来源更新 Q-004 无关；每请求 8 秒、失败再试一次，诊断不含响应正文。
 用户已明确授权推送并验证。2026-11-02 已推送 main，检查 CI 与首次手动监测在 GitHub runner 上通过，每小时计划已启用；首次定时事件与通知送达未单独验证。
 2026-11-03 又推送开发分支 codex/development-baseline-20261102（当时 3d479e2）并验证新 quality workflow；main 未变。

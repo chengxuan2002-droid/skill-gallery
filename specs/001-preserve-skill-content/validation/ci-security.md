@@ -52,6 +52,16 @@
 
 本记录证明开发分支 push 路径；PR/手动触发和失败汇总路径仍需单独验证。合并 main 前须按 US-003 的发布链处理，不能把本 run 当作生产发布。
 
+## US2 远程验证（2026-11-03）
+
+- 推送：`7d5ed24..86eac60` → `codex/development-baseline-20261102`；`main` 仍为 `365d577`。
+- 运行：[Quality checks #41639767607](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/41639767607)，
+  事件 `push`，`headSha=86eac60194fe75471b60e0a0d381cf9dbeebee32`，结论 `success`，约 42 秒。
+- 环境与步骤同前：Node 26.3.0、npm 11.16.0、uv 0.12.3、Gitleaks 8.30.1、Semgrep 1.183.0；
+  四个显式检查步骤成功，最终汇总门禁按条件跳过。
+- 结果：100 项测试中 99 通过、0 失败、1 跳过；Lint/格式通过；依赖审计仍为 6 个 moderate、无 high/critical。
+- 边界：`main` 未合并；`pull_request`/`workflow_dispatch` 和失败汇总路径仍未单独执行；未部署或发布。
+
 ## 失败与边界
 
 网络/下载/安装失败、扫描器版本不符、Gitleaks/Semgrep 规则错误或依赖审计失败均使 job 失败，不当作通过。
