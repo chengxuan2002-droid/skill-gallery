@@ -136,6 +136,19 @@ test('secret fixtures fail the batch and diagnostics never echo the value', asyn
   assert.equal(sha256(fs.readFileSync(path.join(dist, 'manifest.json'))), oldManifest);
 });
 
+test('catalog metadata secrets are rejected without echoing the value', async (t) => {
+  const project = makeUntrustedProject(t);
+  const catalogPath = path.join(project.root, 'catalog/untrusted.json');
+  const record = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
+  const value = 'catalog-secret-value';
+  record.notes = `password=${value}`;
+  fs.writeFileSync(catalogPath, JSON.stringify(record));
+  const failed = await buildSite({ projectRoot: project.root, outputName: 'dist' });
+  assert.equal(failed.ok, false);
+  assert.ok(failed.diagnostics.some((item) => item.code === 'E_SECRET'));
+  assert.equal(JSON.stringify(failed.diagnostics).includes(value), false);
+});
+
 test('documented placeholders remain allowed', async (t) => {
   const project = makeUntrustedProject(t);
   fs.writeFileSync(

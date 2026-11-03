@@ -92,6 +92,20 @@ function aliasMap(tokens) {
   return aliases;
 }
 
+function collectReferenceTargets(tokens, result = { links: new Set(), images: new Set() }) {
+  for (const token of tokens) {
+    if (token.type === 'link' && typeof token.href === 'string') result.links.add(token.href);
+    if (token.type === 'image' && typeof token.href === 'string') result.images.add(token.href);
+    if (Array.isArray(token.tokens)) collectReferenceTargets(token.tokens, result);
+    if (Array.isArray(token.items)) {
+      for (const item of token.items) {
+        if (Array.isArray(item.tokens)) collectReferenceTargets(item.tokens, result);
+      }
+    }
+  }
+  return result;
+}
+
 function collectFragmentLinks(tokens, result = []) {
   for (const token of tokens) {
     if (token.type === 'link' && typeof token.href === 'string') {
@@ -133,12 +147,18 @@ function hasControlCharacter(value) {
   return false;
 }
 
+function reportPath(options, message) {
+  if (options.enforcePath !== false) {
+    options.errors.push(diagnostic('E_PATH', options.relativePath, message));
+  }
+}
+
 function localReferencePath(value, options) {
   if (typeof value !== 'string' || value.length === 0) return null;
   if (value.startsWith('#') || value.startsWith('?')) return null;
   if (/^https?:\/\//i.test(value)) return null;
   if (/^[A-Za-z]:[\\/]/.test(value)) {
-    options.errors.push(diagnostic('E_PATH', options.relativePath, '本地引用不能包含盘符'));
+    reportPath(options, '本地引用不能包含盘符');
     return null;
   }
   if (/^[a-z][a-z0-9+.-]*:/i.test(value)) return null;
@@ -148,7 +168,7 @@ function localReferencePath(value, options) {
   try {
     decoded = decodeURIComponent(withoutFragment);
   } catch {
-    options.errors.push(diagnostic('E_PATH', options.relativePath, '引用编码不合法'));
+    reportPath(options, '引用编码不合法');
     return null;
   }
   if (
@@ -157,12 +177,12 @@ function localReferencePath(value, options) {
     decoded.includes('\\') ||
     hasControlCharacter(decoded)
   ) {
-    options.errors.push(diagnostic('E_PATH', options.relativePath, '本地引用包含越界路径'));
+    reportPath(options, '本地引用包含越界路径');
     return null;
   }
   const relative = path.posix.normalize(path.posix.join(options.baseDir, decoded));
   if (relative === '..' || relative.startsWith('../') || relative.startsWith('/')) {
-    options.errors.push(diagnostic('E_PATH', options.relativePath, '引用越过 Skill 边界'));
+    reportPath(options, '引用越过 Skill 边界');
     return null;
   }
   return relative;
@@ -188,16 +208,18 @@ function resolveReference(value, options) {
   }
   if (/^https?:\/\//i.test(value)) return value;
   if (/^[A-Za-z]:[\\/]/.test(value)) {
-    options.errors.push(diagnostic('E_PATH', options.relativePath, '本地引用不能包含盘符'));
+    reportPath(options, '本地引用不能包含盘符');
     return null;
   }
   if (/^[a-z][a-z0-9+.-]*:/i.test(value)) return null;
   const relative = localReferencePath(value, options);
   if (relative === null) return null;
   if (!options.fileSet.has(relative)) {
-    options.errors.push(
-      diagnostic('E_REFERENCE_MISSING', options.relativePath, '引用的本地附件不存在'),
-    );
+    if (options.enforceMissing !== false) {
+      options.errors.push(
+        diagnostic('E_REFERENCE_MISSING', options.relativePath, '引用的本地附件不存在'),
+      );
+    }
     return null;
   }
   return options.image ? (options.mediaUrls.get(relative) ?? null) : options.fileUrls.get(relative);
@@ -240,6 +262,7 @@ async function renderMarkdown(markdown, options) {
   const tokens = marked.lexer(markdown);
   const aliases = aliasMap(tokens);
   const missingAnchors = missingAnchorTexts(tokens, aliases);
+  const referenceTargets = collectReferenceTargets(tokens);
   const errors = [];
   const imageRequests = options.imageRequests ?? [];
   const rendered = { heading: 0 };
@@ -258,7 +281,13 @@ async function renderMarkdown(markdown, options) {
     a: (tagName, attribs) => {
       const next = { ...attribs };
       const sourceHref = attribs.href;
-      const mapped = resolveReference(sourceHref, { ...referenceOptions, image: false });
+      const isMarkdownLink = referenceTargets.links.has(sourceHref);
+      const mapped = resolveReference(sourceHref, {
+        ...referenceOptions,
+        image: false,
+        enforcePath: isMarkdownLink,
+        enforceMissing: isMarkdownLink,
+      });
       let text;
       if (mapped === null) {
         delete next.href;
@@ -276,9 +305,18 @@ async function renderMarkdown(markdown, options) {
     },
     img: (tagName, attribs) => {
       const next = { ...attribs };
-      const local = localReferencePath(attribs.src, referenceOptions);
+      const isMarkdownImage = referenceTargets.images.has(attribs.src);
+      const local = localReferencePath(attribs.src, {
+        ...referenceOptions,
+        enforcePath: isMarkdownImage,
+      });
       if (local !== null && options.fileSet.has(local)) imageRequests.push(local);
-      const mapped = resolveReference(attribs.src, { ...referenceOptions, image: true });
+      const mapped = resolveReference(attribs.src, {
+        ...referenceOptions,
+        image: true,
+        enforcePath: isMarkdownImage,
+        enforceMissing: isMarkdownImage,
+      });
       if (mapped === null) delete next.src;
       else next.src = mapped;
       return { tagName, attribs: next };

@@ -7,6 +7,7 @@ const { createDiagnostic } = require('./diagnostics');
 const { readFrontmatter } = require('./frontmatter');
 const {
   resolveCatalogRecord,
+  scanSecrets,
   validateCatalogRecord,
   validateRecordOwnership,
 } = require('./validate');
@@ -23,6 +24,21 @@ function fail(diagnostics) {
 
 function sha256(bytes) {
   return crypto.createHash('sha256').update(bytes).digest('hex');
+}
+
+function collectStrings(value, output = []) {
+  if (typeof value === 'string') {
+    output.push(value);
+  } else if (Array.isArray(value)) {
+    for (const item of value) collectStrings(item, output);
+  } else if (value && typeof value === 'object') {
+    for (const item of Object.values(value)) collectStrings(item, output);
+  }
+  return output;
+}
+
+function recordSecretDiagnostics(record, context) {
+  return collectStrings(record).flatMap((value) => scanSecrets(value, context));
 }
 
 function loadCatalog(projectRoot) {
@@ -60,6 +76,11 @@ function loadCatalog(projectRoot) {
     }
     const validated = validateCatalogRecord(parsed);
     if (!validated.ok) return fail(validated.diagnostics);
+    const recordSecrets = recordSecretDiagnostics(validated.record, {
+      slug: validated.record.slug,
+      path: `catalog/${name}`,
+    });
+    if (recordSecrets.length > 0) return fail(recordSecrets);
     records.push(validated.record);
   }
   const ownership = validateRecordOwnership(records);
@@ -72,6 +93,10 @@ function prepareSkills(projectRoot, records) {
   for (const record of records) {
     const snapshot = snapshotSkill({ projectRoot, record });
     if (!snapshot.ok) return fail(snapshot.diagnostics);
+    const secrets = snapshot.snapshot.files.flatMap((file) =>
+      scanSecrets(file.bytes, { slug: record.slug, path: file.path }),
+    );
+    if (secrets.length > 0) return fail(secrets);
     const mainPath = record.content_path.endsWith('/SKILL.md')
       ? 'SKILL.md'
       : path.posix.basename(record.content_path);

@@ -199,7 +199,13 @@ async function buildSkill(skill, stage, artifacts, contentRevision, zipWriter) {
   };
 }
 
-async function prepareOutputs({ projectRoot, skills, contentRevision, stage, zipWriter = writeZip }) {
+async function prepareOutputs({
+  projectRoot,
+  skills,
+  contentRevision,
+  stage,
+  zipWriter = writeZip,
+}) {
   fs.mkdirSync(stage, { recursive: true });
   const artifacts = new Map();
   const copied = copyWebAssets(projectRoot, stage, artifacts);
