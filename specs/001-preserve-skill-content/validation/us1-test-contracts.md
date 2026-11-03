@@ -72,3 +72,14 @@ frontmatter 同名/别名回退、`declared_version` 的 catalog → version →
 命令：`node --test tests/unit/catalog-contract.test.js`
 
 结果：exit 0，10/10 通过；T011 契约全部转绿。
+
+## T016 四固定路径迁移实现
+
+文件：`scripts/migrate-catalog.js`。仅处理四个固定 slug，默认 `--dry-run`，`--write` 与 dry-run 互斥；
+先验证原件与候选记录，再用 `validateCatalogRecord`/`resolveCatalogRecord` 派生记录；
+目标缺失才写、相等为 noop、差异或非普通文件为冲突；写入失败只回收本次新文件，退出码 0/1。
+
+命令：`node --test tests/integration/migration.test.js`
+
+结果：exit 0，7/7 通过。另在非仓库临时项目执行 `--write`，生成四份记录且原件未变；
+正式 `catalog/` 仍由 T017 生成，本轮未写仓库数据。
