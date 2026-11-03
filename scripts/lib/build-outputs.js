@@ -96,7 +96,7 @@ function copyWebAssets(projectRoot, stage, artifacts) {
   return { ok: true };
 }
 
-async function buildSkill(skill, stage, artifacts, contentRevision) {
+async function buildSkill(skill, stage, artifacts, contentRevision, zipWriter) {
   const mediaByPath = new Map((skill.media ?? []).map((item) => [item.sourcePath, item.path]));
   for (const item of skill.media ?? []) {
     if (!artifacts.has(item.path)) {
@@ -135,7 +135,7 @@ async function buildSkill(skill, stage, artifacts, contentRevision) {
   if (skill.snapshot.kind === 'directory') {
     const zipPath = `downloads/${skill.record.slug}.zip`;
     const absolute = path.join(stage, ...zipPath.split('/'));
-    await writeZip(
+    await zipWriter(
       absolute,
       skill.snapshot.rootName,
       skill.snapshot.files,
@@ -199,7 +199,7 @@ async function buildSkill(skill, stage, artifacts, contentRevision) {
   };
 }
 
-async function prepareOutputs({ projectRoot, skills, contentRevision, stage }) {
+async function prepareOutputs({ projectRoot, skills, contentRevision, stage, zipWriter = writeZip }) {
   fs.mkdirSync(stage, { recursive: true });
   const artifacts = new Map();
   const copied = copyWebAssets(projectRoot, stage, artifacts);
@@ -208,7 +208,7 @@ async function prepareOutputs({ projectRoot, skills, contentRevision, stage }) {
   const indexSkills = [];
   const manifestSkills = [];
   for (const skill of skills) {
-    const built = await buildSkill(skill, stage, artifacts, contentRevision);
+    const built = await buildSkill(skill, stage, artifacts, contentRevision, zipWriter);
     if (!built.ok) return built;
     indexSkills.push(built.index);
     manifestSkills.push(built.manifest);

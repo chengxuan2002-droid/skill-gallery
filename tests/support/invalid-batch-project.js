@@ -118,5 +118,6 @@ module.exports = {
   makeValidProject,
   snapshotInputs,
   validMarkdown,
+  writeAssets,
   writeRecord,
 };

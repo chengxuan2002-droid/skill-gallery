@@ -59,6 +59,8 @@ async function commitBuild({
   hadPrevious,
   runId,
   rename,
+  writeTransaction: writeTransactionHook,
+  remove = fs.rmSync,
 }) {
   const outputDir = path.join(parent, outputName);
   const backupDir = path.join(parent, `.dist.backup-${runId}`);
@@ -73,7 +75,12 @@ async function commitBuild({
     candidate_manifest_sha256: sha256(manifestBytes),
   });
   const writeTransaction = (phase) => {
-    fs.writeFileSync(transactionPath, JSON.stringify(transaction(phase)));
+    const value = transaction(phase);
+    if (writeTransactionHook) {
+      writeTransactionHook({ phase, path: transactionPath, transaction: value });
+      return;
+    }
+    fs.writeFileSync(transactionPath, JSON.stringify(value));
   };
 
   let movedOld = false;
@@ -102,9 +109,9 @@ async function commitBuild({
   }
 
   try {
-    if (movedOld) fs.rmSync(backupDir, { recursive: true, force: true });
-    fs.rmSync(transactionPath, { force: true });
-    fs.rmSync(path.join(parent, '.dist.lock'), { recursive: true, force: true });
+    if (movedOld) remove(backupDir, { recursive: true, force: true });
+    remove(transactionPath, { force: true });
+    remove(path.join(parent, '.dist.lock'), { recursive: true, force: true });
     return { ok: true, cleanupStatus: 'complete' };
   } catch {
     return { ok: true, cleanupStatus: 'pending' };

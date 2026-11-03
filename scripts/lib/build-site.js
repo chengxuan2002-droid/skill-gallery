@@ -128,7 +128,12 @@ function verifyStage(stage, revision, manifest) {
   return { ok: true };
 }
 
-async function buildSite({ projectRoot, outputName = 'dist', rename = fs.renameSync } = {}) {
+async function buildSite({
+  projectRoot,
+  outputName = 'dist',
+  rename = fs.renameSync,
+  hooks = {},
+} = {}) {
   if (typeof projectRoot !== 'string' || !path.isAbsolute(projectRoot)) {
     return fail([diagnostic('E_PATH', {}, '项目根必须是绝对路径')]);
   }
@@ -160,15 +165,20 @@ async function buildSite({ projectRoot, outputName = 'dist', rename = fs.renameS
       skills: prepared.skills,
       contentRevision: revision,
       stage,
+      zipWriter: hooks.zipWriter,
     });
     if (!outputs.ok) {
       abortBuild({ lockDir: lock.lockDir, stage });
       return fail(outputs.diagnostics);
     }
+    if (hooks.afterPrepareOutputs) await hooks.afterPrepareOutputs({ stage, outputs });
     const verified = verifyStage(stage, revision, outputs.manifest);
     if (!verified.ok) {
       abortBuild({ lockDir: lock.lockDir, stage });
       return verified;
+    }
+    if (hooks.beforeCommit) {
+      await hooks.beforeCommit({ stage, outputDir: path.join(parent, outputName) });
     }
     const outputDir = path.join(parent, outputName);
     const hadPrevious = fs.existsSync(outputDir);
@@ -184,6 +194,8 @@ async function buildSite({ projectRoot, outputName = 'dist', rename = fs.renameS
       hadPrevious,
       runId,
       rename,
+      writeTransaction: hooks.writeTransaction,
+      remove: hooks.remove,
     });
     if (!committed.ok) {
       return {
