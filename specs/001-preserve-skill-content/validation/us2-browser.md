@@ -48,7 +48,7 @@ US001-SC-02、US001-SC-03。本记录不表示上游 US-001 整体完成或已�
 | 基本搜索回归 | 根列表 4 项；输入 `debug` 得到 2 项结果 |
 | 中文/重复标题锚点 | 重复“快速开始”链接映射到 `#skill-heading-3`；点击后技能 Hash 不变，目标标题存在 |
 | 未知本文锚点 | 链接无 href，文本显示“未知（未找到本文锚点）” |
-| 表格/代码/相对附件 | 页面保留 table、code，附件链接映射到该 Skill 的 `.bin` URL |
+| 表格/代码/相对附件 | 页面保留 table、code，附件链接映射到该 Skill 的 `.bin` URL；正文相对附件点击后下载 `guide.md`，SHA-256 与清单一致 |
 | 同 slug 第二快照 | 旧 `#/skill/same` 链接仍打开同一身份；重建后正文从 Version One 变为 Version Two，contentRevision 改变 |
 | 四旧链接资源前缀 | 列表、详情与下载 URL 均在 `/skill-gallery/` 下；未请求根路径 `/assets` |
 
