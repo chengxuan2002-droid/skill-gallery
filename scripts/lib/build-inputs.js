@@ -114,7 +114,14 @@ function contentRevision(projectRoot, skills) {
       record: skill.record,
     });
   }
-  for (const asset of ['index.html', 'assets/app.js', 'assets/style.css']) {
+  for (const asset of [
+    'index.html',
+    'assets/app.js',
+    'assets/app-views.js',
+    'assets/app-detail.js',
+    'assets/app-actions.js',
+    'assets/style.css',
+  ]) {
     const target = path.join(projectRoot, ...asset.split('/'));
     parts.push({
       asset,

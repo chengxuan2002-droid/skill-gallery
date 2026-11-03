@@ -71,6 +71,7 @@ test('maps headings, aliases, local links and external links', async () => {
   assert.match(result.body, /href="#skill-heading-1"/);
   assert.match(result.body, /href="#skill-heading-2"/);
   assert.doesNotMatch(result.body, /href="[^"]*不存在/);
+  assert.match(result.body, /未知（未找到本文锚点）/);
   assert.match(result.body, /href="https:\/\/example.com"[^>]*rel="noopener noreferrer"/);
   assert.match(result.body, /href="skills\/alpha\/b.bin"/);
   assert.doesNotMatch(result.body, /href="missing\.md"/);

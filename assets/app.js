@@ -1,6 +1,8 @@
 const app = document.getElementById('app');
 const skillCount = document.getElementById('skill-count');
 const views = window.SkillGalleryViews;
+const detailView = window.SkillGalleryDetail;
+const actions = window.SkillGalleryActions;
 const state = {
   skills: [],
   query: '',
@@ -38,6 +40,17 @@ function filterSkills() {
   );
 }
 
+function createDetailActions(detail, token) {
+  const isCurrent = () => token === state.routeToken;
+  return {
+    loadRaw: () => actions.loadRaw(detail, isCurrent),
+    copyText: (text) => actions.copyText(text),
+    shareLink: () => actions.shareLink(detail.slug),
+    downloadPrimary: () => actions.downloadPrimary(detail, isCurrent),
+    downloadFile: (file) => actions.downloadFile(file, isCurrent),
+  };
+}
+
 async function loadDetail(item, token) {
   views.loadingView(app);
   try {
@@ -54,20 +67,24 @@ async function loadDetail(item, token) {
       detail.slug !== item.slug ||
       detail.digest !== item.digest
     ) {
-      views.errorView(app, '内容快照已更新，请刷新页面', () => window.location.reload());
+      views.errorView(
+        app,
+        '内容快照已更新，请刷新页面',
+        () => window.location.reload(),
+        'snapshot_mismatch',
+      );
       return;
     }
-    views.renderDetail(app, detail);
+    detailView.renderDetail(app, detail, createDetailActions(detail, token));
   } catch {
     if (token === state.routeToken) {
-      views.errorView(app, '无法加载该 Skill，请重试', () => route());
+      views.errorView(app, '无法加载该 Skill，请重试', () => route(), 'load_failed');
     }
   }
 }
 
 async function route() {
   const token = ++state.routeToken;
-  if (state.skills.length === 0) return;
   const match = window.location.hash.match(/^#\/skill\/(.+)$/);
   if (!match) {
     document.title = 'Skill Gallery';

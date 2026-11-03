@@ -54,6 +54,18 @@ function makeProject() {
     '<!doctype html><title>Skill Gallery</title><main id="app"></main>',
   );
   fs.writeFileSync(path.join(project.root, 'assets/app.js'), 'globalThis.APP_LOADED = true;');
+  fs.writeFileSync(
+    path.join(project.root, 'assets/app-views.js'),
+    'globalThis.VIEWS_LOADED = true;',
+  );
+  fs.writeFileSync(
+    path.join(project.root, 'assets/app-actions.js'),
+    'globalThis.ACTIONS_LOADED = true;',
+  );
+  fs.writeFileSync(
+    path.join(project.root, 'assets/app-detail.js'),
+    'globalThis.DETAIL_LOADED = true;',
+  );
   fs.writeFileSync(path.join(project.root, 'assets/style.css'), 'body { color: inherit; }');
   fs.writeFileSync(path.join(project.root, '.nojekyll'), '');
   fs.writeFileSync(path.join(project.skillsDir, 'alpha.md'), alphaMarkdown);

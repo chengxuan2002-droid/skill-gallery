@@ -92,6 +92,40 @@ function aliasMap(tokens) {
   return aliases;
 }
 
+function collectFragmentLinks(tokens, result = []) {
+  for (const token of tokens) {
+    if (token.type === 'link' && typeof token.href === 'string') {
+      const hash = token.href.startsWith('#')
+        ? 0
+        : token.href.startsWith('?')
+          ? token.href.indexOf('#')
+          : -1;
+      if (hash !== -1) result.push({ href: token.href, text: token.text || '' });
+    }
+    if (Array.isArray(token.tokens)) collectFragmentLinks(token.tokens, result);
+    if (Array.isArray(token.items)) {
+      for (const item of token.items) {
+        if (Array.isArray(item.tokens)) collectFragmentLinks(item.tokens, result);
+      }
+    }
+  }
+  return result;
+}
+
+function missingAnchorTexts(tokens, aliases) {
+  const missing = new Map();
+  for (const link of collectFragmentLinks(tokens)) {
+    const fragment = link.href.startsWith('#')
+      ? link.href
+      : link.href.slice(link.href.indexOf('#'));
+    if (resolveFragment(fragment, aliases) !== null) continue;
+    if (!missing.has(link.href)) missing.set(link.href, link.text);
+    const encoded = encodeURI(link.href);
+    if (!missing.has(encoded)) missing.set(encoded, link.text);
+  }
+  return missing;
+}
+
 function localReferencePath(value, options) {
   if (typeof value !== 'string' || value.length === 0) return null;
   if (value.startsWith('#') || value.startsWith('?')) return null;
@@ -180,11 +214,13 @@ function headingTransforms(rendered) {
 async function renderMarkdown(markdown, options) {
   const { marked } = await import('marked');
   const tokens = marked.lexer(markdown);
+  const aliases = aliasMap(tokens);
+  const missingAnchors = missingAnchorTexts(tokens, aliases);
   const errors = [];
   const imageRequests = options.imageRequests ?? [];
   const rendered = { heading: 0 };
   const referenceOptions = {
-    aliases: aliasMap(tokens),
+    aliases,
     baseDir: options.baseDir,
     fileSet: options.fileSet,
     fileUrls: options.fileUrls,
@@ -197,14 +233,22 @@ async function renderMarkdown(markdown, options) {
     ...headingTransforms(rendered),
     a: (tagName, attribs) => {
       const next = { ...attribs };
-      const mapped = resolveReference(attribs.href, { ...referenceOptions, image: false });
-      if (mapped === null) delete next.href;
-      else next.href = mapped;
+      const sourceHref = attribs.href;
+      const mapped = resolveReference(sourceHref, { ...referenceOptions, image: false });
+      let text;
+      if (mapped === null) {
+        delete next.href;
+        const anchorKey =
+          typeof sourceHref === 'string' ? sourceHref.replace(/^\\/, '') : sourceHref;
+        if (missingAnchors.has(anchorKey)) {
+          text = `${missingAnchors.get(anchorKey)}（未找到本文锚点）`;
+        }
+      } else next.href = mapped;
       if (/^https?:\/\//i.test(next.href || '')) {
         next.rel = 'noopener noreferrer';
         next.target = '_blank';
       }
-      return { tagName, attribs: next };
+      return text === undefined ? { tagName, attribs: next } : { tagName, attribs: next, text };
     },
     img: (tagName, attribs) => {
       const next = { ...attribs };

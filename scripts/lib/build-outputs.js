@@ -55,9 +55,18 @@ function copyWebAssets(projectRoot, stage, artifacts) {
     writeFile(stage, relativePath, bytes);
     artifacts.set(relativePath, bytes);
   }
-  for (const relativePath of ['assets/app-views.js']) {
+  for (const relativePath of [
+    'assets/app-views.js',
+    'assets/app-actions.js',
+    'assets/app-detail.js',
+  ]) {
     const source = path.join(projectRoot, ...relativePath.split('/'));
-    if (!fs.existsSync(source) || !fs.lstatSync(source).isFile()) continue;
+    if (!fs.existsSync(source) || !fs.lstatSync(source).isFile()) {
+      return {
+        ok: false,
+        diagnostics: [diagnostic('E_BUILD', { path: relativePath }, '缺少站点前端模块')],
+      };
+    }
     const bytes = fs.readFileSync(source);
     writeFile(stage, relativePath, bytes);
     artifacts.set(relativePath, bytes);

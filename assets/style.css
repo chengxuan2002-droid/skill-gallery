@@ -707,3 +707,43 @@ a.skill-card {
   color: inherit;
   text-decoration: none;
 }
+
+.detail-status {
+  margin: 0 0 16px;
+  padding: 8px 12px;
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--accent-soft);
+  font-size: 13px;
+}
+.detail-status[data-state='copy_failed'],
+.detail-status[data-state='download_failed'],
+.detail-status[data-state='raw_unavailable'],
+.detail-status[data-state='load_failed'],
+.detail-status[data-state='snapshot_mismatch'] {
+  border-left-color: var(--warning);
+  background: var(--bg-muted);
+}
+.raw-panel,
+.manual-panel {
+  margin: 0 0 20px;
+  font-size: 13px;
+}
+.raw-text,
+.manual-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  color: var(--text);
+  font-family: 'SF Mono', Monaco, Consolas, monospace;
+  font-size: 13px;
+}
+.raw-text {
+  min-height: 320px;
+  resize: vertical;
+}
+.manual-input {
+  margin-top: 6px;
+}
