@@ -139,7 +139,7 @@ description: "US-001 原件保真、图库模型、旧库迁移与完整取用�
 
 **Purpose**: 完成计划要求的真实命令说明、干净副本/平台验证和本轮范围复核，不增加新业务。
 
-- [ ] T039 [P] 在 tests/integration/reproducibility.test.js 从两个干净且同实现版本的临时副本构建，比较 contentRevision/slug/digest/原件/附件/解包清单及单版本输出；重复相同输入无伪版本/时间，第二快照删附件后无旧文件遗留；不依赖私人路径/凭证/未纳管目录，不要求 ZIP 容器 hash 跨环境相同。（FR-011、NFR-001、NFR-006；DEC-002、DEC-009；AC-002、AC-014 本地部分；US001-SC-06）
+- [x] T039 [P] 在 tests/integration/reproducibility.test.js 从两个干净且同实现版本的临时副本构建，比较 contentRevision/slug/digest/原件/附件/解包清单及单版本输出；重复相同输入无伪版本/时间，第二快照删附件后无旧文件遗留；不依赖私人路径/凭证/未纳管目录，不要求 ZIP 容器 hash 跨环境相同。（FR-011、NFR-001、NFR-006；DEC-002、DEC-009；AC-002、AC-014 本地部分；US001-SC-06）
 - [ ] T040 [P] 仅更新 README.md、AGENTS.md 中本轮已实现并验证的依赖、原件/catalog、限额、迁移/测试/构建/dist 子路径预览与 C-03 遗留锁人工核对/保留事务后重跑的恢复步骤（不新增强制 CLI），说明固定凭证规则/占位边界与标题锚点；明确本地 built 及提交后 cleanup_status=pending、原件非执行、生产 MIME/缓存后续门禁；上传 CLI、GitHub 后台/自动更新/发布仍按现状标规划，不写已可用假命令，不改四份 0.2 主文档的业务范围。（FR-011、NFR-003、NFR-006；DEC-002、DEC-005、DEC-009；AC-012、AC-014 本地部分）
 - [ ] T041 在 specs/001-preserve-skill-content/validation/platform.md 记录同 Node 基线的 macOS 与 Linux ZIP 路径/0644-0755/二进制及 rename/回滚/中断恢复实测；缺环境或未通过必须记未运行/失败并保留此项未完成，不能用单平台结果声称跨平台通过，也不为验证擅自执行远程写入或部署。（FR-004、FR-011、NFR-001、NFR-006；DEC-002、DEC-009；AC-002、AC-012）
 - [ ] T042 完整执行 specs/001-preserve-skill-content/quickstart.md 的适用步骤，在 specs/001-preserve-skill-content/validation/acceptance.md 汇总 npm ci/npm test/迁移/构建/预览的实际命令和退出码、Node/浏览器/平台版本、四项/下载/解包/失败保护证据；逐项判定 US001-SC-01～07，未运行或未达标不勾通过，不能以语法或任务勾选替代验收。（FR-001、FR-004、FR-011、NFR-001、NFR-003、NFR-006；DEC-002、DEC-003、DEC-005、DEC-009；AC-001、AC-002、AC-005、AC-012、AC-014 本地部分）
