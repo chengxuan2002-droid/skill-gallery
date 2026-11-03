@@ -80,6 +80,7 @@ npx ctx7@latest docs <libraryId> "单一概念的具体问题"
 | `node --check scripts/build-index.js` | 构建脚本语法检查 |
 | `node --check assets/app.js` | 前端脚本语法检查 |
 | `node scripts/build-index.js` / `npm run build` | 校验 catalog/skills 并生成 dist；不写根 `assets/search-index.json`；失败保留旧 dist |
+| `node scripts/migrate-catalog.js --dry-run` / `--write` | 仅处理四项固定记录；先全量验证，冲突不覆盖，不导入未纳管目录 |
 | `npm run preview` | 只读预览 dist 的 `/skill-gallery/`；localhost:8000，不提供写入 |
 | `python3 -m http.server 8000` | 本地预览服务；单独运行不证明项目子路径兼容 |
 | `specify check` | 检查 Spec Kit 工具可用性，不是业务验收 |
@@ -120,6 +121,13 @@ US2 后 CI #41639767607 为 100 项，99 通过、0 失败、1 跳过；US3 未�
 用户已明确授权推送并验证。2026-11-02 已推送 main，检查 CI 与首次手动监测在 GitHub runner 上通过，每小时计划已启用；首次定时事件与通知送达未单独验证。
 2026-11-03 又推送开发分支 codex/development-baseline-20261102（当时 3d479e2）并验证新 quality workflow；main 未变。
 未调整通知、分支保护或 Pages 配置；实际运行链接见 specs/001-preserve-skill-content/validation/ci-monitor.md 与 ci-security.md。
+当前内容/构建契约：每个 Skill 最多 500 个普通文件、20 MiB、主文档 1 MiB；原件与 `catalog/<slug>.json`
+分离，构建不执行原件脚本或测试；`dist/` 是唯一公开产物，根 `assets/search-index.json` 只作旧基线。
+构建事务的 `.dist.lock/owner.json`、`.dist.transaction.json`、stage/backup 是私有恢复资料：遗留锁必须先人工确认
+原进程退出并核对 run_id/pid，只移除匹配锁后重跑 `npm run build`，不得先删 dist/backup；提交后清理失败为
+`built` + `cleanup_status=pending`。凭证规则 SECRET-01～04 只报位置/类型，示例使用 `YOUR_*_HERE`、
+`<REDACTED>`、`***` 或 `$ENV`。标题 ID 由构建器生成，重复标题加后缀，未知片段移除 href 并提示。
+上传 CLI、GitHub 后台维护、自动更新和发布仍未实现；生产 Pages MIME/缓存/直接资源安全需发布前验证。
 首页标识或索引契约改变时同时更新 scripts/check-site.js 与相应测试；该探测不代替浏览器交互和原件下载保真验收。
 
 功能或缺陷修复先建立能识别错误行为的验证，再实现并执行适用检查；

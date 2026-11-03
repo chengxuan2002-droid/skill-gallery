@@ -42,6 +42,17 @@ Polish 的跨平台与总验收仍未完成；上传、自动更新和生产发�
 本地验收使用 Windows + Node 22.21.0；声明的 Node 26.3.0/Linux 由 CI 覆盖，结果见下方 T052 run。
 初始化按步骤验证并提交，提交不等于推送或上线。
 
+### 当前内容与构建契约
+
+- 原件位于 `skills/<slug>.md` 或 `skills/<slug>/SKILL.md`；`catalog/<slug>.json` 是独立站内记录。构建只读取 catalog 指向的内容，不扫描未纳管目录，不执行 Skill 脚本、测试或安装其依赖。
+- 初始限额：每 Skill 最多 500 个普通文件、原始总字节 20 MiB、主文档 1 MiB。
+- 迁移：`node scripts/migrate-catalog.js --dry-run`（默认）与 `--write` 仅处理四项固定记录；先验证全部候选，冲突不覆盖已有记录。
+- 精确依赖：yaml 2.9.1、marked 18.1.2、sanitize-html 2.18.1、yazl 3.3.1、minisearch 6.3.0；yauzl 3.4.0 仅开发测试。ESLint/Prettier 等开发依赖见 `package.json` 与锁文件。
+- `npm run build` 只写 `dist/`，不写根 `assets/search-index.json`；`npm run preview` 只映射 `dist` 的 `/skill-gallery/`。成功状态是本地 `built`，不是已发布。
+- 构建事务使用 `.dist.lock/owner.json` 与 `.dist.transaction.json`。发现遗留锁时不要删除 dist、stage 或 backup；先确认原进程已退出并核对 owner 的 run_id/pid，只移除匹配锁，再重跑 `npm run build`。提交后清理失败会返回 `built` + `cleanup_status=pending`，保留记录/backup，不能当作发布成功。
+- 凭证规则 SECRET-01～04 只报告安全位置和类型；示例使用 `YOUR_*_HERE`、`<REDACTED>`、`***` 或 `$ENV`，不得写入真实凭证。标题 ID 由构建器生成；重复标题使用后缀，未知本文锚点移除 href 并提示。
+- 上传 CLI、GitHub 后台维护入口、自动更新与发布仍未实现；不要让旧版根索引/直接 Pages 教程冒充当前流程。生产 Pages 的 MIME、缓存和直接资源安全仍需发布前验证。
+
 ### 检查 CI 与现站基础监测
 
 - [Quality checks](.github/workflows/quality.yml)：所有 push、PR 和手动触发，安装固定工具后运行 `npm run check`，并显式执行 Gitleaks、Semgrep 与根依赖审计；任一步失败汇总为失败。
