@@ -31,3 +31,17 @@ NFR-001、NFR-003、NFR-006，DEC-002、DEC-003、DEC-005、DEC-009，AC-001、A
 这是 T016 尚未实现的预期红灯。
 
 预期实现：T016 提供四固定路径迁移入口；T017 才生成正式四份 catalog 记录。
+
+## T013 构建与预览契约
+
+文件：`tests/integration/build-contract.test.js`、`tests/integration/preview.test.js`。
+覆盖索引/详情/raw/ZIP/manifest 同一 `contentRevision` 与 digest、输出白名单、旧 dist 完整替换、
+缺主文档/重复 slug/缺本地附件整批失败并保留旧输出、首次失败无残缺 dist、第二次 rename 失败回滚，
+以及预览仅映射 `/skill-gallery/`、明确 MIME、拒绝目录列表、链接与编码穿越。
+
+命令：`node --test tests/integration/build-contract.test.js tests/integration/preview.test.js`
+
+结果：exit 1，8/8 失败；构建首因 `Cannot find module '../../scripts/lib/build-site'`，
+预览首因 `Cannot find module '../../scripts/preview'`。这是 T018～T023 尚未实现的预期红灯。
+
+预期实现：T018～T020 提供 `buildSite` 及事务；T021 接入命令；T022 适配前端；T023 提供预览服务器。
