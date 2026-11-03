@@ -61,7 +61,7 @@ description: "US-001 原件保真、图库模型、旧库迁移与完整取用�
 
 ### Tests for User Story 1 — 先写新行为检查
 
-- [ ] T011 [P] [US1] 在 tests/unit/catalog-contract.test.js 先覆盖 data-model.md 全部 CatalogRecord 必填/可空/枚举与优先级、非法日期/URL、未知顶层键、已知原件类型错误不可覆写，以及标准 name/description 原件可配独立记录的 C-01 正反例；补充不编造作者/版本/日期、保留中文显示名和原始扩展字段的断言。（FR-001、NFR-001；DEC-003、DEC-009；AC-001、AC-002）
+- [x] T011 [P] [US1] 在 tests/unit/catalog-contract.test.js 先覆盖 data-model.md 全部 CatalogRecord 必填/可空/枚举与优先级、非法日期/URL、未知顶层键、已知原件类型错误不可覆写，以及标准 name/description 原件可配独立记录的 C-01 正反例；补充不编造作者/版本/日期、保留中文显示名和原始扩展字段的断言。（FR-001、NFR-001；DEC-003、DEC-009；AC-001、AC-002）
 - [ ] T012 [P] [US1] 在 tests/integration/migration.test.js 先覆盖四固定路径迁移、--dry-run 零写入、--write 全部合法才新增、一致 noop/差异冲突、写入中途失败只回收本次新文件、office2md 不入库不变、原件/已有记录不覆盖与标准样例不成为正式第五项。（FR-001、FR-011、NFR-001；DEC-009；AC-001、AC-002）
 - [ ] T013 [P] [US1] 在 tests/integration/build-contract.test.js、tests/integration/preview.test.js 先定义 C-03/C-04 基本契约：索引/详情/raw/ZIP/manifest 同快照、输出白名单、缺主文档/重复 slug/缺本地附件整批失败保留旧输出、成功完整替换、首次失败无残缺 dist、第二次 rename 失败回滚，以及仅 dist 的 /skill-gallery/ 预览；可使用独立样例库，不依赖四记录已落盘。（FR-011、NFR-001、NFR-003、NFR-006；DEC-002、DEC-005、DEC-009；AC-001、AC-012、AC-014 本地部分）
 
