@@ -16,7 +16,7 @@ function prepareLegacyProject() {
   fs.mkdirSync(path.join(project.root, 'scripts'), { recursive: true });
   fs.mkdirSync(path.join(project.root, 'assets'), { recursive: true });
   fs.copyFileSync(
-    path.join(root, 'scripts', 'build-index.js'),
+    path.join(root, 'tests', 'fixtures', 'legacy', 'build-index.js'),
     path.join(project.root, 'scripts', 'build-index.js'),
   );
   fs.copyFileSync(path.join(root, 'assets', 'app.js'), path.join(project.root, 'assets', 'app.js'));

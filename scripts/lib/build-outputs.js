@@ -61,6 +61,22 @@ function copyWebAssets(projectRoot, stage, artifacts) {
     writeFile(stage, '.nojekyll', bytes);
     artifacts.set('.nojekyll', bytes);
   }
+  const vendorRoot = path.resolve(__dirname, '../../node_modules/minisearch');
+  for (const [sourcePath, targetPath] of [
+    ['dist/umd/index.js', 'assets/vendor/minisearch-6.3.0.min.js'],
+    ['LICENSE.txt', 'assets/vendor/LICENSE.minisearch'],
+  ]) {
+    const source = path.join(vendorRoot, ...sourcePath.split('/'));
+    if (!fs.existsSync(source) || !fs.lstatSync(source).isFile()) {
+      return {
+        ok: false,
+        diagnostics: [diagnostic('E_BUILD', { path: targetPath }, '缺少固定 MiniSearch 或许可')],
+      };
+    }
+    const bytes = fs.readFileSync(source);
+    writeFile(stage, targetPath, bytes);
+    artifacts.set(targetPath, bytes);
+  }
   return { ok: true };
 }
 

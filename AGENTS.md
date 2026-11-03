@@ -79,7 +79,7 @@ npx ctx7@latest docs <libraryId> "单一概念的具体问题"
 |---|---|
 | `node --check scripts/build-index.js` | 构建脚本语法检查 |
 | `node --check assets/app.js` | 前端脚本语法检查 |
-| `node scripts/build-index.js` | 现有索引构建，会写入 `assets/search-index.json` |
+| `node scripts/build-index.js` / `npm run build` | 校验 catalog/skills 并生成 dist；不写根 `assets/search-index.json`；失败保留旧 dist |
 | `python3 -m http.server 8000` | 本地预览服务；单独运行不证明项目子路径兼容 |
 | `specify check` | 检查 Spec Kit 工具可用性，不是业务验收 |
 | `npm ci` | 从根锁安装工程开发依赖；不进入 skills 安装 |
@@ -95,7 +95,7 @@ npx ctx7@latest docs <libraryId> "单一概念的具体问题"
 2026-11-02 已建立根 package/锁、工程测试和本地检查入口，Node 26.3.0、npm 11.16.0；
 扫描器版本及来源以 config/security-tools.json 为准。诊断只输出白名单字段；工具缺失、网络/规则/报告失败不能算通过。
 依赖审计 high/critical 阻断，其他级别仍报告；当前有 6 个 moderate 受影响依赖，不能称为零漏洞。
-`npm run build`、正式 preview、迁移和上传 CLI 仍是规划能力；业务依赖/PoC 与业务验收尚待对应任务。
+`npm run build` 已接入本地 dist 构建；正式 preview、迁移和上传 CLI 仍是规划能力；业务依赖/PoC 与业务验收尚待对应任务。
 首次初始化证据见 specs/001-preserve-skill-content/validation/bootstrap.md。
 2026-11-03 在 Windows 复核 T002～T010：`.gitattributes` 固定项目文本为 LF，`skills/**` 不做换行转换；
 测试夹具在 Windows 使用 junction，检查入口解析 `npm.cmd` 与扫描器 `.exe`，安装器支持 Windows zip 包但仍需网络。

@@ -116,3 +116,16 @@ slug/content_path 保持原值。与旧索引的显示名、简介、标签、�
 stage/backup、prepared/promoting/promoted 记录，以及旧输出→backup、stage→dist 的切换；
 第二次 rename 失败时恢复 backup，首次失败不留 dist，清理成功报告 `cleanup_status=complete`。
 验证：`build-contract.test.js` 第 3～5 项通过。
+
+## T021 构建入口与固定前端依赖
+
+`scripts/build-index.js` 改为完整构建入口，`package.json` 接入 `npm run build`；不接受参数，
+公开产物只写 `dist`，不写根 `assets/search-index.json`。旧构建脚本保留为
+`tests/fixtures/legacy/build-index.js`，旧导出回归仍可在隔离副本复现。
+`build-outputs.js` 同步复制固定 MiniSearch 6.3.0 UMD 与许可到 `assets/vendor/`。
+
+命令：在仓库外临时四项项目运行 `node scripts/build-index.js` 两次。
+
+结果：两次均 exit 0、`status=built`、`cleanup_status=complete`，`content_revision` 相同，
+无 `.dist.*` 遗留；根旧索引未被改写。`export-regression.test.js` 1 通过、1 跳过，
+T011～T020 相关测试 28 通过、1 跳过。
