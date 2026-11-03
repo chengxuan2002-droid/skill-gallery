@@ -98,7 +98,8 @@ npx ctx7@latest docs <libraryId> "单一概念的具体问题"
 依赖审计 high/critical 阻断，其他级别仍报告；当前有 6 个 moderate 受影响依赖，不能称为零漏洞。
 `npm run build` 与 `npm run preview` 已接入本地 dist 构建/预览；T001–T024 已完成，US1 本地闭环通过
 （见 specs/001-preserve-skill-content/validation/us1-migration.md）；T025–T030（US2）已完成本地验收
-（见 specs/001-preserve-skill-content/validation/us2-browser.md）；US3/Polish（T031–T043）未实施；
+（见 specs/001-preserve-skill-content/validation/us2-browser.md）；T031–T038（US3）已完成本地故障/安全验收
+（见 specs/001-preserve-skill-content/validation/us3-failures.md）；Polish（T039–T043）未实施；
 上传 CLI、自动更新与生产发布仍待后续故事。
 首次初始化证据见 specs/001-preserve-skill-content/validation/bootstrap.md。
 2026-11-03 在 Windows 复核 T002～T010：`.gitattributes` 固定项目文本为 LF，`skills/**` 不做换行转换；
@@ -106,8 +107,8 @@ npx ctx7@latest docs <libraryId> "单一概念的具体问题"
 本机未安装 Gitleaks/Semgrep，`npm test` 仍有 2 项扫描器用例失败、`npm run check` 非零，安全扫描未通过；
 不能把这些失败算作通过。当前实际 Node 22.21.0 与锁定 26.3.0 不同，未在该基线本地复验；
 开发分支 CI 已在 Node 26.3.0/Linux 完成 US1 时点验证（96 项，95 通过、0 失败、1 跳过）；
-US2 后 CI #41639767607 为 100 项，99 通过、0 失败、1 跳过；本机同版本测试因扫描器缺失为
-97 通过、2 失败、1 跳过，不能把本机失败算作 CI 失败。
+US2 后 CI #41639767607 为 100 项，99 通过、0 失败、1 跳过；US3 未推送，CI 仍为 US2 时点结果。
+本机 US3 后 `npm test` 为 135 项，132 通过、2 失败（扫描器缺失）、1 跳过，不能把本机失败算作 CI 失败。
 详见 specs/001-preserve-skill-content/validation/baseline-remediation.md 与 ci-security.md。
 用户随后已授权提前建设检查型 CI 与现站基础监测：.github/workflows/quality.yml 在所有 push、PR 和手动触发中
 安装固定扫描器，显式执行 npm run check、security:secrets、security:code、security:deps，任一失败汇总为失败，

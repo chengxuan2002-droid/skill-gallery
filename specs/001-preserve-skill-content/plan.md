@@ -167,4 +167,5 @@ T001–T024 已完成，US1 本地闭环通过（[us1-test-contracts.md](validat
 T044–T052 已完成本地，T052 已在开发分支 `codex/development-baseline-20261102` 的 Node 26.3.0/Linux CI 通过
 （Quality checks #41628358392 与 US2 后 #41639767607，见 [ci-security.md](validation/ci-security.md)）。
 T025–T030（US2）已完成本地实现，浏览器与分发验收见 [us2-browser.md](validation/us2-browser.md)；
-T031–T043（US3、Polish）未实施；不能称上游 US-001 完成或已发布。本次补充不改变原规划的业务契约。
+T031–T038（US3）已完成本地故障/安全验收，见 [us3-failures.md](validation/us3-failures.md)；
+T039–T043（Polish）未实施；不能称上游 US-001 完成或已发布。本次补充不改变原规划的业务契约。

@@ -8,7 +8,7 @@ description: "US-001 原件保真、图库模型、旧库迁移与完整取用�
 
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，以及四份 0.2 文档：[调研](../../docs/IndustryResearch.md)、[需求](../../docs/DemandAnalysis.md)、[技术方案](../../docs/TechnicalSolution.md)、[编程规范](../../docs/AiProgrammingGuide.md)。
 
-**Status**: 任务生成于 2026-11-01，2026-11-02 根据分析定向细化 A1/U1/I1；生成阶段未执行实现。2026-11-02 用户另行授权本地工程初始化和逐步提交；2026-11-03 T001–T024 已完成，T025–T030 已完成本地验收，T044–T052 已完成本地，T031 起未实施。功能标识为 001-preserve-skill-content；实际 Git 分支为 `codex/development-baseline-20261102`，已推送到远程同名分支（US1 时点 3d479e2；US2 后 86eac60），Quality checks #41628358392（US1 时点 96 项，95 通过、0 失败、1 跳过）与 #41639767607（US2 后 100 项，99 通过、0 失败、1 跳过）均在 Node 26.3.0/Linux 通过，main 未合并。T002～T010 与跨平台基线修正见 [baseline-remediation.md](validation/baseline-remediation.md)；T011～T024 的 US1 本地闭环见 [us1-migration.md](validation/us1-migration.md)；T025–T030 的 US2 浏览器/分发验收见 [us2-browser.md](validation/us2-browser.md)。不声明 US-001 完成或生产发布。
+**Status**: 任务生成于 2026-11-01，2026-11-02 根据分析定向细化 A1/U1/I1；生成阶段未执行实现。2026-11-02 用户另行授权本地工程初始化和逐步提交；2026-11-03 T001–T024 已完成，T025–T030 已完成本地验收，T031–T038 已完成本地验收，T044–T052 已完成本地，T039 起未实施。功能标识为 001-preserve-skill-content；实际 Git 分支为 `codex/development-baseline-20261102`，已推送到远程同名分支（US1 时点 3d479e2；US2 后 86eac60），Quality checks #41628358392（US1 时点 96 项，95 通过、0 失败、1 跳过）与 #41639767607（US2 后 100 项，99 通过、0 失败、1 跳过）均在 Node 26.3.0/Linux 通过，main 未合并。T002～T010 与跨平台基线修正见 [baseline-remediation.md](validation/baseline-remediation.md)；T011～T024 的 US1 本地闭环见 [us1-migration.md](validation/us1-migration.md)；T025–T030 的 US2 浏览器/分发验收见 [us2-browser.md](validation/us2-browser.md)；T031–T038 的 US3 故障/安全验收见 [us3-failures.md](validation/us3-failures.md)。US3 未推送，不声明 US-001 完成或生产发布。
 
 **Tests**: spec 的 Independent Test、Acceptance Scenarios、US001-SC-01～07 明确要求验证；宪章 IX 要求先建立识别错误行为的验证。因此包含契约、保真、故障注入和浏览器任务。新增行为先记录合理失败，再实现并复验；已由共享层覆盖的行为直接复验，不伪造失败，不复制生产转换算法当期望值。
 
@@ -131,7 +131,7 @@ description: "US-001 原件保真、图库模型、旧库迁移与完整取用�
 - [x] T035 [US3] 依据 T031/T032 在 scripts/lib/validate.js、scripts/lib/content-store.js 校齐全入口的 C-01/C-02 保护：所有 Markdown 引用只查已验证清单，缺本地附件 E_REFERENCE_MISSING 整批失败、越界 E_PATH，不按引用扩大范围；凭证判定只按 C-01 的 SECRET-01～04 与 policyVersion，误报保留原件/旧输出并暂停，不临时放行；落实 E_SCHEMA/E_YAML/E_UTF8/E_DUPLICATE/E_MAIN_MISSING/E_LINK_FILE/E_DOT_PATH_REVIEW/E_SECRET/E_LIMIT 的类型化脱敏诊断；复用已有正确逻辑，只修复测试证实的缺口，不吞异常继续构建。（FR-001、FR-011、NFR-003；DEC-003、DEC-005；AC-001、AC-012；US001-SC-04、US001-SC-07）
 - [x] T036 [US3] 依据 T033 在 scripts/lib/build-site.js 校齐事务恢复与输入复核：E_SOURCE_CHANGED/E_BUSY/E_BUILD/E_RECOVERY_REQUIRED 明确分流，按 C-03 固定记录字段、派生路径、归属和恢复矩阵检查，不覆盖活动构建、不自动抢遗留锁、不按超时清锁、不删除唯一可用 backup；提交前失败恢复旧输出，promoted 后清理失败保留新有效 dist 并报告 cleanup_status=pending；损坏/不匹配记录不猜测，启动恢复未结束旧事务则 1/E_RECOVERY_REQUIRED、不覆盖记录或开始新事务；中断/补偿失败给真实恢复位置及步骤而不谎报原位置可用；只修测试缺口并复用 T020，不增加永久版本目录或生产发布流程。（FR-011、NFR-001、NFR-003；DEC-002、DEC-009；AC-012、AC-014 本地部分）
 - [x] T037 [US3] 依据 T034 校齐 scripts/lib/build-site.js、scripts/preview.js、assets/app.js 的预览/附件安全链路：按 C-04 固定标签/属性和 URL 白名单，只有清理 body_html 入 HTML、标题按 C-04 先去源 id/name 再分配 ID/别名，最终仅保留匹配的标题 ID，本文片段定位不改变技能 Hash，未知片段无 href 并明示；栅格签名准入/活动附件下载与 .bin 明确 MIME、dist 外不可读；正确实现不重复重构，不把本地安全结果冒充 Pages MIME 已验证。（FR-004、FR-011、NFR-003；DEC-005、DEC-009；AC-012）
-- [ ] T038 [US3] 运行 T031～T034 全部负例及真实浏览器恶意展示/取用检查，在 specs/001-preserve-skill-content/validation/us3-failures.md 逐类记录诊断、原件/旧输出摘要、恢复路径、哨兵与回显检查；所有规定非法输入均阻止整批生成，合法点资源/脚本仍保真交付，旧可用库可继续查阅；明确中断时两次 rename 的间隙限制。（FR-001、FR-004、FR-011、NFR-001、NFR-003；DEC-002、DEC-003、DEC-005、DEC-009；AC-001、AC-002、AC-012；US001-SC-04、US001-SC-07）
+- [x] T038 [US3] 运行 T031～T034 全部负例及真实浏览器恶意展示/取用检查，在 specs/001-preserve-skill-content/validation/us3-failures.md 逐类记录诊断、原件/旧输出摘要、恢复路径、哨兵与回显检查；所有规定非法输入均阻止整批生成，合法点资源/脚本仍保真交付，旧可用库可继续查阅；明确中断时两次 rename 的间隙限制。（FR-001、FR-004、FR-011、NFR-001、NFR-003；DEC-002、DEC-003、DEC-005、DEC-009；AC-001、AC-002、AC-012；US001-SC-04、US001-SC-07）
 
 **Checkpoint**: 三个切片的本地功能均完成，安全与故障保护有真实证据；进入跨切片复现与交付复核。
 
@@ -219,7 +219,8 @@ US1 迁移查阅 → US2 完整原文与下载 → US3 全失败矩阵 → 跨�
 
 - T024 的验收记录未重跑完整 `npm test`；2026-11-03 开发分支 CI run #41628358392 在 Node 26.3.0/Linux 上完成
   96 项测试（95 通过、0 失败、1 跳过），作为全量门禁补充证据。本地 Windows/Node 22.21.0 的扫描器缺失仍是环境限制。
-- T025–T030 的 US2 已完成本地验收（见 [us2-browser.md](validation/us2-browser.md)）；T031–T043 的 US3/Polish 尚未实施，
+- T025–T030 的 US2 已完成本地验收（见 [us2-browser.md](validation/us2-browser.md)）；T031–T038 的 US3
+  已完成本地验收（见 [us3-failures.md](validation/us3-failures.md)），但未推送；T039–T043 的 Polish 尚未实施，
   当前复选框不表示上游 US-001 整体完成。
 
 ## 工程基线补充（2026-11-02）
