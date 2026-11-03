@@ -39,7 +39,7 @@ Windows 下由 `.gitattributes` 保持项目文本为 LF，测试夹具使用 ju
 
 ### 检查 CI 与现站基础监测
 
-- [Quality checks](.github/workflows/quality.yml)：main push、PR 和手动触发，安装锁定工具后运行 `npm run check`、`npm run security`。
+- [Quality checks](.github/workflows/quality.yml)：所有 push、PR 和手动触发，安装固定工具后运行 `npm run check`，并显式执行 Gitleaks、Semgrep 与根依赖审计；任一步失败汇总为失败。
 - [Site availability](.github/workflows/site-monitor.yml)：默认分支定时/手动运行，只读取既有网站，不安装项目依赖，不部署或写回。
 - 监测按用户确认每小时一次，UTC 每小时第 7 分（北京时间分钟数相同）；GitHub 调度可能延迟或跳过，不是严格准点服务。
 
@@ -54,6 +54,7 @@ npm run monitor:site
 返回内容始终作为数据，不执行 JS/Skill，不输出正文；本地测试只使用本地 HTTP 服务，不依赖线上站点。
 
 **启用状态：已推送到 main；检查 CI 与首次手动网站监测均在 GitHub 上通过，每小时监测计划已启用。**
+2026-11-03 的 workflow 安全扫描补强尚未推送；远程生效与首次运行需推送后在 Actions 确认。
 首次远程运行结果见下方验证记录；quality 合并必需项仍需单独配置。
 本次没有修改分支保护、通知设置或 Pages 配置；推送触发的既有 Pages 发布也已成功。
 失败首先表现为 Actions 失败运行；是否收到邮件取决于自己的 GitHub 通知设置，不能把本地测试当通知已送达。

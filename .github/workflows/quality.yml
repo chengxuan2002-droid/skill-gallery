@@ -2,7 +2,8 @@ name: Quality checks
 
 on:
   push:
-    branches: [main]
+    branches:
+      - '**'
   pull_request:
   workflow_dispatch:
 
@@ -16,7 +17,7 @@ concurrency:
 jobs:
   quality:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - name: Check out code without persisted credentials
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -39,6 +40,23 @@ jobs:
       - name: Install pinned local security scanners
         run: npm run setup:security
       - name: Run lint, formatting and trusted tests
+        id: quality
+        continue-on-error: true
         run: npm run check
-      - name: Run secret, source and dependency checks
-        run: npm run security
+      - name: Run Gitleaks secret scan
+        id: gitleaks
+        continue-on-error: true
+        run: npm run security:secrets
+      - name: Run Semgrep source scan
+        id: semgrep
+        continue-on-error: true
+        run: npm run security:code
+      - name: Run dependency audit
+        id: deps
+        continue-on-error: true
+        run: npm run security:deps
+      - name: Fail when any gate failed
+        if: steps.quality.outcome != 'success' || steps.gitleaks.outcome != 'success' || steps.semgrep.outcome != 'success' || steps.deps.outcome != 'success'
+        run: |
+          echo "One or more quality/security gates failed."
+          exit 1

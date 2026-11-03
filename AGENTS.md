@@ -103,8 +103,10 @@ npx ctx7@latest docs <libraryId> "单一概念的具体问题"
 本机未安装 Gitleaks/Semgrep，`npm test` 仍有 2 项扫描器用例失败、`npm run check` 非零，安全扫描未通过；
 不能把这些失败算作通过。当前实际 Node 22.21.0 与锁定 26.3.0 不同，未在该基线复验；
 详见 specs/001-preserve-skill-content/validation/baseline-remediation.md。
-用户随后已授权提前建设检查型 CI 与现站基础监测：.github/workflows/quality.yml 复用本地检查，
-site-monitor.yml 以默认分支定时/手动读取现站；完整 SHA 固定、只读权限、无部署/写回，不能改为特权 PR 触发器。
+用户随后已授权提前建设检查型 CI 与现站基础监测：.github/workflows/quality.yml 在所有 push、PR 和手动触发中
+安装固定扫描器，显式执行 npm run check、security:secrets、security:code、security:deps，任一失败汇总为失败，
+不只依赖本机 .tools；site-monitor.yml 以默认分支定时/手动读取现站；完整 SHA 固定、只读权限、无部署/写回，
+不能改为特权 PR 触发器。2026-11-03 的安全扫描补强尚未推送，远程首次运行待推送后验证。
 监测按用户确认每小时一次，与来源更新 Q-004 无关；每请求 8 秒、失败再试一次，诊断不含响应正文。
 用户已明确授权推送并验证。2026-11-02 已推送 main，检查 CI 与首次手动监测在 GitHub runner 上通过，每小时计划已启用；首次定时事件与通知送达未单独验证。
 未调整通知、分支保护或 Pages 配置；实际运行链接见 specs/001-preserve-skill-content/validation/ci-monitor.md。

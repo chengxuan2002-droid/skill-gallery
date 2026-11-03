@@ -231,3 +231,15 @@ US1 迁移查阅 → US2 完整原文与下载 → US3 全失败矩阵 → 跨�
 - [x] T051 在 validation/ci-monitor.md 记录现站四资源、完整检查和原件保护，定向更新 README/AGENTS，明确定时启用、通知和远程未验证状态并提交。（FR-011、NFR-003/004/006；DEC-009；AC-014 支撑）
 
 补充后共 51 项，原业务任务编号不变；复选框不替代远程执行证据。
+
+## push/PR 安全扫描补强（2026-11-03）
+
+用户要求每次 push/PR 自动执行 Gitleaks 和 Semgrep，不依赖当前开发机环境。
+
+- [x] T052 修改 .github/workflows/quality.yml：触发所有 push、PR 和手动运行；固定 Ubuntu/Node/npm/uv 与 Action SHA，
+  安装固定扫描器后显式执行 `npm run check`、`security:secrets`、`security:code`、`security:deps`，
+  各步骤独立执行并由最终门禁汇总失败；更新 README/AGENTS 并新增 validation/ci-security.md。
+  本地完成 YAML/格式/命令验证，远程首次运行待推送后在 Actions 确认。
+  （NFR-003/006；DEC-005/009；AC-012/014 工程支撑）
+
+补充后共 52 项，原业务任务编号不变；复选框不替代远程执行证据。

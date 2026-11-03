@@ -49,7 +49,7 @@ Semgrep 通过 uv 的独立工具环境安装，不改变站点的 npm 包管理
 用户已授权在业务编码前补齐检查型 CI 和现有网站基础可用性监测，不改变四份 0.2 业务契约或宪章 1.0.0。
 复用 GitHub Actions；与外部监控服务相比，免去额外账号/凭证和后台，代价是定时运行非严格 SLA、通知依赖 GitHub 设置。
 
-- `.github/workflows/quality.yml`：main push、PR、手动触发；固定 Node/npm/uv，复用 npm ci、setup:security、check、security。
+- `.github/workflows/quality.yml`：所有 push、PR、手动触发；固定 Node/npm/uv，安装固定扫描器后显式执行 check、Gitleaks、Semgrep 和依赖审计，任一失败汇总为失败。
 - `.github/workflows/site-monitor.yml`：默认分支定时/手动触发，仅用 Node 读取现站，无依赖安装和发布。
 - `scripts/check-site.js`：固定 https://chengxuan2002-droid.github.io/skill-gallery/，检查首页、app.js、style.css、search-index.json。
   校验 HTTP 200、匹配 MIME、非空内容；首页身份标识与旧版索引结构可辨识，不能把返回 200 的错误页当作正常。

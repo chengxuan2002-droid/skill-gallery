@@ -71,3 +71,6 @@ GitHub 返回两个新 workflow 均 active；每小时第 7 分的 cron 已位�
 [调度](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule)、
 [通知](https://docs.github.com/en/actions/concepts/workflows-and-actions/notifications-for-workflow-runs)、
 [Actionlint](https://github.com/rhysd/actionlint/blob/main/docs/usage.md)。
+
+2026-11-03 后续：quality.yml 已改为所有 push/PR 显式执行 Gitleaks、Semgrep 和依赖审计，
+详见 [ci-security.md](ci-security.md)。本文件的远程运行记录仍对应旧版 workflow，新配置尚未推送。
