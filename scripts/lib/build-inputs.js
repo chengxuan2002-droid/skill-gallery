@@ -12,7 +12,7 @@ const {
   validateRecordOwnership,
 } = require('./validate');
 
-const POLICY_VERSION = 'build-policy-v1';
+const POLICY_VERSION = 'build-policy-v2';
 
 function diagnostic(code, context, message) {
   return createDiagnostic(code, { ...context, message });
