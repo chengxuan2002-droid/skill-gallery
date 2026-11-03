@@ -83,3 +83,11 @@ frontmatter 同名/别名回退、`declared_version` 的 catalog → version →
 
 结果：exit 0，7/7 通过。另在非仓库临时项目执行 `--write`，生成四份记录且原件未变；
 正式 `catalog/` 仍由 T017 生成，本轮未写仓库数据。
+
+## T017 四份正式 catalog 记录
+
+执行：`node scripts/migrate-catalog.js --write`，再执行一次得到 `noop`。
+生成 `catalog/{superpower-systematic-debugging,code-review-assistant,refactoring-workflow,handoff-codex}.json`；
+四份记录均通过 `validateCatalogRecord`，`source_tracking` 全为 null，`license` 未伪造；
+slug/content_path 保持原值。与旧索引的显示名、简介、标签、平台、来源、链接、作者、版本、日期和用法逐项一致；
+六项原件 SHA-256 与 `migration-baseline.json` 一致。`office2md` 与标准样例未生成记录。
