@@ -3,16 +3,27 @@ const os = require('node:os');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 
-function command(binary, args, cwd) {
+function command(binary, args, cwd, extra = {}) {
   const result = spawnSync(binary, args, {
     cwd,
     encoding: 'utf8',
     timeout: 120000,
     maxBuffer: 16 * 1024 * 1024,
     env: { ...process.env, SEMGREP_SEND_METRICS: 'off', SEMGREP_ENABLE_VERSION_CHECK: '0' },
+    ...extra,
   });
   if (result.error || result.signal) throw new Error('TOOL_UNAVAILABLE');
   return result;
+}
+
+function npmCommand(args, cwd) {
+  if (process.platform === 'win32') return command('npm.cmd', args, cwd, { shell: true });
+  return command('npm', args, cwd);
+}
+
+function scannerBinary(root, name) {
+  const executable = process.platform === 'win32' ? `${name}.exe` : name;
+  return path.join(root, '.tools/bin', executable);
 }
 
 function listFiles(root) {
@@ -33,10 +44,9 @@ function listFiles(root) {
 
 function reportPath(value, files, snapshot) {
   if (typeof value !== 'string') throw new Error('REPORT_INVALID');
-  const relative = (path.isAbsolute(value) ? path.relative(snapshot, value) : value).replace(
-    /^\.\//,
-    '',
-  );
+  const relative = (path.isAbsolute(value) ? path.relative(snapshot, value) : value)
+    .replace(/\\/g, '/')
+    .replace(/^\.\//, '');
   if (!files.includes(relative)) throw new Error('REPORT_SCOPE_INVALID');
   return relative;
 }
@@ -104,11 +114,11 @@ function summarize(check, report, exit, files, snapshot) {
 function scan(check, root) {
   if (check === 'deps') {
     if (!fs.existsSync(path.join(root, 'package-lock.json'))) throw new Error('LOCK_MISSING');
-    const result = command('npm', ['audit', '--json', '--audit-level=high'], root);
+    const result = npmCommand(['audit', '--json', '--audit-level=high'], root);
     return summarize(check, JSON.parse(result.stdout), result.status, ['package-lock.json'], root);
   }
   const tools = JSON.parse(fs.readFileSync(path.join(root, 'config/security-tools.json'), 'utf8'));
-  const binary = path.join(root, '.tools/bin', check === 'secrets' ? 'gitleaks' : 'semgrep');
+  const binary = scannerBinary(root, check === 'secrets' ? 'gitleaks' : 'semgrep');
   const version = command(binary, [check === 'secrets' ? 'version' : '--version'], root);
   const expected = check === 'secrets' ? tools.gitleaks.version : tools.semgrep.version;
   if (version.status !== 0 || version.stdout.trim().replace(/^v/, '') !== expected)

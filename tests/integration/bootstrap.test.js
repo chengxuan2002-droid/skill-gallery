@@ -26,7 +26,11 @@ function fixture(t) {
     fs.copyFileSync(path.join(root, name), path.join(dir, name));
   }
   for (const name of ['node_modules', '.tools'])
-    fs.symlinkSync(path.join(root, name), path.join(dir, name), 'dir');
+    fs.symlinkSync(
+      path.join(root, name),
+      path.join(dir, name),
+      process.platform === 'win32' ? 'junction' : 'dir',
+    );
   for (const name of ['assets', 'scripts', 'tests/unit', 'tests/integration'])
     fs.mkdirSync(path.join(dir, name), { recursive: true });
   const git = spawnSync('git', ['init', '--quiet'], { cwd: dir });
@@ -84,7 +88,13 @@ test('npm test runs only trusted unit and integration tests, leaving the Skill s
   fs.writeFileSync(path.join(dir, 'skills/untrusted/never.test.js'), body('SKILL_EXECUTED'));
   const env = { ...process.env };
   delete env.NODE_TEST_CONTEXT;
-  const result = spawnSync('npm', ['test'], { cwd: dir, env, encoding: 'utf8' });
+  const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+  const result = spawnSync(npm, ['test'], {
+    cwd: dir,
+    env,
+    encoding: 'utf8',
+    shell: process.platform === 'win32',
+  });
   assert.equal(result.status, 0);
   assert.equal(fs.existsSync(path.join(dir, 'unit-ran')), true, result.stdout + result.stderr);
   assert.equal(fs.existsSync(path.join(dir, 'integration-ran')), true);
@@ -147,6 +157,9 @@ test('audit registry failures remain failures and raw subprocess diagnostics sta
     '#!/usr/bin/env node\nconsole.log(JSON.stringify({error: {code: "EAI_AGAIN", summary: "YOUR_API_KEY_HERE"}})); console.error("private registry context"); process.exit(1);\n',
     { mode: 0o700 },
   );
+  if (process.platform === 'win32') {
+    fs.writeFileSync(`${shim}.cmd`, `@echo off\r\n"${process.execPath}" "%~dp0npm" %*\r\n`);
+  }
   const result = scan(dir, 'deps', {
     ...process.env,
     PATH: path.join(dir, 'bin') + path.delimiter + process.env.PATH,

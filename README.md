@@ -29,6 +29,9 @@ npm run security
 安全结果只输出规则、位置、级别及状态，不输出凭证或源码片段。
 见[诊断约定](specs/001-preserve-skill-content/validation/diagnostics.md)和[本次验证](specs/001-preserve-skill-content/validation/bootstrap.md)。
 当前审计仍有 6 个 moderate 受影响依赖，无 high/critical；通过阻断阈值不表示零漏洞。
+Windows 下由 `.gitattributes` 保持项目文本为 LF，测试夹具使用 junction；安装器支持 Windows zip 与
+`gitleaks.exe`/`semgrep.exe`，但仍需网络。扫描器未安装时，`npm test` 中两项扫描器用例与 `npm run check`
+会失败，不能视为通过；当前环境复核见 [跨平台基线与缺口修正](specs/001-preserve-skill-content/validation/baseline-remediation.md)。
 
 本轮只有工程基线：`npm run build`、正式 preview、迁移、上传及自动更新尚未实现，不能作为可用命令调用。
 旧索引构建只在隔离副本验证，不用它替代保真/完整取用验收；浏览器异常采集与生产发布仍待后续实施。

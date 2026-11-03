@@ -8,7 +8,7 @@ description: "US-001 原件保真、图库模型、旧库迁移与完整取用�
 
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，以及四份 0.2 文档：[调研](../../docs/IndustryResearch.md)、[需求](../../docs/DemandAnalysis.md)、[技术方案](../../docs/TechnicalSolution.md)、[编程规范](../../docs/AiProgrammingGuide.md)。
 
-**Status**: 任务生成于 2026-11-01，2026-11-02 根据分析定向细化 A1/U1/I1；生成阶段未执行实现；2026-11-02 用户另行授权本地工程初始化和逐步提交，实际进度见复选框及工程补充；不迁移、不开展业务实现、不发布。功能标识为 001-preserve-skill-content，当前实际 Git 分支为 main；没有自动创建分支。
+**Status**: 任务生成于 2026-11-01，2026-11-02 根据分析定向细化 A1/U1/I1；生成阶段未执行实现；2026-11-02 用户另行授权本地工程初始化和逐步提交，实际进度见复选框及工程补充；不迁移、不开展业务实现、不发布。功能标识为 001-preserve-skill-content，2026-11-03 核对实际 Git 分支为 `codex/development-baseline-20261102`（相对远程同名分支未推送）；T002～T010 与跨平台基线修正已完成，证据见 [baseline-remediation.md](validation/baseline-remediation.md)；T011 起未实施。
 
 **Tests**: spec 的 Independent Test、Acceptance Scenarios、US001-SC-01～07 明确要求验证；宪章 IX 要求先建立识别错误行为的验证。因此包含契约、保真、故障注入和浏览器任务。新增行为先记录合理失败，再实现并复验；已由共享层覆盖的行为直接复验，不伪造失败，不复制生产转换算法当期望值。
 
@@ -208,7 +208,7 @@ US1 迁移查阅 → US2 完整原文与下载 → US3 全失败矩阵 → 跨�
 ## 工程基线补充（2026-11-02）
 
 用户现已授权执行 project-bootstrap 本地工程基线；此前“仅任务生成”的表述描述历史阶段，不限制本轮已授权工程工作。
-保持所有原业务编号与验收范围；不实现 US-001 的功能、CI 或发布。T002/T003 的业务依赖与标准数据夹具仍须后续完成。
+保持所有原业务编号与验收范围；不实现 US-001 的功能、CI 或发布。T002/T003 已于 2026-11-03 完成，证据见 [foundational.md](validation/foundational.md)；T011 起的业务功能仍未实施。
 
 - [x] T044 创建根 package.json/package-lock.json/.node-version 与工程忽略项，精确锁定开发工具，并在隔离副本验证 npm ci。（NFR-003/NFR-006；DEC-005/009；AC-012/014 工程支撑）
 - [x] T045 添加 eslint.config.mjs、Prettier/EditorConfig 和 tests/unit/bootstrap.test.js、tests/integration/bootstrap.test.js，验证受信任测试发现与规范门禁拒绝行为。（NFR-003/NFR-006；DEC-005；AC-012 工程支撑）
