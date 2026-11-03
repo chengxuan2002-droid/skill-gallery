@@ -1,6 +1,6 @@
 # Skill Gallery 技术方案
 
-> 状态：关键架构决策已确认；US-001 的 US1 切片已本地实现并完成隔离验收 · 版本：0.2 · 日期：2026-11-01（状态补充：2026-11-03）
+> 状态：关键架构决策已确认；US-001 的 US1/US2 切片已本地实现并完成隔离/浏览器验收 · 版本：0.2 · 日期：2026-11-01（状态补充：2026-11-03）
 > 基线：[DemandAnalysis.md](DemandAnalysis.md) 0.2。除已注明的 US1 实现外，其余模块、命令和流水线仍为设计；
 > M-05～M-07、上传、自动更新与生产发布尚未实现。
 
@@ -45,10 +45,12 @@ Node 内建测试显式限定受信任目录；安全检查使用独立本地 Gi
 Semgrep 通过 uv 的独立工具环境安装，不改变站点的 npm 包管理方式；扫描器不进入生产产物。
 此项仅支撑 NFR-003/NFR-006、DEC-005/009，不能替代 C-01/03 内容校验与业务 PoC；首次工程初始化未包含 Actions、部署及线上监控；下述提前建设授权仅覆盖只检查 CI 与现站基础监测，生产发布链仍属 US-003。
 
-2026-11-03 US1 实现补充：T011–T024 已完成，新增 `catalog/` 四份记录、四固定路径迁移、完整 dist 构建（索引/详情/raw/ZIP/manifest/事务）、
+2026-11-03 US1/US2 实现补充：T011–T024 已完成，新增 `catalog/` 四份记录、四固定路径迁移、完整 dist 构建（索引/详情/raw/ZIP/manifest/事务）、
 只读预览及前端最小适配；隔离验收见 [us1-test-contracts.md](../specs/001-preserve-skill-content/validation/us1-test-contracts.md)、
 [us1-migration.md](../specs/001-preserve-skill-content/validation/us1-migration.md)。
-US2 的完整复制/下载交互、US3 的故障矩阵与 Polish 的跨平台/总验收未完成，不能称上游 US-001 完成。
+US2 的完整查阅、复制和下载已完成本地实现与浏览器验收，见
+[us2-browser.md](../specs/001-preserve-skill-content/validation/us2-browser.md)；
+US3 的故障矩阵与 Polish 的跨平台/总验收未完成，不能称上游 US-001 完成。
 T052 quality workflow 已在开发分支的 Node 26.3.0/Linux CI 通过，见 [ci-security.md](../specs/001-preserve-skill-content/validation/ci-security.md)。
 
 ### 1.3 提前建设检查 CI 与现站监测（2026-11-02）
@@ -342,4 +344,4 @@ NFR-002 的 1,000 项/10 MiB/50 次/p95 200ms 为统一候选口径，测法见 
 
 ## 15. 技术准备结论
 
-GitHub 管理、首版 GitHub 自动更新及 Git 历史保留已获用户确认，核心设计可按 US 依赖进入开发。US-001 的 US1 切片已完成本地实现和隔离验收；US2/US3/Polish、同快照生产发布及其他故事仍未完成。Q-004 只影响生产定时任务启用。最终准备度及决策状态以 [需求附录](DemandAnalysis.md#questions) 为准。
+GitHub 管理、首版 GitHub 自动更新及 Git 历史保留已获用户确认，核心设计可按 US 依赖进入开发。US-001 的 US1/US2 切片已完成本地实现和隔离/浏览器验收；US3/Polish、同快照生产发布及其他故事仍未完成。Q-004 只影响生产定时任务启用。最终准备度及决策状态以 [需求附录](DemandAnalysis.md#questions) 为准。

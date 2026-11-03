@@ -8,7 +8,7 @@ description: "US-001 原件保真、图库模型、旧库迁移与完整取用�
 
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，以及四份 0.2 文档：[调研](../../docs/IndustryResearch.md)、[需求](../../docs/DemandAnalysis.md)、[技术方案](../../docs/TechnicalSolution.md)、[编程规范](../../docs/AiProgrammingGuide.md)。
 
-**Status**: 任务生成于 2026-11-01，2026-11-02 根据分析定向细化 A1/U1/I1；生成阶段未执行实现。2026-11-02 用户另行授权本地工程初始化和逐步提交；2026-11-03 T001–T024 已完成，T044–T052 已完成本地，T025 起未实施。功能标识为 001-preserve-skill-content；实际 Git 分支为 `codex/development-baseline-20261102`，已推送到远程同名分支（当时 3d479e2），Quality checks #41628358392 在 Node 26.3.0/Linux 通过（96 项，95 通过、0 失败、1 跳过），main 未合并。T002～T010 与跨平台基线修正见 [baseline-remediation.md](validation/baseline-remediation.md)；T011～T024 的 US1 本地闭环见 [us1-migration.md](validation/us1-migration.md)。不声明 US-001 完成或生产发布。
+**Status**: 任务生成于 2026-11-01，2026-11-02 根据分析定向细化 A1/U1/I1；生成阶段未执行实现。2026-11-02 用户另行授权本地工程初始化和逐步提交；2026-11-03 T001–T024 已完成，T025–T030 已完成本地验收，T044–T052 已完成本地，T031 起未实施。功能标识为 001-preserve-skill-content；实际 Git 分支为 `codex/development-baseline-20261102`，已推送到远程同名分支（当时 3d479e2），Quality checks #41628358392 在 Node 26.3.0/Linux 通过（96 项，95 通过、0 失败、1 跳过），main 未合并。T002～T010 与跨平台基线修正见 [baseline-remediation.md](validation/baseline-remediation.md)；T011～T024 的 US1 本地闭环见 [us1-migration.md](validation/us1-migration.md)；T025–T030 的 US2 浏览器/分发验收见 [us2-browser.md](validation/us2-browser.md)。不声明 US-001 完成或生产发布。
 
 **Tests**: spec 的 Independent Test、Acceptance Scenarios、US001-SC-01～07 明确要求验证；宪章 IX 要求先建立识别错误行为的验证。因此包含契约、保真、故障注入和浏览器任务。新增行为先记录合理失败，再实现并复验；已由共享层覆盖的行为直接复验，不伪造失败，不复制生产转换算法当期望值。
 
@@ -101,15 +101,15 @@ description: "US-001 原件保真、图库模型、旧库迁移与完整取用�
 
 ### Tests for User Story 2
 
-- [ ] T025 [P] [US2] 在 tests/integration/distribution.test.js 对 C-03/C-04 原件资源建立独立单文件/目录夹具验收：完整 frontmatter/版本/扩展/代码/中文，原名、空目录、许可、二进制、文件清单、逐字节摘要及规范执行位；核对所有 PublicFile/ZIP URL 与 hash、不混入跨 Skill 文件，验证 content_text/body_html 不能充当原件来源，不强求 ZIP 容器整体字节相等。（FR-004、NFR-001；DEC-002、DEC-005；AC-002）
-- [ ] T026 [P] [US2] 在 specs/001-preserve-skill-content/validation/us2-browser.md 建立并用现有可信浏览器工具/人工执行前置失败场景：查看/复制原文、原名文件/ZIP/附件下载、剪贴板拒绝、404/摘要不符、未知 slug/不支持 schema、迟到响应/跨修订阻断、中文/重复标题跳转及未知片段、点击后技能 Hash 不变、同 slug 第二快照旧链接和子路径刷新；记录浏览器版本及失败原因，和 T025 使用独立临时输出，不新增 E2E 框架。（FR-004、FR-011、NFR-003；DEC-002、DEC-005、DEC-009；AC-002、AC-005、AC-012）
+- [x] T025 [P] [US2] 在 tests/integration/distribution.test.js 对 C-03/C-04 原件资源建立独立单文件/目录夹具验收：完整 frontmatter/版本/扩展/代码/中文，原名、空目录、许可、二进制、文件清单、逐字节摘要及规范执行位；核对所有 PublicFile/ZIP URL 与 hash、不混入跨 Skill 文件，验证 content_text/body_html 不能充当原件来源，不强求 ZIP 容器整体字节相等。（FR-004、NFR-001；DEC-002、DEC-005；AC-002）
+- [x] T026 [P] [US2] 在 specs/001-preserve-skill-content/validation/us2-browser.md 建立并用现有可信浏览器工具/人工执行前置失败场景：查看/复制原文、原名文件/ZIP/附件下载、剪贴板拒绝、404/摘要不符、未知 slug/不支持 schema、迟到响应/跨修订阻断、中文/重复标题跳转及未知片段、点击后技能 Hash 不变、同 slug 第二快照旧链接和子路径刷新；记录浏览器版本及失败原因，和 T025 使用独立临时输出，不新增 E2E 框架。（FR-004、FR-011、NFR-003；DEC-002、DEC-005、DEC-009；AC-002、AC-005、AC-012）
 
 ### Implementation for User Story 2
 
-- [ ] T027 [US2] 在 assets/app.js、assets/style.css 增加必要原文文本区和完整原文复制：raw_url 响应/大小/SHA-256 正确后严格 UTF-8 解码，遵守「主文档“查看原文/复制”从 raw_url 读取完整 UTF-8 文本，不能从 body_html/content_text 还原」，保留 BOM/换行、不得 trim 或经 textarea 重建；等待剪贴板成功才提示，拒绝则保留手工复制区；只改本操作所需样式。（FR-004、NFR-001、NFR-003；DEC-002、DEC-005；AC-002、AC-005）
-- [ ] T028 [US2] 在 assets/app.js 接通原名单文件、完整 ZIP、附件下载和相对附件点击：验证响应/大小/摘要后以 application/octet-stream Blob 按 download_name 发起，安全回收句柄；HTML/SVG/脚本不导航为活动页面、不执行，安全栅格图片用 media_url，其他图保留 alt 与下载入口；不能保存 404 页或把“已发起下载”说成已安装。（FR-004、NFR-001、NFR-003；DEC-002、DEC-005；AC-002、AC-005、AC-012）
-- [ ] T029 [US2] 在 assets/app.js 完成安全分享链接与状态一致性，回归 T022 的本文锚点处理且不增加标题分享路由：站点基址取当前文档目录并忽略 Hash、内部路径正确编码；复制链接等待真实成功；校验 schemaVersion/contentRevision、detail.slug/digest 和资源摘要，忽略过期异步响应；明确区分 loading、ready、not_found、load_failed、snapshot_mismatch、raw_unavailable、copy_failed、download_failed，提供刷新/重试/手动复制，不给旧数组或坏 JSON 空库假象，不冒充生产缓存策略已验证。（FR-004、FR-011、NFR-003、NFR-006；DEC-005、DEC-009；AC-005、AC-012、AC-014 本地部分）
-- [ ] T030 [US2] 执行 tests/integration/distribution.test.js 及 T026 全部浏览器步骤，在 specs/001-preserve-skill-content/validation/us2-browser.md 记录真实下载/解包摘要、四旧链接直接访问/刷新/复制及同 slug 手工快照、两个操作失败零误报、基本列表搜索回归；代码/表格/相对附件正常，证据未覆盖项明确标未运行，不把模拟内容变更当自动升级交付。（FR-004、FR-011、NFR-001、NFR-006；DEC-002、DEC-005、DEC-009；AC-002、AC-005、AC-012；US001-SC-02、US001-SC-03）
+- [x] T027 [US2] 在 assets/app.js、assets/style.css 增加必要原文文本区和完整原文复制：raw_url 响应/大小/SHA-256 正确后严格 UTF-8 解码，遵守「主文档“查看原文/复制”从 raw_url 读取完整 UTF-8 文本，不能从 body_html/content_text 还原」，保留 BOM/换行、不得 trim 或经 textarea 重建；等待剪贴板成功才提示，拒绝则保留手工复制区；只改本操作所需样式。（FR-004、NFR-001、NFR-003；DEC-002、DEC-005；AC-002、AC-005）
+- [x] T028 [US2] 在 assets/app.js 接通原名单文件、完整 ZIP、附件下载和相对附件点击：验证响应/大小/摘要后以 application/octet-stream Blob 按 download_name 发起，安全回收句柄；HTML/SVG/脚本不导航为活动页面、不执行，安全栅格图片用 media_url，其他图保留 alt 与下载入口；不能保存 404 页或把“已发起下载”说成已安装。（FR-004、NFR-001、NFR-003；DEC-002、DEC-005；AC-002、AC-005、AC-012）
+- [x] T029 [US2] 在 assets/app.js 完成安全分享链接与状态一致性，回归 T022 的本文锚点处理且不增加标题分享路由：站点基址取当前文档目录并忽略 Hash、内部路径正确编码；复制链接等待真实成功；校验 schemaVersion/contentRevision、detail.slug/digest 和资源摘要，忽略过期异步响应；明确区分 loading、ready、not_found、load_failed、snapshot_mismatch、raw_unavailable、copy_failed、download_failed，提供刷新/重试/手动复制，不给旧数组或坏 JSON 空库假象，不冒充生产缓存策略已验证。（FR-004、FR-011、NFR-003、NFR-006；DEC-005、DEC-009；AC-005、AC-012、AC-014 本地部分）
+- [x] T030 [US2] 执行 tests/integration/distribution.test.js 及 T026 全部浏览器步骤，在 specs/001-preserve-skill-content/validation/us2-browser.md 记录真实下载/解包摘要、四旧链接直接访问/刷新/复制及同 slug 手工快照、两个操作失败零误报、基本列表搜索回归；代码/表格/相对附件正常，证据未覆盖项明确标未运行，不把模拟内容变更当自动升级交付。（FR-004、FR-011、NFR-001、NFR-006；DEC-002、DEC-005、DEC-009；AC-002、AC-005、AC-012；US001-SC-02、US001-SC-03）
 
 **Checkpoint**: US2 可用独立夹具证明完整查阅取用。整个功能还需 US3 和最终跨场景验收。
 
@@ -219,7 +219,8 @@ US1 迁移查阅 → US2 完整原文与下载 → US3 全失败矩阵 → 跨�
 
 - T024 的验收记录未重跑完整 `npm test`；2026-11-03 开发分支 CI run #41628358392 在 Node 26.3.0/Linux 上完成
   96 项测试（95 通过、0 失败、1 跳过），作为全量门禁补充证据。本地 Windows/Node 22.21.0 的扫描器缺失仍是环境限制。
-- T025–T043 的 US2/US3/Polish 尚未实施；当前复选框不表示上游 US-001 整体完成。
+- T025–T030 的 US2 已完成本地验收（见 [us2-browser.md](validation/us2-browser.md)）；T031–T043 的 US3/Polish 尚未实施，
+  当前复选框不表示上游 US-001 整体完成。
 
 ## 工程基线补充（2026-11-02）
 

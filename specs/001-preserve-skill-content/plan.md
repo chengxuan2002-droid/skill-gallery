@@ -166,4 +166,5 @@ AC-001/002 覆盖本故事规定的完整迁移和取用；AC-005 仅链接与�
 T001–T024 已完成，US1 本地闭环通过（[us1-test-contracts.md](validation/us1-test-contracts.md)、[us1-migration.md](validation/us1-migration.md)）；
 T044–T052 已完成本地，T052 已在开发分支 `codex/development-baseline-20261102` 的 Node 26.3.0/Linux CI 通过
 （Quality checks #41628358392，见 [ci-security.md](validation/ci-security.md)）。
-T025–T043（US2、US3、Polish）未实施；不能称上游 US-001 完成或已发布。本次补充不改变原规划的业务契约。
+T025–T030（US2）已完成本地实现，浏览器与分发验收见 [us2-browser.md](validation/us2-browser.md)；
+T031–T043（US3、Polish）未实施；不能称上游 US-001 完成或已发布。本次补充不改变原规划的业务契约。
