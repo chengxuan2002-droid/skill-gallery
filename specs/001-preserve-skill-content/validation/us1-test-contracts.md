@@ -129,3 +129,14 @@ stage/backup、prepared/promoting/promoted 记录，以及旧输出→backup、s
 结果：两次均 exit 0、`status=built`、`cleanup_status=complete`，`content_revision` 相同，
 无 `.dist.*` 遗留；根旧索引未被改写。`export-regression.test.js` 1 通过、1 跳过，
 T011～T020 相关测试 28 通过、1 跳过。
+
+## T023 只读 dist 预览
+
+文件：`scripts/preview.js`、`package.json`。导出 `createPreviewServer({root, basePath})`，CLI 监听
+`127.0.0.1:8000`，只映射 `/skill-gallery/`；拒绝非 GET/HEAD、前缀外路径、目录列表、链接组件和编码穿越；
+`.bin` 固定 `application/octet-stream`，不按 HTML 嗅探。
+
+命令：`node --test tests/integration/preview.test.js`
+
+结果：exit 0，3/3 通过。CLI 的 `npm run preview` 需先有本地 `dist`，端到端预览留给 T024 构建后执行；
+本轮未启动 8000 端口服务，未发布。

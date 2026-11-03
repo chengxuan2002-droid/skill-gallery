@@ -33,7 +33,7 @@ Windows 下由 `.gitattributes` 保持项目文本为 LF，测试夹具使用 ju
 `gitleaks.exe`/`semgrep.exe`，但仍需网络。扫描器未安装时，`npm test` 中两项扫描器用例与 `npm run check`
 会失败，不能视为通过；当前环境复核见 [跨平台基线与缺口修正](specs/001-preserve-skill-content/validation/baseline-remediation.md)。
 
-本轮已接入本地 `npm run build`（只写 `dist`，不发布）；正式 preview、迁移、上传及自动更新尚未实现。
+本轮已接入本地 `npm run build` 与 `npm run preview`（仅 `dist`，不发布）；迁移、上传及自动更新尚未实现。
 构建结果仍待 T024 的真实四项闭环验收；浏览器异常采集与生产发布仍待后续实施。
 初始化按步骤验证并提交，提交不等于推送或上线。
 
