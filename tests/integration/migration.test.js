@@ -131,6 +131,7 @@ test('write creates exactly four records and does not import unmanaged samples',
       record.content_path,
       slug === 'handoff-codex' ? 'skills/handoff-codex/SKILL.md' : `skills/${slug}.md`,
     );
+    assert.equal(record.usage, record.usage.trimEnd(), `${slug} usage`);
   }
   assert.equal(catalogFiles(project).includes('standard-sample.json'), false);
   assert.equal(catalogFiles(project).includes('office2md.json'), false);

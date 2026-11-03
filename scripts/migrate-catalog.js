@@ -38,6 +38,8 @@ function deriveCandidate(projectRoot, target) {
   const isGithub =
     meta.source === 'github' ||
     (sourceUrl !== null && /^https?:\/\/github\.com\//i.test(sourceUrl));
+  const usageValue = meta.usage_notes ?? meta.usage ?? null;
+  const usage = typeof usageValue === 'string' ? usageValue.replace(/\s+$/u, '') : usageValue;
 
   const draft = {
     schemaVersion: 1,
@@ -48,7 +50,7 @@ function deriveCandidate(projectRoot, target) {
     platforms: meta.platforms === undefined ? [] : meta.platforms,
     allowed_dot_paths: [],
     source_type: meta.source === undefined ? null : meta.source,
-    usage: meta.usage_notes ?? meta.usage ?? null,
+    usage,
     notes: null,
     content_path: target.content_path,
     source_tracking: null,
