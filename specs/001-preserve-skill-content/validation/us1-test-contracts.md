@@ -51,3 +51,14 @@ NFR-001、NFR-003、NFR-006，DEC-002、DEC-003、DEC-005、DEC-009，AC-001、A
 命令：`npm test`。结果：exit 1，91 项中 63 通过、27 失败、1 跳过。
 其中 25 项是 T011～T013 的预期红灯，2 项仍是本机未安装 Gitleaks/Semgrep 的既有环境失败；
 既有 63 项通过，未见原有测试回归。Lint 与格式检查通过。红灯不表示实现或验收完成。
+
+## T014 CatalogRecord schema 实现
+
+文件：`scripts/lib/catalog-values.js`、`scripts/lib/catalog-schema.js`，由 `scripts/lib/validate.js` 重新导出。
+实现必填/可空/枚举、slug 与 content_path、日期和 URL 边界、source_tracking 结构、
+未知顶层字段、allowed_dot_paths 禁止凭证路径；不请求远程。
+
+命令：`node --test tests/unit/catalog-contract.test.js`
+
+结果：5 通过、5 失败；schema、日期/URL、source_tracking 与点路径用例转绿；
+5 项合并/field_sources 用例仍因 `resolveCatalogRecord is not a function` 失败，留给 T015。

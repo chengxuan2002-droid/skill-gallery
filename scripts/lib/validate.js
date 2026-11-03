@@ -1,4 +1,5 @@
 const { LIMITS } = require('./admission-policy');
+const { validateCatalogRecord } = require('./catalog-schema');
 const { createDiagnostic, POLICY_VERSION } = require('./diagnostics');
 const { collectSkillFiles } = require('./file-admission');
 const { readFrontmatter } = require('./frontmatter');
@@ -43,6 +44,7 @@ module.exports = {
   POLICY_VERSION,
   readFrontmatter,
   scanSecrets,
+  validateCatalogRecord,
   validateRecordOwnership,
   validateSkillInput,
 };
