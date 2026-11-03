@@ -8,7 +8,7 @@ description: "US-001 原件保真、图库模型、旧库迁移与完整取用�
 
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，以及四份 0.2 文档：[调研](../../docs/IndustryResearch.md)、[需求](../../docs/DemandAnalysis.md)、[技术方案](../../docs/TechnicalSolution.md)、[编程规范](../../docs/AiProgrammingGuide.md)。
 
-**Status**: 任务生成于 2026-11-01，2026-11-02 根据分析定向细化 A1/U1/I1；生成阶段未执行实现；2026-11-02 用户另行授权本地工程初始化和逐步提交，实际进度见复选框及工程补充；不迁移、不开展业务实现、不发布。功能标识为 001-preserve-skill-content，2026-11-03 核对实际 Git 分支为 `codex/development-baseline-20261102`（相对远程同名分支未推送）；T002～T010 与跨平台基线修正已完成，证据见 [baseline-remediation.md](validation/baseline-remediation.md)；T011～T013 测试契约已完成并以预期红灯记录，T014 起未实施。
+**Status**: 任务生成于 2026-11-01，2026-11-02 根据分析定向细化 A1/U1/I1；生成阶段未执行实现；2026-11-02 用户另行授权本地工程初始化和逐步提交，实际进度见复选框及工程补充；不迁移、不开展业务实现、不发布。功能标识为 001-preserve-skill-content，2026-11-03 核对实际 Git 分支为 `codex/development-baseline-20261102`（相对远程同名分支未推送）；T002～T010 与跨平台基线修正已完成，证据见 [baseline-remediation.md](validation/baseline-remediation.md)；T011～T024 已完成，US1 本地闭环通过（见 [us1-migration.md](validation/us1-migration.md)）；T025 起未实施。
 
 **Tests**: spec 的 Independent Test、Acceptance Scenarios、US001-SC-01～07 明确要求验证；宪章 IX 要求先建立识别错误行为的验证。因此包含契约、保真、故障注入和浏览器任务。新增行为先记录合理失败，再实现并复验；已由共享层覆盖的行为直接复验，不伪造失败，不复制生产转换算法当期望值。
 
@@ -77,7 +77,7 @@ description: "US-001 原件保真、图库模型、旧库迁移与完整取用�
 - [x] T021 [US1] 改造 scripts/build-index.js 为 T020 的完整构建入口，并在 package.json 接入 npm run build；公开产物只写 dist，必要私有控制路径按 C-03，保留根 assets/search-index.json 为旧基线；提交成功 0/built 并报告 cleanup_status=complete 或 pending；提交前校验/构建/恢复失败 1/脱敏诊断，禁止部分跳过成功；复制 .nojekyll、明确网页资产及固定 MiniSearch/许可，不能复制全仓；先在临时项目验证命令，真实四项闭环由 T024 执行。（FR-004、FR-011、NFR-003、NFR-006；DEC-002、DEC-009；AC-001、AC-012、AC-014 本地部分）
 - [x] T022 [P] [US1] 在 index.html、assets/app.js 最小适配新索引对象与安全详情，display_name 映射既有 name，维持基本列表/搜索、四旧 Hash 身份、加载/未找到反馈和“未提供”显示；仅清理后的 body_html 可插 HTML，其他公开字段按文本/安全属性处理；移除浏览器 marked CDN、改固定本地 MiniSearch，本文锚点点击仅定位当前正文的受控标题并阻止覆盖技能 Hash，不重写界面或搜索算法；共同前置 T021 完成后可与 T023 并行。（FR-001、FR-011、NFR-003；DEC-003、DEC-005、DEC-009；AC-001、AC-005 链接部分、AC-012）
 - [x] T023 [P] [US1] 在 scripts/preview.js 实现 localhost:8000 的只读 dist 预览，在 package.json 接入 npm run preview；仅映射 /skill-gallery/，拒绝目录外读取/路径穿越/链接、禁止目录列表，明确网页 MIME 与 .bin application/octet-stream，不做 HTML 嗅探；复验 T013 的 tests/integration/preview.test.js，不提供管理写入或生产服务。（FR-011、NFR-003、NFR-006；DEC-005、DEC-009；AC-005、AC-012、AC-014 本地部分）
-- [ ] T024 [US1] 在隔离项目运行迁移/构建和 US1 相关测试，用 T023 预览四旧链接及独立标准样例，检查备注/标签只改 catalog、四唯一条目/六原件零差异、office2md 未动未收录、重复生成无伪日期；在 specs/001-preserve-skill-content/validation/us1-migration.md 记录实际命令/退出码/摘要与本地查阅证据，确认 T004 新 raw 回归通过。（FR-001、FR-011、NFR-001、NFR-006；DEC-002、DEC-003、DEC-009；AC-001、AC-002、AC-005；US001-SC-01、US001-SC-05）
+- [x] T024 [US1] 在隔离项目运行迁移/构建和 US1 相关测试，用 T023 预览四旧链接及独立标准样例，检查备注/标签只改 catalog、四唯一条目/六原件零差异、office2md 未动未收录、重复生成无伪日期；在 specs/001-preserve-skill-content/validation/us1-migration.md 记录实际命令/退出码/摘要与本地查阅证据，确认 T004 新 raw 回归通过。（FR-001、FR-011、NFR-001、NFR-006；DEC-002、DEC-003、DEC-009；AC-001、AC-002、AC-005；US001-SC-01、US001-SC-05）
 
 **Checkpoint**: US1 独立验收通过，可提供带基本护栏的本地迁移/查阅演示。US2 的完整交互、US3 深入失败验收尚未完成，不能宣称整个 US-001 完成或上线。
 
