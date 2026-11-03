@@ -62,3 +62,13 @@ NFR-001、NFR-003、NFR-006，DEC-002、DEC-003、DEC-005、DEC-009，AC-001、A
 
 结果：5 通过、5 失败；schema、日期/URL、source_tracking 与点路径用例转绿；
 5 项合并/field_sources 用例仍因 `resolveCatalogRecord is not a function` 失败，留给 T015。
+
+## T015 记录合并与 field_sources 实现
+
+文件：`scripts/lib/catalog-merge.js`，由 `scripts/lib/validate.js` 重新导出。实现 catalog 优先与显式 null、
+frontmatter 同名/别名回退、`declared_version` 的 catalog → version → metadata.version → null 链、
+`skill_name`、`field_sources`、URL/日期/已知字段类型校验，且不修改输入对象。
+
+命令：`node --test tests/unit/catalog-contract.test.js`
+
+结果：exit 0，10/10 通过；T011 契约全部转绿。
