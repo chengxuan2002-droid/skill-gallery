@@ -27,6 +27,18 @@ description: "US-001 原件保真、图库模型、旧库迁移与完整取用�
 - 路径相对项目根；validation 路径均指本功能下的本地验收证据，不能进入 dist。
 - 每项括号保留 FR/NFR、DEC、AC 追溯；所有任务均归上游 US-001。不创建 M-05～M-07 或 C-05～C-07。
 
+## 追加任务索引
+
+原始任务为 T001～T043（2026-11-01）。后续授权增量连续追加，不重排原编号：
+
+| 批次 | 任务 | 日期 | 章节 |
+|---|---|---|---|
+| 工程基线补充 | T044～T047 | 2026-11-02 | [工程基线补充](#工程基线补充2026-11-02) |
+| 检查 CI 与现站监测 | T048～T051 | 2026-11-02 | [提前建设 CI 与基础可用性监测](#提前建设-ci-与基础可用性监测2026-11-02) |
+| push/PR 安全扫描补强 | T052 | 2026-11-03 | [push/PR 安全扫描补强](#pushpr-安全扫描补强2026-11-03) |
+
+当前共 52 项；下方 Phase 1～6 保留原始 43 项，追加任务位于文末对应日期章节，状态以复选框为准。
+
 ## Phase 1: Setup — 环境、基线和受信任测试入口
 
 **Purpose**: 在任何源码修改前冻结输入证据，建立能安全运行后续验证的最小工程入口。
@@ -208,16 +220,15 @@ US1 迁移查阅 → US2 完整原文与下载 → US3 全失败矩阵 → 跨�
 ## 工程基线补充（2026-11-02）
 
 用户现已授权执行 project-bootstrap 本地工程基线；此前“仅任务生成”的表述描述历史阶段，不限制本轮已授权工程工作。
-保持所有原业务编号与验收范围；不实现 US-001 的功能、CI 或发布。T002/T003 已于 2026-11-03 完成，证据见 [foundational.md](validation/foundational.md)；T011 起的业务功能仍未实施。
+保持所有原业务编号与验收范围；不实现 US-001 的功能、CI 或发布。T002/T003 已于 2026-11-03 完成，证据见 [foundational.md](validation/foundational.md)；T011～T024 已完成，T025 起未实施。
 
 - [x] T044 创建根 package.json/package-lock.json/.node-version 与工程忽略项，精确锁定开发工具，并在隔离副本验证 npm ci。（NFR-003/NFR-006；DEC-005/009；AC-012/014 工程支撑）
 - [x] T045 添加 eslint.config.mjs、Prettier/EditorConfig 和 tests/unit/bootstrap.test.js、tests/integration/bootstrap.test.js，验证受信任测试发现与规范门禁拒绝行为。（NFR-003/NFR-006；DEC-005；AC-012 工程支撑）
 - [x] T046 添加 scripts/check-project.js、scripts/setup-security-tools.js 及 config 下固定工具/规则配置，用真实扫描器验证脱敏、失败传播和范围；不实现 C-01 的业务校验器。（NFR-003/NFR-006；DEC-005；AC-012 工程支撑）
 - [x] T047 定向更新 README.md/AGENTS.md 的真实工程入口，记录 validation/bootstrap.md 的检查结果、拒绝样例、原件核对与未运行项。（NFR-001/NFR-003/NFR-006；DEC-009；AC-001/012/014 工程支撑）
 
-以下原任务数量为生成阶段统计；工程补充后共 47 项，原 43 项及其依赖不重排。
-
-任务合计 43 项：Setup 3、Foundational 7、US1 14、US2 6、US3 8、Polish 5；18 项标注 [P]。
+原始任务合计 43 项：Setup 3、Foundational 7、US1 14、US2 6、US3 8、Polish 5；18 项标注 [P]。
+后续工程补充不重排原 43 项：T044～T047 工程基线，T048～T051 CI/监测，T052 安全扫描；当前共 52 项。
 这些数量只描述任务拆分，不表示已完成。生成阶段检查格式、连续编号、标签、文件路径、依赖和验收映射；业务通过证据在未来实施时填入 validation。
 不要执行收录 Skill 的脚本/测试，不做全仓 npm 安装或测试发现，不执行 git add .、reset、clean、force push 或自动提交。原件/有损索引/安全展示不能混作同一数据源。
 
