@@ -7,8 +7,8 @@
   },
   "packageManager": "npm@11.16.0",
   "scripts": {
-    "lint": "eslint assets/app.js scripts tests eslint.config.mjs",
-    "format:check": "prettier --check index.html assets/app.js assets/style.css scripts tests config .github/workflows eslint.config.mjs .prettierrc.json package.json",
+    "lint": "eslint assets scripts tests eslint.config.mjs",
+    "format:check": "prettier --check index.html assets/*.js assets/style.css scripts tests config .github/workflows eslint.config.mjs .prettierrc.json package.json",
     "test": "node --test tests/unit/*.test.js tests/integration/*.test.js",
     "build": "node scripts/build-index.js",
     "preview": "node scripts/preview.js",

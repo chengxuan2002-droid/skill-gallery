@@ -19,7 +19,10 @@ function prepareLegacyProject() {
     path.join(root, 'tests', 'fixtures', 'legacy', 'build-index.js'),
     path.join(project.root, 'scripts', 'build-index.js'),
   );
-  fs.copyFileSync(path.join(root, 'assets', 'app.js'), path.join(project.root, 'assets', 'app.js'));
+  fs.copyFileSync(
+    path.join(root, 'tests', 'fixtures', 'legacy', 'app.js'),
+    path.join(project.root, 'assets', 'app.js'),
+  );
   return project;
 }
 

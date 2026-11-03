@@ -140,3 +140,17 @@ T011～T020 相关测试 28 通过、1 跳过。
 
 结果：exit 0，3/3 通过。CLI 的 `npm run preview` 需先有本地 `dist`，端到端预览留给 T024 构建后执行；
 本轮未启动 8000 端口服务，未发布。
+
+## T022 前端最小适配
+
+文件：`index.html`、`assets/app.js`、`assets/app-views.js`、`assets/style.css`。
+前端改为读取对象型 `search-index.json` 与 `details/<slug>.json`，校验 `schemaVersion`/`contentRevision`/slug/digest；
+`display_name` 映射列表显示，正文仅插入构建清理后的 `body_html`，其他字段按文本/安全属性使用；
+保留 `#/skill/<slug>` 路由、基本搜索、加载/未找到/快照不一致/加载失败状态和“未提供”；
+本地 MiniSearch 替代 CDN，移除 marked CDN；正文锚点点击不改变技能 Hash。
+原 `assets/app.js` 保留为 `tests/fixtures/legacy/app.js`，旧导出回归仍可复现。
+
+验证：`npm run lint`/`format:check` 通过；`export-regression.test.js` 1 通过、1 跳过；
+`build-contract.test.js`/`preview.test.js` 构建与预览契约 9 通过、1 跳过。
+临时构建后用 Edge headless 打开列表与 `#/skill/handoff-codex`，实际渲染搜索框、4 张卡片、详情标题/正文/返回按钮；
+四旧链接逐一交互与完整浏览器验收仍留给 T024。

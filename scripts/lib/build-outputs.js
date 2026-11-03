@@ -55,6 +55,13 @@ function copyWebAssets(projectRoot, stage, artifacts) {
     writeFile(stage, relativePath, bytes);
     artifacts.set(relativePath, bytes);
   }
+  for (const relativePath of ['assets/app-views.js']) {
+    const source = path.join(projectRoot, ...relativePath.split('/'));
+    if (!fs.existsSync(source) || !fs.lstatSync(source).isFile()) continue;
+    const bytes = fs.readFileSync(source);
+    writeFile(stage, relativePath, bytes);
+    artifacts.set(relativePath, bytes);
+  }
   const nojekyll = path.join(projectRoot, '.nojekyll');
   if (fs.existsSync(nojekyll) && fs.lstatSync(nojekyll).isFile()) {
     const bytes = fs.readFileSync(nojekyll);
