@@ -62,6 +62,19 @@
 - 结果：100 项测试中 99 通过、0 失败、1 跳过；Lint/格式通过；依赖审计仍为 6 个 moderate、无 high/critical。
 - 边界：`main` 未合并；`pull_request`/`workflow_dispatch` 和失败汇总路径仍未单独执行；未部署或发布。
 
+## US-001 收口复验（2026-11-04）
+
+- 推送：`84e6c27..36049b1` → `codex/development-baseline-20261102`；`main` 仍为 `365d577`。
+- 运行：[Quality checks #41816996159](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/41816996159)，
+  事件 `push`，`headSha=36049b1cae1bf43cb31e64058687676a83d68bb2`，结论 `success`，约 47 秒。
+- 环境：Node 26.3.0、npm 11.16.0、uv 0.12.3；Gitleaks 8.30.1、Semgrep 1.183.0。
+- 结果：138 项测试中 137 通过、0 失败、1 跳过；Lint/格式通过。
+  Gitleaks 181 个文件无发现；Semgrep 30 个文件无发现；依赖审计 `status=passed`，
+  6 个 moderate、无 high/critical。最终汇总门禁因无失败按条件跳过。
+- 该运行覆盖 US3/Polish 与依赖审计修复后的最新代码，替代此前 US2 时点 100 项结果。
+- 边界：`main` 未合并；`pull_request`/`workflow_dispatch` 和失败汇总路径仍未单独执行；未部署或发布。
+  T041 macOS 仍未验证，本运行不改变该结论。
+
 ## 失败与边界
 
 网络/下载/安装失败、扫描器版本不符、Gitleaks/Semgrep 规则错误或依赖审计失败均使 job 失败，不当作通过。

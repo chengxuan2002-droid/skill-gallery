@@ -43,7 +43,7 @@ US3 的非法内容、路径攻击、构建故障与恢复已完成本地验收�
 T039/T040/T042/T043 已完成；T041 仅 Linux/WSL 通过、macOS 未运行，2026-11-04 用户确认将该缺口记录为
 未验证并据此收口本地交付，T041 不标记为通过。最终差异见
 [最终复核](specs/001-preserve-skill-content/validation/final-review.md)。上传、自动更新和生产发布仍待后续故事。
-本地验收使用 Windows + Node 22.21.0；声明的 Node 26.3.0/Linux 由 CI 覆盖，结果见下方 T052 run。
+本地验收使用 Windows + Node 22.21.0；声明的 Node 26.3.0/Linux 由 CI 覆盖，结果见下方 Quality checks。
 初始化按步骤验证并提交，提交不等于推送或上线。
 
 ### 当前内容与构建契约
@@ -77,6 +77,8 @@ npm run monitor:site
 2026-11-03 的安全扫描补强已推送到开发分支；US1 时点 [Quality checks #41628358392](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/41628358392)
 与 US2 后 [Quality checks #41639767607](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/41639767607)
 均在 Node 26.3.0/Linux 上通过，`npm run check`、Gitleaks、Semgrep 与依赖审计四个步骤均成功。
+2026-11-04 推送 US3/Polish 与依赖审计修复后，[Quality checks #41816996159](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/41816996159)
+复验 138 项测试（137 通过、0 失败、1 跳过），Gitleaks/Semgrep 无发现，依赖审计通过并报告 6 个 moderate。
 `main` 尚未合并该补强，默认分支仍使用旧版 quality workflow；`pull_request`/手动触发配置存在但本次未单独执行。
 quality 合并必需项仍需单独配置。
 本次没有修改分支保护、通知设置或 Pages 配置；推送触发的既有 Pages 发布也已成功。

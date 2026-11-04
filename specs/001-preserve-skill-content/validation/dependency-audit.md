@@ -33,8 +33,14 @@
 eslint-config-prettier、minimatch。均为开发/检查工具链，不是站点运行依赖；本次不执行
 `npm audit fix`，也不把阈值从 high 降低。后续升级依赖需单独评估兼容性。
 
+## 远程复验
+
+2026-11-04 推送 `84e6c27..36049b1` 后，[Quality checks #41816996159](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/41816996159)
+在 Node 26.3.0/Linux 通过；依赖审计步骤返回 `status=passed`，报告 6 个 moderate、无 high/critical。
+同一运行完成 138 项测试（137 通过、0 失败、1 跳过），Gitleaks 181 个文件与 Semgrep 30 个文件均无发现。
+
 ## 边界
 
-- 本记录只证明本机与官方 registry 的审计路径；远程 CI 的完整结果需在推送后另行记录。
+- 本记录证明本机与官方 registry 的审计路径，并有远程 CI 复验；不覆盖其他镜像或代理环境。
 - 审计报告只保留包名与级别，不输出 registry 原始错误、凭证或源码片段。
 - 高/严重级别仍阻断；moderate 仍报告，不能称为零漏洞或全部安全门禁通过。

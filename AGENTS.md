@@ -113,7 +113,8 @@ npx ctx7@latest docs <libraryId> "单一概念的具体问题"
 specs/001-preserve-skill-content/validation/dependency-audit.md。
 当前实际 Node 22.21.0 与锁定 26.3.0 不同，未在该基线本地复验；
 开发分支 CI 已在 Node 26.3.0/Linux 完成 US1 时点验证（96 项，95 通过、0 失败、1 跳过）；
-US2 后 CI #41639767607 为 100 项，99 通过、0 失败、1 跳过；US3/Polish 已本地完成，推送后的 CI 结果见下方。
+US2 后 CI #41639767607 为 100 项，99 通过、0 失败、1 跳过；US3/Polish 与依赖审计修复后
+CI #41816996159 为 138 项，137 通过、0 失败、1 跳过，Gitleaks/Semgrep 无发现，依赖审计通过并报告 6 个 moderate。
 干净 Linux 副本未装扫描器时为 138 项，135 通过、2 失败（扫描器缺失）、1 跳过。
 详见 specs/001-preserve-skill-content/validation/baseline-remediation.md 与 ci-security.md。
 2026-11-04 用户确认将 T041 的 macOS 缺口记录为未验证并据此收口 US-001 本地交付；

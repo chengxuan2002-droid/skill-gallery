@@ -175,5 +175,6 @@ T039/T040/T042/T043 已完成；T041 仅 Linux/WSL 完成，macOS 未运行。�
 
 用户确认将 T041 的 macOS 缺口记录为未验证，并据此收口 US-001 本地交付；T041 复选框保持未完成，
 不宣称 macOS、跨平台或生产发布通过。依赖审计改为固定查询官方 npm registry，恢复可执行并通过
-high/critical 阈值，仍如实报告 6 个 moderate；证据见
-[dependency-audit.md](validation/dependency-audit.md)。
+high/critical 阈值，仍如实报告 6 个 moderate；推送后 Quality checks #41816996159 在
+Node 26.3.0/Linux 复验 138 项（137 通过、0 失败、1 跳过）并通过四个检查步骤。
+证据见 [dependency-audit.md](validation/dependency-audit.md) 与 [ci-security.md](validation/ci-security.md)。
