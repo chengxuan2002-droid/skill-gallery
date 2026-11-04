@@ -72,6 +72,9 @@
   Gitleaks 181 个文件无发现；Semgrep 30 个文件无发现；依赖审计 `status=passed`，
   6 个 moderate、无 high/critical。最终汇总门禁因无失败按条件跳过。
 - 该运行覆盖 US3/Polish 与依赖审计修复后的最新代码，替代此前 US2 时点 100 项结果。
+- 收口文档提交 `51f267a` 的 docs-only 复验
+  [Quality checks #41817461102](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/41817461102)
+  同样通过：138 项中 137 通过、0 失败、1 跳过，Gitleaks/Semgrep/依赖审计结果一致。
 - 边界：`main` 未合并；`pull_request`/`workflow_dispatch` 和失败汇总路径仍未单独执行；未部署或发布。
   T041 macOS 仍未验证，本运行不改变该结论。
 

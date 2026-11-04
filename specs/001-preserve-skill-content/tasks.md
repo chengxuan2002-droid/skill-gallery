@@ -278,6 +278,7 @@ T002/T003 已于 2026-11-03 完成，证据见 [foundational.md](validation/foun
   证据见 [dependency-audit.md](validation/dependency-audit.md)。（NFR-003、NFR-006；DEC-005、DEC-009；AC-012、AC-014 工程支撑）
 - [x] T054 按用户 2026-11-04 决定记录 T041 macOS 未验证缺口，保持 T041 未勾选；
   推送开发分支最新提交并由 [Quality checks #41816996159](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/41816996159)
+  与收口文档复验 [#41817461102](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/41817461102)
   在 Node 26.3.0/Linux 复验 138 项测试（137 通过、0 失败、1 跳过）、Gitleaks、Semgrep 和依赖审计；
   不宣称 macOS、跨平台或生产发布通过。（FR-011、NFR-006；DEC-009；AC-014 工程支撑）
 
