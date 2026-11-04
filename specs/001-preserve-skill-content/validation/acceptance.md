@@ -59,6 +59,7 @@ Windows Node 22 构建的 contentRevision 与本记录不同，因为运行时�
 ## 未运行与残留风险
 
 - **T041 macOS 未运行**；Linux/WSL 已通过，但 T041 仍不完整，不能称 macOS 验证通过。
+  2026-11-04 用户确认将该缺口记录为未验证并据此收口 US-001 本地交付；T041 不标记为通过。
 - 未验证生产 GitHub Pages 的 MIME、缓存、直接资源响应头、授权恢复或部署回滚；这些属于 US-003/发布前门禁。
 - 未实现/未验证上传 CLI、GitHub 后台维护、自动更新、发布和 Q-004 调度。
 - Windows 本地已安装固定 Gitleaks/Semgrep，`npm test` 为 138/137/0/1，`security:secrets` 与 `security:code` 无发现；

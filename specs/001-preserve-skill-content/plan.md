@@ -170,3 +170,10 @@ T025–T030（US2）已完成本地实现，浏览器与分发验收见 [us2-bro
 T031–T038（US3）已完成本地故障/安全验收，见 [us3-failures.md](validation/us3-failures.md)；
 T039/T040/T042/T043 已完成；T041 仅 Linux/WSL 完成，macOS 未运行。不能称上游 US-001 完成或已发布。
 本次补充不改变原规划的业务契约。
+
+## 收口补充（2026-11-04）
+
+用户确认将 T041 的 macOS 缺口记录为未验证，并据此收口 US-001 本地交付；T041 复选框保持未完成，
+不宣称 macOS、跨平台或生产发布通过。依赖审计改为固定查询官方 npm registry，恢复可执行并通过
+high/critical 阈值，仍如实报告 6 个 moderate；证据见
+[dependency-audit.md](validation/dependency-audit.md)。

@@ -23,12 +23,14 @@ npm run security
 | `npm run setup:security` | 安装/核对固定版本 Gitleaks、Semgrep；重复运行复用已匹配工具 |
 | `npm run security:secrets` | 对公开候选和已跟踪原件做脱敏凭证检查 |
 | `npm run security:code` | 对自有 JS 执行本地固定安全规则 |
-| `npm run security:deps` | 审计根锁文件；high/critical 阻断，其他级别报告 |
+| `npm run security:deps` | 通过官方 npm registry 审计根锁文件；high/critical 阻断，其他级别报告 |
 | `npm run check` / `npm run security` | 分别汇总规范/测试、安全检查；保留真实失败退出码 |
 
 安全结果只输出规则、位置、级别及状态，不输出凭证或源码片段。
 见[诊断约定](specs/001-preserve-skill-content/validation/diagnostics.md)和[本次验证](specs/001-preserve-skill-content/validation/bootstrap.md)。
 当前审计仍有 6 个 moderate 受影响依赖，无 high/critical；通过阻断阈值不表示零漏洞。
+本机默认镜像 registry 不实现 npm audit 端点，`security:deps` 固定使用官方 registry；原因与验证见
+[依赖审计记录](specs/001-preserve-skill-content/validation/dependency-audit.md)。
 Windows 下由 `.gitattributes` 保持项目文本为 LF，测试夹具使用 junction；安装器支持 Windows zip 与
 `gitleaks.exe`/`semgrep.exe`，但仍需网络。扫描器未安装时，`npm test` 中两项扫描器用例与 `npm run check`
 会失败，不能视为通过；当前环境复核见 [跨平台基线与缺口修正](specs/001-preserve-skill-content/validation/baseline-remediation.md)。
@@ -38,7 +40,8 @@ US-001 的内部 US1 切片（T001–T024）已完成本地闭环：四份 catal
 （见 [US1 迁移验收](specs/001-preserve-skill-content/validation/us1-migration.md)）。
 US2 的完整查阅、复制和下载已实现并完成本地浏览器验收（见 [US2 验收](specs/001-preserve-skill-content/validation/us2-browser.md)）；
 US3 的非法内容、路径攻击、构建故障与恢复已完成本地验收（见 [US3 验收](specs/001-preserve-skill-content/validation/us3-failures.md)）；
-T039/T040/T042/T043 已完成，T041 仅 Linux/WSL 通过、macOS 未运行；最终差异见
+T039/T040/T042/T043 已完成；T041 仅 Linux/WSL 通过、macOS 未运行，2026-11-04 用户确认将该缺口记录为
+未验证并据此收口本地交付，T041 不标记为通过。最终差异见
 [最终复核](specs/001-preserve-skill-content/validation/final-review.md)。上传、自动更新和生产发布仍待后续故事。
 本地验收使用 Windows + Node 22.21.0；声明的 Node 26.3.0/Linux 由 CI 覆盖，结果见下方 T052 run。
 初始化按步骤验证并提交，提交不等于推送或上线。

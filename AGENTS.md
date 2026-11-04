@@ -107,12 +107,17 @@ npx ctx7@latest docs <libraryId> "单一概念的具体问题"
 2026-11-03 在 Windows 复核 T002～T010：`.gitattributes` 固定项目文本为 LF，`skills/**` 不做换行转换；
 测试夹具在 Windows 使用 junction，检查入口解析 `npm.cmd` 与扫描器 `.exe`，安装器支持 Windows zip 包但仍需网络。
 2026-11-04 本机已通过 `npm run setup:security` 安装固定 Gitleaks/Semgrep：`npm test` 为 138 项，
-137 通过、0 失败、1 跳过；`security:secrets` 与 `security:code` 无发现；依赖审计仍 `AUDIT_UNAVAILABLE`。
+137 通过、0 失败、1 跳过；`security:secrets` 与 `security:code` 无发现。
+依赖审计已改为固定查询官方 npm registry，`security:deps` 通过 high/critical 阈值并继续报告 6 个 moderate；
+原 `AUDIT_UNAVAILABLE` 原因是本机镜像 registry 未实现 audit 端点。证据见
+specs/001-preserve-skill-content/validation/dependency-audit.md。
 当前实际 Node 22.21.0 与锁定 26.3.0 不同，未在该基线本地复验；
 开发分支 CI 已在 Node 26.3.0/Linux 完成 US1 时点验证（96 项，95 通过、0 失败、1 跳过）；
-US2 后 CI #41639767607 为 100 项，99 通过、0 失败、1 跳过；US3 未推送，CI 仍为 US2 时点结果。
+US2 后 CI #41639767607 为 100 项，99 通过、0 失败、1 跳过；US3/Polish 已本地完成，推送后的 CI 结果见下方。
 干净 Linux 副本未装扫描器时为 138 项，135 通过、2 失败（扫描器缺失）、1 跳过。
 详见 specs/001-preserve-skill-content/validation/baseline-remediation.md 与 ci-security.md。
+2026-11-04 用户确认将 T041 的 macOS 缺口记录为未验证并据此收口 US-001 本地交付；
+T041 复选框保持未勾选，不宣称 macOS、跨平台或生产发布通过。
 用户随后已授权提前建设检查型 CI 与现站基础监测：.github/workflows/quality.yml 在所有 push、PR 和手动触发中
 安装固定扫描器，显式执行 npm run check、security:secrets、security:code、security:deps，任一失败汇总为失败，
 不只依赖本机 .tools；site-monitor.yml 以默认分支定时/手动读取现站；完整 SHA 固定、只读权限、无部署/写回，
