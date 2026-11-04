@@ -152,9 +152,16 @@ test('audit registry failures remain failures and raw subprocess diagnostics sta
   const dir = fixture(t);
   fs.mkdirSync(path.join(dir, 'bin'));
   const shim = path.join(dir, 'bin/npm');
+  const argsFile = path.join(dir, 'npm-args.json');
   fs.writeFileSync(
     shim,
-    '#!/usr/bin/env node\nconsole.log(JSON.stringify({error: {code: "EAI_AGAIN", summary: "YOUR_API_KEY_HERE"}})); console.error("private registry context"); process.exit(1);\n',
+    [
+      '#!/usr/bin/env node',
+      `require('node:fs').writeFileSync(${JSON.stringify(argsFile)}, JSON.stringify(process.argv.slice(2)));`,
+      'console.log(JSON.stringify({error: {code: "EAI_AGAIN", summary: "YOUR_API_KEY_HERE"}}));',
+      'console.error("private registry context");',
+      'process.exit(1);',
+    ].join('\n'),
     { mode: 0o700 },
   );
   if (process.platform === 'win32') {
@@ -169,4 +176,7 @@ test('audit registry failures remain failures and raw subprocess diagnostics sta
   assert.equal(result.report.code, 'AUDIT_UNAVAILABLE');
   assert.equal(result.output.includes('YOUR_API_KEY_HERE'), false);
   assert.equal(result.output.includes('private registry context'), false);
+  const args = JSON.parse(fs.readFileSync(argsFile, 'utf8'));
+  assert.equal(args.includes('--registry'), true);
+  assert.equal(args.includes('https://registry.npmjs.org/'), true);
 });

@@ -3,6 +3,8 @@ const os = require('node:os');
 const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 
+const AUDIT_REGISTRY = 'https://registry.npmjs.org/';
+
 function command(binary, args, cwd, extra = {}) {
   const result = spawnSync(binary, args, {
     cwd,
@@ -114,7 +116,10 @@ function summarize(check, report, exit, files, snapshot) {
 function scan(check, root) {
   if (check === 'deps') {
     if (!fs.existsSync(path.join(root, 'package-lock.json'))) throw new Error('LOCK_MISSING');
-    const result = npmCommand(['audit', '--json', '--audit-level=high'], root);
+    const result = npmCommand(
+      ['audit', '--registry', AUDIT_REGISTRY, '--json', '--audit-level=high'],
+      root,
+    );
     return summarize(check, JSON.parse(result.stdout), result.status, ['package-lock.json'], root);
   }
   const tools = JSON.parse(fs.readFileSync(path.join(root, 'config/security-tools.json'), 'utf8'));
