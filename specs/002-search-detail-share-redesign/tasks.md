@@ -82,7 +82,7 @@ description: "US-002 检索、详情、分享与视觉改版的实施任务"
 
 ### Implementation for User Story 1
 
-- [ ] T008 [US1] 实现 `assets/app-search.js` 纯模块（无 DOM）：`normalizeText`、`parseListHash`、
+- [X] T008 [US1] 实现 `assets/app-search.js` 纯模块（无 DOM）：`normalizeText`、`parseListHash`、
   `buildListHash`、`createSearchEngine`、`searchSkills`、`buildFilterOptions`、`buildDetailShareUrl`、
   `buildListShareUrl`；`mode` 仅 `fuzzy|exact` 且缺省 `fuzzy`，`sort` 仅 `auto|name|updated` 且缺省 `auto`，
   筛选数组去重，URL 参数白名单，复用 MiniSearch 6.3.0 的 `boost`/`prefix`/`fuzzy`。
