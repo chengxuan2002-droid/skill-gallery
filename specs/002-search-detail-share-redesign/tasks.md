@@ -11,8 +11,10 @@ description: "US-002 检索、详情、分享与视觉改版的实施任务"
 以及四份 0.2 文档：[调研](../../docs/IndustryResearch.md)、[需求](../../docs/DemandAnalysis.md)、
 [技术方案](../../docs/TechnicalSolution.md)、[编程规范](../../docs/AiProgrammingGuide.md)。
 
-**Status**: 任务于 2026-11-05 生成；当前分支 `codex/us-002-search-detail-share`，尚未实施。
-本功能只覆盖 US-002；不改变 US-001 已验收的复制、下载、旧链接、T041 macOS 缺口或生产发布状态。
+**Status**: 任务于 2026-11-05 生成；当前分支 `codex/us-002-search-detail-share`。T001～T016 已完成；
+T016 的详情/分享、原文复制和原件/ZIP/附件回归见 [us2-detail.md](validation/us2-detail.md)；
+T017～T026 尚未完成。本功能只覆盖 US-002；不改变 US-001 已验收的复制、下载、旧链接、
+T041 macOS 缺口或生产发布状态。
 
 **Tests**: spec 的 Independent Test、Acceptance Scenarios 与 US002-SC-01～06 要求验证；宪章 IX 要求先建立
 能识别错误行为的验证。因此包含搜索核心契约、分享地址/内容标识、构建资产、浏览器可访问性和性能任务。
@@ -137,7 +139,7 @@ description: "US-002 检索、详情、分享与视觉改版的实施任务"
   `author`/`homepage_url`/`repository_url`/`license`/`updated_at` 缺失显示“未提供”；
   `body_html` 只作已清理 HTML 使用，外链仅安全协议，未知 slug/加载失败/快照不一致有明确状态。
   （FR-003、FR-010；AC-004、AC-012）
-- [ ] T016 [US2] 使用 T002 的 `createDetailFixtureProject`/`buildFixturePreview` 生成隔离详情 dist 和预览；
+- [X] T016 [US2] 使用 T002 的 `createDetailFixtureProject`/`buildFixturePreview` 生成隔离详情 dist 和预览；
   执行四个旧 `#/skill/<slug>` 链接、刷新、同 slug 更新、信息齐全/缺失详情、复制详情/列表地址、
   剪贴板拒绝、未知 slug、原文复制和原件/ZIP/附件下载回归；在
   `specs/002-search-detail-share-redesign/validation/us2-detail.md` 记录实际结果和未运行项；
