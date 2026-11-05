@@ -187,7 +187,7 @@ T041 macOS 缺口或生产发布状态。
   （secrets/code/deps），只修复本故事引入的失败；记录实际命令、退出码、测试数量、扫描结果和未运行项。
   不得为通过而格式化原件或无关文件，也不得把工具缺失/AUDIT_UNAVAILABLE 当通过。
   （NFR-003、NFR-006；AC-012、AC-014 工程支撑）
-- [ ] T022 [P] 使用 T002 的 `createSearchFixtureProject`/`buildFixturePreview` 生成隔离的
+- [X] T022 [P] 使用 T002 的 `createSearchFixtureProject`/`buildFixturePreview` 生成隔离的
   1,000 项/10 MiB dist 和预览，在真实浏览器执行 50 次固定中英查询；记录查询到结果可见的 p95、
   设备、浏览器、查询集；候选通过线 200ms，排除网络；证据写入
   `specs/002-search-detail-share-redesign/validation/us2-performance.md`；不依赖工作区 `dist/`。
