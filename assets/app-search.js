@@ -17,6 +17,12 @@
     ['sourceTypes', 'source_type'],
     ['authors', 'author'],
   ];
+  const CONDITION_GROUPS = [
+    ['标签', 'tags'],
+    ['平台', 'platforms'],
+    ['来源', 'sourceTypes'],
+    ['作者', 'authors'],
+  ];
 
   function normalizeText(value) {
     return String(value ?? '')
@@ -205,6 +211,31 @@
     };
   }
 
+  function describeListConditions(state = {}) {
+    const conditions = [];
+    const query = typeof state.query === 'string' ? state.query.trim() : '';
+    if (query) {
+      conditions.push({ kind: 'query', label: `查询：${query}`, key: 'query', value: '' });
+    }
+    if (state.mode === 'exact') {
+      conditions.push({ kind: 'mode', label: '精准模式', key: 'mode', value: 'fuzzy' });
+    }
+    for (const [title, key] of CONDITION_GROUPS) {
+      for (const value of uniqueValues(state[key])) {
+        conditions.push({ kind: 'filter', label: `${title}：${value}`, key, value });
+      }
+    }
+    if (state.sort === 'name' || state.sort === 'updated') {
+      conditions.push({
+        kind: 'sort',
+        label: `排序：${state.sort === 'name' ? '名称' : '更新时间'}`,
+        key: 'sort',
+        value: 'auto',
+      });
+    }
+    return conditions;
+  }
+
   function buildListHash(state = {}) {
     const params = new URLSearchParams();
     const query = typeof state.query === 'string' ? state.query.trim() : '';
@@ -248,6 +279,7 @@
     buildListShareUrl,
     contentIdentity,
     createSearchEngine,
+    describeListConditions,
     normalizeText,
     parseListHash,
     searchSkills,

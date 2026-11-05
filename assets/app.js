@@ -17,6 +17,7 @@ const state = {
   revision: null,
   routeToken: 0,
   listView: null,
+  pendingDetailSlug: null,
 };
 
 function currentResults() {
@@ -41,8 +42,12 @@ function listHandlers() {
       state.listView.update(state, currentResults());
     },
     onOpenDetail(slug) {
+      state.pendingDetailSlug = slug;
       window.sessionStorage.setItem('skill-gallery-list-hash', search.buildListHash(state));
       window.location.hash = `#/skill/${encodeURIComponent(slug)}`;
+    },
+    listShareUrl() {
+      return actions.shareListLink(state);
     },
     copyListLink() {
       return actions.copyText(actions.shareListLink(state));
@@ -103,6 +108,8 @@ function renderListRoute() {
 
 async function route() {
   const token = ++state.routeToken;
+  const pendingSlug = state.pendingDetailSlug;
+  state.pendingDetailSlug = null;
   const match = window.location.hash.match(/^#\/skill\/(.+)$/);
   if (!match) {
     document.title = 'Skill Gallery';
@@ -115,6 +122,9 @@ async function route() {
   } catch {
     views.notFound(app);
     return;
+  }
+  if (pendingSlug !== slug) {
+    window.sessionStorage.removeItem('skill-gallery-list-hash');
   }
   const item = state.skills.find((skill) => skill.slug === slug);
   if (!item) {

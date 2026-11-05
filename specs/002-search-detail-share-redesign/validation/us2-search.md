@@ -40,3 +40,30 @@ T020/T022 承担，不把 Node/vm 结果冒充浏览器验收。
   T020 将验证浏览器可访问性，T022 将验证 1,000 项/10 MiB 浏览器 p95。
 - 未验证 Chromium/Firefox/WebKit 多浏览器矩阵；未验证生产 Pages MIME/缓存或发布。
 - 本记录不改变 US-001 的复制、下载、旧链接、T041 macOS 缺口或生产发布状态。
+
+## 2026-11-05 问题 1/3 补强
+
+范围：固定查询集自动化与列表条件描述；不改变 T012 的 US1 结论，也不宣称完整 T016。
+
+### 红灯
+
+补强测试先于实现运行，`node --test tests/unit/search-core.test.js tests/unit/list-view.test.js tests/unit/app-routing.test.js`
+为 14 项中 8 通过、6 失败，其中与本记录相关：
+
+- `expected at least 20 fixed queries, got 12`。
+- `api.describeListConditions is not a function`。
+- 列表复制失败测试找不到 `#list-manual-copy`。
+- 查询条件 chip 缺失，实际只有 `标签：workflow×`。
+
+### 绿灯
+
+| 检查 | 实际结果 |
+|---|---|
+| `node --test tests/unit/search-core.test.js` | exit 0；10/10 通过 |
+| 固定查询集 | 30 条；覆盖精准/模糊/短语/中文子串/同维 OR/跨维 AND/作者/平台/来源/三种排序/同分/空结果/未闭合引号 |
+| `describeListConditions` | 查询、精准模式、四类筛选、非默认排序的标签/顺序/去重通过 |
+| `npm test` | exit 0；157 项中 156 通过、0 失败、1 跳过 |
+| `npm run lint` / `npm run format:check` | exit 0 |
+
+固定查询集测试位于 `tests/unit/search-core.test.js`，直接读取 `tests/fixtures/search/fixed-skills.json` 的
+`queries`，不再依赖一次性手工脚本。

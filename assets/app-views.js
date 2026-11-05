@@ -1,4 +1,6 @@
 (function () {
+  const search = window.SkillGallerySearch;
+
   function element(tag, className, text) {
     const node = document.createElement(tag);
     if (className) node.className = className;
@@ -184,6 +186,17 @@
     status.setAttribute('aria-live', 'polite');
     content.append(status);
 
+    const manualPanel = element('div', 'manual-panel');
+    manualPanel.hidden = true;
+    const manualLabel = element('label', null, '复制失败，请手动复制：');
+    manualLabel.htmlFor = 'list-manual-copy';
+    const manualInput = element('input', 'manual-input');
+    manualInput.id = 'list-manual-copy';
+    manualInput.type = 'text';
+    manualInput.readOnly = true;
+    manualPanel.append(manualLabel, manualInput);
+    content.append(manualPanel);
+
     const grid = element('div', 'skill-grid');
     content.append(grid);
     layout.append(content);
@@ -197,24 +210,25 @@
 
     function conditionsFor(nextState) {
       const chips = [];
-      for (const [title, key, selected] of [
-        ['标签', 'tags', nextState.tags],
-        ['平台', 'platforms', nextState.platforms],
-        ['来源', 'sourceTypes', nextState.sourceTypes],
-        ['作者', 'authors', nextState.authors],
-      ]) {
-        for (const value of selected) {
-          const chip = element('span', 'condition-chip');
-          chip.append(element('span', null, `${title}：${value}`));
-          const remove = element('button', 'chip-remove', '×');
-          remove.type = 'button';
-          remove.setAttribute('aria-label', `移除筛选 ${title} ${value}`);
-          remove.addEventListener('click', () => {
-            handlers.onChange({ [key]: currentState[key].filter((item) => item !== value) });
-          });
-          chip.append(remove);
-          chips.push(chip);
-        }
+      for (const condition of search.describeListConditions(nextState)) {
+        const chip = element('span', 'condition-chip');
+        chip.append(element('span', null, condition.label));
+        const remove = element('button', 'chip-remove', '×');
+        remove.type = 'button';
+        remove.setAttribute('aria-label', `移除条件 ${condition.label}`);
+        remove.addEventListener('click', () => {
+          if (condition.kind === 'filter') {
+            handlers.onChange({
+              [condition.key]: (currentState[condition.key] || []).filter(
+                (value) => value !== condition.value,
+              ),
+            });
+          } else {
+            handlers.onChange({ [condition.key]: condition.value });
+          }
+        });
+        chip.append(remove);
+        chips.push(chip);
       }
       return chips;
     }
@@ -223,13 +237,6 @@
       count.textContent = `${nextResults.length} 个结果`;
       clear(conditions);
       for (const chip of conditionsFor(nextState)) conditions.append(chip);
-      if (nextState.mode === 'exact')
-        conditions.append(element('span', 'condition-text', '精准模式'));
-      if (nextState.sort !== 'auto') {
-        conditions.append(
-          element('span', 'condition-text', `排序：${sortLabelText(nextState.sort)}`),
-        );
-      }
       const hasConditions =
         nextState.query ||
         nextState.mode !== 'fuzzy' ||
@@ -290,12 +297,9 @@
       for (const result of nextResults) grid.append(cardFor(result.skill, handlers.onOpenDetail));
     }
 
-    function sortLabelText(value) {
-      return value === 'name' ? '名称' : value === 'updated' ? '更新时间' : '自动';
-    }
-
     function update(nextState, nextResults) {
       currentState = nextState;
+      manualPanel.hidden = true;
       if (input.value !== nextState.query) input.value = nextState.query;
       fuzzyButton.setAttribute('aria-pressed', String(nextState.mode === 'fuzzy'));
       exactButton.setAttribute('aria-pressed', String(nextState.mode === 'exact'));
@@ -314,9 +318,17 @@
       setStatus('正在复制列表链接...', 'loading');
       try {
         await handlers.copyListLink();
+        manualPanel.hidden = true;
         setStatus('列表链接已复制', 'ready');
       } catch {
-        setStatus('复制失败，请手动复制当前地址', 'copy_failed');
+        manualInput.value =
+          typeof handlers.listShareUrl === 'function'
+            ? handlers.listShareUrl()
+            : window.location.href;
+        manualPanel.hidden = false;
+        manualInput.focus();
+        manualInput.select();
+        setStatus('复制失败，请手动复制下方链接', 'copy_failed');
       } finally {
         copyButton.disabled = false;
       }

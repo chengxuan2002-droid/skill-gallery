@@ -171,3 +171,84 @@ test('builds canonical detail and list share URLs under the site prefix', () => 
     'http://127.0.0.1:8000/skill-gallery/#/?q=debug&mode=exact&tag=debugging&sort=name',
   );
 });
+
+const REQUIRED_QUERY_IDS = [
+  'exact-debug',
+  'exact-chinese-phrase',
+  'exact-multiword',
+  'fuzzy-typo',
+  'fuzzy-chinese-substring',
+  'tag-or',
+  'platform-or',
+  'platform-and-author',
+  'tag-and-author',
+  'source-filter',
+  'author-only',
+  'updated-sort',
+  'name-sort',
+  'stable-tie',
+  'empty-result',
+  'missing-value-does-not-match',
+  'unclosed-quote',
+];
+
+test('fixed query set covers US002-SC-01 and matches expected slugs', () => {
+  assert.ok(
+    fixture.queries.length >= 20,
+    `expected at least 20 fixed queries, got ${fixture.queries.length}`,
+  );
+  const api = loadSearch();
+  const engine = api.createSearchEngine(fixture.skills, MiniSearch);
+  const ids = new Set(fixture.queries.map((query) => query.id));
+  for (const id of REQUIRED_QUERY_IDS) assert.ok(ids.has(id), `missing required query: ${id}`);
+  for (const query of fixture.queries) {
+    assert.ok(['exact', 'fuzzy'].includes(query.mode), query.id);
+    assert.ok(Array.isArray(query.expected), query.id);
+    assert.equal(new Set(query.expected).size, query.expected.length, query.id);
+    const results = api.searchSkills({
+      skills: fixture.skills,
+      engine,
+      query: query.query,
+      mode: query.mode,
+      tags: query.tags,
+      platforms: query.platforms,
+      sourceTypes: query.sourceTypes,
+      authors: query.authors,
+      sort: query.sort,
+    });
+    assert.deepEqual(slugs(results), query.expected, query.id);
+  }
+});
+
+test('describes active list conditions with single-clear targets', () => {
+  const api = loadSearch();
+  assert.deepEqual(Array.from(api.describeListConditions({})), []);
+  assert.deepEqual(
+    Array.from(
+      api.describeListConditions({
+        query: ' debug ',
+        mode: 'exact',
+        tags: ['workflow', 'debugging', 'workflow'],
+        platforms: ['codex'],
+        sourceTypes: ['github'],
+        authors: ['Example Author'],
+        sort: 'name',
+      }),
+      (condition) => ({ ...condition }),
+    ),
+    [
+      { kind: 'query', label: '查询：debug', key: 'query', value: '' },
+      { kind: 'mode', label: '精准模式', key: 'mode', value: 'fuzzy' },
+      { kind: 'filter', label: '标签：workflow', key: 'tags', value: 'workflow' },
+      { kind: 'filter', label: '标签：debugging', key: 'tags', value: 'debugging' },
+      { kind: 'filter', label: '平台：codex', key: 'platforms', value: 'codex' },
+      { kind: 'filter', label: '来源：github', key: 'sourceTypes', value: 'github' },
+      { kind: 'filter', label: '作者：Example Author', key: 'authors', value: 'Example Author' },
+      { kind: 'sort', label: '排序：名称', key: 'sort', value: 'auto' },
+    ],
+  );
+  assert.deepEqual(
+    Array.from(api.describeListConditions({ sort: 'updated' }), (condition) => ({ ...condition })),
+    [{ kind: 'sort', label: '排序：更新时间', key: 'sort', value: 'auto' }],
+  );
+});
