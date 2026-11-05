@@ -954,6 +954,13 @@ a.skill-card {
   max-width: 100%;
 }
 
+.markdown-body pre,
+.markdown-body pre code {
+  overflow-wrap: normal;
+  word-break: normal;
+  white-space: pre;
+}
+
 .markdown-body table {
   display: block;
   max-width: 100%;

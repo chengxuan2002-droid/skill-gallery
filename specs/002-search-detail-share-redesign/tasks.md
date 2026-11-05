@@ -11,9 +11,10 @@ description: "US-002 检索、详情、分享与视觉改版的实施任务"
 以及四份 0.2 文档：[调研](../../docs/IndustryResearch.md)、[需求](../../docs/DemandAnalysis.md)、
 [技术方案](../../docs/TechnicalSolution.md)、[编程规范](../../docs/AiProgrammingGuide.md)。
 
-**Status**: 任务于 2026-11-05 生成；当前分支 `codex/us-002-search-detail-share`。T001～T016 已完成；
+**Status**: 任务于 2026-11-05 生成；当前分支 `codex/us-002-search-detail-share`。T001～T020 已完成；
 T016 的详情/分享、原文复制和原件/ZIP/附件回归见 [us2-detail.md](validation/us2-detail.md)；
-T017～T026 尚未完成。本功能只覆盖 US-002；不改变 US-001 已验收的复制、下载、旧链接、
+T017～T020 的响应式、主题、键盘和减少动效见 [us2-accessibility.md](validation/us2-accessibility.md)；
+T021～T026 尚未完成。本功能只覆盖 US-002；不改变 US-001 已验收的复制、下载、旧链接、
 T041 macOS 缺口或生产发布状态。
 
 **Tests**: spec 的 Independent Test、Acceptance Scenarios 与 US002-SC-01～06 要求验证；宪章 IX 要求先建立
@@ -169,7 +170,7 @@ T041 macOS 缺口或生产发布状态。
   `prefers-color-scheme`；切换后持久化；路由切换后把焦点放到主标题或返回控件，
   不改变详情/列表地址契约。
   （FR-010、NFR-005；AC-013）
-- [ ] T020 [US3] 使用 T002 的 `buildFixturePreview` 生成隔离 dist 和预览，用浏览器完成
+- [X] T020 [US3] 使用 T002 的 `buildFixturePreview` 生成隔离 dist 和预览，用浏览器完成
   360/768/1440、明暗主题、纯键盘和减少动效验证；记录 Chromium/Firefox/WebKit 版本、焦点路径、
   对比度、溢出和截图/操作记录到
   `specs/002-search-detail-share-redesign/validation/us2-accessibility.md`；未运行浏览器不得写成通过；
