@@ -49,7 +49,7 @@ description: "US-002 检索、详情、分享与视觉改版的实施任务"
 
 **Purpose**: 让新前端模块进入公开构建和快照身份，同时保持 US-001 的索引/详情契约不变。
 
-- [ ] T003 [P] 在 `tests/integration/search-assets.test.js` 先写失败契约：构建产物必须包含
+- [X] T003 [P] 在 `tests/integration/search-assets.test.js` 先写失败契约：构建产物必须包含
   `assets/app-search.js`；修改该资产必须改变 `contentRevision`；索引/详情仍为 `schemaVersion=1`。
   （FR-004、FR-011；AC-014 本地部分）
 - [ ] T004 [P] 在 `scripts/lib/build-outputs.js` 的 `copyWebAssets` 增加 `assets/app-search.js`；
