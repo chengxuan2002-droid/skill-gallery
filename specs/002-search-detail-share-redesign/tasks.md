@@ -58,7 +58,7 @@ description: "US-002 检索、详情、分享与视觉改版的实施任务"
 - [X] T005 [P] 在 `scripts/lib/build-inputs.js` 的 `contentRevision` 资产清单增加 `assets/app-search.js`；
   不改变 `POLICY_VERSION` 的业务含义或索引 schema。
   （FR-011、NFR-006；AC-014 本地部分）
-- [ ] T006 [P] 更新以下测试夹具的临时 `assets/`，创建 `assets/app-search.js` 并保持 `index.html`
+- [X] T006 [P] 更新以下测试夹具的临时 `assets/`，创建 `assets/app-search.js` 并保持 `index.html`
   脚本顺序可构建：`tests/integration/build-contract.test.js`、`tests/integration/build-recovery.test.js`、
   `tests/integration/distribution.test.js`、`tests/support/invalid-batch-project.js`。
   （FR-011；AC-014 本地部分）

@@ -73,9 +73,13 @@ function makeProject() {
   fs.mkdirSync(path.join(project.root, 'catalog'), { recursive: true });
   fs.writeFileSync(
     path.join(project.root, 'index.html'),
-    '<!doctype html><title>Skill Gallery</title><main id="app"></main>',
+    '<!doctype html><title>Skill Gallery</title><script src="assets/app-search.js"></script><script src="assets/app.js"></script><main id="app"></main>',
   );
   fs.writeFileSync(path.join(project.root, 'assets/app.js'), 'globalThis.APP_LOADED = true;');
+  fs.writeFileSync(
+    path.join(project.root, 'assets/app-search.js'),
+    'globalThis.SEARCH_LOADED = true;',
+  );
   fs.writeFileSync(
     path.join(project.root, 'assets/app-views.js'),
     'globalThis.VIEWS_LOADED = true;',
