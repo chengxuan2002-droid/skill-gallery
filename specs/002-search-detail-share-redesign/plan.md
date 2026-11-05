@@ -1,7 +1,9 @@
 # Implementation Plan: US-002 检索、详情、分享与视觉改版
 
-**Branch**: 功能标识 002-search-detail-share-redesign；实际 Git 分支 `codex/us-002-search-detail-share`，基于 `codex/development-baseline-20261102`。  
-**Date**: 2026-11-05 | **Spec**: [spec.md](spec.md)  
+**Branch**: 功能标识 002-search-detail-share-redesign；实际 Git 分支 `codex/us-002-search-detail-share`，基于 `codex/development-baseline-20261102`。
+
+**Date**: 2026-11-05 | **Spec**: [spec.md](spec.md)
+
 **Input**: `specs/002-search-detail-share-redesign/spec.md`，含 2026-11-05 复核后记录的分享地址、精准多词、排序保持、筛选值及更新时间默认规则。
 
 ## Summary
