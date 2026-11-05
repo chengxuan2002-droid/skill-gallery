@@ -101,7 +101,7 @@ description: "US-002 检索、详情、分享与视觉改版的实施任务"
   和 loading/ready/empty_library/empty_results/load_failed 状态；结果计数使用
   `aria-live="polite"`，输入变化不丢焦点。
   （FR-002、FR-010；AC-003、AC-013）
-- [ ] T012 [US1] 使用 T002 的 `buildFixturePreview` 生成隔离 dist/预览，运行
+- [X] T012 [US1] 使用 T002 的 `buildFixturePreview` 生成隔离 dist/预览，运行
   `tests/unit/search-core.test.js`、`tests/integration/search-assets.test.js` 和固定查询集验证；
   在 `specs/002-search-detail-share-redesign/validation/us2-search.md` 记录命令、退出码、
   查询/模式/筛选/排序/URL 恢复结果及未运行项；不依赖工作区 `dist/`。
