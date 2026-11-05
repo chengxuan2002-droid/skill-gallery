@@ -18,6 +18,7 @@ npm run setup:security
 npm run lint
 npm run format:check
 npm test
+npm run security
 npm run build
 npm run preview
 ```
@@ -25,7 +26,8 @@ npm run preview
 预期：
 
 - `npm run lint`、`npm run format:check`、`npm test` 退出 0（扫描器未安装时的环境限制要单独记录）。
-- `npm run build` 返回 `status=built`，不修改原件或根 `assets/search-index.json`。
+- `npm run security` 的 secrets/code/deps 分别给出真实结果；工具缺失或 `AUDIT_UNAVAILABLE` 不得算通过。
+- `npm run build` 在隔离副本返回 `status=built`，不修改原件或根 `assets/search-index.json`。
 - `npm run preview` 只读提供 `http://localhost:8000/skill-gallery/`。
 
 ## 2. 检索与 URL 验证

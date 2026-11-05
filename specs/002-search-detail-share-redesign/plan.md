@@ -28,7 +28,8 @@ UI 组件库或 E2E 框架。marked/sanitize-html/yaml/yazl 继续用于既有�
 
 **Testing**: `node:test` 显式运行 `tests/unit/*.test.js`、`tests/integration/*.test.js`；新搜索核心用
 `node:vm` 加载纯浏览器模块做单元测试；构建测试验证新资产被复制且进入 `contentRevision`；
-浏览器与性能证据使用现有 Edge/Chromium CDP 或人工浏览器流程，不新增 E2E 框架。
+浏览器、详情、性能和可访问证据使用隔离临时项目/dist 与现有 Edge/Chromium CDP 或人工浏览器流程，
+不新增 E2E 框架；Polish 显式运行 `npm run security`（secrets/code/deps），工具缺失不算通过。
 
 **Target Platform**: GitHub Pages 静态站，地址保持 `https://chengxuan2002-droid.github.io/skill-gallery/`，
 资源兼容 `/skill-gallery/`；当前稳定 Chromium、Firefox、WebKit，360/768/1440px、明暗主题和键盘操作。
@@ -55,7 +56,7 @@ T041 macOS 未验证缺口继续保持，不在本故事关闭。
 | 宪章原则 | 计划边界 | 设计与证据入口 |
 |---|---|---|
 | I 地址与稳定身份 | 保留 `#/skill/<slug>`、`/skill-gallery/` 和 slug；查询状态只用 Hash 参数 | 路由契约、四旧链接回归、子路径预览 |
-| II GitHub 后台与写入权限 | 不新增登录或站内写入；管理入口仅低权重外链 | 前端无写 API/token；AC-008 不在本轮但边界保持 |
+| II GitHub 后台与写入权限 | 不新增管理入口；若保留现有外链则保持低权重；无登录或站内写入 | 前端无写 API/token；T026 验证边界；AC-008 不在本轮但边界保持 |
 | III 原件保真与元数据分离 | 检索/详情只读派生数据；不修改原件或从检索文本重建正文 | data-model、detail contract、US-001 回归 |
 | IV 可验证来源更新 | 本故事不实现来源检查或自动替换 | 路由/详情不增加来源写入；留 US-006 |
 | V 单一当前版本 | 不提供旧版选择；只显示当前内容身份 | detail contract、同 slug 旧链接场景 |
@@ -100,7 +101,7 @@ scripts/lib/build-outputs.js        # 复制新增前端资产
 scripts/lib/build-inputs.js         # contentRevision 纳入新增前端资产
 tests/unit/search-core.test.js      # 新增：纯搜索/URL 模块单元测试
 tests/integration/search-assets.test.js # 新增：构建复制与 contentRevision 契约
-tests/support/search-fixture.js     # 新增：隔离检索夹具与 1,000 项负载生成
+tests/support/search-fixture.js     # 新增：隔离检索/详情项目、1,000 项负载与预览构建辅助
 tests/fixtures/search/              # 新增：固定检索样例
 dist/                               # 唯一生成目录，不手改
 ```
@@ -143,7 +144,7 @@ quickstart 只负责可执行验证步骤，不复制 schema。
 | 3 | 改造列表视图与路由状态，接通模式、筛选、排序、分享地址 | 固定查询集、结果条件、URL 恢复、空/加载/错误状态、旧链接不回归 | FR-002、FR-004；AC-003、AC-005 |
 | 4 | 改造详情视图，接入内容标识和分享/复制/下载动作 | 完整/缺失字段、站点说明与原文分区、代码表格附件、剪贴板拒绝、未知 slug | FR-003、FR-004；AC-004、AC-005、AC-012 |
 | 5 | 视觉、响应式、主题、键盘与焦点改造 | 360/768/1440、明暗主题、键盘截图、对比度、减少动效、无正文外溢出 | FR-010、NFR-005；AC-013 |
-| 6 | 浏览器与性能复验、US-001 回归收口 | 1,000 项/10 MiB、50 次查询 p95、Chromium/Firefox/WebKit 记录、复制/下载/旧链接回归 | FR-004、NFR-002/003；AC-015、AC-002/014 回归 |
+| 6 | 浏览器与性能复验、安全门禁、US-001 回归收口 | 1,000 项/10 MiB、50 次查询 p95、Chromium/Firefox/WebKit 记录、`npm run security` 结果、复制/下载/旧链接回归 | FR-004、NFR-002/003；AC-015、AC-002/014 回归 |
 
 ## Planning Verification
 
