@@ -118,7 +118,7 @@ description: "US-002 检索、详情、分享与视觉改版的实施任务"
 
 ### Tests for User Story 2
 
-- [ ] T013 [P] [US2] 在 `tests/unit/share-link.test.js` 先写失败契约：详情地址为
+- [X] T013 [P] [US2] 在 `tests/unit/share-link.test.js` 先写失败契约：详情地址为
   当前文档目录 + `#/skill/<slug>`；列表地址包含查询/模式/筛选/排序且无凭证；
   `contentIdentity` 在声明版本缺失时返回 `digest` 前 12 位，声明版本存在时不把版本当内容身份。
   （FR-003、FR-004；AC-004、AC-005）
