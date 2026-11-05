@@ -3,41 +3,51 @@ const skillCount = document.getElementById('skill-count');
 const views = window.SkillGalleryViews;
 const detailView = window.SkillGalleryDetail;
 const actions = window.SkillGalleryActions;
+const search = window.SkillGallerySearch;
 const state = {
   skills: [],
   query: '',
-  mini: null,
+  mode: 'fuzzy',
+  tags: [],
+  platforms: [],
+  sourceTypes: [],
+  authors: [],
+  sort: 'auto',
+  engine: null,
   revision: null,
   routeToken: 0,
+  listView: null,
 };
 
-function buildMini(skills) {
-  if (!window.MiniSearch) return null;
-  const mini = new window.MiniSearch({
-    fields: ['display_name', 'description', 'tags', 'platforms', 'usage', 'notes', 'content_text'],
-    idField: 'slug',
-    storeFields: ['slug'],
+function currentResults() {
+  return search.searchSkills({
+    skills: state.skills,
+    engine: state.engine,
+    query: state.query,
+    mode: state.mode,
+    sort: state.sort,
+    tags: state.tags,
+    platforms: state.platforms,
+    sourceTypes: state.sourceTypes,
+    authors: state.authors,
   });
-  mini.addAll(skills);
-  return mini;
 }
 
-function filterSkills() {
-  const query = state.query.trim();
-  if (!query) return state.skills;
-  if (state.mini) {
-    const matched = new Set(
-      state.mini.search(query, { prefix: true, fuzzy: 0.2 }).map((result) => result.id),
-    );
-    return state.skills.filter((skill) => matched.has(skill.slug));
-  }
-  const lowered = query.toLowerCase();
-  return state.skills.filter((skill) =>
-    [skill.display_name, skill.description, ...(skill.tags || []), ...(skill.platforms || [])]
-      .join(' ')
-      .toLowerCase()
-      .includes(lowered),
-  );
+function listHandlers() {
+  return {
+    onChange(patch) {
+      Object.assign(state, patch);
+      window.history.replaceState(null, '', search.buildListHash(state));
+      state.listView.update(state, currentResults());
+    },
+    onOpenDetail(slug) {
+      window.sessionStorage.setItem('skill-gallery-list-hash', search.buildListHash(state));
+      window.location.hash = `#/skill/${encodeURIComponent(slug)}`;
+    },
+    copyListLink() {
+      return actions.copyText(search.buildListShareUrl(window.location.href, state));
+    },
+  };
 }
 
 function createDetailActions(detail, token) {
@@ -83,12 +93,20 @@ async function loadDetail(item, token) {
   }
 }
 
+function renderListRoute() {
+  const parsed = search.parseListHash(window.location.hash);
+  Object.assign(state, parsed);
+  const results = currentResults();
+  const filterOptions = search.buildFilterOptions(state.skills);
+  state.listView = views.renderList(app, { state, results, filterOptions }, listHandlers());
+}
+
 async function route() {
   const token = ++state.routeToken;
   const match = window.location.hash.match(/^#\/skill\/(.+)$/);
   if (!match) {
     document.title = 'Skill Gallery';
-    views.renderList(app, state, filterSkills);
+    renderListRoute();
     return;
   }
   let slug;
@@ -117,7 +135,7 @@ async function loadIndex() {
     }
     state.skills = index.skills;
     state.revision = index.contentRevision;
-    state.mini = buildMini(index.skills);
+    state.engine = search.createSearchEngine(index.skills, window.MiniSearch);
     skillCount.textContent = `${index.skills.length} 个 Skill`;
     route();
   } catch {

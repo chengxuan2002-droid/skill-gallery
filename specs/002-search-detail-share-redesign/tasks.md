@@ -90,7 +90,7 @@ description: "US-002 检索、详情、分享与视觉改版的实施任务"
 - [X] T009 [P] [US1] 在 `index.html` 于 `assets/app.js` 之前加载 `assets/app-search.js`，
   保留现有 `#app`、`#skill-count`、主题切换和 `/skill-gallery/` 相对路径。
   （FR-010；AC-013）
-- [ ] T010 [P] [US1] 改造 `assets/app.js`：加载索引后只构建一次搜索引擎；从列表 Hash 读取
+- [X] T010 [P] [US1] 改造 `assets/app.js`：加载索引后只构建一次搜索引擎；从列表 Hash 读取
   query/mode/tags/platforms/sourceTypes/authors/sort；筛选/排序复用一次搜索结果；
   列表状态用 `history.replaceState` 更新地址；进入详情前把列表 Hash 存入 `sessionStorage`；
   详情地址保持 `#/skill/<slug>`；不把查询写入公开详情身份。
