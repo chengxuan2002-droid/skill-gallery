@@ -20,7 +20,19 @@ function loadSearch() {
 }
 
 function slugs(results) {
-  return results.map((result) => result.skill.slug);
+  return Array.from(results, (result) => result.skill.slug);
+}
+
+function plainState(state) {
+  return {
+    query: state.query,
+    mode: state.mode,
+    tags: Array.from(state.tags),
+    platforms: Array.from(state.platforms),
+    sourceTypes: Array.from(state.sourceTypes),
+    authors: Array.from(state.authors),
+    sort: state.sort,
+  };
 }
 
 function search(api, query, mode, options = {}) {
@@ -91,7 +103,7 @@ test('builds filter options from actual values only', () => {
   const api = loadSearch();
   const options = api.buildFilterOptions(fixture.skills);
   assert.deepEqual(
-    options.sourceTypes.map((item) => item.value),
+    Array.from(options.sourceTypes, (item) => item.value),
     ['github', 'self-built'],
   );
   assert.equal(options.authors.find((item) => item.value === 'Example Author').count, 3);
@@ -103,7 +115,7 @@ test('builds filter options from actual values only', () => {
 
 test('parses and builds list hashes with defaults, arrays and safe fallbacks', () => {
   const api = loadSearch();
-  assert.deepEqual(api.parseListHash(''), {
+  assert.deepEqual(plainState(api.parseListHash('')), {
     query: '',
     mode: 'fuzzy',
     tags: [],
@@ -112,16 +124,16 @@ test('parses and builds list hashes with defaults, arrays and safe fallbacks', (
     authors: [],
     sort: 'auto',
   });
-  assert.deepEqual(api.parseListHash('#/'), api.parseListHash(''));
+  assert.deepEqual(plainState(api.parseListHash('#/')), plainState(api.parseListHash('')));
   const parsed = api.parseListHash(
     '#/?q=debug&mode=exact&tag=debugging&tag=workflow&platform=codex&source=self-built&author=Example+Author&sort=name',
   );
   assert.equal(parsed.query, 'debug');
   assert.equal(parsed.mode, 'exact');
-  assert.deepEqual(parsed.tags, ['debugging', 'workflow']);
-  assert.deepEqual(parsed.platforms, ['codex']);
-  assert.deepEqual(parsed.sourceTypes, ['self-built']);
-  assert.deepEqual(parsed.authors, ['Example Author']);
+  assert.deepEqual(Array.from(parsed.tags), ['debugging', 'workflow']);
+  assert.deepEqual(Array.from(parsed.platforms), ['codex']);
+  assert.deepEqual(Array.from(parsed.sourceTypes), ['self-built']);
+  assert.deepEqual(Array.from(parsed.authors), ['Example Author']);
   assert.equal(parsed.sort, 'name');
   assert.equal(api.parseListHash('#/?mode=unknown&sort=unknown').mode, 'fuzzy');
   assert.equal(api.parseListHash('#/?mode=unknown&sort=unknown').sort, 'auto');
