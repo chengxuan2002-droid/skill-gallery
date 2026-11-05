@@ -165,7 +165,7 @@ T041 macOS 缺口或生产发布状态。
   真实 button/checkbox/select/link、可见标签、移动筛选 `aria-expanded`/`aria-controls`、
   结果计数和动作状态 `aria-live`、焦点保持/返回、错误状态可恢复。
   （FR-010、NFR-005；AC-013）
-- [ ] T019 [P] [US3] 改造 `assets/app.js` 主题与焦点：优先读取已保存主题，无保存值时跟随
+- [X] T019 [P] [US3] 改造 `assets/app.js` 主题与焦点：优先读取已保存主题，无保存值时跟随
   `prefers-color-scheme`；切换后持久化；路由切换后把焦点放到主标题或返回控件，
   不改变详情/列表地址契约。
   （FR-010、NFR-005；AC-013）

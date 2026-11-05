@@ -33,20 +33,36 @@ function createStorage() {
 function createAppContext() {
   const sessionStorage = createStorage();
   const detailCalls = [];
+  const focusCalls = [];
   const appElement = { replaceChildren() {}, append() {} };
   const skillCount = { textContent: '' };
-  const themeToggle = { textContent: '', addEventListener() {} };
+  const themeToggle = {
+    textContent: '',
+    title: '',
+    addEventListener() {},
+    setAttribute() {},
+  };
   const views = {
     loadingView() {},
     errorView() {},
     notFound() {},
     renderList() {
-      return { update() {} };
+      return {
+        update() {},
+        focusHeading() {
+          focusCalls.push('list');
+        },
+      };
     },
   };
   const detailView = {
     renderDetail(app, detail, actions) {
       detailCalls.push({ app, detail, actions });
+      return {
+        focusTitle() {
+          focusCalls.push('detail');
+        },
+      };
     },
   };
   const actions = {
@@ -98,7 +114,7 @@ function createAppContext() {
   vm.runInNewContext(`${appSource}\nglobalThis.__app = { route, listHandlers, state };`, context, {
     filename: 'assets/app.js',
   });
-  return { app: context.__app, context, detailCalls, sessionStorage, window };
+  return { app: context.__app, context, detailCalls, focusCalls, sessionStorage, window };
 }
 
 function installFetch(context) {
@@ -169,4 +185,19 @@ test('clears stale list return state for direct or refreshed details', async () 
     assert.equal(sessionStorage.getItem('skill-gallery-list-hash'), null, slug);
     assert.equal(state.pendingDetailSlug, null, slug);
   }
+});
+
+test('moves focus to the list heading and detail title after routes', async () => {
+  const { app, context, focusCalls, window } = createAppContext();
+  installFetch(context);
+  loadState(app);
+
+  window.location.hash = '#/';
+  await app.route();
+  assert.ok(focusCalls.includes('list'));
+
+  window.location.hash = '#/skill/alpha';
+  app.state.pendingDetailSlug = null;
+  await app.route();
+  assert.ok(focusCalls.includes('detail'));
 });

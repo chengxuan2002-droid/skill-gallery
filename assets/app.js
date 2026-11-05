@@ -90,7 +90,10 @@ async function loadDetail(item, token) {
       );
       return;
     }
-    detailView.renderDetail(app, detail, createDetailActions(detail, token));
+    const detailHandle = detailView.renderDetail(app, detail, createDetailActions(detail, token));
+    if (detailHandle && typeof detailHandle.focusTitle === 'function') {
+      detailHandle.focusTitle();
+    }
   } catch {
     if (token === state.routeToken) {
       views.errorView(app, '无法加载该 Skill，请重试', () => route(), 'load_failed');
@@ -104,6 +107,9 @@ function renderListRoute() {
   const results = currentResults();
   const filterOptions = search.buildFilterOptions(state.skills);
   state.listView = views.renderList(app, { state, results, filterOptions }, listHandlers());
+  if (state.listView && typeof state.listView.focusHeading === 'function') {
+    state.listView.focusHeading();
+  }
 }
 
 async function route() {
@@ -153,17 +159,39 @@ async function loadIndex() {
   }
 }
 
+const THEME_KEY = 'skill-gallery-theme';
+
+function applyTheme(theme, toggle) {
+  document.documentElement.dataset.theme = theme;
+  if (!toggle) return;
+  toggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+  toggle.setAttribute('aria-label', theme === 'dark' ? '切换到浅色主题' : '切换到深色主题');
+  toggle.title = theme === 'dark' ? '切换到浅色主题' : '切换到深色主题';
+}
+
 function setupTheme() {
   const toggle = document.getElementById('theme-toggle');
-  const saved = localStorage.getItem('skill-gallery-theme');
-  if (saved) document.documentElement.dataset.theme = saved;
+  const saved = localStorage.getItem(THEME_KEY);
+  let manualTheme = saved === 'dark' || saved === 'light';
+  const media =
+    typeof window.matchMedia === 'function'
+      ? window.matchMedia('(prefers-color-scheme: dark)')
+      : null;
+  const initial = manualTheme ? saved : media?.matches ? 'dark' : 'light';
+  applyTheme(initial, toggle);
   if (!toggle) return;
   toggle.addEventListener('click', () => {
     const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-    document.documentElement.dataset.theme = next;
-    localStorage.setItem('skill-gallery-theme', next);
-    toggle.textContent = next === 'dark' ? '☀️' : '🌙';
+    manualTheme = true;
+    applyTheme(next, toggle);
+    localStorage.setItem(THEME_KEY, next);
   });
+  if (media && typeof media.addEventListener === 'function') {
+    media.addEventListener('change', (event) => {
+      if (manualTheme) return;
+      applyTheme(event.matches ? 'dark' : 'light', toggle);
+    });
+  }
 }
 
 setupTheme();
