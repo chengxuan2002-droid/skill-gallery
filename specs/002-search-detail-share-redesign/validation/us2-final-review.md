@@ -53,6 +53,15 @@ US-002 变更范围（截至 T025）：`assets` 6 个文件、`tests` 13 个文�
 - 依赖审计当前为 0 个漏洞；性能仍只代表隔离 headless 浏览器夹具。
 - 临时 CDP/Playwright 脚本和截图未提交；可重复的 Node 测试与 validation 记录已提交。
 
+## 2026-11-06 风险补强
+
+- 依赖审计通过 `minimatch@11.0.4` override 降至 0 个漏洞；lint、测试和 `security:deps` 通过。
+- Firefox 157.0、WebKit 27.2 完成布局、主题、对比度、键盘和减少动效补充验收；50 查询 p95
+  分别为 48.0ms、50.0ms。证据见 [us2-cross-browser.md](us2-cross-browser.md)。
+- 生产 Pages 只读检查记录在 [us2-production-preflight.md](us2-production-preflight.md)：
+  HTML/JS/CSS/JSON MIME 正确、缓存 10 分钟；平台未提供 `nosniff`/CSP，US-002 新 `.bin`/ZIP 的
+  线上响应和部署回滚仍需部署后验证。
+
 ## 结论
 
 US-002 的 T001–T026 已完成本地实现、验收和文档收口，保留了 US-001 的原件保真、复制/下载、
