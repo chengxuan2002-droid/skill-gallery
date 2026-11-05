@@ -1,0 +1,1 @@
+globalThis.SkillGallerySearch = globalThis.SkillGallerySearch || {};
