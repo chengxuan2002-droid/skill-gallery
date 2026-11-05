@@ -32,7 +32,7 @@ description: "US-002 检索、详情、分享与视觉改版的实施任务"
 
 **Purpose**: 在实现前固定可重复的检索输入和规模负载，避免用正式四项数据代替验收。
 
-- [ ] T001 [P] 在 `tests/fixtures/search/fixed-skills.json` 创建固定检索样例：包含中英文名称/简介/用法、
+- [X] T001 [P] 在 `tests/fixtures/search/fixed-skills.json` 创建固定检索样例：包含中英文名称/简介/用法、
   标签、平台、来源、作者、缺失元数据、代码/表格/中文路径、同分 slug；不写入正式 catalog 或 `skills/`。
   （FR-002、FR-003；AC-003、AC-004）
 - [ ] T002 [P] 在 `tests/support/search-fixture.js` 创建临时项目构建器：
