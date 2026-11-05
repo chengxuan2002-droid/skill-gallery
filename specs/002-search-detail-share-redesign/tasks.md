@@ -35,7 +35,7 @@ description: "US-002 检索、详情、分享与视觉改版的实施任务"
 - [X] T001 [P] 在 `tests/fixtures/search/fixed-skills.json` 创建固定检索样例：包含中英文名称/简介/用法、
   标签、平台、来源、作者、缺失元数据、代码/表格/中文路径、同分 slug；不写入正式 catalog 或 `skills/`。
   （FR-002、FR-003；AC-003、AC-004）
-- [ ] T002 [P] 在 `tests/support/search-fixture.js` 创建临时项目构建器：
+- [X] T002 [P] 在 `tests/support/search-fixture.js` 创建临时项目构建器：
   `createSearchFixtureProject` 生成 1,000 项、总正文 10 MiB 的 catalog/skills/最小 assets
   （含 `assets/app-search.js` 与现有前端模块）；
   `createDetailFixtureProject` 生成信息齐全和作者/版本缺失的可构建详情样例；
