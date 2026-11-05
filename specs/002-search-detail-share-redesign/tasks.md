@@ -75,7 +75,7 @@ description: "US-002 检索、详情、分享与视觉改版的实施任务"
 
 ### Tests for User Story 1
 
-- [ ] T007 [P] [US1] 在 `tests/unit/search-core.test.js` 先写失败契约：规范化（NFC/小写/空白折叠）、
+- [X] T007 [P] [US1] 在 `tests/unit/search-core.test.js` 先写失败契约：规范化（NFC/小写/空白折叠）、
   精准连续片段/双引号短语、模糊英文拼写容错、中文连续子串、名称优先排序、同分 slug、
   同维 OR/跨维 AND、缺失筛选值不匹配、URL 解析/构建往返、非法 mode/sort 回退、空 Hash 等价 `#/`。
   （FR-002；AC-003、AC-015）
