@@ -130,7 +130,7 @@ description: "US-002 检索、详情、分享与视觉改版的实施任务"
   保留原文复制、单文件/目录包/附件下载的响应/大小/摘要校验和
   `raw_unavailable`/`copy_failed`/`download_failed` 状态。
   （FR-004；AC-005、AC-012）
-- [ ] T015 [US2] 改造 `assets/app-detail.js`：首屏按名称、简介、版本/内容标识、作者、来源、
+- [X] T015 [US2] 改造 `assets/app-detail.js`：首屏按名称、简介、版本/内容标识、作者、来源、
   下载/复制/分享入口排列；其下分区展示 `description`（功能简介）、`usage`（适用场景与使用方法）、
   `notes`（备注）、原文、附件和来源元数据；
   `declared_version` 存在时显示版本，否则显示 `digest` 前 12 位内容标识；

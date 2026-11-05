@@ -1,5 +1,6 @@
 (function () {
   const { element, clear, safeText, safeHref } = window.SkillGalleryViews;
+  const search = window.SkillGallerySearch;
 
   function bindBodyAnchors(root, files, onFileLink) {
     root.addEventListener('click', (event) => {
@@ -48,6 +49,13 @@
     return row;
   }
 
+  function textSection(title, value) {
+    const section = element('section', 'detail-section');
+    section.append(element('h4', null, title));
+    section.append(element('p', 'detail-text', safeText(value)));
+    return section;
+  }
+
   function errorMessage(error, fallback) {
     return error && error.code && typeof error.message === 'string' && error.message
       ? error.message
@@ -60,7 +68,8 @@
     const back = element('button', 'detail-back', '← 返回列表');
     back.type = 'button';
     back.addEventListener('click', () => {
-      window.location.hash = '';
+      const listHash = window.sessionStorage.getItem('skill-gallery-list-hash');
+      window.location.hash = listHash && listHash.startsWith('#/') ? listHash : '';
     });
     view.append(back);
 
@@ -72,14 +81,17 @@
       badges.append(element('span', 'badge badge-platform', platform));
     }
     for (const tag of detail.tags || []) badges.append(element('span', 'badge', `#${tag}`));
-    header.append(badges);
+    if (badges.childNodes.length > 0) header.append(badges);
+
+    if (detail.declared_version) {
+      header.append(metaRow('声明版本', detail.declared_version));
+    } else {
+      const identity = search ? search.contentIdentity(detail) : null;
+      header.append(metaRow('内容标识', identity || '未提供'));
+    }
     header.append(metaRow('作者', detail.author));
-    header.append(metaRow('声明版本', detail.declared_version));
-    header.append(metaRow('许可', detail.license));
-    header.append(metaRow('创建时间', detail.created_at));
+    header.append(metaRow('来源', detail.source_type));
     header.append(metaRow('更新时间', detail.updated_at));
-    header.append(linkRow('官网', detail.homepage_url));
-    header.append(linkRow('开源地址', detail.repository_url));
     view.append(header);
 
     const toolbar = element('div', 'detail-toolbar');
@@ -215,13 +227,23 @@
     toolbar.append(shareButton);
     view.append(toolbar, status, manualPanel, rawPanel);
 
+    const siteInfo = element('section', 'detail-section');
+    siteInfo.append(element('h4', null, '站点说明'));
+    siteInfo.append(textSection('功能简介', detail.description));
+    siteInfo.append(textSection('适用场景与使用方法', detail.usage));
+    siteInfo.append(textSection('备注', detail.notes));
+    view.append(siteInfo);
+
+    const bodySection = element('section', 'detail-section');
+    bodySection.append(element('h4', null, '原文'));
     const body = element('div', 'markdown-body');
     body.innerHTML = typeof detail.body_html === 'string' ? detail.body_html : '';
     bindBodyAnchors(body, detail.files || [], downloadAttachment);
-    view.append(body);
+    bodySection.append(body);
+    view.append(bodySection);
 
     if (Array.isArray(detail.files) && detail.files.length > 0) {
-      const section = element('div', 'detail-files');
+      const section = element('section', 'detail-section');
       section.append(element('h4', null, '附件'));
       const list = element('ul', 'file-list');
       for (const file of detail.files) {
@@ -242,21 +264,14 @@
       view.append(section);
     }
 
-    const info = element('div', 'detail-footer-info');
-    info.append(metaRow('来源', detail.source_type));
-    if (detail.usage) {
-      const usage = element('div', 'usage-notes');
-      usage.append(element('h4', null, '用法'));
-      usage.append(element('p', null, detail.usage));
-      info.append(usage);
-    }
-    if (detail.notes) {
-      const notes = element('div', 'usage-notes');
-      notes.append(element('h4', null, '备注'));
-      notes.append(element('p', null, detail.notes));
-      info.append(notes);
-    }
-    view.append(info);
+    const source = element('section', 'detail-section');
+    source.append(element('h4', null, '来源与许可'));
+    source.append(linkRow('官方主页', detail.homepage_url));
+    source.append(linkRow('开源地址', detail.repository_url));
+    source.append(metaRow('许可', detail.license));
+    source.append(metaRow('创建时间', detail.created_at));
+    view.append(source);
+
     app.append(view);
     document.title = `${safeText(detail.display_name, detail.slug)} · Skill Gallery`;
   }
