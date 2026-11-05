@@ -52,7 +52,7 @@ description: "US-002 检索、详情、分享与视觉改版的实施任务"
 - [X] T003 [P] 在 `tests/integration/search-assets.test.js` 先写失败契约：构建产物必须包含
   `assets/app-search.js`；修改该资产必须改变 `contentRevision`；索引/详情仍为 `schemaVersion=1`。
   （FR-004、FR-011；AC-014 本地部分）
-- [ ] T004 [P] 在 `scripts/lib/build-outputs.js` 的 `copyWebAssets` 增加 `assets/app-search.js`；
+- [X] T004 [P] 在 `scripts/lib/build-outputs.js` 的 `copyWebAssets` 增加 `assets/app-search.js`；
   缺失或非普通文件使整批构建失败，不跳过该资产。
   （FR-011、NFR-003；AC-014 本地部分）
 - [ ] T005 [P] 在 `scripts/lib/build-inputs.js` 的 `contentRevision` 资产清单增加 `assets/app-search.js`；
