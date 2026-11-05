@@ -95,7 +95,7 @@ description: "US-002 检索、详情、分享与视觉改版的实施任务"
   列表状态用 `history.replaceState` 更新地址；进入详情前把列表 Hash 存入 `sessionStorage`；
   详情地址保持 `#/skill/<slug>`；不把查询写入公开详情身份。
   （FR-002、FR-004；AC-003、AC-005）
-- [ ] T011 [P] [US1] 改造 `assets/app-views.js`：搜索框、精准/模糊真实按钮、标签/平台/来源/作者
+- [X] T011 [P] [US1] 改造 `assets/app-views.js`：搜索框、精准/模糊真实按钮、标签/平台/来源/作者
   checkbox、带标签的排序 select、命中数、当前条件、单项/全部清除、复制列表链接按钮、结果卡片
   （名称、一句话用途、标签、平台、版本、更新时间；版本缺失显示“未声明版本”、更新时间缺失显示“未提供”）
   和 loading/ready/empty_library/empty_results/load_failed 状态；结果计数使用
