@@ -11,11 +11,12 @@ description: "US-002 检索、详情、分享与视觉改版的实施任务"
 以及四份 0.2 文档：[调研](../../docs/IndustryResearch.md)、[需求](../../docs/DemandAnalysis.md)、
 [技术方案](../../docs/TechnicalSolution.md)、[编程规范](../../docs/AiProgrammingGuide.md)。
 
-**Status**: 任务于 2026-11-05 生成；当前分支 `codex/us-002-search-detail-share`。T001～T020 已完成；
+**Status**: 任务于 2026-11-05 生成；当前分支 `codex/us-002-search-detail-share`。T001～T026 已完成；
 T016 的详情/分享、原文复制和原件/ZIP/附件回归见 [us2-detail.md](validation/us2-detail.md)；
 T017～T020 的响应式、主题、键盘和减少动效见 [us2-accessibility.md](validation/us2-accessibility.md)；
-T021～T026 尚未完成。本功能只覆盖 US-002；不改变 US-001 已验收的复制、下载、旧链接、
-T041 macOS 缺口或生产发布状态。
+T021～T026 的质量、性能、构建、回归和最终复核见 [validation/](validation/)。
+本功能只覆盖 US-002；不改变 US-001 已验收的复制、下载、旧链接、T041 macOS 缺口或生产发布状态。
+分支尚未推送、合并 main 或发布。
 
 **Tests**: spec 的 Independent Test、Acceptance Scenarios 与 US002-SC-01～06 要求验证；宪章 IX 要求先建立
 能识别错误行为的验证。因此包含搜索核心契约、分享地址/内容标识、构建资产、浏览器可访问性和性能任务。
@@ -202,7 +203,7 @@ T041 macOS 缺口或生产发布状态。
 - [X] T025 只定向更新 `README.md`、`AGENTS.md` 中本故事已实现并验证的命令、浏览器/性能证据、
   搜索/筛选/分享行为和未完成项；上传、自动更新、生产发布仍标规划，不写假命令。
   （NFR-006；AC-014 工程支撑）
-- [ ] T026 对照 `specs/002-search-detail-share-redesign/validation/` 与 T001 做最终差异复核：
+- [X] T026 对照 `specs/002-search-detail-share-redesign/validation/` 与 T001 做最终差异复核：
   六原件/catalog/根 `assets/search-index.json` 未改写、无凭证/额外依赖/全仓格式化、无 schema 变更、
   四旧链接与单版本保持、无新增管理员后台/访客登录/站内写入、若保留管理外链则低权重且使用安全协议、
   T041 macOS 缺口仍记录、未合并 main/未发布；更新 tasks/plan 状态并列出未运行项与剩余风险。

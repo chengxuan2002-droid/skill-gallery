@@ -104,7 +104,7 @@ npx ctx7@latest docs <libraryId> "单一概念的具体问题"
 （见 specs/001-preserve-skill-content/validation/us3-failures.md）；T039/T040/T042/T043 已完成
 （acceptance.md、final-review.md），T041 仅 Linux/WSL 通过、macOS 未运行（platform.md）；
 上传 CLI、自动更新与生产发布仍待后续故事。
-2026-11-05 US-002 的 T001–T024 已完成本地实现与验收；T025 文档更新完成，T026 最终复核待完成。
+2026-11-05 US-002 的 T001–T026 已完成本地实现、验收与文档收口。
 证据入口：specs/002-search-detail-share-redesign/validation/ 下的 us2-search、us2-detail、us2-accessibility、
 us2-performance、us2-build、us2-regression、us2-quality。当前本地 npm test 为 163 项（162 通过、0 失败、
 1 跳过）；security:secrets/code 无发现，security:deps 通过并报告 4 个 moderate。Chrome 152/Edge 156

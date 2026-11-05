@@ -6,6 +6,10 @@
 
 **Input**: `specs/002-search-detail-share-redesign/spec.md`，含 2026-11-05 复核后记录的分享地址、精准多词、排序保持、筛选值及更新时间默认规则。
 
+**Implementation Status**: 2026-11-05 T001–T026 已完成本地实现、验收和文档收口；证据入口为
+[validation/](validation/)。分支 `codex/us-002-search-detail-share` 尚未推送、合并 main 或发布；
+T041 macOS、Firefox/WebKit、生产 Pages MIME/缓存和 US-003～US-007 仍未完成。
+
 ## Summary
 
 在保留 US-001 已验收的原件、catalog、详情、复制、下载和旧链接契约的前提下，把现有最小列表/详情升级为
@@ -84,7 +88,7 @@ specs/002-search-detail-share-redesign/
 │   ├── search-ui.md                # 检索、过滤、排序、URL 与状态
 │   └── detail-share.md             # 详情、内容标识、分享与安全
 ├── quickstart.md                   # 实施后验证指南
-└── tasks.md                        # 后续 $speckit-tasks 创建，本轮不创建
+└── tasks.md                        # 已创建，T001–T026
 ```
 
 ### Source Code (repository root)
@@ -152,3 +156,6 @@ quickstart 只负责可执行验证步骤，不复制 schema。
 搜索选项；未运行新业务实现、未构建、未打开浏览器、未修改站点内容、未发布。
 搜索/详情 schema 若不出现新字段，实施时不得为了“顺手”改 schemaVersion 或重建 catalog；
 若测试证明必须新增字段，先按宪章 IX 更新规格与契约，再另行实施迁移。
+
+2026-11-05 复核：上述“只读取”描述是规划阶段记录；T001–T026 已完成本地实现、验收和文档收口，
+实际命令、测试计数、浏览器/性能证据及未运行项见 [validation/](validation/) 与 [tasks.md](tasks.md)。

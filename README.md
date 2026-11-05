@@ -40,7 +40,7 @@ Windows 下由 `.gitattributes` 保持项目文本为 LF，测试夹具使用 ju
 US-001 的内部 US1/US2/US3 切片已完成本地交付：四份 catalog、四项迁移、完整 dist 构建、只读预览、
 完整查阅/复制/下载和故障恢复均有本地证据；T041 仅 Linux/WSL 通过、macOS 未运行，2026-11-04 用户确认
 将该缺口记录为未验证并据此收口本地交付，T041 不标记为通过。
-US-002 的检索、详情、分享、响应式和键盘可访问改造已完成 T001–T024 的本地实现与验收：
+US-002 的检索、详情、分享、响应式和键盘可访问改造已完成 T001–T026 的本地实现、验收与文档收口：
 - 检索/详情/分享：[US2 检索](specs/002-search-detail-share-redesign/validation/us2-search.md)、
   [详情/分享](specs/002-search-detail-share-redesign/validation/us2-detail.md)、
   [可访问性](specs/002-search-detail-share-redesign/validation/us2-accessibility.md)。
@@ -52,7 +52,7 @@ US-002 的检索、详情、分享、响应式和键盘可访问改造已完成 
   依赖审计通过 high/critical 阈值并报告 4 个 moderate。
 - 浏览器证据来自 Chrome 152（Chromium）和 Edge 156；Firefox/WebKit 未运行。性能为 1,000 项/10 MiB
   隔离夹具上 50 次查询 p95 39.9ms，不是生产网络或设备承诺。
-- US-002 的 T025 文档更新已完成；T026 最终复核仍待完成。上传、自动更新和生产发布仍待后续故事。
+- US-002 的 T025 文档更新和 T026 最终复核已完成。上传、自动更新和生产发布仍待后续故事。
 本地验收使用 Windows + Node 22.21.0；声明的 Node 26.3.0/Linux 由 CI 覆盖，结果见下方 Quality checks。
 初始化按步骤验证并提交，提交不等于推送或上线。
 
