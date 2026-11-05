@@ -183,7 +183,7 @@ T041 macOS 缺口或生产发布状态。
 
 **Purpose**: 完成全量检查、性能证据、US-001 回归和范围复核，不新增业务能力。
 
-- [ ] T021 [P] 运行 `npm run lint`、`npm run format:check`、`npm test`、`npm run security`
+- [X] T021 [P] 运行 `npm run lint`、`npm run format:check`、`npm test`、`npm run security`
   （secrets/code/deps），只修复本故事引入的失败；记录实际命令、退出码、测试数量、扫描结果和未运行项。
   不得为通过而格式化原件或无关文件，也不得把工具缺失/AUDIT_UNAVAILABLE 当通过。
   （NFR-003、NFR-006；AC-012、AC-014 工程支撑）
