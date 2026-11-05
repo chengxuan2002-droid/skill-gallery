@@ -45,7 +45,7 @@ function listHandlers() {
       window.location.hash = `#/skill/${encodeURIComponent(slug)}`;
     },
     copyListLink() {
-      return actions.copyText(search.buildListShareUrl(window.location.href, state));
+      return actions.copyText(actions.shareListLink(state));
     },
   };
 }

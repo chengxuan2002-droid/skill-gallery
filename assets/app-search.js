@@ -236,11 +236,17 @@
     return `${siteBase(baseUrl)}${buildListHash(state)}`;
   }
 
+  function contentIdentity(detail) {
+    const digest = detail && typeof detail.digest === 'string' ? detail.digest : '';
+    return digest ? digest.slice(0, 12) : null;
+  }
+
   globalThis.SkillGallerySearch = {
     buildDetailShareUrl,
     buildFilterOptions: filterOptions,
     buildListHash,
     buildListShareUrl,
+    contentIdentity,
     createSearchEngine,
     normalizeText,
     parseListHash,

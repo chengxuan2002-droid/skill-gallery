@@ -67,8 +67,16 @@
   }
 
   function shareLink(slug) {
+    const search = window.SkillGallerySearch;
+    if (search) return search.buildDetailShareUrl(window.location.href, slug);
     const base = new URL('.', window.location.href).href;
     return `${base}#/skill/${encodeURIComponent(slug)}`;
+  }
+
+  function shareListLink(state) {
+    const search = window.SkillGallerySearch;
+    if (search) return search.buildListShareUrl(window.location.href, state);
+    return window.location.href;
   }
 
   async function downloadBytes(bytes, name, isCurrent) {
@@ -116,5 +124,6 @@
     loadRaw,
     mainFile,
     shareLink,
+    shareListLink,
   };
 })();

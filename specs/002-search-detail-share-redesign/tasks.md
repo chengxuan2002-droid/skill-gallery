@@ -125,7 +125,7 @@ description: "US-002 检索、详情、分享与视觉改版的实施任务"
 
 ### Implementation for User Story 2
 
-- [ ] T014 [US2] 改造 `assets/app-actions.js`：使用 `app-search.js` 的详情/列表地址构建器，
+- [X] T014 [US2] 改造 `assets/app-actions.js`：使用 `app-search.js` 的详情/列表地址构建器，
   接上 T011 的“复制列表链接”按钮和详情分享按钮；复制成功仅在真实写入后提示，失败显示可手动复制值；
   保留原文复制、单文件/目录包/附件下载的响应/大小/摘要校验和
   `raw_unavailable`/`copy_failed`/`download_failed` 状态。
