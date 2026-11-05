@@ -24,9 +24,14 @@
 |---|---|
 | `security:secrets` | 203 个文件，无发现 |
 | `security:code` | 31 个文件，无发现 |
-| `security:deps` | 通过 high/critical 阻断；报告 4 个 moderate：`@eslint/config-array`、`@eslint/js`、`eslint`、`minimatch` |
+| `security:deps` | 通过；0 个漏洞（2026-11-06 复验） |
 
-依赖审计的 moderate 项仍存在，不能称为零漏洞；未新增产品依赖。
+### 2026-11-06 依赖补强
+
+为清除 `eslint` 传递依赖 `minimatch@10.2.6` 的 moderate DoS 公告，在 `package.json` 增加
+`overrides.minimatch=11.0.4` 并更新 `package-lock.json`。ESLint 当前使用的 `Minimatch` 构造器与
+`.match()` API 保持兼容；`npm run lint`、`npm test` 和 `security:deps` 复验通过，审计报告为 0 个漏洞。
+`minimatch` 仍为开发工具传递依赖，不是产品运行时依赖。
 
 ## 本次修复
 
@@ -35,7 +40,8 @@ T017～T020 引入的样式和可访问改造已由上述门禁覆盖。T020 发
 
 ## 未运行与限制
 
-- 未运行 Firefox、WebKit 或真实移动设备。
+- Firefox 157.0、WebKit 27.2 的补充结果见 [us2-cross-browser.md](us2-cross-browser.md)；
+  仍未验证真实移动设备。
 - 未验证生产 GitHub Pages 的 MIME/缓存、直接资源响应头或部署回滚。
 - 未验证 T041 macOS、上传 CLI、自动更新、生产发布和 Q-004 调度。
 - 本地 `npm test` 与 `.tools` 扫描器结果不替代远程 CI 或生产发布验收。

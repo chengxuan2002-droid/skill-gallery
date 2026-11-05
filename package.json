@@ -28,6 +28,9 @@
     "prettier": "3.9.10",
     "yauzl": "3.4.0"
   },
+  "overrides": {
+    "minimatch": "11.0.4"
+  },
   "dependencies": {
     "marked": "18.1.2",
     "minisearch": "6.3.0",
