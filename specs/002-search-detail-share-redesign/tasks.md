@@ -192,7 +192,7 @@ T041 macOS 缺口或生产发布状态。
   设备、浏览器、查询集；候选通过线 200ms，排除网络；证据写入
   `specs/002-search-detail-share-redesign/validation/us2-performance.md`；不依赖工作区 `dist/`。
   （NFR-002；AC-015）
-- [ ] T023 在隔离副本运行 `npm run build` 和 `npm run preview`（或使用 T002 的隔离构建辅助），
+- [X] T023 在隔离副本运行 `npm run build` 和 `npm run preview`（或使用 T002 的隔离构建辅助），
   核对 `dist/assets/app-search.js` 存在、`/skill-gallery/` 子路径、四个旧详情链接、刷新和当前单版本；
   记录到 `validation/us2-build.md`，不写工作区 `dist/` 或根 `assets/search-index.json`、不提交 `dist/`。
   （FR-004、FR-011；AC-005、AC-014 本地部分）
