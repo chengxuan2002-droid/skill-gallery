@@ -166,3 +166,47 @@ test('renders active conditions and clears each one with a single action', async
 
   assert.deepEqual(changes, [{ query: '' }, { mode: 'fuzzy' }, { tags: [] }, { sort: 'auto' }]);
 });
+
+test('toggles the mobile filter panel with aria state', async () => {
+  const { document, search, views } = loadViews();
+  const state = baseState();
+  const handlers = {
+    onChange() {},
+    onOpenDetail() {},
+    copyListLink() {
+      return Promise.resolve();
+    },
+    listShareUrl() {
+      return SHARE_URL;
+    },
+  };
+  const app = document.createElement('div');
+  const controller = views.renderList(
+    app,
+    {
+      state,
+      results: fixture.skills.map((skill) => ({ skill, score: 1 })),
+      filterOptions: search.buildFilterOptions(state.skills),
+    },
+    handlers,
+  );
+
+  const toggle = app.querySelector('.filter-toggle');
+  const filters = app.querySelector('.filters');
+  const panel = app.querySelector('#filter-panel');
+  assert.ok(toggle && filters && panel);
+  assert.equal(toggle.getAttribute('aria-controls'), 'filter-panel');
+  assert.equal(toggle.getAttribute('aria-expanded'), 'false');
+  assert.equal(panel.id, 'filter-panel');
+
+  await toggle.dispatch('click');
+  assert.equal(toggle.getAttribute('aria-expanded'), 'true');
+  assert.equal(toggle.textContent, '收起筛选');
+  assert.equal(filters.className.includes('is-open'), true);
+
+  await toggle.dispatch('click');
+  assert.equal(toggle.getAttribute('aria-expanded'), 'false');
+  assert.equal(toggle.textContent, '筛选');
+  assert.equal(filters.className.includes('is-open'), false);
+  assert.equal(typeof controller.focusHeading, 'function');
+});

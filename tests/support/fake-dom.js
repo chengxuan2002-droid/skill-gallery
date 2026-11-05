@@ -72,6 +72,11 @@ function createNode(tagName) {
       if (name === 'id') this.id = String(value);
       if (name === 'type') this.type = String(value);
     },
+    getAttribute(name) {
+      return Object.prototype.hasOwnProperty.call(this.attributes, name)
+        ? this.attributes[name]
+        : null;
+    },
     removeAttribute(name) {
       delete this.attributes[name];
     },
@@ -117,6 +122,7 @@ function createNode(tagName) {
           .filter((item) => item !== name)
           .join(' ');
       }
+      return next;
     },
   };
   return node;

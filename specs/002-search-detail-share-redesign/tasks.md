@@ -161,7 +161,7 @@ T041 macOS 缺口或生产发布状态。
   明暗主题、焦点样式、正文对比 ≥4.5:1、减少动效媒体查询、代码块内部横向滚动、
   正文外无横向溢出；不使用粒子背景、自动播放视频或大面积霓虹。
   （FR-010、NFR-005；AC-013）
-- [ ] T018 [P] [US3] 补全 `assets/app-views.js` 和 `assets/app-detail.js` 的可访问语义：
+- [X] T018 [P] [US3] 补全 `assets/app-views.js` 和 `assets/app-detail.js` 的可访问语义：
   真实 button/checkbox/select/link、可见标签、移动筛选 `aria-expanded`/`aria-controls`、
   结果计数和动作状态 `aria-live`、焦点保持/返回、错误状态可恢复。
   （FR-010、NFR-005；AC-013）

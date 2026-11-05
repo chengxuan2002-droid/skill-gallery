@@ -25,14 +25,19 @@
 
   function loadingView(app) {
     clear(app);
-    app.append(element('div', 'loading', '加载中...'));
+    const node = element('div', 'loading', '加载中...');
+    node.setAttribute('role', 'status');
+    node.setAttribute('aria-live', 'polite');
+    app.append(node);
   }
 
   function errorView(app, message, retry, state = 'load_failed') {
     clear(app);
     const box = element('div', 'empty-state');
     box.dataset.state = state;
-    box.append(element('h3', null, message));
+    const heading = element('h3', null, message);
+    heading.tabIndex = -1;
+    box.append(heading);
     if (retry) {
       const button = element('button', null, '重试');
       button.type = 'button';
@@ -40,6 +45,7 @@
       box.append(button);
     }
     app.append(box);
+    heading.focus();
   }
 
   function notFound(app) {
@@ -116,6 +122,19 @@
     searchBar.append(input);
     filters.append(searchLabel, searchBar);
 
+    const filterToggle = element('button', 'filter-toggle', '筛选');
+    filterToggle.type = 'button';
+    filterToggle.setAttribute('aria-expanded', 'false');
+    filterToggle.setAttribute('aria-controls', 'filter-panel');
+    filterToggle.addEventListener('click', () => {
+      const open = filters.classList.toggle('is-open');
+      filterToggle.setAttribute('aria-expanded', String(open));
+      filterToggle.textContent = open ? '收起筛选' : '筛选';
+    });
+    filters.append(filterToggle);
+    const filterPanel = element('div', 'filter-panel');
+    filterPanel.id = 'filter-panel';
+
     const modeLabel = element('div', 'field-label', '搜索模式');
     const modeGroup = element('div', 'mode-toggle');
     modeGroup.setAttribute('role', 'group');
@@ -127,7 +146,7 @@
     fuzzyButton.addEventListener('click', () => handlers.onChange({ mode: 'fuzzy' }));
     exactButton.addEventListener('click', () => handlers.onChange({ mode: 'exact' }));
     modeGroup.append(fuzzyButton, exactButton);
-    filters.append(modeLabel, modeGroup);
+    filterPanel.append(modeLabel, modeGroup);
 
     const groups = [
       ['标签', 'tags', filterOptions.tags, 'tags'],
@@ -148,7 +167,7 @@
         for (const checkbox of group.querySelectorAll('input')) {
           checkboxes.set(`${key}:${checkbox.value}`, checkbox);
         }
-        filters.append(group);
+        filterPanel.append(group);
       }
     }
 
@@ -167,10 +186,13 @@
     }
     sortSelect.value = state.sort;
     sortSelect.addEventListener('change', () => handlers.onChange({ sort: sortSelect.value }));
-    filters.append(sortLabel, sortSelect);
+    filterPanel.append(sortLabel, sortSelect);
+    filters.append(filterPanel);
     layout.append(filters);
 
     const content = element('div', 'list-content');
+    const listTitle = element('h2', 'list-title', 'Skill 列表');
+    listTitle.tabIndex = -1;
     const bar = element('div', 'sort-bar');
     const count = element('span', 'result-count');
     count.setAttribute('aria-live', 'polite');
@@ -178,7 +200,7 @@
     const copyButton = element('button', 'btn btn-small', '复制列表链接');
     copyButton.type = 'button';
     bar.append(count, conditions, copyButton);
-    content.append(bar);
+    content.append(listTitle, bar);
 
     const status = element('p', 'list-status');
     status.hidden = true;
@@ -208,6 +230,24 @@
       status.textContent = message;
     }
 
+    function focusConditionTarget(condition) {
+      if (condition.kind === 'query') {
+        input.focus();
+        return;
+      }
+      if (condition.kind === 'mode') {
+        (condition.value === 'fuzzy' ? fuzzyButton : exactButton).focus();
+        return;
+      }
+      if (condition.kind === 'sort') {
+        sortSelect.focus();
+        return;
+      }
+      const checkbox = checkboxes.get(`${condition.key}:${condition.value}`);
+      if (checkbox && checkbox.offsetParent !== null) checkbox.focus();
+      else input.focus();
+    }
+
     function conditionsFor(nextState) {
       const chips = [];
       for (const condition of search.describeListConditions(nextState)) {
@@ -226,6 +266,7 @@
           } else {
             handlers.onChange({ [condition.key]: condition.value });
           }
+          focusConditionTarget(condition);
         });
         chip.append(remove);
         chips.push(chip);
@@ -336,7 +377,12 @@
 
     update(state, results);
 
-    return { update };
+    return {
+      update,
+      focusHeading() {
+        listTitle.focus();
+      },
+    };
   }
 
   window.SkillGalleryViews = {

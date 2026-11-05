@@ -16,7 +16,14 @@
           return;
         }
         const target = Array.from(root.querySelectorAll('[id]')).find((node) => node.id === id);
-        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (target) {
+          const reduceMotion =
+            window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          target.scrollIntoView({
+            behavior: reduceMotion ? 'auto' : 'smooth',
+            block: 'start',
+          });
+        }
         return;
       }
       if (/^[a-z][a-z0-9+.-]*:/i.test(href) || href.startsWith('/')) return;
@@ -74,7 +81,9 @@
     view.append(back);
 
     const header = element('div', 'detail-header');
-    header.append(element('h1', 'detail-title', safeText(detail.display_name, detail.slug)));
+    const title = element('h1', 'detail-title', safeText(detail.display_name, detail.slug));
+    title.tabIndex = -1;
+    header.append(title);
     header.append(element('p', 'detail-desc', safeText(detail.description)));
     const badges = element('div', 'detail-meta-row');
     for (const platform of detail.platforms || []) {
@@ -199,6 +208,8 @@
       } catch {
         manualInput.value = shareLink;
         manualPanel.hidden = false;
+        manualInput.focus();
+        manualInput.select();
         setStatus('复制失败，请手动复制下方链接', 'copy_failed');
       } finally {
         setBusy(shareButton, false);
@@ -274,6 +285,11 @@
 
     app.append(view);
     document.title = `${safeText(detail.display_name, detail.slug)} · Skill Gallery`;
+    return {
+      focusTitle() {
+        title.focus();
+      },
+    };
   }
 
   window.SkillGalleryDetail = { renderDetail };
