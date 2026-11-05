@@ -7,6 +7,7 @@ const WORKSPACE = path.resolve(__dirname, '../..');
 const SITE_FILES = [
   'index.html',
   'assets/app.js',
+  'assets/app-search.js',
   'assets/app-views.js',
   'assets/app-actions.js',
   'assets/app-detail.js',
