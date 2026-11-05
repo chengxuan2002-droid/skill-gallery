@@ -96,8 +96,8 @@ npx ctx7@latest docs <libraryId> "单一概念的具体问题"
 验证构建时仍优先在隔离副本执行并检查实际输出，避免改动用户数据。
 2026-11-02 已建立根 package/锁、工程测试和本地检查入口，Node 26.3.0、npm 11.16.0；
 扫描器版本及来源以 config/security-tools.json 为准。诊断只输出白名单字段；工具缺失、网络/规则/报告失败不能算通过。
-依赖审计 high/critical 阻断，其他级别仍报告；2026-11-05 本地 US-002 复验有 4 个 moderate 受影响依赖
-（历史 CI 运行曾报告 6 个），不能称为零漏洞。
+依赖审计 high/critical 阻断，其他级别仍报告；2026-11-06 通过 `minimatch@11.0.4` override 清除
+开发工具传递依赖的 4 个 moderate，本地审计为 0 个漏洞（历史 CI 运行曾报告 6 个）。
 `npm run build` 与 `npm run preview` 已接入本地 dist 构建/预览；T001–T024 已完成，US1 本地闭环通过
 （见 specs/001-preserve-skill-content/validation/us1-migration.md）；T025–T030（US2）已完成本地验收
 （见 specs/001-preserve-skill-content/validation/us2-browser.md）；T031–T038（US3）已完成本地故障/安全验收
@@ -106,11 +106,14 @@ npx ctx7@latest docs <libraryId> "单一概念的具体问题"
 上传 CLI、自动更新与生产发布仍待后续故事。
 2026-11-05 US-002 的 T001–T026 已完成本地实现、验收与文档收口。
 证据入口：specs/002-search-detail-share-redesign/validation/ 下的 us2-search、us2-detail、us2-accessibility、
-us2-performance、us2-build、us2-regression、us2-quality。当前本地 npm test 为 163 项（162 通过、0 失败、
-1 跳过）；security:secrets/code 无发现，security:deps 通过并报告 4 个 moderate。Chrome 152/Edge 156
-浏览器证据覆盖 360/768/1440、明暗主题、键盘和减少动效；Firefox/WebKit 未运行。1,000 项/10 MiB 隔离夹具的
-50 查询 p95 为 39.9ms，候选线 200ms，不是生产网络或设备承诺。搜索支持精准/模糊、同维 OR/跨维 AND、
-作者/平台/来源筛选和 `#/?q=...` 列表分享；详情继续使用 `#/skill/<slug>`，复制失败显示手动值。
+us2-performance、us2-build、us2-regression、us2-quality、us2-cross-browser、us2-production-preflight。
+当前本地 npm test 为 163 项
+（162 通过、0 失败、1 跳过）；security:secrets/code 无发现，security:deps 为 0 个漏洞（通过
+`minimatch@11.0.4` override）。Chrome 152/Edge 156/Firefox 157.0/WebKit 27.2 浏览器证据覆盖
+360/768/1440、明暗主题、键盘和减少动效；仍未验证 Safari/移动实机。1,000 项/10 MiB 隔离夹具的
+50 查询 p95 为 Chrome 39.9ms、Firefox 48.0ms、WebKit 50.0ms，候选线 200ms，不是生产网络或设备承诺。
+搜索支持精准/模糊、同维 OR/跨维 AND、作者/平台/来源筛选和 `#/?q=...` 列表分享；
+详情继续使用 `#/skill/<slug>`，复制失败显示手动值。
 US-002 分支 codex/us-002-search-detail-share 尚未推送或合并 main；不能把本地验收报告为已发布。
 首次初始化证据见 specs/001-preserve-skill-content/validation/bootstrap.md。
 2026-11-03 在 Windows 复核 T002～T010：`.gitattributes` 固定项目文本为 LF，`skills/**` 不做换行转换；

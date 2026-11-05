@@ -28,8 +28,9 @@ npm run security
 
 安全结果只输出规则、位置、级别及状态，不输出凭证或源码片段。
 见[诊断约定](specs/001-preserve-skill-content/validation/diagnostics.md)和[本次验证](specs/001-preserve-skill-content/validation/bootstrap.md)。
-当前本地审计有 4 个 moderate 受影响依赖（历史 CI 运行报告 6 个），无 high/critical；
-通过阻断阈值不表示零漏洞，证据见 [US-002 质量门禁](specs/002-search-detail-share-redesign/validation/us2-quality.md)。
+当前本地审计为 0 个漏洞（通过 `minimatch@11.0.4` override 清除开发工具传递依赖的 4 个 moderate；
+历史 CI 运行曾报告 6 个 moderate），证据见
+[US-002 质量门禁](specs/002-search-detail-share-redesign/validation/us2-quality.md)。
 本机默认镜像 registry 不实现 npm audit 端点，`security:deps` 固定使用官方 registry；原因与验证见
 [依赖审计记录](specs/001-preserve-skill-content/validation/dependency-audit.md)。
 Windows 下由 `.gitattributes` 保持项目文本为 LF，测试夹具使用 junction；安装器支持 Windows zip 与
@@ -47,11 +48,14 @@ US-002 的检索、详情、分享、响应式和键盘可访问改造已完成 
 - 质量/性能/构建/回归：[质量门禁](specs/002-search-detail-share-redesign/validation/us2-quality.md)、
   [性能](specs/002-search-detail-share-redesign/validation/us2-performance.md)、
   [隔离构建](specs/002-search-detail-share-redesign/validation/us2-build.md)、
-  [US-001 取用回归](specs/002-search-detail-share-redesign/validation/us2-regression.md)。
+  [US-001 取用回归](specs/002-search-detail-share-redesign/validation/us2-regression.md)、
+  [跨浏览器](specs/002-search-detail-share-redesign/validation/us2-cross-browser.md)、
+  [生产只读预检](specs/002-search-detail-share-redesign/validation/us2-production-preflight.md)。
 - 当前本地 `npm test` 为 163 项（162 通过、0 失败、1 跳过）；Gitleaks/Semgrep 无发现，
-  依赖审计通过 high/critical 阈值并报告 4 个 moderate。
-- 浏览器证据来自 Chrome 152（Chromium）和 Edge 156；Firefox/WebKit 未运行。性能为 1,000 项/10 MiB
-  隔离夹具上 50 次查询 p95 39.9ms，不是生产网络或设备承诺。
+  依赖审计为 0 个漏洞。
+- 浏览器证据来自 Chrome 152（Chromium）、Edge 156、Firefox 157.0 和 WebKit 27.2；
+  1,000 项/10 MiB 隔离夹具上 50 次查询 p95 分别为 Chrome 39.9ms、Firefox 48.0ms、WebKit 50.0ms，
+  不是生产网络或设备承诺。仍需补 Safari/移动实机。
 - US-002 的 T025 文档更新和 T026 最终复核已完成。上传、自动更新和生产发布仍待后续故事。
 本地验收使用 Windows + Node 22.21.0；声明的 Node 26.3.0/Linux 由 CI 覆盖，结果见下方 Quality checks。
 初始化按步骤验证并提交，提交不等于推送或上线。
@@ -89,7 +93,7 @@ npm run monitor:site
 均在 Node 26.3.0/Linux 上通过，`npm run check`、Gitleaks、Semgrep 与依赖审计四个步骤均成功。
 2026-11-04 推送 US3/Polish 与依赖审计修复后，[Quality checks #41816996159](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/41816996159)
 复验 138 项测试（137 通过、0 失败、1 跳过），Gitleaks/Semgrep 无发现，依赖审计通过并报告 6 个 moderate。
-2026-11-05 本地 US-002 复验为 163 项（162 通过、0 失败、1 跳过），依赖审计通过并报告 4 个 moderate；
+2026-11-05/06 本地 US-002 复验为 163 项（162 通过、0 失败、1 跳过），依赖审计报告 0 个漏洞；
 这是本地结果，不表示远程 CI 已更新为该计数，详见
 [US-002 质量门禁](specs/002-search-detail-share-redesign/validation/us2-quality.md)。
 `main` 尚未合并该补强，默认分支仍使用旧版 quality workflow；`pull_request`/手动触发配置存在但本次未单独执行。

@@ -43,10 +43,19 @@ chinese path, alpha, beta, productivity, format, verify, 调试, 文档, 转换,
 | 判定 | PASS（Chromium headless 隔离夹具） |
 
 最后一条查询 `最小标准` 在该负载中无匹配，结果区显示“0 个结果”；空结果更新也计入测量。
-本结果不包含首次页面加载、网络传输、Firefox/WebKit、真实移动设备或生产缓存。
+本结果不包含首次页面加载、网络传输、真实移动设备或生产缓存。
+
+补充跨浏览器结果（同一夹具/查询集）：
+
+| 浏览器 | p50 | p95 | max | 判定 |
+|---|---|---|---|---|
+| Firefox 157.0 | 41.0ms | 48.0ms | 52.0ms | PASS |
+| WebKit 27.2 | 47.0ms | 50.0ms | 153.0ms | PASS |
+
+详见 [us2-cross-browser.md](us2-cross-browser.md)。
 
 ## 未运行与限制
 
-- 未运行 Firefox、WebKit 或真实移动设备；不能声称跨浏览器/设备通过。
+- Firefox/WebKit 的补充结果见 [us2-cross-browser.md](us2-cross-browser.md)；仍未验证真实移动设备。
 - 未测量生产 Pages 首载、网络延迟、缓存头或真实 1,000 项内容来源。
 - T022 的候选通过线沿用 NFR-002，不把本机结果写成生产性能承诺。

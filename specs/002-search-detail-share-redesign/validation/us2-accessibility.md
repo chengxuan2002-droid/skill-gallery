@@ -76,7 +76,8 @@ T017 的 `.markdown-body` 全局 `overflow-wrap:anywhere` 会让代码块中的�
 
 ## 未运行与限制
 
-- **Firefox、WebKit 未安装/未运行**，不能声称跨三浏览器通过；本记录只有 Chromium 结果。
+- 本记录主体为 Chromium；Firefox 157.0 与 WebKit 27.2 的补充结果见
+  [us2-cross-browser.md](us2-cross-browser.md)，但仍不是 Safari/移动实机。
 - 未验证真实操作系统读屏器、屏幕阅读器语音、真实移动设备或触摸手势。
 - 未验证生产 GitHub Pages MIME/缓存、T041 macOS、上传/自动更新/发布。
 - T017～T019 的样式/语义/主题已在本地完成；最终差异复核和全量回归仍属 T021～T026。
