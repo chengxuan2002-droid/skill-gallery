@@ -87,7 +87,7 @@ description: "US-002 检索、详情、分享与视觉改版的实施任务"
   `buildListShareUrl`；`mode` 仅 `fuzzy|exact` 且缺省 `fuzzy`，`sort` 仅 `auto|name|updated` 且缺省 `auto`，
   筛选数组去重，URL 参数白名单，复用 MiniSearch 6.3.0 的 `boost`/`prefix`/`fuzzy`。
   （FR-002、FR-004；NFR-002；AC-003、AC-005）
-- [ ] T009 [P] [US1] 在 `index.html` 于 `assets/app.js` 之前加载 `assets/app-search.js`，
+- [X] T009 [P] [US1] 在 `index.html` 于 `assets/app.js` 之前加载 `assets/app-search.js`，
   保留现有 `#app`、`#skill-count`、主题切换和 `/skill-gallery/` 相对路径。
   （FR-010；AC-013）
 - [ ] T010 [P] [US1] 改造 `assets/app.js`：加载索引后只构建一次搜索引擎；从列表 Hash 读取
