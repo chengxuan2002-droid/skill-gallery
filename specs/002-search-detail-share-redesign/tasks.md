@@ -196,7 +196,7 @@ T041 macOS 缺口或生产发布状态。
   核对 `dist/assets/app-search.js` 存在、`/skill-gallery/` 子路径、四个旧详情链接、刷新和当前单版本；
   记录到 `validation/us2-build.md`，不写工作区 `dist/` 或根 `assets/search-index.json`、不提交 `dist/`。
   （FR-004、FR-011；AC-005、AC-014 本地部分）
-- [ ] T024 在 T023 的隔离构建上回归 US-001：原文复制、单文件/目录包/附件下载、旧链接、
+- [X] T024 在 T023 的隔离构建上回归 US-001：原文复制、单文件/目录包/附件下载、旧链接、
   当前单版本和失败反馈；记录到 `validation/us2-regression.md`，不以 US-002 结果宣称生产发布。
   （FR-004；AC-002、AC-005 回归）
 - [ ] T025 只定向更新 `README.md`、`AGENTS.md` 中本故事已实现并验证的命令、浏览器/性能证据、
