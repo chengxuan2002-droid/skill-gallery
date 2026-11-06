@@ -5,10 +5,10 @@
 
 ## 基线与分支
 
-- 复核基于 T025 提交 `6618667`；`origin/main` 为 `365d577`，当前分支
-  `codex/us-002-search-detail-share` 无上游跟踪，领先 main 87 个提交。
+- 复核基于 T025 提交 `6618667`；后续风险补强和 Q-004 决策已提交。`origin/main` 为 `365d577`，
+  当前分支 `codex/us-002-search-detail-share` 已推送到 origin 同名功能分支，尚未合并 main。
 - US-002 规格起点为 `dbc42aa`；以下差异以该提交到复核 HEAD 比较。
-- 未创建 PR、未推送、未修改 Pages 或分支保护。
+- 已推送功能分支；未创建 PR、未修改 Pages 或分支保护。
 
 ## 内容与 schema
 
@@ -62,8 +62,11 @@ US-002 变更范围（截至 T025）：`assets` 6 个文件、`tests` 13 个文�
 - 生产 Pages 只读检查记录在 [us2-production-preflight.md](us2-production-preflight.md)：
   HTML/JS/CSS/JSON MIME 正确、缓存 10 分钟；平台未提供 `nosniff`/CSP，US-002 新 `.bin`/ZIP 的
   线上响应和部署回滚仍需部署后验证。
+- Q-004 已确认每日 03:17 Asia/Shanghai；功能分支已推送。Q-004 决策提交推送后的
+  [Quality checks #42170060519](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/42170060519)
+  在 Node 26.3.0/Linux 成功；后续文档提交另行推送，不改变未合并/未发布状态。
 
 ## 结论
 
 US-002 的 T001–T026 已完成本地实现、验收和文档收口，保留了 US-001 的原件保真、复制/下载、
-旧链接和当前单版本；T041 macOS、生产发布和后续维护故事仍未完成。本次不推送、不合并 main、不发布。
+旧链接和当前单版本；T041 macOS、生产发布和后续维护故事仍未完成。功能分支已推送，未合并 main、未发布。

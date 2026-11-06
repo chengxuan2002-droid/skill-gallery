@@ -114,7 +114,9 @@ us2-performance、us2-build、us2-regression、us2-quality、us2-cross-browser�
 50 查询 p95 为 Chrome 39.9ms、Firefox 48.0ms、WebKit 50.0ms，候选线 200ms，不是生产网络或设备承诺。
 搜索支持精准/模糊、同维 OR/跨维 AND、作者/平台/来源筛选和 `#/?q=...` 列表分享；
 详情继续使用 `#/skill/<slug>`，复制失败显示手动值。
-US-002 分支 codex/us-002-search-detail-share 尚未推送或合并 main；不能把本地验收报告为已发布。
+US-002 分支 codex/us-002-search-detail-share 已推送到 origin 同名功能分支，尚未合并 main；
+Q-004 决策提交推送后的 Quality checks #42170060519 在 Node 26.3.0/Linux 成功。
+不能把功能分支验收或远程 CI 报告为生产发布。
 首次初始化证据见 specs/001-preserve-skill-content/validation/bootstrap.md。
 2026-11-03 在 Windows 复核 T002～T010：`.gitattributes` 固定项目文本为 LF，`skills/**` 不做换行转换；
 测试夹具在 Windows 使用 junction，检查入口解析 `npm.cmd` 与扫描器 `.exe`，安装器支持 Windows zip 包但仍需网络。

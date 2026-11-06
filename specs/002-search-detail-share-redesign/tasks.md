@@ -16,7 +16,7 @@ T016 的详情/分享、原文复制和原件/ZIP/附件回归见 [us2-detail.md
 T017～T020 的响应式、主题、键盘和减少动效见 [us2-accessibility.md](validation/us2-accessibility.md)；
 T021～T026 的质量、性能、构建、回归和最终复核见 [validation/](validation/)。
 本功能只覆盖 US-002；不改变 US-001 已验收的复制、下载、旧链接、T041 macOS 缺口或生产发布状态。
-分支尚未推送、合并 main 或发布。
+分支已推送到 origin 同名功能分支，尚未合并 main 或发布。
 
 **Tests**: spec 的 Independent Test、Acceptance Scenarios 与 US002-SC-01～06 要求验证；宪章 IX 要求先建立
 能识别错误行为的验证。因此包含搜索核心契约、分享地址/内容标识、构建资产、浏览器可访问性和性能任务。
@@ -206,7 +206,7 @@ T021～T026 的质量、性能、构建、回归和最终复核见 [validation/]
 - [X] T026 对照 `specs/002-search-detail-share-redesign/validation/` 与 T001 做最终差异复核：
   六原件/catalog/根 `assets/search-index.json` 未改写、无凭证/额外依赖/全仓格式化、无 schema 变更、
   四旧链接与单版本保持、无新增管理员后台/访客登录/站内写入、若保留管理外链则低权重且使用安全协议、
-  T041 macOS 缺口仍记录、未合并 main/未发布；更新 tasks/plan 状态并列出未运行项与剩余风险。
+  T041 macOS 缺口仍记录、已推送功能分支但未合并 main/未发布；更新 tasks/plan 状态并列出未运行项与剩余风险。
   （FR-004、FR-011；NFR-003、NFR-006；AC-005、AC-012、AC-014 本地部分）
 
 ## Dependencies & Execution Order

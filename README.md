@@ -56,7 +56,9 @@ US-002 的检索、详情、分享、响应式和键盘可访问改造已完成 
 - 浏览器证据来自 Chrome 152（Chromium）、Edge 156、Firefox 157.0 和 WebKit 27.2；
   1,000 项/10 MiB 隔离夹具上 50 次查询 p95 分别为 Chrome 39.9ms、Firefox 48.0ms、WebKit 50.0ms，
   不是生产网络或设备承诺。仍需补 Safari/移动实机。
-- US-002 的 T025 文档更新和 T026 最终复核已完成。上传、自动更新和生产发布仍待后续故事。
+- US-002 的 T025 文档更新和 T026 最终复核已完成。2026-11-06 已推送功能分支；
+  [Quality checks #42170060519](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/42170060519)
+  在 Node 26.3.0/Linux 成功；尚未合并 main。上传、自动更新和生产发布仍待后续故事。
 本地验收使用 Windows + Node 22.21.0；声明的 Node 26.3.0/Linux 由 CI 覆盖，结果见下方 Quality checks。
 初始化按步骤验证并提交，提交不等于推送或上线。
 
@@ -110,8 +112,8 @@ quality 合并必需项仍需单独配置。
 ### 换电脑或更换 Code Agent
 
 US-001 的开发基线位于 `codex/development-baseline-20261102` 分支；该分支包含 US1 本地实现与 CI 补强。
-US-002 当前在本地分支 `codex/us-002-search-detail-share`，尚未推送或合并；克隆上述基线不会包含 US-002。
-换电脑或 Agent 时应先核对当前分支、未推送提交和 `.specify/feature.json`，不要把基线分支误当成 US-002。
+US-002 已推送到远程分支 `codex/us-002-search-detail-share`，但尚未合并 main；克隆上述基线不会包含 US-002。
+换电脑或 Agent 时应先核对当前分支、远程跟踪状态和 `.specify/feature.json`，不要把基线分支误当成 US-002。
 
 ```bash
 git clone --branch codex/development-baseline-20261102 https://github.com/chengxuan2002-droid/skill-gallery.git

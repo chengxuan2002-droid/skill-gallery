@@ -7,8 +7,8 @@
 **Input**: `specs/002-search-detail-share-redesign/spec.md`，含 2026-11-05 复核后记录的分享地址、精准多词、排序保持、筛选值及更新时间默认规则。
 
 **Implementation Status**: 2026-11-05 T001–T026 已完成本地实现、验收和文档收口；证据入口为
-[validation/](validation/)。分支 `codex/us-002-search-detail-share` 尚未推送、合并 main 或发布；
-T041 macOS、Firefox/WebKit、生产 Pages MIME/缓存和 US-003～US-007 仍未完成。
+[validation/](validation/)。分支 `codex/us-002-search-detail-share` 已推送到 origin 同名功能分支，
+尚未合并 main 或发布；T041 macOS、生产 Pages 新产物 MIME/缓存/回滚和 US-003～US-007 仍未完成。
 
 ## Summary
 

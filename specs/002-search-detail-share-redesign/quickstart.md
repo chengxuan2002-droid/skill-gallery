@@ -88,7 +88,8 @@ npm run preview
 - 确认 `skills/` 六原件、catalog、根 `assets/search-index.json` 未被新前端改写。
 - 证据写入 `validation/us2-browser.md`、`validation/us2-performance.md`（实施后创建）；
   未运行项必须标为未运行，不能以规格、截图占位或任务勾选替代。
-- T041 的 macOS 缺口、生产 Pages MIME/缓存/直接资源安全和 Q-004 调度保持原状态。
+- T041 的 macOS 缺口和生产 Pages MIME/缓存/直接资源安全保持原状态；Q-004 已确认为每日
+  03:17 Asia/Shanghai，但调度实现仍不属于 US-002。
 
 ## 7. 停止条件
 
