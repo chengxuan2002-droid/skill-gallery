@@ -136,7 +136,7 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
   使用 US-002 已记录的浏览器证据或人工在明确浏览器/版本中复验；记录命令、浏览器/版本、结果和
   未运行项，不能只用普通 HTTP 200 断言 Hash 路由通过。
   （FR-011；AC-014）
-- [ ] T013 [US1] 对同一隔离项目连续构建两次，确认无变化时 `contentRevision` 与产物集合稳定、
+- [X] T013 [US1] 对同一隔离项目连续构建两次，确认无变化时 `contentRevision` 与产物集合稳定、
   `publish-check.js artifact` 仍通过、没有新增内容提交；允许重复部署同一快照，但不得伪装成
   内容更新；把结果补充到 `specs/003-validate-build-publish/validation/us3-snapshot.md`。
   （FR-009、FR-011；AC-011、AC-014）
