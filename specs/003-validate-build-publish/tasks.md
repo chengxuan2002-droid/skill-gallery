@@ -100,7 +100,7 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
   部署前比较远端 HEAD 并调用 `publish-check.js target`，`superseded` 时跳过部署；
   Step Summary 只写脱敏状态。不修改 Pages 设置或分支保护。
   （FR-007、FR-009、FR-011；NFR-003、NFR-004；AC-008、AC-011、AC-014）
-- [ ] T009 运行 `node --test tests/unit/publish.test.js tests/integration/publish-artifact.test.js
+- [X] T009 运行 `node --test tests/unit/publish.test.js tests/integration/publish-artifact.test.js
   tests/integration/publish-workflow.test.js`、`npm run lint`、`npm run format:check`；
   在 `specs/003-validate-build-publish/validation/foundational.md` 记录命令、退出码、测试数量和
   未运行项；只修复本故事引入的问题。
