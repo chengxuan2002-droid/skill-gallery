@@ -8,8 +8,8 @@
 **Input**: `specs/003-validate-build-publish/spec.md`，含四个内部切片、FR-007/009/011、
 NFR-003/004/006、AC-008/011/012/014 及生产授权边界。
 
-**Implementation Status**: 规划完成，尚未实现。生产 Pages 源、environment、分支保护和线上切换
-未修改；US-004～US-007 仍未开始。
+**Implementation Status**: 任务已生成（T001–T032，含 2026-11-07 追加的恢复与回归任务），尚未实现。
+生产 Pages 源、environment、分支保护和线上切换未修改；US-004～US-007 仍未开始。
 
 ## Summary
 
@@ -145,9 +145,9 @@ scripts/lib/build-site.js               # 不改；复用其 manifest 输出
 | 1 | 先写 `tests/unit/publish.test.js`、`tests/integration/publish-artifact.test.js` 的失败契约 | 白名单、双向 manifest、路径/链接/凭证、目标 SHA、状态字段能识别错误实现 | FR-009、FR-011；AC-011、AC-014 |
 | 2 | 实现 `scripts/lib/publish.js` 与 `scripts/publish-check.js` | 合法产物 `verified/current`；额外文件、篡改、凭证、过期 revision 全部失败关闭；错误 JSON 脱敏 | FR-007、FR-009、FR-011；AC-008、AC-011、AC-014 |
 | 3 | 新增 `.github/workflows/maintain.yml`，补 `tests/integration/publish-workflow.test.js` | 触发/权限/environment/并发/固定 SHA/artifact 路径/无 `pull_request_target` 静态通过 | FR-007、FR-011；AC-008、AC-014 |
-| 4 | 在隔离副本执行完整 build + publish-check，注入构建失败、部署失败、superseded 和并发场景 | 合法发布、失败保留、重跑幂等、旧快照不覆盖新快照的证据 | FR-009、NFR-004；AC-011、AC-014 |
+| 4 | 在隔离副本执行完整 build + publish-check，注入构建失败、部署失败、superseded、受控恢复提交和并发场景 | 合法发布、失败保留、重跑幂等、恢复语义、旧快照不覆盖新快照的证据 | FR-009、NFR-004；AC-011、AC-014 |
 | 5 | 运行 `npm run lint`、`npm run format:check`、`npm test`、`npm run security` | 记录实际命令、退出码、测试数量、扫描结果和未运行项 | NFR-003、NFR-006；AC-008 |
-| 6 | 受控测试仓库 POC-002（需授权）或记录未运行 | Pages 源切换、合法/非法发布、部署失败重跑、旧链接/子路径/刷新、运行 URL | FR-011；AC-011、AC-014 |
+| 6 | 受控测试仓库 POC-002（需授权）或记录未运行 | Pages 源切换、合法/非法发布、部署失败重跑、恢复、取用回归、旧链接/子路径/刷新、运行 URL | FR-011；AC-011、AC-014 |
 | 7 | 定向更新 README/AGENTS 与 validation 记录 | 实际可执行命令、发布状态、生产未启用和剩余风险；不写假设性命令 | NFR-006；AC-014 工程支撑 |
 
 T001 先失败再实现；已由共享层覆盖的行为直接复验，不伪造失败。真实生产配置未授权时，

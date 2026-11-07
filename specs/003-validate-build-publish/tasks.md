@@ -11,7 +11,8 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
 以及四份 0.2 文档：[调研](../../docs/IndustryResearch.md)、[需求](../../docs/DemandAnalysis.md)、
 [技术方案](../../docs/TechnicalSolution.md)、[编程规范](../../docs/AiProgrammingGuide.md)。
 
-**Status**: 任务于 2026-11-07 生成；分支 `codex/us-003-validate-build-publish`（从 US-002 分支堆叠，
+**Status**: 任务于 2026-11-07 生成；当前 32 项，T031/T032 为 2026-11-07 分析修订追加，
+不重排既有 T001～T030。分支 `codex/us-003-validate-build-publish`（从 US-002 分支堆叠，
 未合并 main）。尚未实现、未修改 Pages 设置、未发布。生产 Pages 源、environment、分支保护和线上切换
 需要单独授权；受控仓库不可用时按未运行记录。
 
@@ -40,7 +41,8 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
 - [ ] T002 [P] 在 `tests/support/publish-fixture.js` 创建最小发布夹具：生成含 `index.html`、
   `assets/` 前端模块、`catalog/` 与合法单文件/目录 Skill 的临时项目；调用
   `scripts/lib/build-site.js` 生成隔离 `dist/` 并返回路径；提供 40 位 SHA、额外文件、篡改字节和
-  伪造凭证文件的注入辅助。只写系统临时目录，不写工作区 `dist/`，不执行 Skill 脚本。
+  伪造凭证文件的注入辅助。凭证文件内容必须用占位符或运行时拼接生成，不写完整 token/私钥字面量；
+  只写系统临时目录，不写工作区 `dist/`，不执行 Skill 脚本，测试结束清理临时目录。
   （FR-011、NFR-006；AC-014）
 
 **Checkpoint**: 基线与隔离夹具可复现；尚未修改发布行为。
@@ -57,7 +59,8 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
   路径白名单、`..`/绝对路径/反斜杠/控制字符/重复路径、符号链接/非普通文件、隐藏文件
   （`.nojekyll` 除外）、大小/SHA-256、`contentRevision` 同源、文本文件 `scanSecrets`；
   `evaluateDeployTarget` 的 40 位十六进制校验与 `current`/`superseded`；`createRunStatus` 的封闭
-  字段/枚举；`renderSummary` 不包含凭证、响应正文或原始异常。
+  字段/枚举（含 `commit_status`、可选 `started_at`/`finished_at`）；
+  `renderSummary` 不包含凭证、响应正文或原始异常，并显示提交/构建/部署状态与运行时间或 `run_url`。
   （FR-007、FR-009、FR-011；AC-008、AC-011、AC-014）
 - [ ] T004 [P] 在 `tests/integration/publish-artifact.test.js` 先写失败契约：使用 T002 夹具构建
   `dist/` 后验证合法产物通过；额外文件、篡改字节、`.env`/`*.pem`/`id_rsa`、非同一
@@ -65,9 +68,11 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
   （FR-007、FR-011、NFR-003；AC-008、AC-014）
 - [ ] T005 [P] 在 `tests/integration/publish-workflow.test.js` 先写失败契约：解析
   `.github/workflows/maintain.yml`，断言只监听 `push: main` 与 `workflow_dispatch`、无
-  `pull_request_target`/`workflow_run`、artifact 路径为 `dist`、部署 job 使用
-  `github-pages` environment 与 `pages` 并发组、所有 action 使用完整 40 位 SHA、无 `@vN` 浮动引用、
-  无凭证或 PAT。
+  `pull_request_target`/`workflow_run`、工作流级 `concurrency` 为 `maintain-${{ github.ref }}` 且
+  `cancel-in-progress: false`、`timeout-minutes: 30`、默认 `permissions.contents: read`；
+  artifact 路径为 `dist`、部署 job 使用 `github-pages` environment 与 `pages` 并发组、
+  所有 action 使用完整 40 位 SHA、无 `@vN` 浮动引用、无凭证或 PAT。T005 只覆盖基础结构；
+  部署细节、权限细节和同次运行分别由 T016/T020/T023 补充，避免重复断言。
   （FR-007、FR-011；AC-008、AC-014）
 
 ### Implementation for Foundational
@@ -82,8 +87,11 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
   诊断到 stderr 且脱敏；退出码 `0` 通过/current、`2` 参数或读取错误、`4` superseded、
   `6` 产物无效；不写入、不执行 `dist/` 脚本、不发起网络请求。
   （FR-009、FR-011；AC-011、AC-014）
-- [ ] T008 新增 `.github/workflows/maintain.yml`：`build` job 使用固定 checkout/setup-node/
-  setup-uv，安装锁定依赖与扫描器，运行 `npm run check`、`npm run security`、`npm run build`、
+- [ ] T008 新增 `.github/workflows/maintain.yml`：仅监听 `push: main` 与 `workflow_dispatch`；
+  默认 `permissions: contents: read`，工作流级 `concurrency` 的 `group` 为
+  `maintain-${{ github.ref }}`、`cancel-in-progress: false`、`timeout-minutes: 30`；checkout 使用
+  `persist-credentials: false`。`build` job 使用固定 checkout/setup-node/setup-uv，安装锁定依赖与
+  扫描器，运行 `npm run check`、`npm run security`、`npm run build`、
   `node scripts/publish-check.js artifact --dist dist`，再用固定
   `upload-pages-artifact` 上传 `dist/`；`deploy` job `needs: build`，使用
   `github-pages` environment、`pages: write` 和 `id-token: write`、`pages` 并发组，
@@ -121,8 +129,9 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
   `specs/003-validate-build-publish/validation/us3-snapshot.md`，不写工作区 `dist/`。
   （FR-011、NFR-003；AC-008、AC-014）
 - [ ] T012 [US1] 在 T011 的隔离 dist 上运行 `node --test tests/integration/preview.test.js` 或
-  `npm run preview`，核对 `/skill-gallery/` 子路径、四个旧 `#/skill/<slug>` 链接和刷新；
-  记录命令、结果和未运行浏览器项。
+  `npm run preview`，核对 `/skill-gallery/` 子路径；Hash 路由的四个旧 `#/skill/<slug>` 链接和刷新
+  使用 US-002 已记录的浏览器证据或人工在明确浏览器/版本中复验；记录命令、浏览器/版本、结果和
+  未运行项，不能只用普通 HTTP 200 断言 Hash 路由通过。
   （FR-011；AC-014）
 - [ ] T013 [US1] 对同一隔离项目连续构建两次，确认无变化时 `contentRevision` 与产物集合稳定、
   `publish-check.js artifact` 仍通过、没有新增内容提交；允许重复部署同一快照，但不得伪装成
@@ -142,7 +151,8 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
 ### Tests for User Story 2
 
 - [ ] T014 [P] [US2] 在 `tests/unit/publish-status.test.js` 写状态契约：`built`+`deploy_failed` 可
-  同时表达；`superseded` 不表示成功；封闭字段拒绝未知键/枚举；`renderSummary`
+  同时表达；`superseded` 不表示成功；`commit_status` 只接受 `not_applicable/committed/failed`，
+  `started_at`/`finished_at` 可空但只接受 ISO 8601；封闭字段拒绝未知键/枚举；`renderSummary`
   区分内容与部署状态且不泄露凭证/响应正文。
   （FR-009、NFR-004；AC-011）
 - [ ] T015 [P] [US2] 在 `tests/integration/publish-superseded.test.js` 写 CLI 契约：
@@ -151,7 +161,8 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
   （FR-009、NFR-004；AC-011）
 - [ ] T016 [US2] 在 `tests/integration/publish-deploy-workflow.test.js` 写部署 job 静态断言：
   `needs` 包含 `build`、`environment: github-pages`、`pages` 并发组、无 `continue-on-error`
-  掩盖失败、部署前有目标判定步骤、失败时保留旧站点（不执行删除/回滚写操作）。
+  掩盖失败、部署前有目标判定步骤、失败时保留旧站点（不执行删除/回滚写操作）。只补部署 job
+  断言，不重复 T005 的基础触发/权限项。
   （FR-009；AC-011、AC-014）
 
 ### Validation for User Story 2
@@ -166,7 +177,7 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
   `specs/003-validate-build-publish/validation/us3-recovery.md`；未获授权或环境不可用时只记录未运行。
   （FR-009、FR-011；AC-011、AC-014）
 
-**Checkpoint**: 失败保留、重跑和过期语义可独立验证；生产未启用。
+**Checkpoint**: 失败保留、重跑、过期和恢复语义可独立验证；生产未启用。
 
 ## Phase 5: User Story 3 — 写入与部署仅限受信环境（Priority: P1）
 
@@ -179,12 +190,14 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
 
 - [ ] T019 [P] [US3] 在 `tests/integration/publish-security.test.js` 写安全契约：`.env`、
   `*.pem`、`*.key`、`id_rsa`、token 前缀、私钥块和越界路径全部被拒绝；诊断只含位置/规则，
-  不回显值；`dist/` 中的脚本不被执行（执行哨兵保持未触发）。
+  不回显值；`dist/` 中的脚本不被执行（执行哨兵保持未触发）。token 前缀/私钥块测试值必须运行时
+  构造或使用 `YOUR_*_HERE` 占位符，不得在源码中出现完整私钥块；用 `npm run security:secrets`
+  验证为 0 个发现且不打印命中值。
   （FR-007、NFR-003；AC-008、AC-012）
 - [ ] T020 [US3] 在 `tests/integration/publish-security-workflow.test.js` 写权限静态断言：
   默认 `contents: read`；`build` 不授予写权限；`deploy` 仅 `pages: write`/`id-token: write`；
   checkout `persist-credentials: false`；无 PAT、secret、`pull_request_target`、fork 触发；
-  Step Summary 不写入敏感字段。
+  Step Summary 不写入敏感字段。只补权限断言，不重复 T005 的基础结构项。
   （FR-007、NFR-003；AC-008）
 
 ### Validation for User Story 3
@@ -213,11 +226,11 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
 - [ ] T023 [P] [US4] 在 `tests/integration/publish-same-run.test.js` 写结构契约：`maintain.yml`
   只有一个发布工作流，`deploy` 与 `build` 在同一运行且 `needs` 链完整；不存在依赖
   `workflow_run` 或另一次 push 的部署入口；工作流注释/结构允许 US-006 增加 `sync` job 后
-  通过 `needs` 进入 build/deploy。
+  通过 `needs` 进入 build/deploy。只补同次运行结构，不重复 T005 的基础触发/权限项。
   （FR-009、FR-011；AC-014）
 - [ ] T024 [P] [US4] 在 `tests/unit/publish-noop.test.js` 增加 noop 场景：机器提交无内容变化时
-  `content_status=noop`、不新建内容提交；允许重复部署同一快照，部署状态可为 `published` 或
-  `superseded`；失败重跑保持同一 `target_sha`。
+  `content_status=noop`、`commit_status=not_applicable` 或 `committed`、不新建内容提交；
+  允许重复部署同一快照，部署状态可为 `published` 或 `superseded`；失败重跑保持同一 `target_sha`。
   （FR-009；AC-011、AC-014）
 
 ### Validation for User Story 4
@@ -250,8 +263,9 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
   （FR-009、FR-011；AC-011、AC-014）
 - [ ] T030 对照 `spec.md`、`contracts/` 和 `validation/` 做最终差异复核：未改
   `skills/`、`catalog/`、索引/详情 schema、前端行为和根 `assets/search-index.json`；无凭证、
-  额外依赖、全仓格式化或 Pages 设置修改；T041 macOS 与 US-002 合并状态保持；更新
-  tasks/plan 状态并列出未运行项与剩余风险，记录到
+  额外依赖、全仓格式化或 Pages 设置修改；确认公开页面只展示 `updated_at`/`synced_at` 等成功同步
+  信息，不出现运行日志或错误；T041 macOS 与 US-002 合并状态保持；更新 tasks/plan 状态并列出
+  未运行项与剩余风险（SC-03/04/05 无受控仓库时标为未运行/部分），记录到
   `specs/003-validate-build-publish/validation/us3-final-review.md`。
   （FR-007、FR-009、FR-011；NFR-003、NFR-006；AC-008、AC-011、AC-014）
 
@@ -265,13 +279,14 @@ T001,T002 ── T003,T004,T005 ── T006 → T007 → T008 → T009
         ┌────────────────────────────────────┴───────────────────────────┐
         ▼                    ▼                    ▼                      ▼
    US1: T010→T011→T012→T013  US2: T014,T015,T016   US3: T019,T020,T021    US4: T023,T024
-                              →T017→T018            →T022                 →T025→T026
+                              →T017→{T018,T031}     →T022                 →T025→T026
         └────────────────────┴────────────────────┴──────────────────────┘
                                    ▼
-                         T027,T028 → T029 → T030
+                         T027,T028 → T029 → T032 → T030
 ```
 
 T006/T007/T008 为共享阻塞项；T009 是 Foundational gate。各故事依赖 T009 完成，故事之间不互相阻塞。
+T031/T032 为 2026-11-07 追加任务，不重排既有编号；T031 归入 US2，T032 归入 Polish。
 
 ### User Story Dependencies
 
@@ -287,6 +302,7 @@ T006/T007/T008 为共享阻塞项；T009 是 Foundational gate。各故事依赖
   `publish-deploy-workflow.test.js`、`publish-security-workflow.test.js`、
   `publish-status.test.js`、`publish-noop.test.js`、`maintain.yml`）只能串行修改；
   不同文件可并行。
+- 验证文件 `us3-recovery.md` 由 T017/T018/T031 串行写入；`us3-regression.md` 由 T032 写入。
 - 真实 Pages 部署、权限尝试和机器提交只有在受控仓库授权后执行；否则记录未运行。
 
 ## Parallel Examples
@@ -299,12 +315,12 @@ T006/T007/T008 按依赖串行，T009 最后执行。
 ### User Story 1
 
 T010 完成后再执行 T011；T012 使用 T011 的构建产物，T013 在 T011 后串行补充 no-op 证据；
-三者写入同一 validation 文件，不并行。
+T012/T013 写入同一 `us3-snapshot.md`，需串行；T032 写 `us3-regression.md`，可在 T011 后独立执行。
 
 ### User Story 2
 
 T014（状态单测）、T015（superseded CLI 集成）与 T016（部署工作流静态断言）为不同文件，可并行；
-T017 等三者完成后执行；T018 需外部授权。
+T017 等三者完成后执行；T031 本地恢复演练依赖 T017，可与 T018 并行；T018 需外部授权。
 
 ### User Story 3
 
@@ -318,7 +334,8 @@ T023（同次运行结构测试）与 T024（noop 状态测试）为不同文件
 
 ### Polish
 
-T027（全量检查）与 T028（文档更新）可并行；T029 依赖 T027 的检查结果；T030 最后执行。
+T027（全量检查）与 T028（文档更新）可并行；T029 依赖 T027 的检查结果；T032 在 T011 后执行；
+T030 最后执行并覆盖 T029/T032 的结果。
 
 ## Implementation Strategy
 
@@ -330,14 +347,30 @@ T027（全量检查）与 T028（文档更新）可并行；T029 依赖 T027 的
 ### Incremental Delivery
 
 共享校验与工作流 → US1 产物/快照 → US2 失败/恢复 → US3 权限/凭证 → US4 同次运行 →
-Polish 全量检查/文档/复核。每一步在隔离副本验证；受控仓库步骤单独授权、单独报告。
+Polish 全量检查/取用回归/文档/复核。每一步在隔离副本验证；受控仓库步骤单独授权、单独报告。
 
 ## Notes
 
 - 不执行 `skills/` 中任何脚本/测试，不安装其依赖；发布产物中的脚本只作为文件。
 - 不新增 npm 产品依赖；GitHub Actions 全部使用 plan/contracts 中的完整 SHA。
 - `dist/` 是生成目录；测试和验证使用系统临时目录，不覆盖工作区 `dist/`。
-- 生产 Pages 源、environment、分支保护和线上切换不在任务默认授权内；T018/T022/T025 未获授权时
-  必须记录未运行，不能以本地测试或工作流文件存在代替。
+- 生产 Pages 源、environment、分支保护和线上切换不在任务默认授权内；T018/T022/T025/T032 的受控部分
+  未获授权时必须记录未运行，不能以本地测试或工作流文件存在代替。
 - 不修改 US-001/US-002 的原件、catalog、schema、前端行为、旧链接或当前单版本。
 - 提交按逻辑组拆分，仅暂存本故事文件；推送、合并 main 和生产发布需单独明确授权。
+
+## 追加任务（2026-11-07 分析修订）
+
+本批不重排既有 T001～T030：T031 归入 US2，T032 归入 Polish；两者均可先在隔离副本完成，
+受控部署部分再按授权补充。
+
+- [ ] T031 [US2] 在隔离副本生成一次内容提交及对应的受控恢复提交（`git revert` 或等价恢复），
+  分别构建并记录恢复前后的 `contentRevision`；确认恢复后既有 slug、四个旧 `#/skill/<slug>` 链接、
+  当前单版本和 Git 历史保持一致，不 force push；把命令、结果和未运行项写入
+  `specs/003-validate-build-publish/validation/us3-recovery.md`。本任务不需要远程写入。
+  （FR-009；AC-011）
+- [ ] T032 [P] 在隔离构建或受控站点回归 US-001/US-002：复制原文（含 frontmatter）、
+  单文件/目录 ZIP/附件下载摘要、详情/列表分享、四个旧链接和当前单版本；记录到
+  `specs/003-validate-build-publish/validation/us3-regression.md`；受控部署未授权时
+  只做隔离构建等价检查并记录未运行项。
+  （FR-011；AC-002、AC-005 回归）

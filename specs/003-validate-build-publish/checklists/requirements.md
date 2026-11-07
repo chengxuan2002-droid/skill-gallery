@@ -44,5 +44,6 @@ US-001/US-002 已交付基线及当前 spec/plan/tasks 审查。
 
 ## Notes
 
-- 本规格可进入规划；生产环境启用、真实 Pages 配置和线上切换仍需单独授权与验证。
+- 本规格已完成规划与任务生成；生产环境启用、真实 Pages 配置和线上切换仍需单独授权与验证。
 - 2026-11-07 的收窄决定已同步 spec、plan、contracts、data-model、quickstart 和 tasks。
+- 同日分析修订新增 T031 恢复演练、T032 取用回归，并补充 workflow 并发/时限、RunStatus 时间与提交状态约束。

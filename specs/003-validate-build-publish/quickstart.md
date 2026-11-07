@@ -73,6 +73,7 @@ node --test tests/integration/publish-workflow.test.js
 期望：
 
 - 触发仅 `push: main` 和 `workflow_dispatch`，无 `pull_request_target`。
+- 工作流级 `concurrency` 为 `maintain-${{ github.ref }}`、`cancel-in-progress: false`，`timeout-minutes: 30`。
 - `build` 仅有 `contents: read`；`deploy` 仅有 `pages: write` 和 `id-token: write`。
 - artifact 路径为 `dist`，部署 job 使用 `github-pages` environment 与 `pages` 并发组。
 - 所有第三方 action 使用完整 SHA，无浮动的 `@vN`。
@@ -91,6 +92,10 @@ node --test tests/integration/publish-workflow.test.js
    旧站点保持可用；用同一 commit 重跑，确认不新建内容提交、成功后状态为已发布。
 6. 触发两次相邻运行，确认旧运行在部署前被标记 `superseded`，旧快照不覆盖新快照。
 7. 以未授权身份尝试触发，确认无写入、无部署副作用。
+8. 恢复演练：在隔离副本对一次内容提交生成 `git revert` 恢复提交，重新构建/发布，确认 slug、
+   旧链接和单版本保持；不 force push、不改写历史。
+9. 回归取用：复制原文（含 frontmatter）、单文件/目录 ZIP/附件下载摘要、详情/列表分享和
+   当前单版本；记录结果，受控站点不可用时只做隔离构建等价检查并记未运行。
 
 ## 7. 记录与报告
 

@@ -64,11 +64,12 @@
 
 ## 3. `createRunStatus(input)`
 
-**输入字段**: `runId`、`trigger`、`targetSha`、`contentRevision`、`contentStatus`、`deployStatus`、
-`reason`、`runUrl`。只接受 [data-model.md](../data-model.md) 第 1 节的枚举值；未知字段和未知状态
-必须被拒绝，不做静默丢弃。
+**输入字段**: `runId`、`trigger`、`targetSha`、`commitStatus`、`contentRevision`、`contentStatus`、
+`deployStatus`、`reason`、`startedAt`、`finishedAt`、`runUrl`。只接受
+[data-model.md](../data-model.md) 第 1 节的枚举值；未知字段和未知状态必须被拒绝，不做静默丢弃。
 
-**输出**: 封闭字段 JSON；`reason` 只允许稳定错误码，不包含自由文本、响应正文或凭证。
+**输出**: 封闭字段 JSON；`reason` 只允许稳定错误码，不包含自由文本、响应正文或凭证；
+`startedAt`/`finishedAt` 未知时为 null，不能编造。
 
 ## 4. `renderSummary(status, context)`
 
@@ -77,7 +78,8 @@
 **输出**: Markdown 文本，至少包含：
 
 - 运行标识/链接、触发方式、目标提交、内容标识；
-- 内容状态与部署状态（分开显示）；
+- 提交状态、内容状态与部署状态（分开显示）；
+- 运行开始/结束时间；缺失时提供 `run_url`，不编造时间；
 - 失败码或 `superseded` 说明；
 - 不包含 token、cookie、响应正文、环境变量或用户文件内容。
 

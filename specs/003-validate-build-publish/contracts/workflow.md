@@ -44,7 +44,8 @@ concurrency:
 ```
 
 部署前比较目标提交与远端默认分支 HEAD；不一致时状态为 `superseded`，跳过 `deploy-pages`，
-但 job 不得误报“已发布”。同一提交重跑幂等，不新建内容提交。
+但 job 不得误报“已发布”。同一提交重跑幂等，不新建内容提交。工作流 `timeout-minutes: 30`；
+超时按失败处理并保留上次正常站点。
 
 ## 4. 构建与 artifact
 
@@ -79,13 +80,14 @@ concurrency:
 - 部署失败必须保留上次正常线上快照（平台行为），状态显示 `deploy_failed`；重跑同一提交不新建内容提交。
 - 内容未变化时允许重复部署同一快照；不要求检测线上是否已存在相同快照，但不得创建空内容提交
   或把重复部署报告为内容更新。
+- 恢复使用受控历史提交（`revert`/restore）走同一构建/发布路径；不 force push、不改写历史。
 - 部署成功后输出 `page_url` 到 Step Summary；不得把“artifact 上传成功”当作“已部署”。
 
 ## 6. 状态与摘要
 
-Step Summary 至少包含：运行标识/链接、触发方式、目标 SHA、`content_revision`、
-`content_status`、`deploy_status`、失败码或 `superseded` 说明。禁止写入 token、cookie、
-响应正文、环境变量、用户文件内容或原始异常堆栈。公开页面不展示运行日志。
+Step Summary 至少包含：运行标识/链接、触发方式、目标 SHA、`commit_status`、`content_revision`、
+`content_status`、`deploy_status`、开始/结束时间或 `run_url`、失败码或 `superseded` 说明。
+禁止写入 token、cookie、响应正文、环境变量、用户文件内容或原始异常堆栈。公开页面不展示运行日志。
 
 ## 7. 外部前提（未授权不修改）
 

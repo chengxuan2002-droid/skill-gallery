@@ -15,10 +15,13 @@
 | `run_id` | string | GitHub 运行标识；非空 |
 | `trigger` | `push` \| `workflow_dispatch` \| `schedule` | 本轮实现前两者；`schedule` 留 US-006 |
 | `target_sha` | string | 40 位小写十六进制目标提交 |
+| `commit_status` | `not_applicable` \| `committed` \| `failed` | 内容提交状态；US-003 通常为 `not_applicable` 或 `committed` |
 | `content_revision` | string \| null | 构建产物内容标识；构建前为 null |
 | `content_status` | `pending` \| `built` \| `noop` \| `failed` | 内容校验/构建状态，与部署分开 |
 | `deploy_status` | `pending` \| `deploying` \| `published` \| `failed` \| `superseded` | 部署状态 |
 | `reason` | string \| null | 稳定错误码（如 `E_ARTIFACT_EXTRA_FILE`），不含自由文本详情 |
+| `started_at` | string \| null | ISO 8601 运行开始时间；未知为 null |
+| `finished_at` | string \| null | ISO 8601 运行结束时间；运行中为 null |
 | `run_url` | string \| null | GitHub 运行链接；不包含凭证 |
 
 状态转换：
@@ -33,6 +36,8 @@ deploying → failed（部署失败或等待超时）
 
 `content_status` 与 `deploy_status` 必须能同时表达“已构建/已提交但部署失败”，不得合并为单一成功/失败。
 `noop` 表示内容未变化；允许仍部署同一快照，但不得创建空内容提交，也不得把重复部署伪装成新内容。
+`commit_status` 必须与构建、部署状态分开；`started_at`/`finished_at` 未知时摘要必须回退到 `run_url`，
+不得编造时间。
 
 ## 2. BuildArtifact
 
