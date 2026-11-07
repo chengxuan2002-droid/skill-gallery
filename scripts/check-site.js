@@ -14,18 +14,22 @@ function expectedContent(text, kind) {
   }
   if (kind === 'index') {
     try {
-      const entries = JSON.parse(text);
+      const index = JSON.parse(text);
       return (
-        Array.isArray(entries) &&
-        entries.length > 0 &&
-        entries.every(
+        index !== null &&
+        typeof index === 'object' &&
+        index.schemaVersion === 1 &&
+        typeof index.contentRevision === 'string' &&
+        index.contentRevision.length > 0 &&
+        Array.isArray(index.skills) &&
+        index.skills.length > 0 &&
+        index.skills.every(
           (entry) =>
             entry &&
             typeof entry.slug === 'string' &&
             entry.slug.trim() &&
-            typeof entry.name === 'string' &&
-            entry.name.trim() &&
-            typeof entry.content === 'string',
+            typeof entry.digest === 'string' &&
+            entry.digest.trim(),
         )
       );
     } catch {
