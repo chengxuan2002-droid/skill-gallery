@@ -23,8 +23,8 @@ T019 [validation/us5-quality.md](validation/us5-quality.md)，T020 `README.md`/`
 T021 [validation/us5-poc.md](validation/us5-poc.md)，T022
 [validation/us5-final-review.md](validation/us5-final-review.md)，T023
 [validation/us5-quickstart.md](validation/us5-quickstart.md)。分支
-`codex/us-005-skill-cli`（从 US-004 分支堆叠，未合并 main）。生产 Pages 未启用；真实远端写入与
-POC-002 操作需单独授权。
+`codex/us-005-skill-cli`（从 US-004 分支堆叠，交付见 PR #3；合并前不视为生产可用）。
+生产 Pages 未启用；真实远端写入与 POC-002 操作需单独授权。
 
 **Tests**: 宪章 IX 要求先建立能识别错误行为的验证。新增参数/退出码/JSON 单元测试与临时裸仓库
 集成测试；来源与状态查询可注入，默认测试不访问网络、不推真实远端。

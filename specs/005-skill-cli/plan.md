@@ -1,7 +1,7 @@
 # Implementation Plan: US-005 Agent 命令维护
 
 **Branch**: 功能标识 `005-skill-cli`；实际 Git 分支 `codex/us-005-skill-cli`
-（从 US-004 分支堆叠，未合并 main）。**Date**: 2026-11-08 | **Spec**: [spec.md](spec.md)
+（从 US-004 分支堆叠，交付见 PR #3）。**Date**: 2026-11-08 | **Spec**: [spec.md](spec.md)
 
 **Input**: [spec.md](spec.md)，含五个内部切片、FR-006/007/009/010、NFR-003/004/006、
 AC-007/008/011 及生产授权边界。

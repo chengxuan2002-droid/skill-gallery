@@ -75,7 +75,7 @@ US-002 的检索、详情、分享、响应式和键盘可访问改造已完成 
 （218 通过、0 失败、2 跳过）。T016/T017 已完成受控发布与最终复核；生产 Pages 未切换，
 手动提交或本地构建不等于线上发布。
 
-2026-11-08 US-005 的 T001–T022 已完成本地/受控验证：`skill-cli` 的 preview/add/import/replace/status、
+2026-11-08 US-005 的 T001–T023 已完成本地/受控验证：`skill-cli` 的 preview/add/import/replace/status、
 JSON 输出与退出码、隔离 worktree、临时裸远端和 POC-002 新增/替换/状态查询证据见
 [US-005 validation](specs/005-skill-cli/validation/)；当前本地 `npm test` 为 241 项
 （239 通过、0 失败、2 跳过）。T023 quickstart 走查已完成；生产 Pages 未切换，
@@ -394,7 +394,7 @@ git push -u origin main
 #### 第四步：后续更新
 
 当前已纳管内容的新增、替换和下架通过 GitHub 后台手动维护（见“手动维护（GitHub 后台）”），
-Agent CLI 仍属 US-005 规划。维护 `skills/` 与 `catalog/` 后，本地只可验证：
+本地/来源维护使用“Agent 命令（skill-cli）”。维护 `skills/` 与 `catalog/` 后，本地只可验证：
 
 ```bash
 npm run build
@@ -412,8 +412,8 @@ npm run preview
 
 所有 skill 都存放在 `skills/` 目录下，每个 skill 是一个 `.md` 文件。文件名即 `slug`（URL 中显示的标识），只用小写字母、数字和短横线。
 
-站内没有面向访客的上传入口；新增、替换、下架与发布通过 GitHub 后台手动维护（见上文），
-Agent CLI 仍属 US-005 规划。
+站内没有面向访客的上传入口；新增、替换、下架与发布通过 GitHub 后台手动维护（见上文）或
+“Agent 命令（skill-cli）”。
 以下内容只说明原件格式和 `catalog/` 记录结构；可执行步骤见“手动维护（GitHub 后台）”。已纳管内容用
 `npm run build` 验证 `dist`；不要手工编辑根 `assets/search-index.json`。
 
@@ -751,7 +751,7 @@ https://chengxuan2002-droid.github.io/skill-gallery/#/?q=debug&mode=exact&tag=de
 
 **Q: 添加了新 Skill 但页面上看不到？**
 A: 站内没有面向访客的上传入口；新增、替换、下架通过 GitHub 后台手动维护（见“手动维护（GitHub 后台）”），
-Agent CLI 仍在 US-005 规划。已纳管内容可用 `npm run build` 在本地验证，但不能把本地 `built` 当作网站已发布。
+或使用“Agent 命令（skill-cli）”。已纳管内容可用 `npm run build` 在本地验证，但不能把本地 `built` 当作网站已发布。
 
 **Q: 可以批量导入吗？**
 A: 尚未实现。不要按旧教程提交根 `assets/search-index.json`，也不要把仓库根目录当作站点发布目录。
