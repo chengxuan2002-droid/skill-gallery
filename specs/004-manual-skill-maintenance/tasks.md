@@ -10,10 +10,10 @@ description: "US-004 管理员手动维护的实施任务"
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，
 以及 US-003 已交付的发布链与 validation 证据。
 
-**Status**: 任务于 2026-11-07 生成；当前 17 项。T001–T003 已完成（T001 见
+**Status**: 任务于 2026-11-07 生成；当前 17 项。T001–T004 已完成（T001 见
 [validation/preflight.md](validation/preflight.md)，T002 见
-`tests/integration/manual-maintenance.test.js`，T003 见 `README.md` 手动维护章节）；
-T004–T017 未开始。分支
+`tests/integration/manual-maintenance.test.js`，T003 见 `README.md` 手动维护章节，T004 见
+[validation/manual-add.md](validation/manual-add.md)）；T005–T017 未开始。分支
 `codex/us-004-manual-maintenance`（从 US-003 分支堆叠，未合并 main）。生产 Pages 未切换；
 手动发布验收只在隔离副本与受控仓库（POC-002）授权范围内进行。
 
@@ -59,7 +59,7 @@ T004–T017 未开始。分支
 - [X] T003 [US1] 在 `README.md` 增加“手动维护（GitHub 后台）”章节：单文件/目录上传步骤、必填
   记录字段、提交到默认分支后的校验/构建/发布结果、成功与未发布状态的区分；不写未验证命令。
   （FR-005、NFR-006；AC-006）
-- [ ] T004 [US1] 在隔离副本执行新增流程（单文件与目录型各一次），记录命令、构建结果、
+- [X] T004 [US1] 在隔离副本执行新增流程（单文件与目录型各一次），记录命令、构建结果、
   `contentRevision`、索引/详情/下载检查和未运行项到
   `specs/004-manual-skill-maintenance/validation/manual-add.md`。
   （FR-005、NFR-006；AC-006）
