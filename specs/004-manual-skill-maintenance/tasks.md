@@ -10,8 +10,9 @@ description: "US-004 管理员手动维护的实施任务"
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，
 以及 US-003 已交付的发布链与 validation 证据。
 
-**Status**: 任务于 2026-11-07 生成；当前 17 项。T001 已完成（见
-[validation/preflight.md](validation/preflight.md)）；T002–T017 未开始。分支
+**Status**: 任务于 2026-11-07 生成；当前 17 项。T001–T002 已完成（T001 见
+[validation/preflight.md](validation/preflight.md)，T002 见
+`tests/integration/manual-maintenance.test.js`）；T003–T017 未开始。分支
 `codex/us-004-manual-maintenance`（从 US-003 分支堆叠，未合并 main）。生产 Pages 未切换；
 手动发布验收只在隔离副本与受控仓库（POC-002）授权范围内进行。
 
@@ -47,7 +48,7 @@ description: "US-004 管理员手动维护的实施任务"
 
 ### Tests for User Story 1
 
-- [ ] T002 [US1] 在 `tests/integration/manual-maintenance.test.js` 建立手动维护集成契约：
+- [X] T002 [US1] 在 `tests/integration/manual-maintenance.test.js` 建立手动维护集成契约：
   使用隔离项目新增单文件与目录型 Skill（含 `catalog` 记录），调用现有构建并断言索引/详情/
   原件下载/目录 ZIP；仅修改站内元数据时原件字节不变；重复构建同一内容稳定。
   （FR-005、NFR-001；AC-006）
