@@ -155,7 +155,7 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
 
 ### Tests for User Story 2
 
-- [ ] T014 [P] [US2] 在 `tests/unit/publish-status.test.js` 写状态契约：`built`+`deploy_failed` 可
+- [X] T014 [P] [US2] 在 `tests/unit/publish-status.test.js` 写状态契约：`built`+`deploy_failed` 可
   同时表达；`superseded` 不表示成功；`commit_status` 只接受 `not_applicable/committed/failed`，
   `started_at`/`finished_at` 可空但只接受 ISO 8601；封闭字段拒绝未知键/枚举；`renderSummary`
   区分内容与部署状态且不泄露凭证/响应正文。
