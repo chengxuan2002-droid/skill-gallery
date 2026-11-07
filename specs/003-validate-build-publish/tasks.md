@@ -131,7 +131,7 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
   同 `contentRevision`、无额外文件和凭证；记录到
   `specs/003-validate-build-publish/validation/us3-snapshot.md`，不写工作区 `dist/`。
   （FR-011、NFR-003；AC-008、AC-014）
-- [ ] T012 [US1] 在 T011 的隔离 dist 上运行 `node --test tests/integration/preview.test.js` 或
+- [X] T012 [US1] 在 T011 的隔离 dist 上运行 `node --test tests/integration/preview.test.js` 或
   `npm run preview`，核对 `/skill-gallery/` 子路径；Hash 路由的四个旧 `#/skill/<slug>` 链接和刷新
   使用 US-002 已记录的浏览器证据或人工在明确浏览器/版本中复验；记录命令、浏览器/版本、结果和
   未运行项，不能只用普通 HTTP 200 断言 Hash 路由通过。
