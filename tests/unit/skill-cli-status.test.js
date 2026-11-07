@@ -3,7 +3,11 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 
-const { deriveRunStatus, statusOutcome, waitForRun } = require('../../scripts/lib/skill-cli/status');
+const {
+  deriveRunStatus,
+  statusOutcome,
+  waitForRun,
+} = require('../../scripts/lib/skill-cli/status');
 
 function completedRun(overrides = {}) {
   return {
@@ -116,13 +120,16 @@ test('keeps pending states pending', () => {
     url: 'https://github.com/owner/repository/actions/runs/3',
   });
   assert.equal(deploying.deploy_status, 'deploying');
-  assert.equal(statusOutcome('3', {
-    status: 'in_progress',
-    conclusion: null,
-    jobs: deploying.jobs,
-    headSha: deploying.head_sha,
-    url: deploying.run_url,
-  }).status, 'pending');
+  assert.equal(
+    statusOutcome('3', {
+      status: 'in_progress',
+      conclusion: null,
+      jobs: deploying.jobs,
+      headSha: deploying.head_sha,
+      url: deploying.run_url,
+    }).status,
+    'pending',
+  );
 });
 
 test('waitForRun stops at terminal states and times out without reporting published', async () => {
