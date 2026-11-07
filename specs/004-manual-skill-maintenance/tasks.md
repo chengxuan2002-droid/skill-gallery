@@ -10,15 +10,15 @@ description: "US-004 管理员手动维护的实施任务"
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，
 以及 US-003 已交付的发布链与 validation 证据。
 
-**Status**: 任务于 2026-11-07 生成；当前 17 项。T001–T015 已完成（T001 见
+**Status**: 任务于 2026-11-07 生成；当前 17 项。T001–T016 已完成（T001 见
 [validation/preflight.md](validation/preflight.md)，T002/T005/T008 见
 `tests/integration/manual-maintenance.test.js`，T003/T006/T009 见 `README.md` 手动维护章节，T004 见
 [validation/manual-add.md](validation/manual-add.md)，T007 见
 [validation/manual-failures.md](validation/manual-failures.md)，T010 见
 [validation/manual-replace-remove-recovery.md](validation/manual-replace-remove-recovery.md)，T011–T013 见
 `tests/unit/site-entry.test.js` 与 [validation/admin-entry.md](validation/admin-entry.md)，T014 见
-[validation/manual-quality.md](validation/manual-quality.md)，T015 见 `README.md`/`AGENTS.md`）；
-T016–T017 未开始。分支
+[validation/manual-quality.md](validation/manual-quality.md)，T015 见 `README.md`/`AGENTS.md`，T016 见
+[validation/manual-poc.md](validation/manual-poc.md)）；T017 未开始。分支
 `codex/us-004-manual-maintenance`（从 US-003 分支堆叠，未合并 main）。生产 Pages 未切换；
 手动发布验收只在隔离副本与受控仓库（POC-002）授权范围内进行。
 
@@ -151,7 +151,7 @@ T016–T017 未开始。分支
 - [X] T015 [P] 定向更新 `README.md`、`AGENTS.md` 中本故事已实现并验证的入口、手动维护流程、
   受控结果和未完成项；US-005～US-007 仍标规划；不写未验证命令或线上成功。
   （NFR-006；AC-006）
-- [ ] T016 在受控临时仓库 POC-002 执行等价手动提交（新增、非法批次、替换、下架），确认
+- [X] T016 在受控临时仓库 POC-002 执行等价手动提交（新增、非法批次、替换、下架），确认
   校验/构建/发布与失败保留；记录运行 URL、目标 SHA、`contentRevision` 和未运行项到
   `specs/004-manual-skill-maintenance/validation/manual-poc.md`；生产 Pages 未切换。
   （FR-005、FR-009；AC-006、AC-011）
