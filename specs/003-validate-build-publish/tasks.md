@@ -55,7 +55,7 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
 
 ### Tests for Foundational
 
-- [ ] T003 [P] 在 `tests/unit/publish.test.js` 先写失败契约：`verifyArtifact` 的 manifest 双向一致、
+- [X] T003 [P] 在 `tests/unit/publish.test.js` 先写失败契约：`verifyArtifact` 的 manifest 双向一致、
   路径白名单、`..`/绝对路径/反斜杠/控制字符/重复路径、符号链接/非普通文件、隐藏文件
   （`.nojekyll` 除外）、大小/SHA-256、`contentRevision` 同源、文本文件 `scanSecrets`；
   `evaluateDeployTarget` 的 40 位十六进制校验与 `current`/`superseded`；`createRunStatus` 的封闭
