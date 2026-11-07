@@ -38,6 +38,9 @@ Context7 GitHub Actions 资料，再用 GitHub 官方 action 发布记录与 REA
   不要求检测线上是否已存在相同快照，但不得创建空内容提交或伪装成内容更新。
 - **Rationale**: AC-014 明确要求自动提交后的发布不依赖另一次隐含 push；同一运行可追踪目标提交、
   构建产物和部署结果，失败可按同一 commit 重跑。
+- **Verified**: 2026-11-07 实施复核：`maintain.yml` 仅含 `build`→`deploy`，`on` 不含 `workflow_run`；
+  `deploy.needs` 为 `build`，两个 job 均无 `github.event_name` 条件，US-006 可在 build 前增加 `sync`
+  并经 `needs` 进入同一运行；T023 结构断言与 T024 noop 状态测试通过。未发现平台行为差异，无需修改契约。
 - **Alternatives considered**: `workflow_run` 链（跨运行状态和顺序更难保证）；让机器人 push 再触发
   另一条部署工作流（明确被 AC-014 排除）。
 

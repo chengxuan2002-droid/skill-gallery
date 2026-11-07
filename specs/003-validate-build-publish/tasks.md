@@ -12,7 +12,7 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
 [技术方案](../../docs/TechnicalSolution.md)、[编程规范](../../docs/AiProgrammingGuide.md)。
 
 **Status**: 任务于 2026-11-07 生成；当前 33 项，T031/T032 为 2026-11-07 分析修订追加，
-T033 为同日 Step Summary 补齐追加，不重排既有 T001～T030。T001–T021、T023、T024 与 T033 已完成
+T033 为同日 Step Summary 补齐追加，不重排既有 T001～T030。T001–T021、T023、T024、T026 与 T033 已完成
 （T018 在受控临时公开仓库执行；Foundational 见 [validation/foundational.md](validation/foundational.md)；US1 见
 [validation/us3-snapshot.md](validation/us3-snapshot.md) 与
 [validation/us3-links.md](validation/us3-links.md)；US2 测试契约见
@@ -22,7 +22,7 @@ T033 为同日 Step Summary 补齐追加，不重排既有 T001～T030。T001–
 [validation/us3-summary.md](validation/us3-summary.md)；US3 安全契约见
 `tests/integration/publish/publish-security.test.js`、
 `tests/integration/publish/publish-security-workflow.test.js` 与
-[validation/us3-security.md](validation/us3-security.md)）；T022、T025–T032 未开始。
+[validation/us3-security.md](validation/us3-security.md)）；T022、T025、T027–T032 未开始。
 2026-11-07 已将 publish 集成测试重组到 `tests/integration/publish/`，`npm test` 同步覆盖该目录；
 历史 validation 记录保留执行时路径。
 T018 的受控 POC-002 结果见 [validation/us3-recovery.md](validation/us3-recovery.md) 第 6 节。
@@ -257,7 +257,7 @@ T018 的受控 POC-002 结果见 [validation/us3-recovery.md](validation/us3-rec
   目标提交；无变化时允许重复部署同一快照，但不得新建内容提交或伪装成内容更新；记录到
   `specs/003-validate-build-publish/validation/us3-same-run.md`；未获授权时记录未运行。
   （FR-009、FR-011；AC-014）
-- [ ] T026 [US4] 复核 `specs/003-validate-build-publish/research.md` 中“同次运行显式部署”的结论与
+- [X] T026 [US4] 复核 `specs/003-validate-build-publish/research.md` 中“同次运行显式部署”的结论与
   实际工作流一致；如发现平台行为差异，先更新契约/计划再修改实现，不以隐式 push 补丁绕过。
   （FR-009、FR-011；AC-014）
 
