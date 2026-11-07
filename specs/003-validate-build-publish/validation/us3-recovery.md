@@ -102,3 +102,40 @@ build、artifact 校验、上传、目标判定、摘要和失败注入，移除
 - T033 已在 build/deploy Step Summary 中补齐完整 RunStatus 字段，见
   [us3-summary.md](us3-summary.md)；本记录只验证状态模型和失败保留语义，不代表生产发布通过。
 - 临时公开仓库尚未删除；如需清理，应单独确认后删除。
+
+## 8. 隔离恢复演练（T031）
+
+**日期**: 2026-11-07（Asia/Shanghai）
+**范围**: 在系统临时目录复制正式站点内容（`index.html`、`assets/`、`catalog/`、`skills/`），
+初始化独立 Git 仓库，依次生成基线提交、内容变更提交和 `git revert` 恢复提交；每次重新构建并
+记录 `contentRevision`。不配置远程、不推送、不 force push，不触碰工作区 `dist/` 或生产 Pages。
+**环境**: Windows 11；Node `v22.21.0`、npm `10.9.4`；构建使用 `scripts/lib/build-site.js`。
+
+### 8.1 提交与内容标识
+
+| 步骤 | 临时提交 | `contentRevision` |
+|---|---|---|
+| 基线提交 | `80bbe76642b0f576de9489fb935378abacdccce3` | `f8143ad0059b30bd1404c4ef9d05f40559525ecbdcb47d2a8b2dabdbb032006d` |
+| 内容变更（`catalog/refactoring-workflow.json` 的 `notes`） | `d9c2f3e4d109503bbc420e870638149f2504b3dd` | `a114c23eac4448f9d7f15277ccede2c810cd122f374fbfe660c8e3a731ac5ca6` |
+| `git revert --no-edit HEAD` 恢复提交 | `699aff41533b57da0b205712e2f5683dcee850b5` | `f8143ad0059b30bd1404c4ef9d05f40559525ecbdcb47d2a8b2dabdbb032006d` |
+
+恢复后 `contentRevision` 与基线完全一致；变更提交产生了新的内容标识，说明恢复走的是重新构建而不是
+复用旧产物。
+
+### 8.2 一致性与历史
+
+| 检查 | 结果 |
+|---|---|
+| 临时仓库提交数 | 3（基线、变更、revert），历史保留 |
+| 远程配置 | 空；未推送、未 force push |
+| 既有 slug | 4 个，与恢复前一致 |
+| 旧 `#/skill/<slug>` 链接 | `#/skill/code-review-assistant`、`#/skill/handoff-codex`、`#/skill/refactoring-workflow`、`#/skill/superpower-systematic-debugging`；对应详情文件均存在 |
+| 当前单版本 | `details/` 仅 4 个 JSON，索引 4 项，slug 无重复 |
+| 产物文件数 | 24，与基线一致 |
+| 原文/附件保真 | 6 个原始文件字节与 SHA-256 一致，frontmatter 保留；目录 ZIP 3 个文件字节一致 |
+
+### 8.3 未运行与限制
+
+- 演练在临时副本执行，未在受控仓库或生产环境做真实回滚部署。
+- 浏览器刷新、线上 MIME/缓存和旧链接的交互行为仍以 US-001/US-002 既有证据为准，本轮未复验浏览器。
+- 临时副本在演练结束后删除；命令与结果仅保留在本记录。

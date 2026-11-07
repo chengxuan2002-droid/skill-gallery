@@ -12,7 +12,7 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
 [技术方案](../../docs/TechnicalSolution.md)、[编程规范](../../docs/AiProgrammingGuide.md)。
 
 **Status**: 任务于 2026-11-07 生成；当前 33 项，T031/T032 为 2026-11-07 分析修订追加，
-T033 为同日 Step Summary 补齐追加，不重排既有 T001～T030。T001–T026 与 T033 已完成
+T033 为同日 Step Summary 补齐追加，不重排既有 T001～T030。T001–T026、T031 与 T033 已完成
 （T018 在受控临时公开仓库执行；Foundational 见 [validation/foundational.md](validation/foundational.md)；US1 见
 [validation/us3-snapshot.md](validation/us3-snapshot.md) 与
 [validation/us3-links.md](validation/us3-links.md)；US2 测试契约见
@@ -22,7 +22,7 @@ T033 为同日 Step Summary 补齐追加，不重排既有 T001～T030。T001–
 [validation/us3-summary.md](validation/us3-summary.md)；US3 安全契约见
 `tests/integration/publish/publish-security.test.js`、
 `tests/integration/publish/publish-security-workflow.test.js` 与
-[validation/us3-security.md](validation/us3-security.md)）；T027–T032 未开始。
+[validation/us3-security.md](validation/us3-security.md)）；T027–T030、T032 未开始。
 2026-11-07 已将 publish 集成测试重组到 `tests/integration/publish/`，`npm test` 同步覆盖该目录；
 历史 validation 记录保留执行时路径。
 T018 的受控 POC-002 结果见 [validation/us3-recovery.md](validation/us3-recovery.md) 第 6 节。
@@ -382,7 +382,7 @@ Polish 全量检查/取用回归/文档/复核。每一步在隔离副本验证�
 本批不重排既有 T001～T030：T031 归入 US2，T032 归入 Polish；两者均可先在隔离副本完成，
 受控部署部分再按授权补充。
 
-- [ ] T031 [US2] 在隔离副本生成一次内容提交及对应的受控恢复提交（`git revert` 或等价恢复），
+- [X] T031 [US2] 在隔离副本生成一次内容提交及对应的受控恢复提交（`git revert` 或等价恢复），
   分别构建并记录恢复前后的 `contentRevision`；确认恢复后既有 slug、四个旧 `#/skill/<slug>` 链接、
   当前单版本和 Git 历史保持一致，不 force push；把命令、结果和未运行项写入
   `specs/003-validate-build-publish/validation/us3-recovery.md`。本任务不需要远程写入。
