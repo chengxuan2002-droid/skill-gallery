@@ -122,16 +122,18 @@ Q-004 决策提交推送后的 Quality checks #42170060519 在 Node 26.3.0/Linux
 隔离恢复演练与取用回归见 specs/003-validate-build-publish/validation/；临时公开仓库 POC-002 验证了
 部署失败/旧站保留/同提交重跑、同次运行发布和匿名未授权拒绝。US-003 收口时本地 npm test 为 211 项
 （209 通过、0 失败、2 跳过）；已推送并创建 PR #1（Quality checks 42382079287/42382097367 通过），
-未合并；生产 Pages 未启用，生成、提交与验收不等于发布。
+已合并到 main；生产 Pages 已切换为 GitHub Actions 并成功发布（run 42396936423 / 42397297833），
+生成、提交仍须经 Actions 部署。
 2026-11-07 US-004 的 T001–T015 已完成本地验证：GitHub 后台手动维护说明、页脚低权重“管理”外链、
 必填字段与失败/替换/下架/恢复步骤，以及隔离构建/失败批次/生命周期/入口证据见
 specs/004-manual-skill-maintenance/validation/；当前本地 npm test 为 220 项
-（218 通过、0 失败、2 跳过）。T016/T017 已完成受控发布与最终复核；生产 Pages 未切换，
-手动提交、本地构建或受控验收不等于生产发布。
-2026-11-08 US-005 的 T001–T022 已完成本地/受控验证：`skill-cli` 的 preview/add/import/replace/status、
+（218 通过、0 失败、2 跳过）。T016/T017 已完成受控发布与最终复核；生产 Pages 已切换，
+手动提交/本地构建需经 Actions 发布，受控验收不等于生产发布。
+2026-11-08 US-005 的 T001–T023 已完成本地/受控验证：`skill-cli` 的 preview/add/import/replace/status、
 JSON/退出码、隔离 worktree、临时裸远端与 POC-002 新增/替换/状态查询证据见
 specs/005-skill-cli/validation/；当前本地 npm test 为 241 项（239 通过、0 失败、2 跳过）。
-T023 quickstart 走查已完成；生产 Pages 未切换，Agent 命令、本地构建或受控验收不等于生产发布。
+T023 quickstart 走查已完成；生产 Pages 已切换，Agent 命令/本地构建需经 Actions 发布，
+不把本地结果当作生产发布。
 首次初始化证据见 specs/001-preserve-skill-content/validation/bootstrap.md。
 2026-11-03 在 Windows 复核 T002～T010：`.gitattributes` 固定项目文本为 LF，`skills/**` 不做换行转换；
 测试夹具在 Windows 使用 junction，检查入口解析 `npm.cmd` 与扫描器 `.exe`，安装器支持 Windows zip 包但仍需网络。
@@ -153,7 +155,8 @@ T041 复选框保持未勾选，不宣称 macOS、跨平台或生产发布通过
 不只依赖本机 .tools；site-monitor.yml 以默认分支定时/手动读取现站；完整 SHA 固定、只读权限、无部署/写回，
 不能改为特权 PR 触发器。2026-11-03 的安全扫描补强已推送到开发分支；Quality checks #41628358392
 （US1 时点）与 #41639767607（US2 后）均通过，Node/npm/uv 与四个显式检查步骤均验证。
-`main` 尚未合并该补强，默认分支仍为旧版 workflow；push 路径已验证，PR/手动触发未单独执行。
+`main` 已合并该补强，默认分支使用更新版 workflow；2026-11-08 合并 PR #1–#4 后 push 路径在 main
+运行成功，PR/手动触发以运行记录为准。
 监测按用户确认每小时一次，与来源更新 Q-004 无关；每请求 8 秒、失败再试一次，诊断不含响应正文。
 用户已明确授权推送并验证。2026-11-02 已推送 main，检查 CI 与首次手动监测在 GitHub runner 上通过，每小时计划已启用；首次定时事件与通知送达未单独验证。
 2026-11-03 又推送开发分支 codex/development-baseline-20261102（当时 3d479e2）并验证新 quality workflow；main 未变。
