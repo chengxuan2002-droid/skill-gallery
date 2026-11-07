@@ -8,16 +8,21 @@
 **Input**: `specs/003-validate-build-publish/spec.md`，含四个内部切片、FR-007/009/011、
 NFR-003/004/006、AC-008/011/012/014 及生产授权边界。
 
-**Implementation Status**: T001–T021 与 T033 已完成（T018 在受控临时公开仓库执行；Foundational 见
-[validation/foundational.md](validation/foundational.md)；US1 见
+**Implementation Status**: T001–T033 已完成本地/受控验证（T018/T022/T025 在受控临时公开仓库执行；
+Foundational 见 [validation/foundational.md](validation/foundational.md)；US1 见
 [validation/us3-snapshot.md](validation/us3-snapshot.md) 与
 [validation/us3-links.md](validation/us3-links.md)；US2 测试契约见
-`tests/unit/publish-status.test.js`、`tests/integration/publish-superseded.test.js` 与
-`tests/integration/publish-deploy-workflow.test.js`，恢复演练见
+`tests/unit/publish-status.test.js`、`tests/integration/publish/publish-superseded.test.js` 与
+`tests/integration/publish/publish-deploy-workflow.test.js`，恢复演练见
 [validation/us3-recovery.md](validation/us3-recovery.md)，Step Summary 见
 [validation/us3-summary.md](validation/us3-summary.md)；US3 安全契约见
-`tests/integration/publish-security.test.js`、`tests/integration/publish-security-workflow.test.js` 与
-[validation/us3-security.md](validation/us3-security.md)）；T027–T032 未开始。
+`tests/integration/publish/publish-security.test.js`、
+`tests/integration/publish/publish-security-workflow.test.js` 与
+[validation/us3-security.md](validation/us3-security.md)；US4 同次运行/noop 见
+`tests/integration/publish/publish-same-run.test.js`、`tests/unit/publish-noop.test.js` 与
+[validation/us3-same-run.md](validation/us3-same-run.md)；取用回归与最终复核见
+[validation/us3-regression.md](validation/us3-regression.md)、
+[validation/us3-final-review.md](validation/us3-final-review.md)）。生产 Pages 未启用。
 T018 的受控 POC-002 结果见 [validation/us3-recovery.md](validation/us3-recovery.md) 第 6 节。
 生产 Pages 源、environment、分支保护和线上切换未修改；US-004～US-007 仍未开始。
 
