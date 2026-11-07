@@ -64,13 +64,69 @@ US-002 的检索、详情、分享、响应式和键盘可访问改造已完成 
 `maintain.yml`、US1 快照/子路径、US2 状态/失败/恢复、US3 凭证/权限/匿名未授权尝试、US4 同次运行/noop、
 隔离恢复演练与取用回归见
 [US-003 validation](specs/003-validate-build-publish/validation/)；临时公开仓库 POC-002 验证了
-部署失败/旧站保留/同提交重跑、同次运行发布和匿名未授权拒绝。当前本地 `npm test` 为 211 项
+部署失败/旧站保留/同提交重跑、同次运行发布和匿名未授权拒绝。US-003 收口时本地 `npm test` 为 211 项
 （209 通过、0 失败、2 跳过）；已推送并创建
 [PR #1](https://github.com/chengxuan2002-droid/skill-gallery/pull/1)
 （Quality checks 42382079287/42382097367 通过），未合并；生产 Pages 未启用，本地构建或受控验收不等于线上发布。
 
+2026-11-07 US-004 的 T001–T015 已完成本地验证：GitHub 后台手动维护步骤、页脚低权重“管理”外链、
+必填字段与失败/替换/下架/恢复说明，以及隔离构建、失败批次、生命周期和入口证据见
+[US-004 validation](specs/004-manual-skill-maintenance/validation/)；当前本地 `npm test` 为 220 项
+（218 通过、0 失败、2 跳过）。T016/T017 已完成受控发布与最终复核；生产 Pages 未切换，
+手动提交或本地构建不等于线上发布。
+
 本地验收使用 Windows + Node 22.21.0；声明的 Node 26.3.0/Linux 由 CI 覆盖，结果见下方 Quality checks。
 初始化按步骤验证并提交，提交不等于推送或上线。
+
+### 手动维护（GitHub 后台）
+
+访客只读；新增、修改、显式替换和下架由管理员通过 GitHub 仓库后台完成，不提供站内登录或上传接口。
+前提是对仓库有写权限；生产 Pages 的 Source 需为 “GitHub Actions” 才能由 Actions 发布（当前生产仍为
+`legacy`，切换需单独授权）。
+
+1. 在 GitHub 网页后台添加原件：单文件为 `skills/<slug>.md`；目录型为 `skills/<slug>/SKILL.md`
+   及其附件。目录按文件夹上传，不要求 ZIP 解压。
+2. 添加或更新 `catalog/<slug>.json`，至少包含：
+
+   | 字段 | 必填 | 说明 |
+   |---|---|---|
+   | `schemaVersion` | 是 | 固定为 `1` |
+   | `slug` | 是 | 小写字母、数字和短横线，≤64，与目录/文件名一致 |
+   | `display_name` | 是 | 站点显示名 |
+   | `description` | 是 | 一句话简介 |
+   | `content_path` | 是 | `skills/<slug>.md` 或 `skills/<slug>/SKILL.md` |
+
+   `tags`、`platforms` 可省略或为空数组；其他字段可选，未知字段会被拒绝。
+3. 提交到默认分支。`Maintain site` 工作流会执行既有检查、构建、产物校验与发布；非法批次整批阻止。
+4. 在 Actions 运行记录中查看结果：提交、构建和部署状态分开显示；失败时旧站保留。提交成功或本地
+   `npm run build` 成功不等于已发布，只有部署成功且站点可访问才算上线。
+
+**失败处理**：任一非法条目会让整批校验/构建失败，不上传产物、不部署，现有站点保持可读。先按运行
+记录中的稳定错误码定位，再修复并重新提交：
+
+| 错误码 | 常见原因 | 处理方式 |
+|---|---|---|
+| `E_SCHEMA` | 缺必填字段、未知字段、字段类型错误 | 按记录中的 slug/字段补齐；不要猜测或添加未定义字段 |
+| `E_PATH` | `content_path` 与 slug 不匹配、越界或使用反斜杠 | 改为 `skills/<slug>.md` 或 `skills/<slug>/SKILL.md` |
+| `E_MAIN_MISSING` | 主文档不存在 | 补回主文档并确认路径大小写 |
+| `E_REFERENCE_MISSING` | 正文引用的本地附件缺失 | 补回附件或移除失效引用 |
+| `E_SECRET` | 疑似凭证（token、私钥、密码赋值） | 移除真实凭证并轮换；示例用 `YOUR_*_HERE`；诊断只报位置，不回显值 |
+
+修复后重新提交即可；失败不会自动产生新内容提交，也不需要新建空提交。不要手动修改 `dist/`、删除
+旧产物或降低分支保护来“通过”失败；运行日志和内部错误不进入访客页面。
+
+**替换、下架与恢复**：
+
+- **显式替换**：用完整新内容替换同一 slug 的原件（单文件或目录），保持 `catalog` 记录中的 slug 与
+  `content_path` 不变后提交。构建只保留一个当前版本，新清单之外的旧附件会从详情、目录 ZIP 和
+  索引关联中移除；不要为旧内容保留第二份目录或重复卡片。
+- **下架**：删除对应原件（单文件或整个 Skill 目录）与 `catalog/<slug>.json` 后提交。构建后该条目从
+  索引、详情和下载中消失；未纳管的本地文件不受影响，旧分享链接回到列表/未找到状态。
+- **受控恢复**：需要回到上一份有效内容时，通过 GitHub 历史或 `git revert` 生成恢复提交，再走同一
+  构建/发布流程；保持既有 slug、旧链接和单版本，不 force push、不清除历史。不要通过手工改
+  `dist/` 或直接覆盖线上文件“恢复”。
+
+Agent CLI（US-005）、自动来源检查/调度（US-006）、ZIP 解压和站内上传后台不属于当前能力。
 
 ### 当前内容与构建契约
 
@@ -81,7 +137,8 @@ US-002 的检索、详情、分享、响应式和键盘可访问改造已完成 
 - `npm run build` 只写 `dist/`，不写根 `assets/search-index.json`；`npm run preview` 只映射 `dist` 的 `/skill-gallery/`。成功状态是本地 `built`，不是已发布。
 - 构建事务使用 `.dist.lock/owner.json` 与 `.dist.transaction.json`。发现遗留锁时不要删除 dist、stage 或 backup；先确认原进程已退出并核对 owner 的 run_id/pid，只移除匹配锁，再重跑 `npm run build`。提交后清理失败会返回 `built` + `cleanup_status=pending`，保留记录/backup，不能当作发布成功。
 - 凭证规则 SECRET-01～04 只报告安全位置和类型；示例使用 `YOUR_*_HERE`、`<REDACTED>`、`***` 或 `$ENV`，不得写入真实凭证。标题 ID 由构建器生成；重复标题使用后缀，未知本文锚点移除 href 并提示。
-- 上传 CLI、GitHub 后台维护入口、自动更新与发布仍未实现；不要让旧版根索引/直接 Pages 教程冒充当前流程。生产 Pages 的 MIME、缓存和直接资源安全仍需发布前验证。
+- 上传 CLI、自动更新和生产发布仍未实现；GitHub 后台手动维护见上文“手动维护（GitHub 后台）”。
+  不要让旧版根索引/直接 Pages 教程冒充当前流程。生产 Pages 的 MIME、缓存和直接资源安全仍需发布前验证。
 
 ### 检查 CI 与现站基础监测
 
@@ -284,8 +341,8 @@ git push -u origin main
 
 #### 第四步：后续更新
 
-当前已纳管内容的新增、替换和下架入口仍在后续 US-004/US-005 规划中，尚未提供可执行的维护命令。
-维护 `skills/` 与 `catalog/` 后，本地只可验证：
+当前已纳管内容的新增、替换和下架通过 GitHub 后台手动维护（见“手动维护（GitHub 后台）”），
+Agent CLI 仍属 US-005 规划。维护 `skills/` 与 `catalog/` 后，本地只可验证：
 
 ```bash
 npm run build
@@ -303,8 +360,9 @@ npm run preview
 
 所有 skill 都存放在 `skills/` 目录下，每个 skill 是一个 `.md` 文件。文件名即 `slug`（URL 中显示的标识），只用小写字母、数字和短横线。
 
-当前没有面向访客或普通用户的上传入口；新增、替换、下架及发布仍属后续 US-004/US-005。
-以下内容只说明原件格式和 `catalog/` 记录结构，不代表已有可执行的维护命令。已纳管内容用
+站内没有面向访客的上传入口；新增、替换、下架与发布通过 GitHub 后台手动维护（见上文），
+Agent CLI 仍属 US-005 规划。
+以下内容只说明原件格式和 `catalog/` 记录结构；可执行步骤见“手动维护（GitHub 后台）”。已纳管内容用
 `npm run build` 验证 `dist`；不要手工编辑根 `assets/search-index.json`。
 
 下面按不同来源分别给出格式示例：
@@ -640,8 +698,8 @@ https://chengxuan2002-droid.github.io/skill-gallery/#/?q=debug&mode=exact&tag=de
 ### 五、常见问题
 
 **Q: 添加了新 Skill 但页面上看不到？**
-A: 当前没有面向访客的上传入口；新增、替换、下架和发布仍在后续 US-004/US-005。
-已纳管内容可用 `npm run build` 在本地验证，但不能把本地 `built` 当作网站已发布。
+A: 站内没有面向访客的上传入口；新增、替换、下架通过 GitHub 后台手动维护（见“手动维护（GitHub 后台）”），
+Agent CLI 仍在 US-005 规划。已纳管内容可用 `npm run build` 在本地验证，但不能把本地 `built` 当作网站已发布。
 
 **Q: 可以批量导入吗？**
 A: 尚未实现。不要按旧教程提交根 `assets/search-index.json`，也不要把仓库根目录当作站点发布目录。
