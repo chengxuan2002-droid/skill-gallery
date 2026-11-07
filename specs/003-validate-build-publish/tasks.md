@@ -12,10 +12,12 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
 [技术方案](../../docs/TechnicalSolution.md)、[编程规范](../../docs/AiProgrammingGuide.md)。
 
 **Status**: 任务于 2026-11-07 生成；当前 32 项，T031/T032 为 2026-11-07 分析修订追加，
-不重排既有 T001～T030。T001–T013 已完成本地实现与验证（Foundational 见
+不重排既有 T001～T030。T001–T016 已完成本地实现与验证（Foundational 见
 [validation/foundational.md](validation/foundational.md)；US1 见
 [validation/us3-snapshot.md](validation/us3-snapshot.md) 与
-[validation/us3-links.md](validation/us3-links.md)）；T014–T032 未开始。
+[validation/us3-links.md](validation/us3-links.md)；US2 测试契约见
+`tests/unit/publish-status.test.js`、`tests/integration/publish-superseded.test.js` 与
+`tests/integration/publish-deploy-workflow.test.js`）；T017–T032 未开始。
 分支 `codex/us-003-validate-build-publish`（从 US-002 分支堆叠，当前未推送、未合并 main）。
 生产 Pages 源、environment、分支保护和线上切换未修改、未发布；受控仓库不可用时按未运行记录。
 

@@ -60,10 +60,10 @@ US-002 的检索、详情、分享、响应式和键盘可访问改造已完成 
   [Quality checks #42170060519](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/42170060519)
   在 Node 26.3.0/Linux 成功；尚未合并 main。上传、自动更新和生产发布仍待后续故事。
 
-2026-11-07 US-003 的 T001–T013 已完成本地实现与验证：发布产物校验、`publish-check.js`、
-`maintain.yml` 骨架和 US1 快照/子路径验收见
-[US-003 validation](specs/003-validate-build-publish/validation/)；T014–T032 未开始，分支未推送，
-生产 Pages 未切换。当前本地 `npm test` 为 177 项（175 通过、0 失败、2 跳过，含 US-003 测试）。
+2026-11-07 US-003 的 T001–T016 已完成本地实现与验证：发布产物校验、`publish-check.js`、
+`maintain.yml` 骨架、US1 快照/子路径验收和 US2 状态/部署测试契约见
+[US-003 validation](specs/003-validate-build-publish/validation/)；T017–T032 未开始，分支未推送，
+生产 Pages 未切换。当前本地 `npm test` 为 188 项（186 通过、0 失败、2 跳过，含 US-003 测试）。
 
 本地验收使用 Windows + Node 22.21.0；声明的 Node 26.3.0/Linux 由 CI 覆盖，结果见下方 Quality checks。
 初始化按步骤验证并提交，提交不等于推送或上线。
