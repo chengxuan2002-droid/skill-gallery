@@ -45,3 +45,22 @@ test('missing app-search.js fails the whole build', async (t) => {
     true,
   );
 });
+
+test('build copies the DOM and filter modules and includes them in contentRevision', async (t) => {
+  const project = createSearchFixtureProject({ count: 2, totalBytes: 2000 });
+  t.after(() => project.cleanup());
+  const assets = ['assets/app-dom.js', 'assets/app-filters.js'];
+  const content = (version) => `globalThis.SKILL_GALLERY_MODULE = ${version};\n`;
+  for (const relative of assets) fs.writeFileSync(path.join(project.root, relative), content(1));
+
+  const first = await project.buildPreview();
+  assert.equal(first.ok, true, JSON.stringify(first.diagnostics));
+  for (const relative of assets) {
+    assert.equal(fs.readFileSync(path.join(first.distDir, relative), 'utf8'), content(1));
+  }
+
+  fs.writeFileSync(path.join(project.root, 'assets/app-filters.js'), content(2));
+  const second = await project.buildPreview();
+  assert.equal(second.ok, true, JSON.stringify(second.diagnostics));
+  assert.notEqual(second.contentRevision, first.contentRevision);
+});

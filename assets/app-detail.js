@@ -1,5 +1,5 @@
 (function () {
-  const { element, clear, safeText, safeHref } = window.SkillGalleryViews;
+  const { element, clear, safeText, safeHref } = window.SkillGalleryDom;
   const search = window.SkillGallerySearch;
 
   function bindBodyAnchors(root, files, onFileLink) {

@@ -10,7 +10,9 @@ const MiniSearch = require('minisearch');
 const { createDocument } = require('../support/fake-dom');
 
 const root = path.resolve(__dirname, '../..');
+const domSource = fs.readFileSync(path.join(root, 'assets/app-dom.js'), 'utf8');
 const searchSource = fs.readFileSync(path.join(root, 'assets/app-search.js'), 'utf8');
+const filtersSource = fs.readFileSync(path.join(root, 'assets/app-filters.js'), 'utf8');
 const viewsSource = fs.readFileSync(path.join(root, 'assets/app-views.js'), 'utf8');
 const fixture = JSON.parse(
   fs.readFileSync(path.join(root, 'tests/fixtures/search/fixed-skills.json'), 'utf8'),
@@ -31,8 +33,10 @@ function loadViews() {
     URLSearchParams,
   };
   context.globalThis = context;
+  vm.runInNewContext(domSource, context, { filename: 'assets/app-dom.js' });
   vm.runInNewContext(searchSource, context, { filename: 'assets/app-search.js' });
   context.window.SkillGallerySearch = context.SkillGallerySearch;
+  vm.runInNewContext(filtersSource, context, { filename: 'assets/app-filters.js' });
   vm.runInNewContext(viewsSource, context, { filename: 'assets/app-views.js' });
   return { document, search: context.SkillGallerySearch, views: context.window.SkillGalleryViews };
 }

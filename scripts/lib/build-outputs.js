@@ -56,7 +56,9 @@ function copyWebAssets(projectRoot, stage, artifacts) {
     artifacts.set(relativePath, bytes);
   }
   for (const relativePath of [
+    'assets/app-dom.js',
     'assets/app-search.js',
+    'assets/app-filters.js',
     'assets/app-views.js',
     'assets/app-actions.js',
     'assets/app-detail.js',

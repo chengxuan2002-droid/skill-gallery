@@ -95,9 +95,11 @@ specs/002-search-detail-share-redesign/
 
 ```text
 index.html                          # 新增搜索/筛选/详情结构所需容器与脚本顺序
+assets/app-dom.js                   # 2026-11-07 拆分：共享 DOM 与安全文本/链接辅助
 assets/app-search.js                # 新增：纯搜索、过滤、排序、URL 状态模块
 assets/app.js                       # 路由、加载、状态编排、主题
-assets/app-views.js                 # 列表、筛选、排序、结果状态与可访问 DOM
+assets/app-filters.js               # 2026-11-07 拆分：搜索框、模式、筛选与排序控件
+assets/app-views.js                 # 列表、结果状态、复制反馈与可访问 DOM
 assets/app-detail.js                # 详情分区、内容标识、复制/下载/分享操作
 assets/app-actions.js               # 分享地址、复制、下载等浏览器动作
 assets/style.css                    # 响应式、明暗主题、焦点、状态样式

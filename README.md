@@ -653,7 +653,9 @@ skill-gallery/
 ├── catalog/                 # 站内记录与来源配置
 ├── assets/                  # 前端源码与旧版索引基线
 │   ├── app.js
+│   ├── app-dom.js
 │   ├── app-search.js
+│   ├── app-filters.js
 │   ├── app-views.js
 │   ├── app-detail.js
 │   ├── app-actions.js

@@ -142,7 +142,9 @@ function contentRevision(projectRoot, skills) {
   for (const asset of [
     'index.html',
     'assets/app.js',
+    'assets/app-dom.js',
     'assets/app-search.js',
+    'assets/app-filters.js',
     'assets/app-views.js',
     'assets/app-detail.js',
     'assets/app-actions.js',

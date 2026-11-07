@@ -1,27 +1,7 @@
 (function () {
   const search = window.SkillGallerySearch;
-
-  function element(tag, className, text) {
-    const node = document.createElement(tag);
-    if (className) node.className = className;
-    if (text !== undefined) node.textContent = text;
-    return node;
-  }
-
-  function clear(node) {
-    node.replaceChildren();
-  }
-
-  function safeText(value, fallback = '未提供') {
-    return value === null || value === undefined || value === '' ? fallback : String(value);
-  }
-
-  function safeHref(value) {
-    if (typeof value !== 'string' || value.length === 0) return null;
-    if (/^[a-z][a-z0-9+.-]*:/i.test(value)) return /^https?:/i.test(value) ? value : null;
-    if (value.startsWith('/') || value.split('/').includes('..')) return null;
-    return value;
-  }
+  const { clear, element, safeText } = window.SkillGalleryDom;
+  const { createFilters } = window.SkillGalleryFilters;
 
   function loadingView(app) {
     clear(app);
@@ -81,114 +61,17 @@
     return card;
   }
 
-  function filterGroup(title, key, options, getSelected, onChange) {
-    if (!options.length) return null;
-    const group = element('fieldset', 'filter-group');
-    group.append(element('legend', 'field-label', title));
-    for (const option of options) {
-      const label = element('label', 'filter-option');
-      const checkbox = element('input');
-      checkbox.type = 'checkbox';
-      checkbox.value = option.value;
-      checkbox.checked = getSelected().includes(option.value);
-      checkbox.addEventListener('change', () => {
-        const selected = getSelected();
-        const next = checkbox.checked
-          ? [...selected, option.value]
-          : selected.filter((value) => value !== option.value);
-        onChange({ [key]: [...new Set(next)] });
-      });
-      label.append(checkbox, element('span', null, `${option.value} (${option.count})`));
-      group.append(label);
-    }
-    return group;
-  }
-
   function renderList(app, { state, results, filterOptions }, handlers) {
     clear(app);
     let currentState = state;
 
     const layout = element('div', 'list-layout');
-    const filters = element('aside', 'filters');
-    const searchLabel = element('label', 'field-label', '搜索 Skill');
-    searchLabel.htmlFor = 'skill-search';
-    const searchBar = element('div', 'search-bar');
-    const input = element('input', 'search-input');
-    input.type = 'search';
-    input.id = 'skill-search';
-    input.placeholder = '搜索名称、简介、标签或正文';
-    input.value = state.query;
-    input.addEventListener('input', () => handlers.onChange({ query: input.value }));
-    searchBar.append(input);
-    filters.append(searchLabel, searchBar);
-
-    const filterToggle = element('button', 'filter-toggle', '筛选');
-    filterToggle.type = 'button';
-    filterToggle.setAttribute('aria-expanded', 'false');
-    filterToggle.setAttribute('aria-controls', 'filter-panel');
-    filterToggle.addEventListener('click', () => {
-      const open = filters.classList.toggle('is-open');
-      filterToggle.setAttribute('aria-expanded', String(open));
-      filterToggle.textContent = open ? '收起筛选' : '筛选';
+    const filters = createFilters({
+      state,
+      filterOptions,
+      onChange: handlers.onChange,
     });
-    filters.append(filterToggle);
-    const filterPanel = element('div', 'filter-panel');
-    filterPanel.id = 'filter-panel';
-
-    const modeLabel = element('div', 'field-label', '搜索模式');
-    const modeGroup = element('div', 'mode-toggle');
-    modeGroup.setAttribute('role', 'group');
-    modeGroup.setAttribute('aria-label', '搜索模式');
-    const fuzzyButton = element('button', 'mode-button', '模糊');
-    const exactButton = element('button', 'mode-button', '精准');
-    fuzzyButton.type = 'button';
-    exactButton.type = 'button';
-    fuzzyButton.addEventListener('click', () => handlers.onChange({ mode: 'fuzzy' }));
-    exactButton.addEventListener('click', () => handlers.onChange({ mode: 'exact' }));
-    modeGroup.append(fuzzyButton, exactButton);
-    filterPanel.append(modeLabel, modeGroup);
-
-    const groups = [
-      ['标签', 'tags', filterOptions.tags, 'tags'],
-      ['平台', 'platforms', filterOptions.platforms, 'platforms'],
-      ['来源', 'sourceTypes', filterOptions.sourceTypes, 'sourceTypes'],
-      ['作者', 'authors', filterOptions.authors, 'authors'],
-    ];
-    const checkboxes = new Map();
-    for (const [title, key, options, stateKey] of groups) {
-      const group = filterGroup(
-        title,
-        key,
-        options,
-        () => currentState[stateKey],
-        handlers.onChange,
-      );
-      if (group) {
-        for (const checkbox of group.querySelectorAll('input')) {
-          checkboxes.set(`${key}:${checkbox.value}`, checkbox);
-        }
-        filterPanel.append(group);
-      }
-    }
-
-    const sortLabel = element('label', 'field-label', '排序');
-    sortLabel.htmlFor = 'skill-sort';
-    const sortSelect = element('select', 'sort-select');
-    sortSelect.id = 'skill-sort';
-    for (const [value, text] of [
-      ['auto', '自动'],
-      ['name', '名称'],
-      ['updated', '更新时间'],
-    ]) {
-      const option = element('option', null, text);
-      option.value = value;
-      sortSelect.append(option);
-    }
-    sortSelect.value = state.sort;
-    sortSelect.addEventListener('change', () => handlers.onChange({ sort: sortSelect.value }));
-    filterPanel.append(sortLabel, sortSelect);
-    filters.append(filterPanel);
-    layout.append(filters);
+    layout.append(filters.node);
 
     const content = element('div', 'list-content');
     const listTitle = element('h2', 'list-title', 'Skill 列表');
@@ -230,24 +113,6 @@
       status.textContent = message;
     }
 
-    function focusConditionTarget(condition) {
-      if (condition.kind === 'query') {
-        input.focus();
-        return;
-      }
-      if (condition.kind === 'mode') {
-        (condition.value === 'fuzzy' ? fuzzyButton : exactButton).focus();
-        return;
-      }
-      if (condition.kind === 'sort') {
-        sortSelect.focus();
-        return;
-      }
-      const checkbox = checkboxes.get(`${condition.key}:${condition.value}`);
-      if (checkbox && checkbox.offsetParent !== null) checkbox.focus();
-      else input.focus();
-    }
-
     function conditionsFor(nextState) {
       const chips = [];
       for (const condition of search.describeListConditions(nextState)) {
@@ -266,7 +131,7 @@
           } else {
             handlers.onChange({ [condition.key]: condition.value });
           }
-          focusConditionTarget(condition);
+          filters.focusConditionTarget(condition);
         });
         chip.append(remove);
         chips.push(chip);
@@ -340,17 +205,8 @@
 
     function update(nextState, nextResults) {
       currentState = nextState;
+      filters.update(nextState);
       manualPanel.hidden = true;
-      if (input.value !== nextState.query) input.value = nextState.query;
-      fuzzyButton.setAttribute('aria-pressed', String(nextState.mode === 'fuzzy'));
-      exactButton.setAttribute('aria-pressed', String(nextState.mode === 'exact'));
-      fuzzyButton.classList.toggle('is-active', nextState.mode === 'fuzzy');
-      exactButton.classList.toggle('is-active', nextState.mode === 'exact');
-      sortSelect.value = nextState.sort;
-      for (const [key, checkbox] of checkboxes) {
-        const selected = nextState[key.split(':')[0]];
-        checkbox.checked = selected.includes(checkbox.value);
-      }
       renderResults(nextState, nextResults);
     }
 
@@ -386,13 +242,9 @@
   }
 
   window.SkillGalleryViews = {
-    clear,
-    element,
     errorView,
     loadingView,
     notFound,
     renderList,
-    safeHref,
-    safeText,
   };
 })();

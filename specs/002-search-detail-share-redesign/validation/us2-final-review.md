@@ -50,7 +50,8 @@ US-002 变更范围（截至 T025）：`assets` 6 个文件、`tests` 13 个文�
   US-002 新 `.bin`/ZIP 的线上行为、部署失败回滚或 Pages 配置仍未验证。
 - 上传 CLI、GitHub 后台维护、自动更新和生产发布仍未实现；Q-004 已确认为每日 03:17 Asia/Shanghai，
   调度本身仍待 US-006 实现/启用。
-- `assets/app-views.js` 为 398 行，超过项目 300 行约束；建议后续拆分。
+- `assets/app-views.js` 曾为 398 行，超过项目 300 行约束；2026-11-07 已拆分为
+  `app-dom.js`、`app-filters.js` 与精简后的 `app-views.js`（均低于 300 行），行为与测试保持不变。
 - 依赖审计当前为 0 个漏洞；性能仍只代表隔离 headless 浏览器夹具。
 - 临时 CDP/Playwright 脚本和截图未提交；可重复的 Node 测试与 validation 记录已提交。
 

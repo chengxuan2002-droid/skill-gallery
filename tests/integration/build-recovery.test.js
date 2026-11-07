@@ -24,6 +24,11 @@ async function makeProject(t) {
     path.join(project.root, 'assets/app-search.js'),
     'globalThis.SEARCH_LOADED = true;',
   );
+  fs.writeFileSync(path.join(project.root, 'assets/app-dom.js'), 'globalThis.DOM_LOADED = true;');
+  fs.writeFileSync(
+    path.join(project.root, 'assets/app-filters.js'),
+    'globalThis.FILTERS_LOADED = true;',
+  );
   fs.writeFileSync(
     path.join(project.root, 'assets/app-views.js'),
     'globalThis.VIEWS_LOADED = true;',
