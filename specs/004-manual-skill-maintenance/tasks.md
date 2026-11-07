@@ -10,10 +10,10 @@ description: "US-004 管理员手动维护的实施任务"
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，
 以及 US-003 已交付的发布链与 validation 证据。
 
-**Status**: 任务于 2026-11-07 生成；当前 17 项。T001–T005 已完成（T001 见
+**Status**: 任务于 2026-11-07 生成；当前 17 项。T001–T006 已完成（T001 见
 [validation/preflight.md](validation/preflight.md)，T002/T005 见
-`tests/integration/manual-maintenance.test.js`，T003 见 `README.md` 手动维护章节，T004 见
-[validation/manual-add.md](validation/manual-add.md)）；T006–T017 未开始。分支
+`tests/integration/manual-maintenance.test.js`，T003/T006 见 `README.md` 手动维护章节，T004 见
+[validation/manual-add.md](validation/manual-add.md)）；T007–T017 未开始。分支
 `codex/us-004-manual-maintenance`（从 US-003 分支堆叠，未合并 main）。生产 Pages 未切换；
 手动发布验收只在隔离副本与受控仓库（POC-002）授权范围内进行。
 
@@ -81,7 +81,7 @@ description: "US-004 管理员手动维护的实施任务"
 
 ### Implementation / Validation for User Story 2
 
-- [ ] T006 [US2] 在 `README.md` 补充失败处理：字段/附件/路径/凭证错误的定位方式、整批阻止和
+- [X] T006 [US2] 在 `README.md` 补充失败处理：字段/附件/路径/凭证错误的定位方式、整批阻止和
   旧站保留、重新提交要求；示例只使用占位凭证。（FR-005、FR-007；AC-006、AC-008）
 - [ ] T007 [US2] 在隔离副本执行失败批次（至少缺字段、缺附件、凭证文件各一次），记录退出码、
   诊断码、旧产物不变证据与未运行项到
