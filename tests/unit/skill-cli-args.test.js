@@ -117,6 +117,8 @@ test('maps statuses and stable error codes to contract exit codes', () => {
   assert.equal(exitCodeFor({ status: 'failed', errors: [{ code: 'E_DEPLOY' }] }), 7);
   assert.equal(exitCodeFor({ status: 'failed', errors: [{ code: 'E_TIMEOUT' }] }), 8);
   assert.equal(exitCodeFor({ status: 'failed', errors: [{ code: 'E_SCHEMA' }] }), 2);
+  assert.equal(exitCodeFor({ status: 'pending' }), 0);
+  assert.equal(exitCodeFor({ status: 'pending', errors: [{ code: 'E_TIMEOUT' }] }), 8);
 });
 
 test('serializes one line of closed fields and never echoes secret values', () => {

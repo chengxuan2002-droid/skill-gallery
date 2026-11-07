@@ -32,7 +32,7 @@ const ERROR_EXIT_CODES = {
   E_TIMEOUT: EXIT_CODES.TIMEOUT,
 };
 
-const SUCCESS_STATUSES = new Set(['ok', 'previewed', 'noop', 'submitted', 'published']);
+const SUCCESS_STATUSES = new Set(['ok', 'previewed', 'noop', 'submitted', 'published', 'pending']);
 const OUTPUT_KEYS = [
   'status',
   'slug',
@@ -47,9 +47,10 @@ const OUTPUT_KEYS = [
 const ERROR_KEYS = ['code', 'path', 'message', 'expected', 'actual'];
 
 function exitCodeFor(result = {}) {
-  if (SUCCESS_STATUSES.has(result.status)) return EXIT_CODES.OK;
   const code = result.errors?.[0]?.code;
-  return ERROR_EXIT_CODES[code] ?? EXIT_CODES.USAGE;
+  if (code && ERROR_EXIT_CODES[code] !== undefined) return ERROR_EXIT_CODES[code];
+  if (SUCCESS_STATUSES.has(result.status)) return EXIT_CODES.OK;
+  return EXIT_CODES.USAGE;
 }
 
 function sanitizeErrors(errors) {
