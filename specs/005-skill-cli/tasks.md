@@ -10,13 +10,13 @@ description: "US-005 Agent 命令维护的实施任务"
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，
 US-003 发布链与 US-004 手动维护规则。
 
-**Status**: 任务于 2026-11-08 生成；当前 23 项。T001–T009 已完成（T001 见
+**Status**: 任务于 2026-11-08 生成；当前 23 项。T001–T010 已完成（T001 见
 [validation/preflight.md](validation/preflight.md)，T002–T004 见
 `tests/unit/skill-cli-args.test.js`、`tests/support/skill-cli-fixture.js` 与
 `scripts/lib/skill-cli/`，T005–T007 见 `tests/integration/skill-cli-add.test.js` 与
-[validation/us5-add.md](validation/us5-add.md)，T008–T009 见
-`tests/integration/skill-cli-replace.test.js` 与 `scripts/lib/skill-cli/replace.js`）；
-T010–T023 未开始。分支
+[validation/us5-add.md](validation/us5-add.md)，T008–T010 见
+`tests/integration/skill-cli-replace.test.js`、`scripts/lib/skill-cli/replace.js` 与
+[validation/us5-replace.md](validation/us5-replace.md)）；T011–T023 未开始。分支
 `codex/us-005-skill-cli`（从 US-004 分支堆叠，未合并 main）。生产 Pages 未启用；真实远端写入与
 POC-002 操作需单独授权。
 
@@ -71,7 +71,7 @@ POC-002 操作需单独授权。
   （FR-006、FR-009；AC-007、AC-011）
 - [X] T009 [US2] 实现 replace 流程（保留/替换元数据、expected revision、fast-forward 检查）；
   复验 T008。（FR-006、FR-009；AC-011）
-- [ ] T010 [US2] 在隔离临时仓库执行替换成功/冲突，记录提交、产物差异、退出码与未运行项到
+- [X] T010 [US2] 在隔离临时仓库执行替换成功/冲突，记录提交、产物差异、退出码与未运行项到
   `specs/005-skill-cli/validation/us5-replace.md`。（FR-006；AC-011）
 
 ## Phase 5: User Story 3 — GitHub 来源导入（Priority: P2）
