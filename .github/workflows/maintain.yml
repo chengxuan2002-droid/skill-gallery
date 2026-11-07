@@ -17,6 +17,8 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
+    outputs:
+      content_revision: ${{ steps.content.outputs.revision }}
     steps:
       - name: Check out code without persisted credentials
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -43,13 +45,32 @@ jobs:
       - name: Run secret, source and dependency scans
         run: npm run security
       - name: Build the static site
+        id: build
         run: npm run build
+      - name: Read content revision
+        id: content
+        run: |
+          REVISION=$(node -p 'require("./dist/manifest.json").contentRevision')
+          echo "revision=$REVISION" >> "$GITHUB_OUTPUT"
       - name: Verify the publish artifact
         run: node scripts/publish-check.js artifact --dist dist
       - name: Upload the Pages artifact
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: dist
+      - name: Write build summary
+        if: always()
+        env:
+          PUBLISH_PHASE: build
+          PUBLISH_RUN_ID: ${{ github.run_id }}
+          PUBLISH_TRIGGER: ${{ github.event_name }}
+          PUBLISH_TARGET_SHA: ${{ github.sha }}
+          PUBLISH_COMMIT_STATUS: not_applicable
+          PUBLISH_CONTENT_REVISION: ${{ steps.content.outputs.revision }}
+          PUBLISH_CONTENT_STATUS: ${{ steps.build.outcome == 'success' && 'built' || 'failed' }}
+          PUBLISH_JOB_STATUS: ${{ job.status }}
+          PUBLISH_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: node scripts/publish-summary.js
 
   deploy:
     needs: build
@@ -95,8 +116,17 @@ jobs:
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
       - name: Write publish summary
         if: always()
-        run: |
-          echo "## Publish run" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Target commit: $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Decision: ${{ steps.freshness.outputs.decision || 'unknown' }}" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Page: ${{ steps.deployment.outputs.page_url || 'not deployed' }}" >> "$GITHUB_STEP_SUMMARY"
+        env:
+          PUBLISH_PHASE: deploy
+          PUBLISH_RUN_ID: ${{ github.run_id }}
+          PUBLISH_TRIGGER: ${{ github.event_name }}
+          PUBLISH_TARGET_SHA: ${{ github.sha }}
+          PUBLISH_COMMIT_STATUS: not_applicable
+          PUBLISH_CONTENT_REVISION: ${{ needs.build.outputs.content_revision }}
+          PUBLISH_CONTENT_STATUS: built
+          PUBLISH_DEPLOY_DECISION: ${{ steps.freshness.outputs.decision || 'unknown' }}
+          PUBLISH_DEPLOY_OUTCOME: ${{ steps.deployment.outcome || 'skipped' }}
+          PUBLISH_JOB_STATUS: ${{ job.status }}
+          PUBLISH_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          PUBLISH_PAGE_URL: ${{ steps.deployment.outputs.page_url || '' }}
+        run: node scripts/publish-summary.js

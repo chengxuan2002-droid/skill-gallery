@@ -11,14 +11,15 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
 以及四份 0.2 文档：[调研](../../docs/IndustryResearch.md)、[需求](../../docs/DemandAnalysis.md)、
 [技术方案](../../docs/TechnicalSolution.md)、[编程规范](../../docs/AiProgrammingGuide.md)。
 
-**Status**: 任务于 2026-11-07 生成；当前 32 项，T031/T032 为 2026-11-07 分析修订追加，
-不重排既有 T001～T030。T001–T017 已完成本地实现与验证（Foundational 见
-[validation/foundational.md](validation/foundational.md)；US1 见
+**Status**: 任务于 2026-11-07 生成；当前 33 项，T031/T032 为 2026-11-07 分析修订追加，
+T033 为同日 Step Summary 补齐追加，不重排既有 T001～T030。T001–T017 与 T033 已完成本地实现与验证
+（Foundational 见 [validation/foundational.md](validation/foundational.md)；US1 见
 [validation/us3-snapshot.md](validation/us3-snapshot.md) 与
 [validation/us3-links.md](validation/us3-links.md)；US2 测试契约见
 `tests/unit/publish-status.test.js`、`tests/integration/publish-superseded.test.js` 与
 `tests/integration/publish-deploy-workflow.test.js`，恢复演练见
-[validation/us3-recovery.md](validation/us3-recovery.md)）；T018–T032 未开始。
+[validation/us3-recovery.md](validation/us3-recovery.md)，Step Summary 见
+[validation/us3-summary.md](validation/us3-summary.md)）；T018–T032 未开始。
 分支 `codex/us-003-validate-build-publish`（从 US-002 分支堆叠，当前未推送、未合并 main）。
 生产 Pages 源、environment、分支保护和线上切换未修改、未发布；受控仓库不可用时按未运行记录。
 
@@ -383,3 +384,12 @@ Polish 全量检查/取用回归/文档/复核。每一步在隔离副本验证�
   `specs/003-validate-build-publish/validation/us3-regression.md`；受控部署未授权时
   只做隔离构建等价检查并记录未运行项。
   （FR-011；AC-002、AC-005 回归）
+
+## 追加任务（2026-11-07 Step Summary 补齐）
+
+- [X] T033 [US2] 在 `.github/workflows/maintain.yml` 的 build 与 deploy Step Summary 中补齐完整
+  RunStatus 字段（运行标识/链接、触发方式、目标 SHA、`commit_status`、`content_revision`、
+  `content_status`、`deploy_status`、时间或 `run_url`、失败码/`superseded` 说明和可选页面地址），
+  复用 `scripts/lib/publish.js` 的状态模型；新增测试覆盖 build 成功/失败、deploy
+  `published`/`failed`/`superseded`、摘要脱敏和工作流字段；不改变触发、权限和部署顺序。
+  （FR-009；AC-011、AC-014）

@@ -87,7 +87,10 @@ deploy job `timeout-minutes: 10`；超时按失败处理并保留上次正常站
 
 Step Summary 至少包含：运行标识/链接、触发方式、目标 SHA、`commit_status`、`content_revision`、
 `content_status`、`deploy_status`、开始/结束时间或 `run_url`、失败码或 `superseded` 说明。
-禁止写入 token、cookie、响应正文、环境变量、用户文件内容或原始异常堆栈。公开页面不展示运行日志。
+实现由 `scripts/publish-summary.js` 读取 `PUBLISH_*` 环境变量并复用 `scripts/lib/publish.js` 的
+`createRunStatus`/`renderSummary`；build 与 deploy 各自以 `if: always()` 写入，页面地址仅在安全
+URL 时附加。禁止写入 token、cookie、响应正文、环境变量、用户文件内容或原始异常堆栈。
+公开页面不展示运行日志。
 
 ## 7. 外部前提（未授权不修改）
 

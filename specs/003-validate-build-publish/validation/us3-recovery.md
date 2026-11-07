@@ -69,5 +69,5 @@ node scripts/publish-check.js target --target <target> --remote <remote>
 - 未执行真实 GitHub Pages 部署、environment 审批或受控仓库 POC-002（T018）。
 - 未在 Node 26.3.0/npm 11.16.0、Linux/CI 或真实 GitHub runner 上运行。
 - 未验证浏览器刷新、线上 MIME/缓存或真实回滚；这些留待受控环境验证。
-- 当前 `maintain.yml` 的 Step Summary 尚未补齐完整 RunStatus 字段；本记录只验证状态模型和
-  失败保留语义，下一步再修改工作流摘要。
+- T033 已在 build/deploy Step Summary 中补齐完整 RunStatus 字段，见
+  [us3-summary.md](us3-summary.md)；本记录只验证状态模型和失败保留语义，不代表远程运行通过。

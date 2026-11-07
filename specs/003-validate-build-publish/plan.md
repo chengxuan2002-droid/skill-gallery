@@ -8,13 +8,14 @@
 **Input**: `specs/003-validate-build-publish/spec.md`，含四个内部切片、FR-007/009/011、
 NFR-003/004/006、AC-008/011/012/014 及生产授权边界。
 
-**Implementation Status**: T001–T017 已完成本地实现与验证（Foundational 见
+**Implementation Status**: T001–T017 与 T033 已完成本地实现与验证（Foundational 见
 [validation/foundational.md](validation/foundational.md)；US1 见
 [validation/us3-snapshot.md](validation/us3-snapshot.md) 与
 [validation/us3-links.md](validation/us3-links.md)；US2 测试契约见
 `tests/unit/publish-status.test.js`、`tests/integration/publish-superseded.test.js` 与
 `tests/integration/publish-deploy-workflow.test.js`，恢复演练见
-[validation/us3-recovery.md](validation/us3-recovery.md)）；T018–T032 未开始。
+[validation/us3-recovery.md](validation/us3-recovery.md)，Step Summary 见
+[validation/us3-summary.md](validation/us3-summary.md)）；T018–T032 未开始。
 生产 Pages 源、environment、分支保护和线上切换未修改；US-004～US-007 仍未开始。
 
 ## Summary
@@ -109,10 +110,14 @@ specs/003-validate-build-publish/
 ```text
 .github/workflows/maintain.yml          # 新增：push main / dispatch → build → deploy
 scripts/lib/publish.js                  # 新增：产物校验、目标判定、状态与摘要
+scripts/lib/publish-summary.js          # 新增：从 CI 环境构造 RunStatus 摘要
 scripts/publish-check.js                # 新增：本地/CI 校验 CLI（artifact/target）
+scripts/publish-summary.js              # 新增：Step Summary CI 入口
 tests/unit/publish.test.js              # 新增：纯函数与状态契约
+tests/unit/publish-summary.test.js      # 新增：摘要状态与脱敏
 tests/integration/publish-artifact.test.js # 新增：构建产物与失败注入
 tests/integration/publish-workflow.test.js # 新增：工作流静态断言
+tests/integration/publish-summary-workflow.test.js # 新增：摘要字段静态断言
 assets/                                 # 不改
 catalog/、skills/                       # 不改
 scripts/lib/build-site.js               # 不改；复用其 manifest 输出

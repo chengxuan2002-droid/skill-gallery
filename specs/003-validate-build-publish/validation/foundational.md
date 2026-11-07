@@ -48,4 +48,5 @@
 - Windows 不允许创建符号链接，对应测试跳过；未在支持环境补跑。
 - T010–T013 的 US1 验收已由 [us3-snapshot.md](us3-snapshot.md) 与
   [us3-links.md](us3-links.md) 记录；T014–T016 的 US2 测试契约已完成，T017 的隔离恢复演练见
-  [us3-recovery.md](us3-recovery.md)；T018–T032（US2 受控验证/US3/US4/Polish）未执行。
+  [us3-recovery.md](us3-recovery.md)，T033 的 Step Summary 验证见
+  [us3-summary.md](us3-summary.md)；T018–T032（US2 受控验证/US3/US4/Polish）未执行。
