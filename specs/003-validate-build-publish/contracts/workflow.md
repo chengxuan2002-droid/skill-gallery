@@ -77,6 +77,8 @@ concurrency:
 - 部署前以 `git ls-remote https://github.com/${GITHUB_REPOSITORY}.git refs/heads/main` 读取远端 HEAD，
   调用 `publish-check.js target`；`superseded` 时不执行部署。
 - 部署失败必须保留上次正常线上快照（平台行为），状态显示 `deploy_failed`；重跑同一提交不新建内容提交。
+- 内容未变化时允许重复部署同一快照；不要求检测线上是否已存在相同快照，但不得创建空内容提交
+  或把重复部署报告为内容更新。
 - 部署成功后输出 `page_url` 到 Step Summary；不得把“artifact 上传成功”当作“已部署”。
 
 ## 6. 状态与摘要

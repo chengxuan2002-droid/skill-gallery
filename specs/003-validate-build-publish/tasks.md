@@ -125,8 +125,8 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
   记录命令、结果和未运行浏览器项。
   （FR-011；AC-014）
 - [ ] T013 [US1] 对同一隔离项目连续构建两次，确认无变化时 `contentRevision` 与产物集合稳定、
-  `publish-check.js artifact` 仍通过、没有新增提交或部署；把结果补充到
-  `specs/003-validate-build-publish/validation/us3-snapshot.md`。
+  `publish-check.js artifact` 仍通过、没有新增内容提交；允许重复部署同一快照，但不得伪装成
+  内容更新；把结果补充到 `specs/003-validate-build-publish/validation/us3-snapshot.md`。
   （FR-009、FR-011；AC-011、AC-014）
 
 **Checkpoint**: US1 的合法/非法产物与固定路径行为可独立验证。
@@ -216,13 +216,14 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
   通过 `needs` 进入 build/deploy。
   （FR-009、FR-011；AC-014）
 - [ ] T024 [P] [US4] 在 `tests/unit/publish-noop.test.js` 增加 noop 场景：机器提交无内容变化时
-  `content_status=noop`、不部署、不新建内容提交；失败重跑保持同一 `target_sha`。
+  `content_status=noop`、不新建内容提交；允许重复部署同一快照，部署状态可为 `published` 或
+  `superseded`；失败重跑保持同一 `target_sha`。
   （FR-009；AC-011、AC-014）
 
 ### Validation for User Story 4
 
 - [ ] T025 [US4] 在隔离/受控环境模拟机器提交（或等价 commit），确认同一运行显式构建并部署
-  目标提交、无变化不部署；记录到
+  目标提交；无变化时允许重复部署同一快照，但不得新建内容提交或伪装成内容更新；记录到
   `specs/003-validate-build-publish/validation/us3-same-run.md`；未获授权时记录未运行。
   （FR-009、FR-011；AC-014）
 - [ ] T026 [US4] 复核 `specs/003-validate-build-publish/research.md` 中“同次运行显式部署”的结论与

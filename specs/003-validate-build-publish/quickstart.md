@@ -32,6 +32,7 @@ node scripts/publish-check.js artifact --dist dist
 
 - `npm run build` 输出 `status=built` 且 `dist/manifest.json` 存在；失败时不替换旧 `dist/`。
 - 产物校验输出 `status=verified`、`content_revision` 与 `files` 数量，退出码 `0`。
+- 内容未变化时允许重复部署同一快照；验收只要求不新建内容提交且不把重复部署伪装成内容更新。
 
 ## 3. 失败路径（隔离副本）
 

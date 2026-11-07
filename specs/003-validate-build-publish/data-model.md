@@ -25,12 +25,14 @@
 
 ```text
 pending → built → deploying → published
+pending → noop → deploying → published（内容未变化但允许重发同一快照）
 pending → failed
-built → superseded（部署前发现远端 HEAD 已变化）
+built/noop → superseded（部署前发现远端 HEAD 已变化）
 deploying → failed（部署失败或等待超时）
 ```
 
 `content_status` 与 `deploy_status` 必须能同时表达“已构建/已提交但部署失败”，不得合并为单一成功/失败。
+`noop` 表示内容未变化；允许仍部署同一快照，但不得创建空内容提交，也不得把重复部署伪装成新内容。
 
 ## 2. BuildArtifact
 

@@ -96,5 +96,6 @@ node scripts/publish-check.js target --target <sha> --remote <sha>
 
 - 只有 `status=verified` 且 `decision=current` 的产物可以进入部署。
 - 产物、索引、详情和 manifest 必须来自同一 `content_revision`。
+- `content_status=noop` 只表示内容未变化；允许部署同一快照，但不得创建空内容提交或标记为新内容。
 - 校验失败不得删除、覆盖或修改现有 `dist/`；只报告并退出非零。
 - 任何日志、摘要或 JSON 不得回显凭证值；只报告位置/类型/规则。

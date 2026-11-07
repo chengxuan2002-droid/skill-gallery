@@ -34,7 +34,8 @@ Context7 GitHub Actions 资料，再用 GitHub 官方 action 发布记录与 REA
 ## 3. 同一运行显式衔接，不使用隐式 push 链
 
 - **Decision**: 单一 `maintain.yml` 包含 `build` 与 `deploy` 两个 job；后续 US-006 在同一工作流增加
-  `sync` job，提交后通过 `needs` 进入同一运行的构建与部署。
+  `sync` job，提交后通过 `needs` 进入同一运行的构建与部署。内容未变化时允许重发同一快照，
+  不要求检测线上是否已存在相同快照，但不得创建空内容提交或伪装成内容更新。
 - **Rationale**: AC-014 明确要求自动提交后的发布不依赖另一次隐含 push；同一运行可追踪目标提交、
   构建产物和部署结果，失败可按同一 commit 重跑。
 - **Alternatives considered**: `workflow_run` 链（跨运行状态和顺序更难保证）；让机器人 push 再触发
