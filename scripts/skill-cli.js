@@ -7,6 +7,7 @@ const { importCandidate } = require('./lib/skill-cli/import');
 const { exitCodeFor, serializeResult } = require('./lib/skill-cli/output');
 const { publishCandidate } = require('./lib/skill-cli/publish');
 const { replaceCandidate } = require('./lib/skill-cli/replace');
+const { createGhRunReader, statusOutcome, waitForRun } = require('./lib/skill-cli/status');
 
 function failure(errors) {
   return {
@@ -36,40 +37,67 @@ function previewOutcome(candidate) {
   };
 }
 
-function commandResult(parsed) {
+async function waitForPublished(outcome) {
+  if (!outcome.commit_sha) return outcome;
+  let runId;
+  try {
+    runId = createGhRunReader().findByCommit(outcome.commit_sha);
+  } catch {
+    return outcome;
+  }
+  if (!runId) return outcome;
+  const waited = await waitForRun({ runId, reader: createGhRunReader() });
+  return waited.outcome;
+}
+
+async function publishOutcome(published, wait) {
+  if (!published.ok) return failure(published.diagnostics);
+  if (!wait) return { ...published.outcome, errors: [] };
+  const outcome = await waitForPublished(published.outcome);
+  return { ...outcome, errors: outcome.errors ?? [] };
+}
+
+async function commandResult(parsed) {
   if (parsed.command === 'preview' || parsed.command === 'add') {
     const loaded = loadCandidate({ inputPath: parsed.input, metaPath: parsed.metaPath });
     if (!loaded.ok) return failure(loaded.diagnostics);
     if (parsed.command === 'add' && parsed.publish) {
-      const published = publishCandidate({
-        projectRoot: process.cwd(),
-        candidate: loaded.candidate,
-      });
-      if (!published.ok) return failure(published.diagnostics);
-      return { ...published.outcome, errors: [] };
+      return publishOutcome(
+        publishCandidate({ projectRoot: process.cwd(), candidate: loaded.candidate }),
+        parsed.wait,
+      );
     }
     return previewOutcome(loaded.candidate);
   }
   if (parsed.command === 'import') {
-    const imported = importCandidate({
-      projectRoot: process.cwd(),
-      source: parsed.source,
-      metaPath: parsed.metaPath,
-      publish: parsed.publish,
-    });
-    if (!imported.ok) return failure(imported.diagnostics);
-    return { ...imported.outcome, errors: [] };
+    return publishOutcome(
+      importCandidate({
+        projectRoot: process.cwd(),
+        source: parsed.source,
+        metaPath: parsed.metaPath,
+        publish: parsed.publish,
+      }),
+      parsed.wait,
+    );
   }
   if (parsed.command === 'replace') {
-    const replaced = replaceCandidate({
-      projectRoot: process.cwd(),
-      slug: parsed.slug,
-      inputPath: parsed.input,
-      metaPath: parsed.metaPath,
-      expectedRevision: parsed.expectedRevision,
-    });
-    if (!replaced.ok) return failure(replaced.diagnostics);
-    return { ...replaced.outcome, errors: [] };
+    return publishOutcome(
+      replaceCandidate({
+        projectRoot: process.cwd(),
+        slug: parsed.slug,
+        inputPath: parsed.input,
+        metaPath: parsed.metaPath,
+        expectedRevision: parsed.expectedRevision,
+      }),
+      parsed.wait,
+    );
+  }
+  if (parsed.command === 'status') {
+    try {
+      return statusOutcome(parsed.runId, createGhRunReader().get(parsed.runId));
+    } catch {
+      return failure([{ code: 'E_SOURCE', path: null, message: '运行状态读取失败' }]);
+    }
   }
   return failure([{ code: 'E_INPUT', path: null, message: '命令尚未实现' }]);
 }
@@ -82,17 +110,15 @@ function emit(result) {
   process.exitCode = exitCodeFor(result);
 }
 
-function main(argv) {
+async function main(argv) {
   const parsed = parseArgs(argv);
   if (!parsed.ok) {
     emit(failure(parsed.diagnostics));
     return;
   }
-  emit(commandResult(parsed));
+  emit(await commandResult(parsed));
 }
 
-try {
-  main(process.argv.slice(2));
-} catch {
+main(process.argv.slice(2)).catch(() => {
   emit(failure([{ code: 'E_INPUT', path: null, message: '命令失败' }]));
-}
+});

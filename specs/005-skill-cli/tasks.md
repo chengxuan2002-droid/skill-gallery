@@ -10,14 +10,15 @@ description: "US-005 Agent 命令维护的实施任务"
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，
 US-003 发布链与 US-004 手动维护规则。
 
-**Status**: 任务于 2026-11-08 生成；当前 23 项。T001–T014 已完成（T001 见
+**Status**: 任务于 2026-11-08 生成；当前 23 项。T001–T015 已完成（T001 见
 [validation/preflight.md](validation/preflight.md)，T002–T010 见
 `tests/unit/skill-cli-args.test.js`、`tests/integration/skill-cli-{add,replace}.test.js`、
 `tests/support/skill-cli-fixture.js`、`scripts/lib/skill-cli/` 与
 [validation/us5-add.md](validation/us5-add.md)、[validation/us5-replace.md](validation/us5-replace.md)，
 T011–T013 见 `tests/integration/skill-cli-import.test.js`、
 `scripts/lib/skill-cli/source-github.js` 与 [validation/us5-import.md](validation/us5-import.md)，
-T014 见 `tests/unit/skill-cli-status.test.js`）；T015–T023 未开始。分支
+T014–T015 见 `tests/unit/skill-cli-status.test.js` 与 `scripts/lib/skill-cli/status.js`）；
+T016–T023 未开始。分支
 `codex/us-005-skill-cli`（从 US-004 分支堆叠，未合并 main）。生产 Pages 未启用；真实远端写入与
 POC-002 操作需单独授权。
 
@@ -90,7 +91,7 @@ POC-002 操作需单独授权。
 - [X] T014 [P] [US4] 在 `tests/unit/skill-cli-status.test.js` 建立状态派生契约：build/deploy
   job 组合、superseded、pending、失败与 `--wait` 超时 `8`；不得误报 published。
   （FR-009；AC-011）
-- [ ] T015 [US4] 实现 `scripts/lib/skill-cli/status.js` 与 `--wait` 轮询；复验 T014。
+- [X] T015 [US4] 实现 `scripts/lib/skill-cli/status.js` 与 `--wait` 轮询；复验 T014。
   （FR-009；AC-011）
 - [ ] T016 [US4] 用受控 POC-002 运行或固定运行状态执行 status/wait，记录 JSON、退出码、超时与
   未运行项到 `specs/005-skill-cli/validation/us5-status.md`。（FR-009；AC-011）
