@@ -10,9 +10,10 @@ description: "US-005 Agent 命令维护的实施任务"
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，
 US-003 发布链与 US-004 手动维护规则。
 
-**Status**: 任务于 2026-11-08 生成；当前 23 项。T001–T002 已完成（T001 见
+**Status**: 任务于 2026-11-08 生成；当前 23 项。T001–T003 已完成（T001 见
 [validation/preflight.md](validation/preflight.md)，T002 见
-`tests/unit/skill-cli-args.test.js`）；T003–T023 未开始。分支
+`tests/unit/skill-cli-args.test.js`，T003 见 `tests/support/skill-cli-fixture.js`）；
+T004–T023 未开始。分支
 `codex/us-005-skill-cli`（从 US-004 分支堆叠，未合并 main）。生产 Pages 未启用；真实远端写入与
 POC-002 操作需单独授权。
 
@@ -41,7 +42,7 @@ POC-002 操作需单独授权。
 - [X] T002 [P] 在 `tests/unit/skill-cli-args.test.js` 建立参数/退出码契约：命令互斥、必填、非法
   slug/SHA、`--wait` 仅用于 publish、JSON 单行与脱敏、退出码 `0/2/3/4/5/6/7/8` 映射。
   （FR-006、FR-007；AC-007、AC-008）
-- [ ] T003 [P] 在 `tests/support/skill-cli-fixture.js` 建立测试夹具：临时项目、临时裸远端、基线
+- [X] T003 [P] 在 `tests/support/skill-cli-fixture.js` 建立测试夹具：临时项目、临时裸远端、基线
   提交、候选 Skill/元数据、来源读取与运行查询注入；只写系统临时目录，测试结束清理。
   （FR-006；AC-007）
 - [ ] T004 实现 `scripts/skill-cli.js` 与 `scripts/lib/skill-cli/args.js`、`output.js`：命令分发、
