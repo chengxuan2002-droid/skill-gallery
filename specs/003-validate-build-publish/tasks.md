@@ -34,7 +34,7 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
 
 **Purpose**: 在实现前固定当前分支、构建和外部配置状态，并提供可重复的最小发布夹具。
 
-- [ ] T001 [P] 在 `specs/003-validate-build-publish/validation/preflight.md` 记录：分支与 HEAD、
+- [X] T001 [P] 在 `specs/003-validate-build-publish/validation/preflight.md` 记录：分支与 HEAD、
   Node/npm 实际版本与锁定版本、现有 `dist/` 状态、五个 action 版本/完整 SHA、Pages 源与
   environment 未修改、T041 macOS 与 US-002 合并状态；不读取或打印凭证。
   （FR-011、NFR-006；AC-014）
