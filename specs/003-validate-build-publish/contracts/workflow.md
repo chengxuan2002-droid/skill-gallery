@@ -21,7 +21,7 @@
 | Job | `permissions` | 说明 |
 |---|---|---|
 | `build` | `contents: read` | checkout、依赖安装、校验、构建、上传 artifact |
-| `deploy` | `pages: write`、`id-token: write` | 只做 Pages 部署；不需要仓库写权限 |
+| `deploy` | `contents: read`、`pages: write`、`id-token: write` | 读取目标提交并部署；没有仓库写权限 |
 | 未来 `sync`（US-006） | `contents: write` | 仅同步 job 可提交；不得下放给 build/deploy |
 
 工作流默认 `permissions: contents: read`。checkout 必须 `persist-credentials: false`；
@@ -44,8 +44,8 @@ concurrency:
 ```
 
 部署前比较目标提交与远端默认分支 HEAD；不一致时状态为 `superseded`，跳过 `deploy-pages`，
-但 job 不得误报“已发布”。同一提交重跑幂等，不新建内容提交。工作流 `timeout-minutes: 30`；
-超时按失败处理并保留上次正常站点。
+但 job 不得误报“已发布”。同一提交重跑幂等，不新建内容提交。build job `timeout-minutes: 30`；
+deploy job `timeout-minutes: 10`；超时按失败处理并保留上次正常站点。
 
 ## 4. 构建与 artifact
 

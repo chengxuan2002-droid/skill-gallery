@@ -69,7 +69,8 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
 - [X] T005 [P] 在 `tests/integration/publish-workflow.test.js` 先写失败契约：解析
   `.github/workflows/maintain.yml`，断言只监听 `push: main` 与 `workflow_dispatch`、无
   `pull_request_target`/`workflow_run`、工作流级 `concurrency` 为 `maintain-${{ github.ref }}` 且
-  `cancel-in-progress: false`、`timeout-minutes: 30`、默认 `permissions.contents: read`；
+  `cancel-in-progress: false`、build job `timeout-minutes: 30`、deploy job `timeout-minutes: 10`、
+  默认 `permissions.contents: read`；
   artifact 路径为 `dist`、部署 job 使用 `github-pages` environment 与 `pages` 并发组、
   所有 action 使用完整 40 位 SHA、无 `@vN` 浮动引用、无凭证或 PAT。T005 只覆盖基础结构；
   部署细节、权限细节和同次运行分别由 T016/T020/T023 补充，避免重复断言。
@@ -87,14 +88,15 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
   诊断到 stderr 且脱敏；退出码 `0` 通过/current、`2` 参数或读取错误、`4` superseded、
   `6` 产物无效；不写入、不执行 `dist/` 脚本、不发起网络请求。
   （FR-009、FR-011；AC-011、AC-014）
-- [ ] T008 新增 `.github/workflows/maintain.yml`：仅监听 `push: main` 与 `workflow_dispatch`；
+- [X] T008 新增 `.github/workflows/maintain.yml`：仅监听 `push: main` 与 `workflow_dispatch`；
   默认 `permissions: contents: read`，工作流级 `concurrency` 的 `group` 为
-  `maintain-${{ github.ref }}`、`cancel-in-progress: false`、`timeout-minutes: 30`；checkout 使用
+  `maintain-${{ github.ref }}`、`cancel-in-progress: false`；build job `timeout-minutes: 30`、
+  deploy job `timeout-minutes: 10`；checkout 使用
   `persist-credentials: false`。`build` job 使用固定 checkout/setup-node/setup-uv，安装锁定依赖与
   扫描器，运行 `npm run check`、`npm run security`、`npm run build`、
   `node scripts/publish-check.js artifact --dist dist`，再用固定
   `upload-pages-artifact` 上传 `dist/`；`deploy` job `needs: build`，使用
-  `github-pages` environment、`pages: write` 和 `id-token: write`、`pages` 并发组，
+  `github-pages` environment、`contents: read`、`pages: write` 和 `id-token: write`、`pages` 并发组，
   部署前比较远端 HEAD 并调用 `publish-check.js target`，`superseded` 时跳过部署；
   Step Summary 只写脱敏状态。不修改 Pages 设置或分支保护。
   （FR-007、FR-009、FR-011；NFR-003、NFR-004；AC-008、AC-011、AC-014）
@@ -195,7 +197,8 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
   验证为 0 个发现且不打印命中值。
   （FR-007、NFR-003；AC-008、AC-012）
 - [ ] T020 [US3] 在 `tests/integration/publish-security-workflow.test.js` 写权限静态断言：
-  默认 `contents: read`；`build` 不授予写权限；`deploy` 仅 `pages: write`/`id-token: write`；
+  默认 `contents: read`；`build` 不授予写权限；`deploy` 仅 `pages: write`、`id-token: write`
+  和 checkout/目标判定所需的 `contents: read`；
   checkout `persist-credentials: false`；无 PAT、secret、`pull_request_target`、fork 触发；
   Step Summary 不写入敏感字段。只补权限断言，不重复 T005 的基础结构项。
   （FR-007、NFR-003；AC-008）

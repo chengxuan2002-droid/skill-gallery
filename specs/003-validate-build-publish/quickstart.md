@@ -73,8 +73,10 @@ node --test tests/integration/publish-workflow.test.js
 期望：
 
 - 触发仅 `push: main` 和 `workflow_dispatch`，无 `pull_request_target`。
-- 工作流级 `concurrency` 为 `maintain-${{ github.ref }}`、`cancel-in-progress: false`，`timeout-minutes: 30`。
-- `build` 仅有 `contents: read`；`deploy` 仅有 `pages: write` 和 `id-token: write`。
+- 工作流级 `concurrency` 为 `maintain-${{ github.ref }}`、`cancel-in-progress: false`；
+  build job `timeout-minutes: 30`、deploy job `timeout-minutes: 10`。
+- `build` 仅有 `contents: read`；`deploy` 仅有 `pages: write`、`id-token: write` 和
+  checkout/目标判定所需的 `contents: read`。
 - artifact 路径为 `dist`，部署 job 使用 `github-pages` environment 与 `pages` 并发组。
 - 所有第三方 action 使用完整 SHA，无浮动的 `@vN`。
 - 无凭证、token、PAT 或未固定 URL。

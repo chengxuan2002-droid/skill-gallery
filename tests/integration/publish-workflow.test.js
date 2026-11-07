@@ -40,7 +40,6 @@ test('maintain workflow has the required triggers, permissions, concurrency and 
   assert.equal(workflow.permissions.contents, 'read');
   assert.equal(workflow.concurrency.group, 'maintain-${{ github.ref }}');
   assert.equal(workflow.concurrency['cancel-in-progress'], false);
-  assert.equal(workflow['timeout-minutes'], 30);
   assert.equal(text.includes('pull_request_target'), false);
   assert.equal(/secrets\./.test(text), false);
 
@@ -48,6 +47,8 @@ test('maintain workflow has the required triggers, permissions, concurrency and 
   const deploy = workflow.jobs.deploy;
   assert.ok(build);
   assert.ok(deploy);
+  assert.equal(build['timeout-minutes'], 30);
+  assert.equal(deploy['timeout-minutes'], 10);
 
   const buildSteps = steps(build);
   const checkout = buildSteps.find((step) =>
