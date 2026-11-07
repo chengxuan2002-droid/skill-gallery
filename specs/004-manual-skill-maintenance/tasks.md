@@ -10,7 +10,8 @@ description: "US-004 管理员手动维护的实施任务"
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，
 以及 US-003 已交付的发布链与 validation 证据。
 
-**Status**: 任务于 2026-11-07 生成；当前 17 项，T001–T017 未开始。分支
+**Status**: 任务于 2026-11-07 生成；当前 17 项。T001 已完成（见
+[validation/preflight.md](validation/preflight.md)）；T002–T017 未开始。分支
 `codex/us-004-manual-maintenance`（从 US-003 分支堆叠，未合并 main）。生产 Pages 未切换；
 手动发布验收只在隔离副本与受控仓库（POC-002）授权范围内进行。
 
@@ -31,7 +32,7 @@ description: "US-004 管理员手动维护的实施任务"
 
 **Purpose**: 固定当前分支、构建/测试基线和生产状态，为后续故事提供可复现记录。
 
-- [ ] T001 [P] 在 `specs/004-manual-skill-maintenance/validation/preflight.md` 记录：分支与 HEAD、
+- [X] T001 [P] 在 `specs/004-manual-skill-maintenance/validation/preflight.md` 记录：分支与 HEAD、
   Node/npm 实际版本与锁定版本、现有测试数量、首页页脚现状、生产 Pages 仍为 `legacy`、
   POC-002 可用性与本轮授权边界；不读取或打印凭证。（NFR-006；AC-006）
 
