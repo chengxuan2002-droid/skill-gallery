@@ -64,9 +64,31 @@ node scripts/publish-check.js target --target <target> --remote <remote>
 | 产物集合、大小、SHA-256 | 与第一次相同 |
 | 临时 Git 提交数 | 重跑前 `1`，重跑后 `1`，未新增内容提交 |
 
-## 6. 未运行与限制
+## 6. 受控仓库 POC-002（T018）
 
-- 未执行真实 GitHub Pages 部署、environment 审批或受控仓库 POC-002（T018）。
+**状态**: 未运行。未提供受控测试仓库、Pages 源切换和 environment 修改授权；用户要求
+不自动推送或发布。当前 `origin` 仍是生产仓库 `chengxuan2002-droid/skill-gallery`，当前分支
+`codex/us-003-validate-build-publish` 未推送。
+
+只读核对（未修改任何远程设置）：
+
+| 检查 | 结果 |
+|---|---|
+| `gh api repos/chengxuan2002-droid/skill-gallery/pages` | `build_type=legacy`，`source=main:/`，`status=built` |
+| `gh api repos/chengxuan2002-droid/skill-gallery/environments/github-pages` | `protection_rules=[branch_policy]` |
+| `npm run monitor:site` | 通过；首页、`assets/app.js`、`assets/style.css`、`assets/search-index.json` 均 HTTP 200 |
+| `git remote -v` | 仅配置生产仓库 `origin`，未发现受控测试仓库 |
+
+上述只读探测只证明当前站点可读和 Pages 仍为旧源，不证明部署失败保留、同一提交重跑或
+受控环境权限。本轮未推送、未切换 Pages 源、未触发 workflow、未部署。
+
+解除条件：提供受控测试仓库及明确授权后，按 [quickstart.md](../quickstart.md) 第 6 节切换
+Pages 源，注入部署失败，确认旧站可用，再按同一 commit 重跑成功，并记录运行 URL、目标 SHA、
+状态和未运行项。
+
+## 7. 未运行与限制
+
+- T018 的受控仓库 POC-002 未运行，原因见第 6 节；不得把本记录的本地模拟当作远程发布通过。
 - 未在 Node 26.3.0/npm 11.16.0、Linux/CI 或真实 GitHub runner 上运行。
 - 未验证浏览器刷新、线上 MIME/缓存或真实回滚；这些留待受控环境验证。
 - T033 已在 build/deploy Step Summary 中补齐完整 RunStatus 字段，见

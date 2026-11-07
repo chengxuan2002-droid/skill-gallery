@@ -63,8 +63,8 @@ US-002 的检索、详情、分享、响应式和键盘可访问改造已完成 
 2026-11-07 US-003 的 T001–T017 与 T033 已完成本地实现与验证：发布产物校验、`publish-check.js`、
 `maintain.yml` 骨架、US1 快照/子路径验收、US2 状态/部署测试契约、隔离恢复演练和完整
 RunStatus Step Summary 见 [US-003 validation](specs/003-validate-build-publish/validation/)；
-T018–T032 未开始，分支未推送，生产 Pages 未切换。当前本地 `npm test` 为 196 项
-（194 通过、0 失败、2 跳过，含 US-003 测试）。
+T018 未运行（无受控仓库授权），T019–T032 未开始，分支未推送，生产 Pages 未切换。
+当前本地 `npm test` 为 196 项（194 通过、0 失败、2 跳过，含 US-003 测试）。
 
 本地验收使用 Windows + Node 22.21.0；声明的 Node 26.3.0/Linux 由 CI 覆盖，结果见下方 Quality checks。
 初始化按步骤验证并提交，提交不等于推送或上线。

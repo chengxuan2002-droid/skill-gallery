@@ -15,7 +15,8 @@ NFR-003/004/006、AC-008/011/012/014 及生产授权边界。
 `tests/unit/publish-status.test.js`、`tests/integration/publish-superseded.test.js` 与
 `tests/integration/publish-deploy-workflow.test.js`，恢复演练见
 [validation/us3-recovery.md](validation/us3-recovery.md)，Step Summary 见
-[validation/us3-summary.md](validation/us3-summary.md)）；T018–T032 未开始。
+[validation/us3-summary.md](validation/us3-summary.md)）；T018 未运行（未提供受控测试仓库或授权），
+T019–T032 未开始。
 生产 Pages 源、environment、分支保护和线上切换未修改；US-004～US-007 仍未开始。
 
 ## Summary
