@@ -12,14 +12,14 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
 [技术方案](../../docs/TechnicalSolution.md)、[编程规范](../../docs/AiProgrammingGuide.md)。
 
 **Status**: 任务于 2026-11-07 生成；当前 33 项，T031/T032 为 2026-11-07 分析修订追加，
-T033 为同日 Step Summary 补齐追加，不重排既有 T001～T030。T001–T019 与 T033 已完成
+T033 为同日 Step Summary 补齐追加，不重排既有 T001～T030。T001–T020 与 T033 已完成
 （T018 在受控临时公开仓库执行；Foundational 见 [validation/foundational.md](validation/foundational.md)；US1 见
 [validation/us3-snapshot.md](validation/us3-snapshot.md) 与
 [validation/us3-links.md](validation/us3-links.md)；US2 测试契约见
 `tests/unit/publish-status.test.js`、`tests/integration/publish-superseded.test.js` 与
 `tests/integration/publish-deploy-workflow.test.js`，恢复演练见
 [validation/us3-recovery.md](validation/us3-recovery.md)，Step Summary 见
-[validation/us3-summary.md](validation/us3-summary.md)）；T020–T032 未开始。
+[validation/us3-summary.md](validation/us3-summary.md)）；T021–T032 未开始。
 T018 的受控 POC-002 结果见 [validation/us3-recovery.md](validation/us3-recovery.md) 第 6 节。
 分支 `codex/us-003-validate-build-publish`（从 US-002 分支堆叠，当前未推送、未合并 main）。
 生产 Pages 源、environment、分支保护和线上切换未修改、未发布；受控仓库不可用时按未运行记录。
@@ -206,7 +206,7 @@ T018 的受控 POC-002 结果见 [validation/us3-recovery.md](validation/us3-rec
   构造或使用 `YOUR_*_HERE` 占位符，不得在源码中出现完整私钥块；用 `npm run security:secrets`
   验证为 0 个发现且不打印命中值。
   （FR-007、NFR-003；AC-008、AC-012）
-- [ ] T020 [US3] 在 `tests/integration/publish-security-workflow.test.js` 写权限静态断言：
+- [X] T020 [US3] 在 `tests/integration/publish-security-workflow.test.js` 写权限静态断言：
   默认 `contents: read`；`build` 不授予写权限；`deploy` 仅 `pages: write`、`id-token: write`
   和 checkout/目标判定所需的 `contents: read`；
   checkout `persist-credentials: false`；无 PAT、secret、`pull_request_target`、fork 触发；
