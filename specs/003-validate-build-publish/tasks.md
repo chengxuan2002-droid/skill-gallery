@@ -160,7 +160,7 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
   `started_at`/`finished_at` 可空但只接受 ISO 8601；封闭字段拒绝未知键/枚举；`renderSummary`
   区分内容与部署状态且不泄露凭证/响应正文。
   （FR-009、NFR-004；AC-011）
-- [ ] T015 [P] [US2] 在 `tests/integration/publish-superseded.test.js` 写 CLI 契约：
+- [X] T015 [P] [US2] 在 `tests/integration/publish-superseded.test.js` 写 CLI 契约：
   目标 SHA 与远端 HEAD 相同返回 `0/current`；不同返回 `4/superseded`；非法 SHA 返回 `2`；
   命令不写入仓库、不发起部署。
   （FR-009、NFR-004；AC-011）
