@@ -62,7 +62,7 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
   字段/枚举（含 `commit_status`、可选 `started_at`/`finished_at`）；
   `renderSummary` 不包含凭证、响应正文或原始异常，并显示提交/构建/部署状态与运行时间或 `run_url`。
   （FR-007、FR-009、FR-011；AC-008、AC-011、AC-014）
-- [ ] T004 [P] 在 `tests/integration/publish-artifact.test.js` 先写失败契约：使用 T002 夹具构建
+- [X] T004 [P] 在 `tests/integration/publish-artifact.test.js` 先写失败契约：使用 T002 夹具构建
   `dist/` 后验证合法产物通过；额外文件、篡改字节、`.env`/`*.pem`/`id_rsa`、非同一
   `contentRevision` 全部失败关闭；失败不修改、不删除原 `dist/`。
   （FR-007、FR-011、NFR-003；AC-008、AC-014）
