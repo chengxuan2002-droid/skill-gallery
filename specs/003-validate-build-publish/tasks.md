@@ -82,7 +82,7 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
   `scripts/lib/secrets.js`，诊断只含 `code`/`path`/脱敏 `message`；不新增 npm 依赖、不修改内容
   schema、不写工作区 `dist/`。完成后复验 T003/T004。
   （FR-007、FR-009、FR-011；NFR-003；AC-008、AC-011、AC-014）
-- [ ] T007 实现 `scripts/publish-check.js`：支持
+- [X] T007 实现 `scripts/publish-check.js`：支持
   `artifact --dist <dir>` 与 `target --target <sha> --remote <sha>`；stdout 单行机器 JSON，
   诊断到 stderr 且脱敏；退出码 `0` 通过/current、`2` 参数或读取错误、`4` superseded、
   `6` 产物无效；不写入、不执行 `dist/` 脚本、不发起网络请求。
