@@ -66,7 +66,7 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
   `dist/` 后验证合法产物通过；额外文件、篡改字节、`.env`/`*.pem`/`id_rsa`、非同一
   `contentRevision` 全部失败关闭；失败不修改、不删除原 `dist/`。
   （FR-007、FR-011、NFR-003；AC-008、AC-014）
-- [ ] T005 [P] 在 `tests/integration/publish-workflow.test.js` 先写失败契约：解析
+- [X] T005 [P] 在 `tests/integration/publish-workflow.test.js` 先写失败契约：解析
   `.github/workflows/maintain.yml`，断言只监听 `push: main` 与 `workflow_dispatch`、无
   `pull_request_target`/`workflow_run`、工作流级 `concurrency` 为 `maintain-${{ github.ref }}` 且
   `cancel-in-progress: false`、`timeout-minutes: 30`、默认 `permissions.contents: read`；
