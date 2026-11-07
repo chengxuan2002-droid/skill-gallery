@@ -38,7 +38,7 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
   Node/npm 实际版本与锁定版本、现有 `dist/` 状态、五个 action 版本/完整 SHA、Pages 源与
   environment 未修改、T041 macOS 与 US-002 合并状态；不读取或打印凭证。
   （FR-011、NFR-006；AC-014）
-- [ ] T002 [P] 在 `tests/support/publish-fixture.js` 创建最小发布夹具：生成含 `index.html`、
+- [X] T002 [P] 在 `tests/support/publish-fixture.js` 创建最小发布夹具：生成含 `index.html`、
   `assets/` 前端模块、`catalog/` 与合法单文件/目录 Skill 的临时项目；调用
   `scripts/lib/build-site.js` 生成隔离 `dist/` 并返回路径；提供 40 位 SHA、额外文件、篡改字节和
   伪造凭证文件的注入辅助。凭证文件内容必须用占位符或运行时拼接生成，不写完整 token/私钥字面量；
