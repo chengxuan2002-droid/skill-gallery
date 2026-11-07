@@ -117,11 +117,11 @@ US-002 收口时本地 npm test 为 163 项
 US-002 分支 codex/us-002-search-detail-share 已推送到 origin 同名功能分支，尚未合并 main；
 Q-004 决策提交推送后的 Quality checks #42170060519 在 Node 26.3.0/Linux 成功。
 不能把功能分支验收或远程 CI 报告为生产发布。
-2026-11-07 US-003 的 T001–T018 与 T033 已完成：发布产物校验、`publish-check.js`、`maintain.yml`
-骨架、US1 快照/子路径验收、US2 状态/部署测试契约、隔离恢复演练、完整 RunStatus Step Summary
-和临时公开仓库 POC-002（部署失败/旧站保留/同提交重跑）见 specs/003-validate-build-publish/；
-T019–T032 未开始，分支未推送，生产未启用。当前本地 npm test 为 196 项
-（194 通过、0 失败、2 跳过，含 US-003 测试）。
+2026-11-07 US-003 的 T001–T032 与 T033 已完成本地/受控验证：发布产物校验、`publish-check.js`、
+`maintain.yml`、US1 快照/子路径、US2 状态/失败/恢复、US3 凭证/权限/匿名未授权尝试、US4 同次运行/noop、
+隔离恢复演练与取用回归见 specs/003-validate-build-publish/validation/；临时公开仓库 POC-002 验证了
+部署失败/旧站保留/同提交重跑、同次运行发布和匿名未授权拒绝。当前本地 npm test 为 211 项
+（209 通过、0 失败、2 跳过）；分支未推送，生产 Pages 未启用，生成、提交与验收不等于发布。
 首次初始化证据见 specs/001-preserve-skill-content/validation/bootstrap.md。
 2026-11-03 在 Windows 复核 T002～T010：`.gitattributes` 固定项目文本为 LF，`skills/**` 不做换行转换；
 测试夹具在 Windows 使用 junction，检查入口解析 `npm.cmd` 与扫描器 `.exe`，安装器支持 Windows zip 包但仍需网络。

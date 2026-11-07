@@ -60,11 +60,12 @@ US-002 的检索、详情、分享、响应式和键盘可访问改造已完成 
   [Quality checks #42170060519](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/42170060519)
   在 Node 26.3.0/Linux 成功；尚未合并 main。上传、自动更新和生产发布仍待后续故事。
 
-2026-11-07 US-003 的 T001–T018 与 T033 已完成：发布产物校验、`publish-check.js`、`maintain.yml`
-骨架、US1 快照/子路径验收、US2 状态/部署测试契约、隔离恢复演练、完整 RunStatus Step Summary
-和临时公开仓库 POC-002（部署失败/旧站保留/同提交重跑）见
-[US-003 validation](specs/003-validate-build-publish/validation/)；T019–T032 未开始，分支未推送，
-生产 Pages 未切换。当前本地 `npm test` 为 196 项（194 通过、0 失败、2 跳过，含 US-003 测试）。
+2026-11-07 US-003 的 T001–T032 与 T033 已完成本地/受控验证：发布产物校验、`publish-check.js`、
+`maintain.yml`、US1 快照/子路径、US2 状态/失败/恢复、US3 凭证/权限/匿名未授权尝试、US4 同次运行/noop、
+隔离恢复演练与取用回归见
+[US-003 validation](specs/003-validate-build-publish/validation/)；临时公开仓库 POC-002 验证了
+部署失败/旧站保留/同提交重跑、同次运行发布和匿名未授权拒绝。当前本地 `npm test` 为 211 项
+（209 通过、0 失败、2 跳过）；分支未推送，生产 Pages 未启用，本地构建或受控验收不等于线上发布。
 
 本地验收使用 Windows + Node 22.21.0；声明的 Node 26.3.0/Linux 由 CI 覆盖，结果见下方 Quality checks。
 初始化按步骤验证并提交，提交不等于推送或上线。
