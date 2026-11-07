@@ -64,10 +64,16 @@ US-002 的检索、详情、分享、响应式和键盘可访问改造已完成 
 `maintain.yml`、US1 快照/子路径、US2 状态/失败/恢复、US3 凭证/权限/匿名未授权尝试、US4 同次运行/noop、
 隔离恢复演练与取用回归见
 [US-003 validation](specs/003-validate-build-publish/validation/)；临时公开仓库 POC-002 验证了
-部署失败/旧站保留/同提交重跑、同次运行发布和匿名未授权拒绝。当前本地 `npm test` 为 211 项
+部署失败/旧站保留/同提交重跑、同次运行发布和匿名未授权拒绝。US-003 收口时本地 `npm test` 为 211 项
 （209 通过、0 失败、2 跳过）；已推送并创建
 [PR #1](https://github.com/chengxuan2002-droid/skill-gallery/pull/1)
 （Quality checks 42382079287/42382097367 通过），未合并；生产 Pages 未启用，本地构建或受控验收不等于线上发布。
+
+2026-11-07 US-004 的 T001–T015 已完成本地验证：GitHub 后台手动维护步骤、页脚低权重“管理”外链、
+必填字段与失败/替换/下架/恢复说明，以及隔离构建、失败批次、生命周期和入口证据见
+[US-004 validation](specs/004-manual-skill-maintenance/validation/)；当前本地 `npm test` 为 220 项
+（218 通过、0 失败、2 跳过）。T016/T017（受控仓库与最终复核）未完成；生产 Pages 未切换，
+手动提交或本地构建不等于线上发布。
 
 本地验收使用 Windows + Node 22.21.0；声明的 Node 26.3.0/Linux 由 CI 覆盖，结果见下方 Quality checks。
 初始化按步骤验证并提交，提交不等于推送或上线。
