@@ -1,6 +1,6 @@
 # Skill Gallery AI 编程规范
 
-> 状态：可进入开发；US-001 的 US1/US2/US3 切片已本地实现，T041 macOS 未运行 · 版本：0.2 · 日期：2026-11-01（状态补充：2026-11-04）
+> 状态：可进入开发；US-001、US-002 已完成本地实现与验收，T041 macOS 未运行，US-003～US-007 未开始 · 版本：0.2 · 日期：2026-11-01（状态补充：2026-11-06）
 > 输入基线：[IndustryResearch.md](IndustryResearch.md)、[DemandAnalysis.md](DemandAnalysis.md)、[TechnicalSolution.md](TechnicalSolution.md)，均为 0.2。
 
 ## 1. 实施总览
@@ -35,7 +35,7 @@ US-002、US-004、US-005、US-006 → US-007 整体验收
 
 ## 2. 编程工具与项目匹配
 
-采用 Spec-Kit 1.2.5 的 Codex Skills 集成，继续引用本轮文档稳定 ID。后续将需求映射 spec、技术映射 plan、项目约束映射 constitution、US 拆成 tasks；派生文档引用四份主文档及其版本，行为变化同步上游，不能用工具模板覆盖本轮业务决定。上述为初始化阶段状态；宪章 1.0.0、当前 spec/plan/tasks 及 US1 本地实现已在此后完成，US2/US3/Polish 仍未完成。
+采用 Spec-Kit 1.2.5 的 Codex Skills 集成，继续引用本轮文档稳定 ID。后续将需求映射 spec、技术映射 plan、项目约束映射 constitution、US 拆成 tasks；派生文档引用四份主文档及其版本，行为变化同步上游，不能用工具模板覆盖本轮业务决定。上述为初始化阶段状态；宪章 1.0.0、当前 spec/plan/tasks 及 US-001、US-002 已在此后完成本地实现与验收，US-003～US-007 尚未开始。
 
 实际执行的初始化命令如下，保留现有 Shell 脚本模式。`--force` 会合并或覆盖工具管理路径；本次执行前已在项目外备份，并对照检查业务文件与已有文档。
 
@@ -102,12 +102,12 @@ python3 -m http.server 8000
 | 层级 | 必测行为 | 命令状态与完成证据 |
 |---|---|---|
 | 现有语法 | 站点与构建脚本 | `node --check` 可用于单文件；完整检查以 `npm run lint` 为准 |
-| 单元/契约 | 元数据、slug 冲突、YAML、digest、搜索、排序、路径与输出状态 | `npm test` 已建立；US1/US2/US3 测试通过；US3 后本机 138 项中 137 通过、0 失败、1 跳过（扫描器已装）；干净 Linux 副本未装扫描器时 2 项失败；CI #41639767607 仍为 US2 时点 100 项 99 通过、0 失败、1 跳过 |
-| 内容集成 | 保真、ZIP 解包、二进制、附件删除、迁移、恶意 Markdown | `npm test` 已可执行；US1/US2/US3 迁移、保真、ZIP、下载、故障恢复与安全夹具通过 |
+| 单元/契约 | 元数据、slug 冲突、YAML、digest、搜索、排序、路径与输出状态 | `npm test` 已建立；US-001 内部三个切片与 US-002 的检索/详情/分享测试通过；2026-11-06 本机 163 项中 162 通过、0 失败、1 跳过（扫描器已装）；干净 Linux 副本未装扫描器时扫描器相关项失败；功能分支 CI #42170060519 在 Node 26.3.0/Linux 成功 |
+| 内容集成 | 保真、ZIP 解包、二进制、附件删除、迁移、恶意 Markdown | `npm test` 已可执行；US-001 内部切片的迁移、保真、ZIP、下载、故障恢复与安全夹具通过 |
 | 构建 | 干净 checkout 全量校验、静态白名单、索引/详情同快照 | `npm ci`、`npm run build` 已接入并在隔离四项项目验证；生产发布未验证 |
-| E2E/视觉 | 检索组合、详情、复制、窄屏、键盘和旧链接 | US2/US3 Edge headless 浏览器与安全验收见 specs/001-preserve-skill-content/validation/us2-browser.md、us3-failures.md；完整视觉/性能未验收 |
+| E2E/视觉 | 检索组合、详情、复制、窄屏、键盘和旧链接 | US-001 内部 US2/US3 的 Edge headless 浏览器与安全验收见 specs/001-preserve-skill-content/validation/us2-browser.md、us3-failures.md；US-002 的详情、可访问、跨浏览器与现站预检见 specs/002-search-detail-share-redesign/validation/；跨发布视觉回归和生产部署后验证仍未运行 |
 | 来源/发布集成 | fixed SHA、Release、限流、冲突、同次 workflow 显式部署 | 未实现；后续按 US-003/US-006 验证 |
-| 性能 | NFR-002 统一负载和统计方法 | 未测量；AC-015 的 50 次/p95 口径不能变 |
+| 性能 | NFR-002 统一负载和统计方法 | US-002 已在隔离 1,000 项/10 MiB 夹具按 50 次固定查询测得 p95：Chrome 39.9ms、Firefox 48.0ms、WebKit 50.0ms（候选线 200ms）；生产网络首载未测，AC-015 口径不能变 |
 
 本次文档工作不新建或运行业务测试。未来测试按风险选择，普通文档、颜色或文案微调不机械新增测试；文件替换、权限、自动发布等必须有失败路径验证。
 
@@ -213,8 +213,8 @@ AC-001、AC-002、AC-005、AC-012，以及 docs/TechnicalSolution.md 的 DEC-002
 | 产物 | 阶段/责任角色 | 完成条件 | 当前状态 |
 |---|---|---|---|
 | 四份规划文档 | 本次准备/规划 Agent | 依据、契约、任务、验收可追溯，未决明确 | 0.2 已同步三个关键决策；其余为待实现设计基线 |
-| 原件库及图库记录 | US-001/coding agent | 迁移和保真 AC 通过 | 四份 catalog 已生成；US1 迁移/保真、US3 故障/安全验收通过；T041 macOS 未运行 |
-| 静态界面与下载 | US-001、US-002/coding agent | 搜索详情完整可用、截图和性能报告 | US1 最小列表/详情、US2 完整复制/下载与 US3 安全展示/取用已验收；完整视觉/性能未验收 |
+| 原件库及图库记录 | US-001/coding agent | 迁移和保真 AC 通过 | 四份 catalog 已生成；US-001 内部 US1 迁移/保真与 US3 故障/安全验收通过；T041 macOS 未运行 |
+| 静态界面与下载 | US-001、US-002/coding agent | 搜索详情完整可用、截图和性能报告 | US-001 的最小列表/详情、复制/下载与安全取用已验收；US-002 的检索、详情、分享、可访问与隔离性能已完成本地验收，证据见 specs/002-search-detail-share-redesign/validation/；生产发布未实现 |
 | 手动/命令维护与 README | US-004、US-005/coding agent | 两入口发布闭环与认证通过 | 未实现 |
 | 定期升级与恢复 | US-006/coding agent | 单版本与失败保留验证 | 未实现 |
 | 构建发布与原地址交付 | US-003、US-007/coding agent、仓库维护者 | 白名单产物、固定地址、旧链、显式发布链 | 本地 dist 构建/preview 已验证；生产发布未实现 |
@@ -247,8 +247,10 @@ AC-001、AC-002、AC-005、AC-012，以及 docs/TechnicalSolution.md 的 DEC-002
 
 ## 8. 启动条件
 
-当前准备度以 [需求附录](DemandAnalysis.md#questions) 为准：**可进入开发**。US-001～US-007 按依赖推进，
-Q-001～Q-004 已关闭；Q-004 的每日 03:17 Asia/Shanghai 只作为 US-006 生产调度配置，调度实现和生产
-启用仍待该故事。依赖版本及外部能力仍按 PoC 验证，生产配置按实际授权。
+当前准备度以 [需求附录](DemandAnalysis.md#questions) 为准：**可进入开发**。US-001、US-002 已完成本地
+实现与验收，US-003～US-007 按依赖推进。Q-001～Q-004 已关闭；Q-004 的每日 03:17 Asia/Shanghai
+只作为 US-006 生产调度配置，调度实现和生产启用仍待该故事。依赖版本及外部能力仍按 PoC 验证，
+生产配置按实际授权。
 
-第一项是 US-001 与 POC-001，输入、边界和验收已在本文给出。此次请求仅授权准备文档，不能自动继续业务编码、安装项目依赖或发布。
+下一项是 US-003 与 POC-002，输入、边界和验收已在本文给出。后续业务编码、依赖安装和发布仍需
+对应授权，不能因本文档状态更新而自动开始。

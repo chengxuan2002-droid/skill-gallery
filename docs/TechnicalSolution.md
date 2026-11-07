@@ -1,7 +1,7 @@
 # Skill Gallery 技术方案
 
-> 状态：关键架构决策已确认；US-001 的 US1/US2/US3 切片已本地实现并完成隔离/浏览器/故障验收 · 版本：0.2 · 日期：2026-11-01（状态补充：2026-11-03）
-> 基线：[DemandAnalysis.md](DemandAnalysis.md) 0.2。除已注明的 US1 实现外，其余模块、命令和流水线仍为设计；
+> 状态：关键架构决策已确认；US-001、US-002 已完成本地实现与验收（US-001 的 T041 macOS 未运行）· 版本：0.2 · 日期：2026-11-01（状态补充：2026-11-06）
+> 基线：[DemandAnalysis.md](DemandAnalysis.md) 0.2。除已注明的 US-001/US-002 实现外，其余模块、命令和流水线仍为设计；
 > M-05～M-07、上传、自动更新与生产发布尚未实现。
 
 本方案按“应用架构 → 管理与使用闭环 → 集成验证”展开。公开站点继续由原生 JS 和 GitHub Pages 承载，后台复用 GitHub 仓库与 Actions；站点原地址不变。Q-001～003 已由用户确认：GitHub 后台、GitHub 首版自动更新、当前单版本并保留 Git 历史。专用管理后台不属于本轮范围，未来变更需先修订 DEC-001、DEC-006。
@@ -45,7 +45,7 @@ Node 内建测试显式限定受信任目录；安全检查使用独立本地 Gi
 Semgrep 通过 uv 的独立工具环境安装，不改变站点的 npm 包管理方式；扫描器不进入生产产物。
 此项仅支撑 NFR-003/NFR-006、DEC-005/009，不能替代 C-01/03 内容校验与业务 PoC；首次工程初始化未包含 Actions、部署及线上监控；下述提前建设授权仅覆盖只检查 CI 与现站基础监测，生产发布链仍属 US-003。
 
-2026-11-03 US1/US2/US3 实现补充：T011–T024 已完成，新增 `catalog/` 四份记录、四固定路径迁移、完整 dist 构建（索引/详情/raw/ZIP/manifest/事务）、
+2026-11-03 US-001 内部 US1/US2/US3 实现补充：T011–T024 已完成，新增 `catalog/` 四份记录、四固定路径迁移、完整 dist 构建（索引/详情/raw/ZIP/manifest/事务）、
 只读预览及前端最小适配；隔离验收见 [us1-test-contracts.md](../specs/001-preserve-skill-content/validation/us1-test-contracts.md)、
 [us1-migration.md](../specs/001-preserve-skill-content/validation/us1-migration.md)。
 US2 的完整查阅、复制和下载已完成本地实现与浏览器验收，见
@@ -54,6 +54,15 @@ US3 的非法内容、路径攻击、构建故障与恢复已完成本地验收�
 [us3-failures.md](../specs/001-preserve-skill-content/validation/us3-failures.md)；
 T039/T040/T042/T043 已完成，T041 仅 Linux/WSL 通过、macOS 未运行，不能称上游 US-001 完成。
 T052 quality workflow 已在开发分支的 Node 26.3.0/Linux CI 通过，见 [ci-security.md](../specs/001-preserve-skill-content/validation/ci-security.md)。
+
+2026-11-06 US-002 实现补充：T001–T026 已完成本地实现、验收和文档收口，新增无 DOM 的
+`assets/app-search.js` 并纳入构建复制与 `contentRevision`，未改变索引/详情 `schemaVersion=1` 或
+catalog schema；检索、详情、分享与可访问行为及隔离四项构建证据见
+[specs/002-search-detail-share-redesign/validation/](../specs/002-search-detail-share-redesign/validation/)。
+本机 `npm test` 为 163 项（162 通过、0 失败、1 跳过）；1,000 项/10 MiB 隔离夹具的 50 次查询 p95 为
+Chrome 39.9ms、Firefox 48.0ms、WebKit 50.0ms（候选线 200ms，非生产承诺）。功能分支
+`codex/us-002-search-detail-share` 已推送，未合并 main、未生产发布；生产 Pages 仅做只读 MIME/缓存预检，
+部署后 `.bin`/ZIP 响应、回滚与跨发布视觉回归仍未验证。
 
 ### 1.3 提前建设检查 CI 与现站监测（2026-11-02）
 
@@ -329,7 +338,9 @@ Agent：读取 README → 检查已有凭证和参数 → dry-run → 显式 pub
 | POC-002 子路径与发布触发 | coding agent，US-003 | 本地 `/skill-gallery/` 预览可读；受控测试仓库验证自动提交后显式发布，权限不扩大 | 回到 DEC-008，真实仓库设置由维护者决定 |
 | POC-003 GitHub 固定 SHA 与许可范围 | coding agent，US-006（Q-002 已确认） | 对测试来源完整读文件和二进制，分支/Release/删除文件/限流夹具通过 | 报告不支持的来源，不静默降级抓 HTML |
 
-POC-001 已用锁定依赖完成本地夹具验证；POC-002/003、内容发布链的远程写入、部署和性能实测尚未完成。
+POC-001 已用锁定依赖完成本地夹具验证；POC-002/003 与内容发布链的远程写入、部署尚未完成。
+NFR-002 已在 US-002 的隔离 1,000 项/10 MiB 夹具实测（p95 见
+[us2-performance.md](../specs/002-search-detail-share-redesign/validation/us2-performance.md)），不是生产网络或设备承诺。
 
 ## 14. 性能与扩展触发
 
@@ -349,6 +360,7 @@ NFR-002 的 1,000 项/10 MiB/50 次/p95 200ms 为统一候选口径，测法见 
 ## 15. 技术准备结论
 
 GitHub 管理、首版 GitHub 自动更新及 Git 历史保留已获用户确认，核心设计可按 US 依赖进入开发。
-US-001 的 US1/US2/US3 切片已完成本地实现和隔离/浏览器/故障验收；T041 macOS、同快照生产发布
-及其他故事仍未完成。Q-004 已于 2026-11-06 确认每日 03:17 Asia/Shanghai，但自动更新与生产调度
-仍待 US-006 实现/启用。最终准备度及决策状态以 [需求附录](DemandAnalysis.md#questions) 为准。
+US-001 已完成本地实现和隔离/浏览器/故障验收，US-002 已完成检索、详情、分享与可访问的本地验收；
+T041 macOS、同快照生产发布和 US-003～US-007 仍未完成。Q-004 已于 2026-11-06 确认每日 03:17
+Asia/Shanghai，但自动更新与生产调度仍待 US-006 实现/启用。最终准备度及决策状态以
+[需求附录](DemandAnalysis.md#questions) 为准。

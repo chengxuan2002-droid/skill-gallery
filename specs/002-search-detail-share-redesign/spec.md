@@ -4,7 +4,8 @@
 
 **Created**: 2026-11-05
 
-**Status**: Draft — 已依据四份 0.2 文档、宪章 1.0.0 与 US-001 本地交付基线创建；不表示业务实现或生产发布完成。
+**Status**: Implemented（本地验收）— 2026-11-05 T001–T026 完成本地实现、验收与文档收口；
+功能分支已推送，尚未合并 main 或生产发布。证据见 [validation/](validation/)。
 
 **Input**: User description: "依据 AGENTS.md、宪章、四份规范及当前 spec/plan/tasks，为 US-002（检索、详情、分享与视觉改版）创建功能规格。"
 
