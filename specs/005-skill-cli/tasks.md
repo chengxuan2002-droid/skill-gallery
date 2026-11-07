@@ -10,7 +10,7 @@ description: "US-005 Agent 命令维护的实施任务"
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，
 US-003 发布链与 US-004 手动维护规则。
 
-**Status**: 任务于 2026-11-08 生成；当前 23 项。T001–T021 已完成（T001 见
+**Status**: 任务于 2026-11-08 生成；当前 23 项。T001–T022 已完成（T001 见
 [validation/preflight.md](validation/preflight.md)，T002–T010 见
 `tests/unit/skill-cli-args.test.js`、`tests/integration/skill-cli-{add,replace}.test.js`、
 `tests/support/skill-cli-fixture.js`、`scripts/lib/skill-cli/` 与
@@ -21,7 +21,8 @@ T014–T016 见 `tests/unit/skill-cli-status.test.js`、`scripts/lib/skill-cli/s
 [validation/us5-status.md](validation/us5-status.md)，T017–T018 见 `README.md`
 “Agent 命令（skill-cli）”与 [validation/us5-readme.md](validation/us5-readme.md)，T019 见
 [validation/us5-quality.md](validation/us5-quality.md)，T020 见 `README.md`/`AGENTS.md`，
-T021 见 [validation/us5-poc.md](validation/us5-poc.md)）；T022–T023 未开始。分支
+T021 见 [validation/us5-poc.md](validation/us5-poc.md)，T022 见
+[validation/us5-final-review.md](validation/us5-final-review.md)）；T023 未开始。分支
 `codex/us-005-skill-cli`（从 US-004 分支堆叠，未合并 main）。生产 Pages 未启用；真实远端写入与
 POC-002 操作需单独授权。
 
@@ -117,7 +118,7 @@ POC-002 操作需单独授权。
 - [X] T021 在受控 POC-002 执行一次真实发布/替换/状态查询（需授权），记录运行 URL、提交 SHA、
   JSON 状态与未运行项到 `specs/005-skill-cli/validation/us5-poc.md`；生产 Pages 未切换。
   （FR-006、FR-009；AC-007、AC-011）
-- [ ] T022 复核 `spec.md`、`contracts/` 与 `validation/`：未改内容 schema、搜索/详情前端、发布权限
+- [X] T022 复核 `spec.md`、`contracts/` 与 `validation/`：未改内容 schema、搜索/详情前端、发布权限
   或生产 Pages；失败项与未运行项单独列出；更新 tasks/plan 状态，记录到
   `specs/005-skill-cli/validation/us5-final-review.md`。
   （FR-006、FR-007、FR-009；AC-007、AC-008、AC-011）

@@ -75,10 +75,10 @@ US-002 的检索、详情、分享、响应式和键盘可访问改造已完成 
 （218 通过、0 失败、2 跳过）。T016/T017 已完成受控发布与最终复核；生产 Pages 未切换，
 手动提交或本地构建不等于线上发布。
 
-2026-11-08 US-005 的 T001–T019 已完成本地验证：`skill-cli` 的 preview/add/import/replace/status、
-JSON 输出与退出码、隔离 worktree 和临时裸远端证据见
+2026-11-08 US-005 的 T001–T022 已完成本地/受控验证：`skill-cli` 的 preview/add/import/replace/status、
+JSON 输出与退出码、隔离 worktree、临时裸远端和 POC-002 新增/替换/状态查询证据见
 [US-005 validation](specs/005-skill-cli/validation/)；当前本地 `npm test` 为 241 项
-（239 通过、0 失败、2 跳过）。T021–T023 与受控 POC 发布未完成；生产 Pages 未切换，
+（239 通过、0 失败、2 跳过）。T023 quickstart 走查待完成；生产 Pages 未切换，
 Agent 命令或本地构建不等于线上发布。
 
 本地验收使用 Windows + Node 22.21.0；声明的 Node 26.3.0/Linux 由 CI 覆盖，结果见下方 Quality checks。

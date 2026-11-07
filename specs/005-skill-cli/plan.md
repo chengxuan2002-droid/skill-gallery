@@ -6,7 +6,8 @@
 **Input**: [spec.md](spec.md)，含五个内部切片、FR-006/007/009/010、NFR-003/004/006、
 AC-007/008/011 及生产授权边界。
 
-**Implementation Status**: 实施任务未开始（规划阶段）；生产 Pages 未启用。
+**Implementation Status**: T001–T022 已完成本地/受控验证（T021 在 POC-002 执行；证据见
+[validation/](validation/)）；T023 quickstart 走查待完成；生产 Pages 未启用。
 
 ## Summary
 
