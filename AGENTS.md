@@ -107,7 +107,7 @@ npx ctx7@latest docs <libraryId> "单一概念的具体问题"
 2026-11-05 US-002 的 T001–T026 已完成本地实现、验收与文档收口。
 证据入口：specs/002-search-detail-share-redesign/validation/ 下的 us2-search、us2-detail、us2-accessibility、
 us2-performance、us2-build、us2-regression、us2-quality、us2-cross-browser、us2-production-preflight。
-当前本地 npm test 为 163 项
+US-002 收口时本地 npm test 为 163 项
 （162 通过、0 失败、1 跳过）；security:secrets/code 无发现，security:deps 为 0 个漏洞（通过
 `minimatch@11.0.4` override）。Chrome 152/Edge 156/Firefox 157.0/WebKit 27.2 浏览器证据覆盖
 360/768/1440、明暗主题、键盘和减少动效；仍未验证 Safari/移动实机。1,000 项/10 MiB 隔离夹具的
@@ -117,6 +117,10 @@ us2-performance、us2-build、us2-regression、us2-quality、us2-cross-browser�
 US-002 分支 codex/us-002-search-detail-share 已推送到 origin 同名功能分支，尚未合并 main；
 Q-004 决策提交推送后的 Quality checks #42170060519 在 Node 26.3.0/Linux 成功。
 不能把功能分支验收或远程 CI 报告为生产发布。
+2026-11-07 US-003 的 T001–T013 已完成本地实现与验证：发布产物校验、`publish-check.js`、
+`maintain.yml` 骨架和 US1 快照/子路径验收见
+specs/003-validate-build-publish/validation/；T014–T032 未开始，分支未推送，生产未启用。
+当前本地 npm test 为 177 项（175 通过、0 失败、2 跳过，含 US-003 T001–T013 测试）。
 首次初始化证据见 specs/001-preserve-skill-content/validation/bootstrap.md。
 2026-11-03 在 Windows 复核 T002～T010：`.gitattributes` 固定项目文本为 LF，`skills/**` 不做换行转换；
 测试夹具在 Windows 使用 junction，检查入口解析 `npm.cmd` 与扫描器 `.exe`，安装器支持 Windows zip 包但仍需网络。

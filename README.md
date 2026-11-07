@@ -51,7 +51,7 @@ US-002 的检索、详情、分享、响应式和键盘可访问改造已完成 
   [US-001 取用回归](specs/002-search-detail-share-redesign/validation/us2-regression.md)、
   [跨浏览器](specs/002-search-detail-share-redesign/validation/us2-cross-browser.md)、
   [生产只读预检](specs/002-search-detail-share-redesign/validation/us2-production-preflight.md)。
-- 当前本地 `npm test` 为 163 项（162 通过、0 失败、1 跳过）；Gitleaks/Semgrep 无发现，
+- US-002 收口时本地 `npm test` 为 163 项（162 通过、0 失败、1 跳过）；Gitleaks/Semgrep 无发现，
   依赖审计为 0 个漏洞。
 - 浏览器证据来自 Chrome 152（Chromium）、Edge 156、Firefox 157.0 和 WebKit 27.2；
   1,000 项/10 MiB 隔离夹具上 50 次查询 p95 分别为 Chrome 39.9ms、Firefox 48.0ms、WebKit 50.0ms，
@@ -59,6 +59,12 @@ US-002 的检索、详情、分享、响应式和键盘可访问改造已完成 
 - US-002 的 T025 文档更新和 T026 最终复核已完成。2026-11-06 已推送功能分支；
   [Quality checks #42170060519](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/42170060519)
   在 Node 26.3.0/Linux 成功；尚未合并 main。上传、自动更新和生产发布仍待后续故事。
+
+2026-11-07 US-003 的 T001–T013 已完成本地实现与验证：发布产物校验、`publish-check.js`、
+`maintain.yml` 骨架和 US1 快照/子路径验收见
+[US-003 validation](specs/003-validate-build-publish/validation/)；T014–T032 未开始，分支未推送，
+生产 Pages 未切换。当前本地 `npm test` 为 177 项（175 通过、0 失败、2 跳过，含 US-003 测试）。
+
 本地验收使用 Windows + Node 22.21.0；声明的 Node 26.3.0/Linux 由 CI 覆盖，结果见下方 Quality checks。
 初始化按步骤验证并提交，提交不等于推送或上线。
 

@@ -46,4 +46,5 @@
 - 未执行 `.github/workflows/maintain.yml` 的远程运行；未启用 Pages GitHub Actions 源。
 - 未进行真实 Pages 部署、environment 审批或线上检查。
 - Windows 不允许创建符号链接，对应测试跳过；未在支持环境补跑。
-- 未执行 T010 之后的 US1/US2/US3/US4 验收。
+- T010–T013 的 US1 验收已由 [us3-snapshot.md](us3-snapshot.md) 与
+  [us3-links.md](us3-links.md) 记录；T014–T032（US2/US3/US4/Polish）未执行。
