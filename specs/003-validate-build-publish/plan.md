@@ -1,7 +1,7 @@
 # Implementation Plan: US-003 校验、构建与原地址发布流水线
 
 **Branch**: 功能标识 `003-validate-build-publish`；实际 Git 分支 `codex/us-003-validate-build-publish`
-（从 US-002 功能分支堆叠，未合并 main）。
+（从 US-002 功能分支堆叠，已推送并创建 PR #1，未合并 main）。
 
 **Date**: 2026-11-07 | **Spec**: [spec.md](spec.md)
 

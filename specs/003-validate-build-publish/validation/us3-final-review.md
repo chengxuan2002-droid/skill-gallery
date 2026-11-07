@@ -64,7 +64,9 @@
 
 - 生产 Pages 源、environment、分支保护和线上切换未修改；本故事交付的是可审阅配置、本地/受控验证，
   不是生产发布验收。
-- US-002 分支未合并 `main`（本地 tip 比远端多 2 个提交）；US-003 分支未推送、未合并。
+- US-002 分支未合并 `main`（本地 tip 比远端多 2 个提交）；US-003 已推送并创建
+  [PR #1](https://github.com/chengxuan2002-droid/skill-gallery/pull/1)（Quality checks
+  `42382079287`/`42382097367` 均通过），未合并。
 - T041 的 macOS 缺口保持未验证、未勾选；US-002/US-001 既有浏览器与平台证据未重新执行。
 - 未在 Node 26.3.0/Linux 本地复验；未在本地运行完整 `npm run check`/`npm run security` 的 GitHub
   runner 组合（POC 使用精简 workflow，未含 check/security）。

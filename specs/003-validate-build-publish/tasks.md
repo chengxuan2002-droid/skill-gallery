@@ -27,7 +27,7 @@ T033 为同日 Step Summary 补齐追加，不重排既有 T001～T030。T001–
 2026-11-07 已将 publish 集成测试重组到 `tests/integration/publish/`，`npm test` 同步覆盖该目录；
 历史 validation 记录保留执行时路径。
 T018 的受控 POC-002 结果见 [validation/us3-recovery.md](validation/us3-recovery.md) 第 6 节。
-分支 `codex/us-003-validate-build-publish`（从 US-002 分支堆叠，当前未推送、未合并 main）。
+分支 `codex/us-003-validate-build-publish`（从 US-002 分支堆叠，已推送并创建 PR #1，未合并 main）。
 生产 Pages 源、environment、分支保护和线上切换未修改、未发布；受控仓库不可用时按未运行记录。
 
 **Tests**: spec 的 Independent Test、Acceptance Scenarios 与 US003-SC-01～06 要求验证；宪章 IX 要求

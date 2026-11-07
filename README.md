@@ -65,7 +65,9 @@ US-002 的检索、详情、分享、响应式和键盘可访问改造已完成 
 隔离恢复演练与取用回归见
 [US-003 validation](specs/003-validate-build-publish/validation/)；临时公开仓库 POC-002 验证了
 部署失败/旧站保留/同提交重跑、同次运行发布和匿名未授权拒绝。当前本地 `npm test` 为 211 项
-（209 通过、0 失败、2 跳过）；分支未推送，生产 Pages 未启用，本地构建或受控验收不等于线上发布。
+（209 通过、0 失败、2 跳过）；已推送并创建
+[PR #1](https://github.com/chengxuan2002-droid/skill-gallery/pull/1)
+（Quality checks 42382079287/42382097367 通过），未合并；生产 Pages 未启用，本地构建或受控验收不等于线上发布。
 
 本地验收使用 Windows + Node 22.21.0；声明的 Node 26.3.0/Linux 由 CI 覆盖，结果见下方 Quality checks。
 初始化按步骤验证并提交，提交不等于推送或上线。
