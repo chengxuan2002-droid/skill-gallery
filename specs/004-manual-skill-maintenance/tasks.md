@@ -10,13 +10,13 @@ description: "US-004 管理员手动维护的实施任务"
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，
 以及 US-003 已交付的发布链与 validation 证据。
 
-**Status**: 任务于 2026-11-07 生成；当前 17 项。T001–T011 已完成（T001 见
+**Status**: 任务于 2026-11-07 生成；当前 17 项。T001–T012 已完成（T001 见
 [validation/preflight.md](validation/preflight.md)，T002/T005/T008 见
 `tests/integration/manual-maintenance.test.js`，T003/T006/T009 见 `README.md` 手动维护章节，T004 见
 [validation/manual-add.md](validation/manual-add.md)，T007 见
 [validation/manual-failures.md](validation/manual-failures.md)，T010 见
 [validation/manual-replace-remove-recovery.md](validation/manual-replace-remove-recovery.md)，T011 见
-`tests/unit/site-entry.test.js`）；T012–T017 未开始。分支
+`tests/unit/site-entry.test.js`，T012 见 `index.html`）；T013–T017 未开始。分支
 `codex/us-004-manual-maintenance`（从 US-003 分支堆叠，未合并 main）。生产 Pages 未切换；
 手动发布验收只在隔离副本与受控仓库（POC-002）授权范围内进行。
 
@@ -130,7 +130,7 @@ description: "US-004 管理员手动维护的实施任务"
 
 ### Implementation / Validation for User Story 4
 
-- [ ] T012 [US4] 修改 `index.html` 与 `assets/style.css`：页脚增加低权重“管理”外链，
+- [X] T012 [US4] 修改 `index.html` 与 `assets/style.css`：页脚增加低权重“管理”外链，
   不改变主视觉、搜索/详情行为或运行时依赖。（FR-007、FR-010；AC-008）
 - [ ] T013 [US4] 运行入口测试与隔离构建，记录链接、构建后首页包含情况、未运行项到
   `specs/004-manual-skill-maintenance/validation/admin-entry.md`。
