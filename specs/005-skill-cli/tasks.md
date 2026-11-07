@@ -10,11 +10,11 @@ description: "US-005 Agent 命令维护的实施任务"
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，
 US-003 发布链与 US-004 手动维护规则。
 
-**Status**: 任务于 2026-11-08 生成；当前 23 项。T001–T006 已完成（T001 见
+**Status**: 任务于 2026-11-08 生成；当前 23 项。T001–T007 已完成（T001 见
 [validation/preflight.md](validation/preflight.md)，T002–T004 见
 `tests/unit/skill-cli-args.test.js`、`tests/support/skill-cli-fixture.js` 与
-`scripts/lib/skill-cli/`，T005–T006 见 `tests/integration/skill-cli-add.test.js`）；
-T007–T023 未开始。分支
+`scripts/lib/skill-cli/`，T005–T007 见 `tests/integration/skill-cli-add.test.js` 与
+[validation/us5-add.md](validation/us5-add.md)）；T008–T023 未开始。分支
 `codex/us-005-skill-cli`（从 US-004 分支堆叠，未合并 main）。生产 Pages 未启用；真实远端写入与
 POC-002 操作需单独授权。
 
@@ -59,7 +59,7 @@ POC-002 操作需单独授权。
 - [X] T006 [US1] 实现 `scripts/lib/skill-cli/candidate.js`、`workspace.js`、`publish.js`：候选校验、
   隔离工作副本、基于远端基线暂存、提交与状态输出；复验 T005。
   （FR-006、FR-009；AC-007、AC-011）
-- [ ] T007 [US1] 在隔离项目与临时裸远端执行预览/新增，记录命令、退出码、JSON、提交与未运行项到
+- [X] T007 [US1] 在隔离项目与临时裸远端执行预览/新增，记录命令、退出码、JSON、提交与未运行项到
   `specs/005-skill-cli/validation/us5-add.md`。（FR-006；AC-007）
 
 ## Phase 4: User Story 2 — 显式替换与冲突（Priority: P1）
