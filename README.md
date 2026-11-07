@@ -23,20 +23,69 @@ npm run security
 | `npm run setup:security` | 安装/核对固定版本 Gitleaks、Semgrep；重复运行复用已匹配工具 |
 | `npm run security:secrets` | 对公开候选和已跟踪原件做脱敏凭证检查 |
 | `npm run security:code` | 对自有 JS 执行本地固定安全规则 |
-| `npm run security:deps` | 审计根锁文件；high/critical 阻断，其他级别报告 |
+| `npm run security:deps` | 通过官方 npm registry 审计根锁文件；high/critical 阻断，其他级别报告 |
 | `npm run check` / `npm run security` | 分别汇总规范/测试、安全检查；保留真实失败退出码 |
 
 安全结果只输出规则、位置、级别及状态，不输出凭证或源码片段。
 见[诊断约定](specs/001-preserve-skill-content/validation/diagnostics.md)和[本次验证](specs/001-preserve-skill-content/validation/bootstrap.md)。
-当前审计仍有 6 个 moderate 受影响依赖，无 high/critical；通过阻断阈值不表示零漏洞。
+当前本地审计为 0 个漏洞（通过 `minimatch@11.0.4` override 清除开发工具传递依赖的 4 个 moderate；
+历史 CI 运行曾报告 6 个 moderate），证据见
+[US-002 质量门禁](specs/002-search-detail-share-redesign/validation/us2-quality.md)。
+本机默认镜像 registry 不实现 npm audit 端点，`security:deps` 固定使用官方 registry；原因与验证见
+[依赖审计记录](specs/001-preserve-skill-content/validation/dependency-audit.md)。
+Windows 下由 `.gitattributes` 保持项目文本为 LF，测试夹具使用 junction；安装器支持 Windows zip 与
+`gitleaks.exe`/`semgrep.exe`，但仍需网络。扫描器未安装时，`npm test` 中两项扫描器用例与 `npm run check`
+会失败，不能视为通过；当前环境复核见 [跨平台基线与缺口修正](specs/001-preserve-skill-content/validation/baseline-remediation.md)。
 
-本轮只有工程基线：`npm run build`、正式 preview、迁移、上传及自动更新尚未实现，不能作为可用命令调用。
-旧索引构建只在隔离副本验证，不用它替代保真/完整取用验收；浏览器异常采集与生产发布仍待后续实施。
+本轮已接入本地 `npm run build` 与 `npm run preview`（仅 `dist`，不发布）。
+US-001 的内部 US1/US2/US3 切片已完成本地交付：四份 catalog、四项迁移、完整 dist 构建、只读预览、
+完整查阅/复制/下载和故障恢复均有本地证据；T041 仅 Linux/WSL 通过、macOS 未运行，2026-11-04 用户确认
+将该缺口记录为未验证并据此收口本地交付，T041 不标记为通过。
+US-002 的检索、详情、分享、响应式和键盘可访问改造已完成 T001–T026 的本地实现、验收与文档收口：
+- 检索/详情/分享：[US2 检索](specs/002-search-detail-share-redesign/validation/us2-search.md)、
+  [详情/分享](specs/002-search-detail-share-redesign/validation/us2-detail.md)、
+  [可访问性](specs/002-search-detail-share-redesign/validation/us2-accessibility.md)。
+- 质量/性能/构建/回归：[质量门禁](specs/002-search-detail-share-redesign/validation/us2-quality.md)、
+  [性能](specs/002-search-detail-share-redesign/validation/us2-performance.md)、
+  [隔离构建](specs/002-search-detail-share-redesign/validation/us2-build.md)、
+  [US-001 取用回归](specs/002-search-detail-share-redesign/validation/us2-regression.md)、
+  [跨浏览器](specs/002-search-detail-share-redesign/validation/us2-cross-browser.md)、
+  [生产只读预检](specs/002-search-detail-share-redesign/validation/us2-production-preflight.md)。
+- US-002 收口时本地 `npm test` 为 163 项（162 通过、0 失败、1 跳过）；Gitleaks/Semgrep 无发现，
+  依赖审计为 0 个漏洞。
+- 浏览器证据来自 Chrome 152（Chromium）、Edge 156、Firefox 157.0 和 WebKit 27.2；
+  1,000 项/10 MiB 隔离夹具上 50 次查询 p95 分别为 Chrome 39.9ms、Firefox 48.0ms、WebKit 50.0ms，
+  不是生产网络或设备承诺。仍需补 Safari/移动实机。
+- US-002 的 T025 文档更新和 T026 最终复核已完成。2026-11-06 已推送功能分支；
+  [Quality checks #42170060519](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/42170060519)
+  在 Node 26.3.0/Linux 成功；尚未合并 main。上传、自动更新和生产发布仍待后续故事。
+
+2026-11-07 US-003 的 T001–T032 与 T033 已完成本地/受控验证：发布产物校验、`publish-check.js`、
+`maintain.yml`、US1 快照/子路径、US2 状态/失败/恢复、US3 凭证/权限/匿名未授权尝试、US4 同次运行/noop、
+隔离恢复演练与取用回归见
+[US-003 validation](specs/003-validate-build-publish/validation/)；临时公开仓库 POC-002 验证了
+部署失败/旧站保留/同提交重跑、同次运行发布和匿名未授权拒绝。当前本地 `npm test` 为 211 项
+（209 通过、0 失败、2 跳过）；已推送并创建
+[PR #1](https://github.com/chengxuan2002-droid/skill-gallery/pull/1)
+（Quality checks 42382079287/42382097367 通过），未合并；生产 Pages 未启用，本地构建或受控验收不等于线上发布。
+
+本地验收使用 Windows + Node 22.21.0；声明的 Node 26.3.0/Linux 由 CI 覆盖，结果见下方 Quality checks。
 初始化按步骤验证并提交，提交不等于推送或上线。
+
+### 当前内容与构建契约
+
+- 原件位于 `skills/<slug>.md` 或 `skills/<slug>/SKILL.md`；`catalog/<slug>.json` 是独立站内记录。构建只读取 catalog 指向的内容，不扫描未纳管目录，不执行 Skill 脚本、测试或安装其依赖。
+- 初始限额：每 Skill 最多 500 个普通文件、原始总字节 20 MiB、主文档 1 MiB。
+- 迁移：`node scripts/migrate-catalog.js --dry-run`（默认）与 `--write` 仅处理四项固定记录；先验证全部候选，冲突不覆盖已有记录。
+- 精确依赖：yaml 2.9.1、marked 18.1.2、sanitize-html 2.18.1、yazl 3.3.1、minisearch 6.3.0；yauzl 3.4.0 仅开发测试。ESLint/Prettier 等开发依赖见 `package.json` 与锁文件。
+- `npm run build` 只写 `dist/`，不写根 `assets/search-index.json`；`npm run preview` 只映射 `dist` 的 `/skill-gallery/`。成功状态是本地 `built`，不是已发布。
+- 构建事务使用 `.dist.lock/owner.json` 与 `.dist.transaction.json`。发现遗留锁时不要删除 dist、stage 或 backup；先确认原进程已退出并核对 owner 的 run_id/pid，只移除匹配锁，再重跑 `npm run build`。提交后清理失败会返回 `built` + `cleanup_status=pending`，保留记录/backup，不能当作发布成功。
+- 凭证规则 SECRET-01～04 只报告安全位置和类型；示例使用 `YOUR_*_HERE`、`<REDACTED>`、`***` 或 `$ENV`，不得写入真实凭证。标题 ID 由构建器生成；重复标题使用后缀，未知本文锚点移除 href 并提示。
+- 上传 CLI、GitHub 后台维护入口、自动更新与发布仍未实现；不要让旧版根索引/直接 Pages 教程冒充当前流程。生产 Pages 的 MIME、缓存和直接资源安全仍需发布前验证。
 
 ### 检查 CI 与现站基础监测
 
-- [Quality checks](.github/workflows/quality.yml)：main push、PR 和手动触发，安装锁定工具后运行 `npm run check`、`npm run security`。
+- [Quality checks](.github/workflows/quality.yml)：所有 push、PR 和手动触发，安装固定工具后运行 `npm run check`，并显式执行 Gitleaks、Semgrep 与根依赖审计；任一步失败汇总为失败。
 - [Site availability](.github/workflows/site-monitor.yml)：默认分支定时/手动运行，只读取既有网站，不安装项目依赖，不部署或写回。
 - 监测按用户确认每小时一次，UTC 每小时第 7 分（北京时间分钟数相同）；GitHub 调度可能延迟或跳过，不是严格准点服务。
 
@@ -50,8 +99,17 @@ npm run monitor:site
 每次请求超时 8 秒，失败重试一次；检查状态码、MIME、非空内容、首页标识及旧版索引结构。
 返回内容始终作为数据，不执行 JS/Skill，不输出正文；本地测试只使用本地 HTTP 服务，不依赖线上站点。
 
-**启用状态：已推送到 main；检查 CI 与首次手动网站监测均在 GitHub 上通过，每小时监测计划已启用。**
-首次远程运行结果见下方验证记录；quality 合并必需项仍需单独配置。
+**启用状态：main 的检查 CI 与首次手动网站监测已通过，每小时监测计划已启用。**
+2026-11-03 的安全扫描补强已推送到开发分支；US1 时点 [Quality checks #41628358392](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/41628358392)
+与 US2 后 [Quality checks #41639767607](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/41639767607)
+均在 Node 26.3.0/Linux 上通过，`npm run check`、Gitleaks、Semgrep 与依赖审计四个步骤均成功。
+2026-11-04 推送 US3/Polish 与依赖审计修复后，[Quality checks #41816996159](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/41816996159)
+复验 138 项测试（137 通过、0 失败、1 跳过），Gitleaks/Semgrep 无发现，依赖审计通过并报告 6 个 moderate。
+2026-11-05/06 本地 US-002 复验为 163 项（162 通过、0 失败、1 跳过），依赖审计报告 0 个漏洞；
+这是本地结果，不表示远程 CI 已更新为该计数，详见
+[US-002 质量门禁](specs/002-search-detail-share-redesign/validation/us2-quality.md)。
+`main` 尚未合并该补强，默认分支仍使用旧版 quality workflow；`pull_request`/手动触发配置存在但本次未单独执行。
+quality 合并必需项仍需单独配置。
 本次没有修改分支保护、通知设置或 Pages 配置；推送触发的既有 Pages 发布也已成功。
 失败首先表现为 Actions 失败运行；是否收到邮件取决于自己的 GitHub 通知设置，不能把本地测试当通知已送达。
 
@@ -61,8 +119,45 @@ npm run monitor:site
 首页标识或索引切换新版契约时，同步修改监测断言与测试；浏览器交互、JS 异常和完整下载一致性另行验收。
 实测与边界见[CI/监测验证记录](specs/001-preserve-skill-content/validation/ci-monitor.md)。
 
+### 换电脑或更换 Code Agent
+
+US-001 的开发基线位于 `codex/development-baseline-20261102` 分支；该分支包含 US1 本地实现与 CI 补强。
+US-002 已推送到远程分支 `codex/us-002-search-detail-share`，但尚未合并 main；克隆上述基线不会包含 US-002。
+换电脑或 Agent 时应先核对当前分支、远程跟踪状态和 `.specify/feature.json`，不要把基线分支误当成 US-002。
+
+```bash
+git clone --branch codex/development-baseline-20261102 https://github.com/chengxuan2002-droid/skill-gallery.git
+cd skill-gallery
+```
+
+先安装上文指定的 Node、npm 和 uv，再执行上文的安装、工程及安全检查命令。
+`node_modules/`、`.tools/`、`.env*`、系统杂项和本机凭证不随仓库迁移；GitHub 写入凭证在新电脑独立授权。
+不复制旧电脑的 SSH 私钥、Agent 会话或工具执行授权来替代新环境的授权。
+
+当前功能是 `specs/002-search-detail-share-redesign`。`.specify/feature.json` 按 Spec Kit 规则保持本机忽略；
+首次在新副本运行以下命令，会检查规划文件并恢复这个本地指针：
+
+```bash
+export SPECIFY_FEATURE_DIRECTORY=specs/002-search-detail-share-redesign
+bash .specify/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks
+```
+
+新 Agent 先读 [AGENTS.md](AGENTS.md)、[宪章](.specify/memory/constitution.md)、四份规范和当前功能
+[spec](specs/002-search-detail-share-redesign/spec.md)、
+[plan](specs/002-search-detail-share-redesign/plan.md)、
+[tasks](specs/002-search-detail-share-redesign/tasks.md)，再核对真实文件与验证记录。
+项目级 Skills 保存在 `.agents/skills/`，Spec Kit 初始化来源记录为 1.2.5/Codex；其他 Agent 若不自动发现，
+应按其机制读取这些文件或配置入口，不能因更换工具而覆盖规范、重新生成任务或重跑 `specify init`。
+可选的 Specify CLI 及其他 Agent 适配器需在新电脑单独安装并验证；现有 Bash 检查不依赖全局 CLI。
+
+本次基线用于接续开发，不表示 US-001 已完成或已通过新的规格一致性分析。
+后续先复核 spec/plan/tasks，再按明确授权实施。交接记录保留在独立交接分支，未收录的 `office2md` 不属于此基线。
+此开发分支不合入 `main`、不修改 Pages 配置；合入前须核对只发布允许公开的静态产物，排除规划和工具资料。
+
 下文保留现有版本和历史部署说明。
 
+
+> 下一轮改造准备（2026-11-01）：[业界调研](docs/IndustryResearch.md) · [产品需求](docs/DemandAnalysis.md) · [技术方案](docs/TechnicalSolution.md) · [AI 编程规范](docs/AiProgrammingGuide.md)。四份文档描述计划，后台、上传命令和自动更新尚未实现；下文保留历史版本说明，当前命令和 US-002 行为以上方工程章节为准。
 
 个人 AI Agent Skill 收藏夹——统一管理、快速查找、跨平台复用、一键分享。
 
@@ -70,12 +165,12 @@ npm run monitor:site
 
 ## ✨ 特性
 
-- **统一格式** — 所有 skill 以 markdown + YAML frontmatter 存储，结构清晰
-- **全文搜索** — 按名称、描述、标签、正文内容秒级检索
-- **多维筛选** — 按标签、平台、来源多维度过滤
-- **多格式导出** — 一键导出为 Codex、Claude Code 等平台格式
+- **统一格式** — 原件以 markdown + YAML frontmatter 或目录形式保真保存，站内记录独立在 `catalog/`
+- **精准/模糊搜索** — 名称、简介、标签、平台、来源、作者、用途、备注和正文检索
+- **多维筛选** — 标签/平台/来源/作者；同维 OR、跨维 AND；可恢复的 Hash 分享地址
+- **完整取用与分享** — 原文复制、原件/目录 ZIP/附件下载、详情和列表链接复制
 - **静态部署** — 原生前端；本地使用 Node 工程检查，不需要后台服务
-- **暗色模式** — 跟随系统，也可手动切换
+- **暗色模式与键盘可访问** — 优先手动主题，无保存值时跟随系统；响应式布局和焦点状态
 
 ---
 
@@ -83,16 +178,17 @@ npm run monitor:site
 
 ### 本地预览
 
+当前构建只写 `dist/`，预览服务只映射 `/skill-gallery/` 子路径：
+
 ```bash
-# 1. 构建搜索索引
-node scripts/build-index.js
-
-# 2. 启动本地服务器
-python3 -m http.server 8000
-
-# 3. 打开浏览器访问
-# http://localhost:8000
+npm ci
+npm run build
+npm run preview
+# 打开 http://localhost:8000/skill-gallery/
 ```
+
+`npm run build` 成功只表示本地生成 `dist`，不表示 GitHub Pages 已发布。不要直接把仓库根目录作为
+静态站点发布；上传、自动更新和发布流程仍属后续故事。
 
 ### 部署到 GitHub Pages（历史通用说明）
 
@@ -188,16 +284,16 @@ git push -u origin main
 
 #### 第四步：后续更新
 
-以后添加了新 skill，只需：
+当前已纳管内容的新增、替换和下架入口仍在后续 US-004/US-005 规划中，尚未提供可执行的维护命令。
+维护 `skills/` 与 `catalog/` 后，本地只可验证：
 
 ```bash
-node scripts/build-index.js          # 重建索引
-git add skills/new-skill.md assets/search-index.json
-git commit -m "add: new skill"
-git push
+npm run build
+npm run preview
 ```
 
-GitHub Pages 会自动更新，通常几十秒内生效。
+这不会自动提交、推送或发布；不要手工编辑根 `assets/search-index.json`，也不要按旧教程把仓库根目录
+直接当作 Pages 发布目录。
 
 ---
 
@@ -207,22 +303,11 @@ GitHub Pages 会自动更新，通常几十秒内生效。
 
 所有 skill 都存放在 `skills/` 目录下，每个 skill 是一个 `.md` 文件。文件名即 `slug`（URL 中显示的标识），只用小写字母、数字和短横线。
 
-添加流程：**新建文件 → 填写内容 → 重建索引 → 提交推送**
+当前没有面向访客或普通用户的上传入口；新增、替换、下架及发布仍属后续 US-004/US-005。
+以下内容只说明原件格式和 `catalog/` 记录结构，不代表已有可执行的维护命令。已纳管内容用
+`npm run build` 验证 `dist`；不要手工编辑根 `assets/search-index.json`。
 
-```bash
-# 1. 新建 skill 文件
-vim skills/my-new-skill.md
-
-# 2. 重建搜索索引
-node scripts/build-index.js
-
-# 3. 提交
-git add skills/my-new-skill.md assets/search-index.json
-git commit -m "add: my new skill"
-git push
-```
-
-下面按不同来源分别给出示例：
+下面按不同来源分别给出格式示例：
 
 ---
 
@@ -507,103 +592,26 @@ tags: [标签1, 标签2]
 
 ---
 
-### 三、导出 Skill
+### 三、取用与分享
 
-在 skill 详情页右上角点击 **"Export ↓"** 按钮，有 4 种导出方式：
+当前详情页提供以下已验证操作：
 
----
+- **查看/复制原文**：从 raw 原件读取并校验大小和摘要后展示或写入剪贴板；复制失败会保留可手动复制的原文。
+- **下载原件**：单文件按原名下载；目录型 Skill 下载完整 ZIP，包含附件和许可文件。
+- **下载附件**：详情附件区按文件清单提供下载，响应大小和 SHA-256 校验通过后才发起。
+- **复制分享链接**：详情地址为当前文档目录下的 `#/skill/<slug>`；列表页可复制包含查询、模式、筛选和排序的地址。
+- **失败反馈**：剪贴板拒绝显示 `copy_failed` 和手动复制值；资源缺失或摘要不符显示 `download_failed`，不误报成功。
+- **返回列表**：从卡片进入详情时恢复进入前的列表条件；直接打开旧链接或刷新详情时回到列表根。
 
-#### 导出方式 1：Codex SKILL.md
+当前不提供 Codex/Claude Code 平台格式导出，也不提供旧版本选择。详情旧链接
+`#/skill/<slug>` 仍指向当前单版本；Git 历史保留仅用于受控恢复，不是公开旧版入口。
 
-导出为 Codex 原生的 `SKILL.md` 格式（frontmatter + markdown 正文）。
+分享示例：
 
-**使用方法：**
-1. 点击 "Codex SKILL.md" → 自动下载 `.md` 文件
-2. 将文件放入你的 Codex skills 目录
-3. 重启 Codex 即可使用
-
-**示例输出（节选）：**
-```markdown
----
-name: Systematic Debugging
-description: Step-by-step debugging workflow...
-tags: [debugging, workflow, problem-solving]
-platforms: [codex, claude-code, generic]
-source: self-built
-author: Your Name
-created_at: 2026-08-02
-updated_at: 2026-08-02
-usage_notes: |
-  Most useful for bugs that are hard to reproduce.
-  Always start with reproduction steps before diving into code.
----
-
-# Systematic Debugging
-
-A rigorous, step-by-step approach to debugging any software issue.
-...
-```
-
-> 💡 我们的统一格式本身就基于 Codex 格式设计，所以导出几乎是原样输出，兼容性最好。
-
----
-
-#### 导出方式 2：Claude Code 格式
-
-导出为 Claude Code 友好的 markdown 格式（去掉 frontmatter，用标题+引用结构）。
-
-**使用方法：**
-1. 点击 "Claude Code format" → 自动下载 `.md` 文件
-2. 将文件放入 Claude Code 的 custom skills 目录
-3. 根据需要微调格式
-
-**示例输出（节选）：**
-```markdown
-# Systematic Debugging
-
-> Step-by-step debugging workflow for reproducing and fixing any bug
-
-**Platforms:** codex, claude-code, generic
-
----
-
-A rigorous, step-by-step approach to debugging any software issue.
-
-## Steps
-...
-```
-
-> ⚠️ 不同 agent 平台格式可能略有差异，导出后可能需要微调。
-
----
-
-#### 导出方式 3：复制原始 Markdown
-
-一键复制完整的 skill markdown 内容（含 frontmatter）到剪贴板。
-
-**使用场景：**
-- 想快速粘贴到自己的编辑器里修改
-- 想贴到聊天中分享
-- 想在其他工具中使用
-
-**操作：** 点击 "Raw markdown" → 提示 "Copied markdown to clipboard" → 直接粘贴即可
-
----
-
-#### 导出方式 4：复制分享链接
-
-复制当前 skill 的网页链接，发送给别人直接查看。
-
-**使用场景：**
-- 给朋友推荐某个 skill
-- 在文档中引用
-
-**链接格式：**
-```
+```text
 https://chengxuan2002-droid.github.io/skill-gallery/#/skill/systematic-debugging
+https://chengxuan2002-droid.github.io/skill-gallery/#/?q=debug&mode=exact&tag=debugging
 ```
-
-对方打开链接就能直接看到 skill 详情页，也可以自己导出下载。
 
 ---
 
@@ -611,42 +619,39 @@ https://chengxuan2002-droid.github.io/skill-gallery/#/skill/systematic-debugging
 
 #### 全文搜索
 
-- 在顶部搜索框输入关键词，实时过滤结果
-- 搜索范围：名称、描述、标签、正文内容
-- 支持模糊匹配（拼写小错误也能搜到）
-- 按相关度排序，最匹配的排在前面
+- 搜索范围：名称、简介、标签、平台、来源、作者、用途、备注和正文纯文本。
+- **模糊模式**（默认）：英文允许轻微拼写误差，中文至少按连续子串命中。
+- **精准模式**：对规范化文本做连续片段匹配；未加引号的多词按完整连续片段处理，
+  双引号表示完整短语，不自动纠错。
+- 名称命中优先于简介/标签，简介/标签优先于正文；同分按 slug 稳定排序。
 
-#### 标签筛选
+#### 筛选与排序
 
-- 点击左侧标签可以添加筛选条件
-- 多个标签同时选中时是 **AND** 关系（同时满足所有标签）
-- 再次点击取消筛选
-
-#### 平台筛选
-
-- 点击平台名筛选特定平台的 skill
-- 同样支持多选 AND
-
-#### 排序
-
-- **Recently updated**：按更新时间倒序（默认）
-- **Name (A-Z)**：按名称字母排序
+- 标签、平台、来源类型、作者均有筛选；同维度多选为 **OR**，不同维度为 **AND**。
+- 缺失字段不匹配对应筛选条件；筛选选项只来自当前索引实际值。
+- 排序：`自动`（有关键词按相关度，无关键词按更新时间倒序）、`名称`、`更新时间`；
+  显式选择在查询/筛选变化后保持，同分/同日期按 slug。
+- 当前查询、模式、筛选和排序显示为可单项清除的条件 chip；可一键清除全部。
+- 条件保存在可分享的 Hash 地址：`#/?q=...&mode=exact&tag=...&platform=...&source=...&author=...&sort=...`。
+- 移动端筛选默认收起，使用“筛选”按钮展开；结果数量和操作状态通过 `aria-live` 提示。
 
 ---
 
 ### 五、常见问题
 
-**Q: 添加了新 skill 但页面上看不到？**
-A: 记得运行 `node scripts/build-index.js` 重建搜索索引。
+**Q: 添加了新 Skill 但页面上看不到？**
+A: 当前没有面向访客的上传入口；新增、替换、下架和发布仍在后续 US-004/US-005。
+已纳管内容可用 `npm run build` 在本地验证，但不能把本地 `built` 当作网站已发布。
 
 **Q: 可以批量导入吗？**
-A: v1 版本只支持手动添加，后续会加入半自动导入脚本。
+A: 尚未实现。不要按旧教程提交根 `assets/search-index.json`，也不要把仓库根目录当作站点发布目录。
 
-**Q: 导出的文件在我的 agent 里不能直接用？**
-A: 不同平台格式有差异，导出功能做的是"尽力而为"的转换，可能需要手动微调。详情页顶部有兼容性提示。
+**Q: 能导出 Codex/Claude Code 格式吗？**
+A: 当前只提供原件/目录 ZIP/附件下载、原文复制和详情/列表链接分享，不提供平台格式转换导出。
 
 **Q: 怎么换主题？**
-A: 点击右上角的 🌙/☀️ 按钮切换，设置会记住。
+A: 点击右上角主题按钮切换；有手动选择时持久化，没有保存值时跟随系统
+`prefers-color-scheme`。
 
 ---
 
@@ -654,18 +659,23 @@ A: 点击右上角的 🌙/☀️ 按钮切换，设置会记住。
 
 ```
 skill-gallery/
-├── skills/                  # Skill 数据源（唯一）
-│   ├── README.md            # 格式说明
-│   └── *.md                 # 每个 skill 一个文件
-├── assets/
-│   ├── app.js               # 前端逻辑
-│   ├── style.css            # 样式
-│   └── search-index.json    # 构建产物（搜索索引）
-├── scripts/
-│   └── build-index.js       # 构建脚本
-├── index.html               # 页面入口
-├── .nojekyll                # GitHub Pages 配置
-├── specs/                   # 设计文档
+├── skills/                  # 保真原件（单文件或 SKILL.md 目录）
+├── catalog/                 # 站内记录与来源配置
+├── assets/                  # 前端源码与旧版索引基线
+│   ├── app.js
+│   ├── app-dom.js
+│   ├── app-search.js
+│   ├── app-filters.js
+│   ├── app-views.js
+│   ├── app-detail.js
+│   ├── app-actions.js
+│   └── style.css
+├── scripts/                 # 校验、迁移、构建和预览
+├── tests/                   # 受信任的 unit/integration 测试与夹具
+├── specs/                   # 当前功能规格、计划、任务和验收记录
+├── dist/                    # 构建产物（生成目录，不提交）
+├── index.html
+├── .nojekyll
 └── README.md
 ```
 

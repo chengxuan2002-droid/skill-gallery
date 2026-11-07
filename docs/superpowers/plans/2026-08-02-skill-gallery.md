@@ -1,5 +1,7 @@
 # Skill Gallery Implementation Plan
 
+> Historical v1 plan. For the 2026-11-01 iteration, use [DemandAnalysis](../../DemandAnalysis.md), [TechnicalSolution](../../TechnicalSolution.md), and [AiProgrammingGuide](../../AiProgrammingGuide.md). This file is retained as implementation history; do not re-run its bootstrap tasks for the new iteration.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Build a pure-static personal skill gallery hosted on GitHub Pages, with unified markdown skill files, full-text search, tag filtering, and multi-platform export.

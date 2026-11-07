@@ -20,30 +20,50 @@ async function install() {
   const tools = require('../config/security-tools.json');
   const bin = path.join(root, '.tools/bin');
   fs.mkdirSync(bin, { recursive: true });
-  const gitleaks = path.join(bin, 'gitleaks');
+  const isWindows = process.platform === 'win32';
+  const platform = isWindows ? 'windows' : process.platform;
+  const platformKey = `${platform}_${process.arch}`;
+  const binaryName = isWindows ? 'gitleaks.exe' : 'gitleaks';
+  const gitleaks = path.join(bin, binaryName);
   if (version(gitleaks, 'version') !== tools.gitleaks.version) {
-    const platform = `${process.platform}_${process.arch}`;
-    const expected = tools.gitleaks.sha256[platform];
+    const expected = tools.gitleaks.sha256[platformKey];
     if (!expected) throw new Error('UNSUPPORTED_PLATFORM');
-    const archiveName = `gitleaks_${tools.gitleaks.version}_${platform}.tar.gz`;
+    const extension = isWindows ? 'zip' : 'tar.gz';
+    const archiveName = `gitleaks_${tools.gitleaks.version}_${platformKey}.${extension}`;
     const url = `https://github.com/gitleaks/gitleaks/releases/download/v${tools.gitleaks.version}/${archiveName}`;
-    const response = await fetch(url, { signal: AbortSignal.timeout(120000) });
+    let response;
+    try {
+      response = await fetch(url, { signal: AbortSignal.timeout(120000) });
+    } catch {
+      throw new Error('SCANNER_DOWNLOAD_FAILED');
+    }
     if (!response.ok) throw new Error('SCANNER_DOWNLOAD_FAILED');
-    const bytes = Buffer.from(await response.arrayBuffer());
+    let bytes;
+    try {
+      bytes = Buffer.from(await response.arrayBuffer());
+    } catch {
+      throw new Error('SCANNER_DOWNLOAD_FAILED');
+    }
     verifyArchive(bytes, expected);
     const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'skill-gallery-tools-'));
     try {
-      const archive = path.join(temp, 'gitleaks.tar.gz');
+      const archive = path.join(temp, `gitleaks.${extension}`);
       fs.writeFileSync(archive, bytes, { mode: 0o600 });
-      const extract = spawnSync('tar', ['-xzf', archive, '-C', temp, 'gitleaks']);
+      const extract = spawnSync('tar', [
+        isWindows ? '-xf' : '-xzf',
+        archive,
+        '-C',
+        temp,
+        binaryName,
+      ]);
       if (extract.status !== 0) throw new Error('SCANNER_EXTRACTION_FAILED');
-      fs.copyFileSync(path.join(temp, 'gitleaks'), gitleaks);
+      fs.copyFileSync(path.join(temp, binaryName), gitleaks);
       fs.chmodSync(gitleaks, 0o755);
     } finally {
       fs.rmSync(temp, { recursive: true, force: true });
     }
   }
-  const semgrep = path.join(bin, 'semgrep');
+  const semgrep = path.join(bin, isWindows ? 'semgrep.exe' : 'semgrep');
   if (version(semgrep, '--version') !== tools.semgrep.version) {
     const result = spawnSync(
       'uv',
@@ -70,7 +90,11 @@ if (require.main === module) {
   install().then(
     (result) => console.log(JSON.stringify(result)),
     (error) => {
-      const code = /^[A-Z_]+$/.test(error.message) ? error.message : 'SCANNER_SETUP_FAILED';
+      const code = /^[A-Z_]+$/.test(error.message)
+        ? error.message
+        : error.code === 'ENOSPC'
+          ? 'SCANNER_DISK_FULL'
+          : 'SCANNER_SETUP_FAILED';
       console.log(JSON.stringify({ status: 'error', code }));
       process.exitCode = 2;
     },

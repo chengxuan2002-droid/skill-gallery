@@ -1,0 +1,4 @@
+interface:
+  display_name: "Skill Gallery 工程初始化"
+  short_description: "为 Skill Gallery 盘点并补齐可复现的工程基线与安全质量门禁"
+  default_prompt: "使用 $project-bootstrap 盘点本项目工程基线，对齐现有规范与任务，并只执行本轮已授权的初始化工作。"

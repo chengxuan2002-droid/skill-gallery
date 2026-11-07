@@ -39,7 +39,7 @@
 Node 内建测试、独立 Gitleaks 8.30.1/Semgrep CE 1.183.0 及 npm audit 分担工程检查，工具输出仅保留脱敏白名单字段。
 仅验证受控源码/公开候选文件，原件只读且不执行；不新增产品运行依赖，不替代 C-01 的 SECRET-01～04。
 映射 NFR-003/NFR-006、DEC-005/009 与 AC-012/014 的工程支撑子集；本地检查型 CI 也未纳入本次执行。
-任务追加 T044～T047，T002/T003 只能记录部分覆盖；业务依赖、迁移/原文取用、自动更新、发布仍按原规划。
+任务追加 T044～T047；2026-11-03 复核 T002/T003 已完成（见 [foundational.md](validation/foundational.md)），T011 起的业务实现、迁移/原文取用、自动更新、发布仍按原规划。
 
 GATE：研究前审查和 Phase 1 设计后复核均通过。此处通过的是设计合规性，不是功能验收。
 
@@ -159,4 +159,22 @@ AC-001/002 覆盖本故事规定的完整迁移和取用；AC-005 仅链接与�
 
 监测采用每次 8 秒超时、失败再试一次、固定四资源。用户已确认每小时一次，仅 GitHub 原生运行状态/维护者通知；最终 cron 为 7 * * * *。
 本地测试不能依赖线上站点。代码与网络报告只输出固定类型、路径、HTTP 状态及尝试次数，不输出站点正文和原始错误。
-验收证据写 validation/ci-monitor.md；远程执行与分支保护状态如实分列。原 43 项业务任务、T002/T003 未完成部分不改变。
+验收证据写 validation/ci-monitor.md；远程执行与分支保护状态如实分列。原 43 项业务任务编号不变；T002/T003 的未完成部分后已补齐。
+
+## 实施状态补充（2026-11-03）
+
+T001–T024 已完成，US1 本地闭环通过（[us1-test-contracts.md](validation/us1-test-contracts.md)、[us1-migration.md](validation/us1-migration.md)）；
+T044–T052 已完成本地，T052 已在开发分支 `codex/development-baseline-20261102` 的 Node 26.3.0/Linux CI 通过
+（Quality checks #41628358392 与 US2 后 #41639767607，见 [ci-security.md](validation/ci-security.md)）。
+T025–T030（US2）已完成本地实现，浏览器与分发验收见 [us2-browser.md](validation/us2-browser.md)；
+T031–T038（US3）已完成本地故障/安全验收，见 [us3-failures.md](validation/us3-failures.md)；
+T039/T040/T042/T043 已完成；T041 仅 Linux/WSL 完成，macOS 未运行。不能称上游 US-001 完成或已发布。
+本次补充不改变原规划的业务契约。
+
+## 收口补充（2026-11-04）
+
+用户确认将 T041 的 macOS 缺口记录为未验证，并据此收口 US-001 本地交付；T041 复选框保持未完成，
+不宣称 macOS、跨平台或生产发布通过。依赖审计改为固定查询官方 npm registry，恢复可执行并通过
+high/critical 阈值，仍如实报告 6 个 moderate；推送后 Quality checks #41816996159 在
+Node 26.3.0/Linux 复验 138 项（137 通过、0 失败、1 跳过）并通过四个检查步骤。
+证据见 [dependency-audit.md](validation/dependency-audit.md) 与 [ci-security.md](validation/ci-security.md)。
