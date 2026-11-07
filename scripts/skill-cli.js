@@ -5,6 +5,7 @@ const { parseArgs } = require('./lib/skill-cli/args');
 const { loadCandidate } = require('./lib/skill-cli/candidate');
 const { exitCodeFor, serializeResult } = require('./lib/skill-cli/output');
 const { publishCandidate } = require('./lib/skill-cli/publish');
+const { replaceCandidate } = require('./lib/skill-cli/replace');
 
 function failure(errors) {
   return {
@@ -47,6 +48,17 @@ function commandResult(parsed) {
       return { ...published.outcome, errors: [] };
     }
     return previewOutcome(loaded.candidate);
+  }
+  if (parsed.command === 'replace') {
+    const replaced = replaceCandidate({
+      projectRoot: process.cwd(),
+      slug: parsed.slug,
+      inputPath: parsed.input,
+      metaPath: parsed.metaPath,
+      expectedRevision: parsed.expectedRevision,
+    });
+    if (!replaced.ok) return failure(replaced.diagnostics);
+    return { ...replaced.outcome, errors: [] };
   }
   return failure([{ code: 'E_INPUT', path: null, message: '命令尚未实现' }]);
 }

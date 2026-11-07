@@ -35,7 +35,7 @@ function copyTree(source, target) {
   fs.copyFileSync(source, target);
 }
 
-function readRecord(metaPath) {
+function readMetaRecord(metaPath) {
   let raw;
   try {
     raw = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
@@ -47,10 +47,7 @@ function readRecord(metaPath) {
   return { ok: true, record: validated.record };
 }
 
-function loadCandidate({ inputPath, metaPath }) {
-  const loaded = readRecord(metaPath);
-  if (!loaded.ok) return loaded;
-  const record = loaded.record;
+function buildCandidate({ inputPath, record }) {
   const slug = record.slug;
   const single = record.content_path === `skills/${slug}.md`;
   const directory = record.content_path === `skills/${slug}/SKILL.md`;
@@ -101,6 +98,7 @@ function loadCandidate({ inputPath, metaPath }) {
         record,
         files,
         digest: snapshot.snapshot.digest,
+        recordDigest: snapshot.snapshot.recordDigest,
         mainPath: record.content_path,
       },
     };
@@ -111,9 +109,15 @@ function loadCandidate({ inputPath, metaPath }) {
   }
 }
 
+function loadCandidate({ inputPath, metaPath }) {
+  const loaded = readMetaRecord(metaPath);
+  if (!loaded.ok) return loaded;
+  return buildCandidate({ inputPath, record: loaded.record });
+}
+
 function snapshotFromRoot(root, record) {
   const result = snapshotSkill({ projectRoot: root, record });
   return result.ok ? result.snapshot : null;
 }
 
-module.exports = { loadCandidate, snapshotFromRoot };
+module.exports = { buildCandidate, loadCandidate, readMetaRecord, snapshotFromRoot };

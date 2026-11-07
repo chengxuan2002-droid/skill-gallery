@@ -38,6 +38,7 @@ function createBaseline(projectRoot) {
   return {
     root: tree,
     branch,
+    head: git(tree, 'rev-parse', 'HEAD'),
     cleanup() {
       try {
         git(projectRoot, 'worktree', 'remove', '--force', tree);
@@ -47,6 +48,11 @@ function createBaseline(projectRoot) {
       fs.rmSync(temp, { recursive: true, force: true });
     },
   };
+}
+
+function removeSkill(root, slug) {
+  fs.rmSync(path.join(root, 'skills', `${slug}.md`), { force: true });
+  fs.rmSync(path.join(root, 'skills', slug), { recursive: true, force: true });
 }
 
 function writeFiles(root, files, record) {
@@ -60,10 +66,20 @@ function writeFiles(root, files, record) {
   fs.writeFileSync(recordPath, `${JSON.stringify(record, null, 2)}\n`);
 }
 
-function commitFiles({ root, files, record }) {
+function trackedSkillPaths(root, slug) {
+  return git(root, 'ls-files', '--', `skills/${slug}.md`, `skills/${slug}`)
+    .split(/\r?\n/)
+    .filter(Boolean);
+}
+
+function commitFiles({ root, files, record, replace = false }) {
   const paths = [...files.map((file) => file.path), `catalog/${record.slug}.json`];
-  git(root, 'add', '--', ...paths);
-  git(root, 'commit', '-q', '-m', `ingest: add ${record.slug}`);
+  if (replace) {
+    paths.push(...trackedSkillPaths(root, record.slug));
+  }
+  git(root, 'add', '-A', '--', ...new Set(paths));
+  const action = replace ? 'replace' : 'add';
+  git(root, 'commit', '-q', '-m', `ingest: ${action} ${record.slug}`);
   return git(root, 'rev-parse', 'HEAD');
 }
 
@@ -71,4 +87,12 @@ function pushBaseline(root, branch) {
   git(root, 'push', '--quiet', 'origin', `HEAD:${branch}`);
 }
 
-module.exports = { commitFiles, createBaseline, pushBaseline, remoteBranch, writeFiles };
+module.exports = {
+  commitFiles,
+  createBaseline,
+  pushBaseline,
+  removeSkill,
+  remoteBranch,
+  trackedSkillPaths,
+  writeFiles,
+};
