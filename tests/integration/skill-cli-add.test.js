@@ -3,7 +3,7 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { spawnSync } = require('node:child_process');
+const { execFileSync, spawnSync } = require('node:child_process');
 const test = require('node:test');
 
 const {
@@ -38,7 +38,7 @@ function remoteFiles(project) {
 }
 
 function remoteFile(project, relativePath) {
-  return project.git('-C', project.remoteDir, 'show', `main:${relativePath}`);
+  return execFileSync('git', ['-C', project.remoteDir, 'show', `main:${relativePath}`]);
 }
 
 test('preview validates a candidate without writing or publishing', async (t) => {

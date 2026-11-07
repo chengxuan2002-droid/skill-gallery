@@ -2,7 +2,9 @@
 'use strict';
 
 const { parseArgs } = require('./lib/skill-cli/args');
+const { loadCandidate } = require('./lib/skill-cli/candidate');
 const { exitCodeFor, serializeResult } = require('./lib/skill-cli/output');
+const { publishCandidate } = require('./lib/skill-cli/publish');
 
 function failure(errors) {
   return {
@@ -16,6 +18,37 @@ function failure(errors) {
     public_url: null,
     errors,
   };
+}
+
+function previewOutcome(candidate) {
+  return {
+    status: 'previewed',
+    slug: candidate.slug,
+    content_revision: candidate.digest,
+    content_status: 'previewed',
+    deploy_status: 'pending',
+    commit_sha: null,
+    run_url: null,
+    public_url: null,
+    errors: [],
+  };
+}
+
+function commandResult(parsed) {
+  if (parsed.command === 'preview' || parsed.command === 'add') {
+    const loaded = loadCandidate({ inputPath: parsed.input, metaPath: parsed.metaPath });
+    if (!loaded.ok) return failure(loaded.diagnostics);
+    if (parsed.command === 'add' && parsed.publish) {
+      const published = publishCandidate({
+        projectRoot: process.cwd(),
+        candidate: loaded.candidate,
+      });
+      if (!published.ok) return failure(published.diagnostics);
+      return { ...published.outcome, errors: [] };
+    }
+    return previewOutcome(loaded.candidate);
+  }
+  return failure([{ code: 'E_INPUT', path: null, message: '命令尚未实现' }]);
 }
 
 function emit(result) {
@@ -32,7 +65,7 @@ function main(argv) {
     emit(failure(parsed.diagnostics));
     return;
   }
-  emit(failure([{ code: 'E_INPUT', path: null, message: '命令尚未实现' }]));
+  emit(commandResult(parsed));
 }
 
 try {

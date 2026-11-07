@@ -43,6 +43,7 @@ function sampleRecord(slug, overrides = {}) {
 function initializeRepository(project) {
   const root = project.root;
   fs.writeFileSync(path.join(root, '.gitignore'), 'dist/\ncandidates/\n');
+  fs.writeFileSync(path.join(root, '.gitattributes'), '* text=auto eol=lf\nskills/** -text\n');
   git(root, 'init', '-q', '-b', 'main');
   git(root, 'config', 'user.name', 'CLI Fixture');
   git(root, 'config', 'user.email', 'cli-fixture@example.invalid');
@@ -87,9 +88,9 @@ function writeSingleCandidate(project, slug = 'cli-single', overrides = {}) {
 function writeDirectoryCandidate(project, slug = 'cli-pack', overrides = {}) {
   const candidateDir = path.join(project.root, 'candidates', slug);
   fs.mkdirSync(path.join(candidateDir, 'references'), { recursive: true });
-  const contentPath = path.join(candidateDir, 'SKILL.md');
+  const mainPath = path.join(candidateDir, 'SKILL.md');
   fs.writeFileSync(
-    contentPath,
+    mainPath,
     `---\nname: ${slug}\ndescription: CLI directory candidate\n---\n\n# ${slug}\n\nRead [note](references/note.md).\n`,
   );
   fs.writeFileSync(path.join(candidateDir, 'references/note.md'), '# Note\n\nAttachment.\n');
@@ -99,7 +100,7 @@ function writeDirectoryCandidate(project, slug = 'cli-pack', overrides = {}) {
   });
   const metaPath = path.join(project.root, 'candidates', `${slug}.json`);
   fs.writeFileSync(metaPath, `${JSON.stringify(record, null, 2)}\n`);
-  return { contentPath, metaPath, record };
+  return { contentPath: candidateDir, mainPath, metaPath, record };
 }
 
 function createFakeSource({ revision = 'b'.repeat(40), files = {} } = {}) {
