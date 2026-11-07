@@ -126,7 +126,7 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
 
 ### Implementation / Validation for User Story 1
 
-- [ ] T011 [US1] 在隔离副本执行 `npm run build` 和
+- [X] T011 [US1] 在隔离副本执行 `npm run build` 和
   `node scripts/publish-check.js artifact --dist <隔离 dist>`；检查白名单、manifest 双向一致、
   同 `contentRevision`、无额外文件和凭证；记录到
   `specs/003-validate-build-publish/validation/us3-snapshot.md`，不写工作区 `dist/`。
