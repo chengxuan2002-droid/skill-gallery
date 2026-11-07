@@ -11,7 +11,11 @@ const healthy = {
   '/skill-gallery/assets/style.css': ['text/css', 'body { color: inherit; }'],
   '/skill-gallery/assets/search-index.json': [
     'application/json',
-    JSON.stringify([{ slug: 'fixture', name: 'Example', content: 'data only' }]),
+    JSON.stringify({
+      schemaVersion: 1,
+      contentRevision: 'rev-1',
+      skills: [{ slug: 'fixture', digest: 'a'.repeat(64) }],
+    }),
   ],
 };
 
@@ -102,9 +106,13 @@ test('HTML served as a JavaScript asset fails MIME validation', async (t) => {
 
 for (const [label, body] of [
   ['invalid JSON', 'not json'],
-  ['empty index', '[]'],
+  ['empty array index', '[]'],
   ['wrong shape', '{}'],
-  ['invalid entries', '[{"slug":3,"name":"x","content":"x"}]'],
+  ['empty skills', '{"schemaVersion":1,"contentRevision":"rev-1","skills":[]}'],
+  [
+    'invalid entries',
+    '{"schemaVersion":1,"contentRevision":"rev-1","skills":[{"slug":3,"digest":"x"}]}',
+  ],
 ]) {
   test(`${label} cannot pass as an available search index`, async (t) => {
     const site = await server(t, (req, res) => {
