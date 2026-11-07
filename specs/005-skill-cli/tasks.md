@@ -10,7 +10,8 @@ description: "US-005 Agent 命令维护的实施任务"
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，
 US-003 发布链与 US-004 手动维护规则。
 
-**Status**: 任务于 2026-11-08 生成；当前 23 项，T001–T023 未开始。分支
+**Status**: 任务于 2026-11-08 生成；当前 23 项。T001 已完成（见
+[validation/preflight.md](validation/preflight.md)）；T002–T023 未开始。分支
 `codex/us-005-skill-cli`（从 US-004 分支堆叠，未合并 main）。生产 Pages 未启用；真实远端写入与
 POC-002 操作需单独授权。
 
@@ -28,7 +29,7 @@ POC-002 操作需单独授权。
 
 ## Phase 1: Setup — 基线与前置
 
-- [ ] T001 [P] 在 `specs/005-skill-cli/validation/preflight.md` 记录：分支与 HEAD、Node/npm 实际与
+- [X] T001 [P] 在 `specs/005-skill-cli/validation/preflight.md` 记录：分支与 HEAD、Node/npm 实际与
   锁定版本、Git/gh 可用性与登录状态（不读取 token）、现有测试数量、生产 Pages 状态、POC-002
   可用性与授权边界。（NFR-006；AC-007）
 
