@@ -12,7 +12,7 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
 [技术方案](../../docs/TechnicalSolution.md)、[编程规范](../../docs/AiProgrammingGuide.md)。
 
 **Status**: 任务于 2026-11-07 生成；当前 33 项，T031/T032 为 2026-11-07 分析修订追加，
-T033 为同日 Step Summary 补齐追加，不重排既有 T001～T030。T001–T027、T031–T033 已完成
+T033 为同日 Step Summary 补齐追加，不重排既有 T001～T030。T001–T027、T029、T031–T033 已完成
 （T018 在受控临时公开仓库执行；Foundational 见 [validation/foundational.md](validation/foundational.md)；US1 见
 [validation/us3-snapshot.md](validation/us3-snapshot.md) 与
 [validation/us3-links.md](validation/us3-links.md)；US2 测试契约见
@@ -22,7 +22,7 @@ T033 为同日 Step Summary 补齐追加，不重排既有 T001～T030。T001–
 [validation/us3-summary.md](validation/us3-summary.md)；US3 安全契约见
 `tests/integration/publish/publish-security.test.js`、
 `tests/integration/publish/publish-security-workflow.test.js` 与
-[validation/us3-security.md](validation/us3-security.md)）；T028–T030 未开始。
+[validation/us3-security.md](validation/us3-security.md)）；T028、T030 未开始。
 2026-11-07 已将 publish 集成测试重组到 `tests/integration/publish/`，`npm test` 同步覆盖该目录；
 历史 validation 记录保留执行时路径。
 T018 的受控 POC-002 结果见 [validation/us3-recovery.md](validation/us3-recovery.md) 第 6 节。
@@ -275,7 +275,7 @@ T018 的受控 POC-002 结果见 [validation/us3-recovery.md](validation/us3-rec
 - [ ] T028 [P] 定向更新 `README.md`、`AGENTS.md` 中本故事已实现并验证的命令、工作流状态、
   受控环境结果和未完成项；生产发布、US-004～US-007 仍标规划；不写未验证的命令或线上成功。
   （NFR-006；AC-014 工程支撑）
-- [ ] T029 运行 `node scripts/publish-check.js artifact --dist <隔离 dist>` 与
+- [X] T029 运行 `node scripts/publish-check.js artifact --dist <隔离 dist>` 与
   `node scripts/publish-check.js target ...` 的最终冒烟，确认退出码/JSON 与契约一致；
   记录到 `specs/003-validate-build-publish/validation/us3-quality.md`，不写工作区 `dist/`。
   （FR-009、FR-011；AC-011、AC-014）

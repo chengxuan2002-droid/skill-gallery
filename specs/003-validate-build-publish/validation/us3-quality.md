@@ -23,3 +23,19 @@ npm 依赖、未修改 `skills/`、`catalog/`、内容 schema、前端行为或�
 
 未运行：GitHub Actions runner 上的完整 `npm run check`/`npm run security`、Node 26.3.0/Linux
 本地复验，以及生产 Pages 部署。
+
+## 2. 发布检查 CLI 冒烟（T029）
+
+使用 `tests/support/publish-fixture.js` 在系统临时目录构建隔离 `dist/`，未写入工作区 `dist/`；
+所有输出均为单行 JSON，诊断只含 `code`/`path`/固定 `message`。
+
+| 命令/场景 | 退出码 | JSON 结果 |
+|---|---|---|
+| `node scripts/publish-check.js artifact --dist <隔离 dist>` | 0 | `status=verified`、`content_revision=c48791d508cf5e3b306d21f8ce60330c391538d5505e248704bae35bac980578`、`files=20`、`diagnostics=[]` |
+| `... target --target <sha> --remote <同一 sha>` | 0 | `decision=current`，两个 40 位 SHA 原样返回 |
+| `... target --target <sha> --remote <另一 sha>` | 4 | `decision=superseded`，未执行部署 |
+| `... target --target not-a-sha --remote <sha>` | 2 | `decision=null`，`E_TARGET_SHA`，stderr 仅错误码 |
+| 篡改隔离 `dist/index.html` 后 `artifact` | 6 | `status=failed`、`E_ARTIFACT_HASH`，stderr 仅错误码，旧产物未被修改 |
+| `E_ARTIFACT_HASH` 诊断 | — | 只含位置与规则，不回显文件内容 |
+
+冒烟结束后删除临时项目，未执行 `dist/` 中的脚本、未发起网络请求。
