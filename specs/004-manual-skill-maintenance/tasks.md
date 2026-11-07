@@ -10,11 +10,11 @@ description: "US-004 管理员手动维护的实施任务"
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，
 以及 US-003 已交付的发布链与 validation 证据。
 
-**Status**: 任务于 2026-11-07 生成；当前 17 项。T001–T007 已完成（T001 见
-[validation/preflight.md](validation/preflight.md)，T002/T005 见
+**Status**: 任务于 2026-11-07 生成；当前 17 项。T001–T008 已完成（T001 见
+[validation/preflight.md](validation/preflight.md)，T002/T005/T008 见
 `tests/integration/manual-maintenance.test.js`，T003/T006 见 `README.md` 手动维护章节，T004 见
 [validation/manual-add.md](validation/manual-add.md)，T007 见
-[validation/manual-failures.md](validation/manual-failures.md)）；T008–T017 未开始。分支
+[validation/manual-failures.md](validation/manual-failures.md)）；T009–T017 未开始。分支
 `codex/us-004-manual-maintenance`（从 US-003 分支堆叠，未合并 main）。生产 Pages 未切换；
 手动发布验收只在隔离副本与受控仓库（POC-002）授权范围内进行。
 
@@ -100,7 +100,7 @@ description: "US-004 管理员手动维护的实施任务"
 
 ### Tests for User Story 3
 
-- [ ] T008 [US3] 在 `tests/integration/manual-maintenance.test.js` 增加替换/下架/恢复用例：
+- [X] T008 [US3] 在 `tests/integration/manual-maintenance.test.js` 增加替换/下架/恢复用例：
   替换后单版本且旧附件不残留；删除原件与记录后索引/详情/ZIP 消失；受控 revert 重建后
   `contentRevision` 与基线一致、slug 不变。（FR-005、FR-009；AC-006、AC-011）
 
