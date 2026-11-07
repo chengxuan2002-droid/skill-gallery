@@ -10,13 +10,13 @@ description: "US-004 管理员手动维护的实施任务"
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，
 以及 US-003 已交付的发布链与 validation 证据。
 
-**Status**: 任务于 2026-11-07 生成；当前 17 项。T001–T010 已完成（T001 见
+**Status**: 任务于 2026-11-07 生成；当前 17 项。T001–T011 已完成（T001 见
 [validation/preflight.md](validation/preflight.md)，T002/T005/T008 见
 `tests/integration/manual-maintenance.test.js`，T003/T006/T009 见 `README.md` 手动维护章节，T004 见
 [validation/manual-add.md](validation/manual-add.md)，T007 见
 [validation/manual-failures.md](validation/manual-failures.md)，T010 见
-[validation/manual-replace-remove-recovery.md](validation/manual-replace-remove-recovery.md)）；
-T011–T017 未开始。分支
+[validation/manual-replace-remove-recovery.md](validation/manual-replace-remove-recovery.md)，T011 见
+`tests/unit/site-entry.test.js`）；T012–T017 未开始。分支
 `codex/us-004-manual-maintenance`（从 US-003 分支堆叠，未合并 main）。生产 Pages 未切换；
 手动发布验收只在隔离副本与受控仓库（POC-002）授权范围内进行。
 
@@ -124,7 +124,7 @@ T011–T017 未开始。分支
 
 ### Tests for User Story 4
 
-- [ ] T011 [P] [US4] 在 `tests/unit/site-entry.test.js` 建立入口契约：页脚“管理”链接指向
+- [X] T011 [P] [US4] 在 `tests/unit/site-entry.test.js` 建立入口契约：页脚“管理”链接指向
   `https://github.com/chengxuan2002-droid/skill-gallery`、`target="_blank"`、`rel="noopener"`；
   首页无登录表单、`<input type="file">` 或上传按钮。（FR-007、FR-010；AC-008）
 
