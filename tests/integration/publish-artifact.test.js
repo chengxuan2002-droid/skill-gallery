@@ -100,3 +100,46 @@ test('extra files, tampering, credentials and stale revisions fail closed withou
     }
   }
 });
+
+test('unchanged rebuild keeps the revision and artifact set stable', async (t) => {
+  const project = createPublishFixtureProject();
+  t.after(() => project.cleanup());
+  const first = await project.buildDist();
+  assert.equal(first.ok, true, JSON.stringify(first.diagnostics));
+  const firstRevision = project.readManifest().contentRevision;
+  const firstSnapshot = project.snapshotDist(first.distDir);
+
+  const second = await project.buildDist();
+  assert.equal(second.ok, true, JSON.stringify(second.diagnostics));
+  assert.equal(project.readManifest().contentRevision, firstRevision);
+  assertUnchanged(firstSnapshot, project.snapshotDist(second.distDir));
+
+  const result = verifyArtifact(second.distDir);
+  assert.equal(result.ok, true, JSON.stringify(result.diagnostics));
+});
+
+test('a missing attachment fails the rebuild and preserves the previous dist', async (t) => {
+  const project = createPublishFixtureProject();
+  t.after(() => project.cleanup());
+  const first = await project.buildDist();
+  assert.equal(first.ok, true, JSON.stringify(first.diagnostics));
+  const before = project.snapshotDist(first.distDir);
+
+  fs.rmSync(path.join(project.root, 'skills/complete-detail/references/guide.md'));
+  const second = await project.buildDist();
+  assert.equal(second.ok, false);
+  assertUnchanged(before, project.snapshotDist(first.distDir));
+});
+
+test('an invalid catalog entry fails the rebuild and preserves the previous dist', async (t) => {
+  const project = createPublishFixtureProject();
+  t.after(() => project.cleanup());
+  const first = await project.buildDist();
+  assert.equal(first.ok, true, JSON.stringify(first.diagnostics));
+  const before = project.snapshotDist(first.distDir);
+
+  fs.writeFileSync(path.join(project.root, 'catalog/complete-detail.json'), '{invalid');
+  const second = await project.buildDist();
+  assert.equal(second.ok, false);
+  assertUnchanged(before, project.snapshotDist(first.distDir));
+});

@@ -119,7 +119,7 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
 
 ### Tests for User Story 1
 
-- [ ] T010 [US1] 在 `tests/integration/publish-artifact.test.js` 增加合法快照场景：索引、每个详情和
+- [X] T010 [US1] 在 `tests/integration/publish-artifact.test.js` 增加合法快照场景：索引、每个详情和
   manifest 的 `contentRevision` 一致，detail 的 `slug`/`digest` 与索引一致；第二次构建无变化时
   产物集合稳定；注入非法条目、缺失附件和额外文件时整批失败。
   （FR-009、FR-011；AC-011、AC-014）
