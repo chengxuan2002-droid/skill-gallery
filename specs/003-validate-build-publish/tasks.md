@@ -12,9 +12,10 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
 [技术方案](../../docs/TechnicalSolution.md)、[编程规范](../../docs/AiProgrammingGuide.md)。
 
 **Status**: 任务于 2026-11-07 生成；当前 32 项，T031/T032 为 2026-11-07 分析修订追加，
-不重排既有 T001～T030。分支 `codex/us-003-validate-build-publish`（从 US-002 分支堆叠，
-未合并 main）。尚未实现、未修改 Pages 设置、未发布。生产 Pages 源、environment、分支保护和线上切换
-需要单独授权；受控仓库不可用时按未运行记录。
+不重排既有 T001～T030。T001–T009 已完成本地实现与验证（见
+[validation/foundational.md](validation/foundational.md)）；T010–T032 未开始。
+分支 `codex/us-003-validate-build-publish`（从 US-002 分支堆叠，未合并 main）。
+生产 Pages 源、environment、分支保护和线上切换未修改、未发布；受控仓库不可用时按未运行记录。
 
 **Tests**: spec 的 Independent Test、Acceptance Scenarios 与 US003-SC-01～06 要求验证；宪章 IX 要求
 先建立能识别错误行为的验证。因此包含发布前产物、状态/过期、凭证边界和工作流静态契约测试。

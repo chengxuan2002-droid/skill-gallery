@@ -8,7 +8,8 @@
 **Input**: `specs/003-validate-build-publish/spec.md`，含四个内部切片、FR-007/009/011、
 NFR-003/004/006、AC-008/011/012/014 及生产授权边界。
 
-**Implementation Status**: 任务已生成（T001–T032，含 2026-11-07 追加的恢复与回归任务），尚未实现。
+**Implementation Status**: T001–T009 已完成本地实现与验证（见
+[validation/foundational.md](validation/foundational.md)）；T010–T032 未开始。
 生产 Pages 源、environment、分支保护和线上切换未修改；US-004～US-007 仍未开始。
 
 ## Summary
