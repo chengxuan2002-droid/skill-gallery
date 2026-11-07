@@ -103,10 +103,17 @@ function writeDirectoryCandidate(project, slug = 'cli-pack', overrides = {}) {
   return { contentPath: candidateDir, mainPath, metaPath, record };
 }
 
-function createFakeSource({ revision = 'b'.repeat(40), files = {} } = {}) {
+function createFakeSource({
+  revision = 'b'.repeat(40),
+  files = {},
+  truncated = false,
+  error = null,
+} = {}) {
   return {
-    revision,
-    files: new Map(Object.entries(files)),
+    resolve() {
+      if (error) return { ok: false, ...error };
+      return { ok: true, revision, truncated, files: new Map(Object.entries(files)) };
+    },
   };
 }
 

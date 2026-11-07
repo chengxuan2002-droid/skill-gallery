@@ -10,13 +10,12 @@ description: "US-005 Agent 命令维护的实施任务"
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，
 US-003 发布链与 US-004 手动维护规则。
 
-**Status**: 任务于 2026-11-08 生成；当前 23 项。T001–T010 已完成（T001 见
-[validation/preflight.md](validation/preflight.md)，T002–T004 见
-`tests/unit/skill-cli-args.test.js`、`tests/support/skill-cli-fixture.js` 与
-`scripts/lib/skill-cli/`，T005–T007 见 `tests/integration/skill-cli-add.test.js` 与
-[validation/us5-add.md](validation/us5-add.md)，T008–T010 见
-`tests/integration/skill-cli-replace.test.js`、`scripts/lib/skill-cli/replace.js` 与
-[validation/us5-replace.md](validation/us5-replace.md)）；T011–T023 未开始。分支
+**Status**: 任务于 2026-11-08 生成；当前 23 项。T001–T011 已完成（T001 见
+[validation/preflight.md](validation/preflight.md)，T002–T010 见
+`tests/unit/skill-cli-args.test.js`、`tests/integration/skill-cli-{add,replace}.test.js`、
+`tests/support/skill-cli-fixture.js`、`scripts/lib/skill-cli/` 与
+[validation/us5-add.md](validation/us5-add.md)、[validation/us5-replace.md](validation/us5-replace.md)，
+T011 见 `tests/integration/skill-cli-import.test.js`）；T012–T023 未开始。分支
 `codex/us-005-skill-cli`（从 US-004 分支堆叠，未合并 main）。生产 Pages 未启用；真实远端写入与
 POC-002 操作需单独授权。
 
@@ -76,7 +75,7 @@ POC-002 操作需单独授权。
 
 ## Phase 5: User Story 3 — GitHub 来源导入（Priority: P2）
 
-- [ ] T011 [US3] 在 `tests/integration/skill-cli-import.test.js` 建立来源导入契约：固定来源树、
+- [X] T011 [US3] 在 `tests/integration/skill-cli-import.test.js` 建立来源导入契约：固定来源树、
   截断/404/403/限流/越界/符号链接失败、普通网页 URL 拒绝；使用注入来源，不访问网络。
   （FR-006、FR-007；AC-007、AC-008）
 - [ ] T012 [US3] 实现 `scripts/lib/skill-cli/source-github.js`：结构化定位、不可变提交、完整文件树、
