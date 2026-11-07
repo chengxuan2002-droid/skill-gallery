@@ -126,7 +126,7 @@ Q-004 决策提交推送后的 Quality checks #42170060519 在 Node 26.3.0/Linux
 2026-11-07 US-004 的 T001–T015 已完成本地验证：GitHub 后台手动维护说明、页脚低权重“管理”外链、
 必填字段与失败/替换/下架/恢复步骤，以及隔离构建/失败批次/生命周期/入口证据见
 specs/004-manual-skill-maintenance/validation/；当前本地 npm test 为 220 项
-（218 通过、0 失败、2 跳过）。T016/T017 与受控发布验收未完成；生产 Pages 未切换，
+（218 通过、0 失败、2 跳过）。T016/T017 已完成受控发布与最终复核；生产 Pages 未切换，
 手动提交、本地构建或受控验收不等于生产发布。
 首次初始化证据见 specs/001-preserve-skill-content/validation/bootstrap.md。
 2026-11-03 在 Windows 复核 T002～T010：`.gitattributes` 固定项目文本为 LF，`skills/**` 不做换行转换；
