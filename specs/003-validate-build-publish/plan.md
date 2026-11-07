@@ -17,7 +17,7 @@ NFR-003/004/006、AC-008/011/012/014 及生产授权边界。
 [validation/us3-recovery.md](validation/us3-recovery.md)，Step Summary 见
 [validation/us3-summary.md](validation/us3-summary.md)；US3 安全契约见
 `tests/integration/publish-security.test.js`、`tests/integration/publish-security-workflow.test.js` 与
-[validation/us3-security.md](validation/us3-security.md)）；T022–T032 未开始。
+[validation/us3-security.md](validation/us3-security.md)）；T027–T032 未开始。
 T018 的受控 POC-002 结果见 [validation/us3-recovery.md](validation/us3-recovery.md) 第 6 节。
 生产 Pages 源、environment、分支保护和线上切换未修改；US-004～US-007 仍未开始。
 
