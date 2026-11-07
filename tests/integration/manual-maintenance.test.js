@@ -7,7 +7,7 @@ const test = require('node:test');
 const yauzl = require('yauzl');
 
 const { createDetailFixtureProject } = require('../support/search-fixture');
-const { sha256 } = require('../support/fixtures');
+const { listTree, sha256 } = require('../support/fixtures');
 
 const SINGLE_BODY = [
   '---',
@@ -190,6 +190,72 @@ test('metadata-only edits keep the original bytes unchanged', async (t) => {
   assert.deepEqual(fs.readFileSync(path.join(project.skillsDir, 'manual-single.md')), source);
   const raw = fs.readFileSync(path.join(second.distDir, ...detail.raw_url.split('/')));
   assert.deepEqual(raw, source);
+});
+
+function snapshot(root) {
+  const { files } = listTree(root);
+  return new Map(
+    files.map((relativePath) => {
+      const bytes = fs.readFileSync(path.join(root, ...relativePath.split('/')));
+      return [relativePath, { size: bytes.length, sha256: sha256(bytes) }];
+    }),
+  );
+}
+
+test('invalid manual batches fail closed and preserve the previous dist', async (t) => {
+  const secret = ['ghp', '_', 'A'.repeat(24)].join('');
+  const cases = [
+    {
+      name: 'missing required field',
+      mutate(project) {
+        const value = record('manual-single', { display_name: 'Manual Single' });
+        delete value.display_name;
+        writeRecord(project.root, value);
+      },
+      code: 'E_SCHEMA',
+    },
+    {
+      name: 'missing attachment',
+      mutate(project) {
+        fs.rmSync(path.join(project.skillsDir, 'manual-pack/references/note.md'));
+      },
+      code: 'E_REFERENCE_MISSING',
+    },
+    {
+      name: 'path traversal',
+      mutate(project) {
+        writeRecord(
+          project.root,
+          record('manual-single', { content_path: 'skills/../index.html' }),
+        );
+      },
+      code: 'E_PATH',
+    },
+    {
+      name: 'credential content',
+      mutate(project) {
+        fs.writeFileSync(
+          path.join(project.skillsDir, 'manual-pack/references/leak.txt'),
+          `token: ${secret}\n`,
+        );
+      },
+      code: 'E_SECRET',
+    },
+  ];
+
+  for (const item of cases) {
+    const project = makeProject(t);
+    const first = await project.buildPreview();
+    assert.equal(first.ok, true, `${item.name}: ${JSON.stringify(first.diagnostics)}`);
+    const before = snapshot(first.distDir);
+
+    item.mutate(project);
+    const failed = await project.buildPreview();
+    assert.equal(failed.ok, false, item.name);
+    assert.equal(failed.diagnostics[0].code, item.code, item.name);
+    assert.equal(JSON.stringify(failed.diagnostics).includes(secret), false, item.name);
+    assert.deepEqual([...snapshot(first.distDir).entries()], [...before.entries()], item.name);
+  }
 });
 
 test('rebuilding unchanged manual content keeps the revision and artifact set', async (t) => {

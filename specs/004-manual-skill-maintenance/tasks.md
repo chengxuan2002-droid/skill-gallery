@@ -10,10 +10,10 @@ description: "US-004 管理员手动维护的实施任务"
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，
 以及 US-003 已交付的发布链与 validation 证据。
 
-**Status**: 任务于 2026-11-07 生成；当前 17 项。T001–T004 已完成（T001 见
-[validation/preflight.md](validation/preflight.md)，T002 见
+**Status**: 任务于 2026-11-07 生成；当前 17 项。T001–T005 已完成（T001 见
+[validation/preflight.md](validation/preflight.md)，T002/T005 见
 `tests/integration/manual-maintenance.test.js`，T003 见 `README.md` 手动维护章节，T004 见
-[validation/manual-add.md](validation/manual-add.md)）；T005–T017 未开始。分支
+[validation/manual-add.md](validation/manual-add.md)）；T006–T017 未开始。分支
 `codex/us-004-manual-maintenance`（从 US-003 分支堆叠，未合并 main）。生产 Pages 未切换；
 手动发布验收只在隔离副本与受控仓库（POC-002）授权范围内进行。
 
@@ -75,7 +75,7 @@ description: "US-004 管理员手动维护的实施任务"
 
 ### Tests for User Story 2
 
-- [ ] T005 [US2] 在 `tests/integration/manual-maintenance.test.js` 增加失败用例：缺必填字段、
+- [X] T005 [US2] 在 `tests/integration/manual-maintenance.test.js` 增加失败用例：缺必填字段、
   缺失附件、越界路径、伪造凭证文件（运行时构造或占位符）全部失败关闭；诊断只含位置/规则，
   不回显值；失败前后旧 `dist/` 不变。（FR-005、FR-007、FR-009；AC-006、AC-008、AC-011）
 
