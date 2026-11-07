@@ -66,23 +66,29 @@ node scripts/publish-check.js target --target <target> --remote <remote>
 
 ## 6. 受控仓库 POC-002（T018）
 
-**状态**: 未运行。未提供受控测试仓库、Pages 源切换和 environment 修改授权；用户要求
-不自动推送或发布。当前 `origin` 仍是生产仓库 `chengxuan2002-droid/skill-gallery`，当前分支
-`codex/us-003-validate-build-publish` 未推送。
+**状态**: 未运行（环境不可用）。已按授权创建临时私有仓库
+`chengxuan2002-droid/skill-gallery-poc-20261107`，但创建 Pages 站点返回
+`422 Your current plan does not support GitHub Pages for this repository.`。未推送内容、
+未创建 `github-pages` environment、未切换 Pages 源、未触发 workflow。当前 `origin` 仍是生产仓库
+`chengxuan2002-droid/skill-gallery`，当前分支 `codex/us-003-validate-build-publish` 未推送。
 
-只读核对（未修改任何远程设置）：
+核对记录：
 
 | 检查 | 结果 |
 |---|---|
+| 临时私有仓库 | 已创建，空仓库；未推送任何提交 |
+| 临时仓库 Actions 权限 | `default_workflow_permissions=write` |
+| `POST /repos/chengxuan2002-droid/skill-gallery-poc-20261107/pages` | HTTP 422：当前计划不支持私有仓库 Pages |
 | `gh api repos/chengxuan2002-droid/skill-gallery/pages` | `build_type=legacy`，`source=main:/`，`status=built` |
 | `gh api repos/chengxuan2002-droid/skill-gallery/environments/github-pages` | `protection_rules=[branch_policy]` |
 | `npm run monitor:site` | 通过；首页、`assets/app.js`、`assets/style.css`、`assets/search-index.json` 均 HTTP 200 |
-| `git remote -v` | 仅配置生产仓库 `origin`，未发现受控测试仓库 |
+| `git remote -v` | 仅配置生产仓库 `origin`；临时仓库未加入本地 remote |
 
-上述只读探测只证明当前站点可读和 Pages 仍为旧源，不证明部署失败保留、同一提交重跑或
-受控环境权限。本轮未推送、未切换 Pages 源、未触发 workflow、未部署。
+上述探测只证明当前生产站点可读和 Pages 仍为旧源，不证明部署失败保留、同一提交重跑或
+受控环境权限。本轮未向临时仓库推送、未切换任何 Pages 源、未触发 workflow、未部署。
 
-解除条件：提供受控测试仓库及明确授权后，按 [quickstart.md](../quickstart.md) 第 6 节切换
+解除条件：当前计划不支持私有仓库 Pages；需要授权临时公开测试仓库、升级计划，或继续将
+T018 记录为未运行。获得可用受控仓库后，按 [quickstart.md](../quickstart.md) 第 6 节切换
 Pages 源，注入部署失败，确认旧站可用，再按同一 commit 重跑成功，并记录运行 URL、目标 SHA、
 状态和未运行项。
 

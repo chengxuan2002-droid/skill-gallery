@@ -119,8 +119,8 @@ Q-004 决策提交推送后的 Quality checks #42170060519 在 Node 26.3.0/Linux
 不能把功能分支验收或远程 CI 报告为生产发布。
 2026-11-07 US-003 的 T001–T017 与 T033 已完成本地实现与验证：发布产物校验、`publish-check.js`、
 `maintain.yml` 骨架、US1 快照/子路径验收、US2 状态/部署测试契约、隔离恢复演练和完整
-RunStatus Step Summary 见 specs/003-validate-build-publish/；T018 未运行（无受控仓库授权，
-只读核对见 us3-recovery.md），T019–T032 未开始，分支未推送，生产未启用。
+RunStatus Step Summary 见 specs/003-validate-build-publish/；T018 未运行（临时私有仓库 Pages 不受
+当前计划支持，核对见 us3-recovery.md），T019–T032 未开始，分支未推送，生产未启用。
 当前本地 npm test 为 196 项（194 通过、0 失败、2 跳过，含 US-003 测试）。
 首次初始化证据见 specs/001-preserve-skill-content/validation/bootstrap.md。
 2026-11-03 在 Windows 复核 T002～T010：`.gitattributes` 固定项目文本为 LF，`skills/**` 不做换行转换；

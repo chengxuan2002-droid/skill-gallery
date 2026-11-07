@@ -19,8 +19,8 @@ T033 为同日 Step Summary 补齐追加，不重排既有 T001～T030。T001–
 `tests/unit/publish-status.test.js`、`tests/integration/publish-superseded.test.js` 与
 `tests/integration/publish-deploy-workflow.test.js`，恢复演练见
 [validation/us3-recovery.md](validation/us3-recovery.md)，Step Summary 见
-[validation/us3-summary.md](validation/us3-summary.md)）；T018 未运行（未提供受控测试仓库或授权，
-只读核对见 us3-recovery.md），T019–T032 未开始。
+[validation/us3-summary.md](validation/us3-summary.md)）；T018 未运行（临时私有仓库 Pages 不受
+当前计划支持，核对见 us3-recovery.md），T019–T032 未开始。
 分支 `codex/us-003-validate-build-publish`（从 US-002 分支堆叠，当前未推送、未合并 main）。
 生产 Pages 源、environment、分支保护和线上切换未修改、未发布；受控仓库不可用时按未运行记录。
 
@@ -186,7 +186,8 @@ T033 为同日 Step Summary 补齐追加，不重排既有 T001～T030。T001–
   目标 SHA、状态和未运行项到
   `specs/003-validate-build-publish/validation/us3-recovery.md`；未获授权或环境不可用时只记录未运行。
   （FR-009、FR-011；AC-011、AC-014）
-  **2026-11-07 状态**: 未运行；未提供受控测试仓库或授权，只读核对与解除条件见
+  **2026-11-07 状态**: 未运行；已创建临时私有仓库，但 Pages 返回 422（当前计划不支持
+  私有仓库 Pages），未推送、未切换、未部署；核对与解除条件见
   [validation/us3-recovery.md](validation/us3-recovery.md)。
 
 **Checkpoint**: 失败保留、重跑、过期和恢复语义可独立验证；生产未启用。
