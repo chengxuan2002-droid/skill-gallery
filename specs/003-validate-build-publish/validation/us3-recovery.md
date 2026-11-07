@@ -66,36 +66,39 @@ node scripts/publish-check.js target --target <target> --remote <remote>
 
 ## 6. 受控仓库 POC-002（T018）
 
-**状态**: 未运行（环境不可用）。已按授权创建临时私有仓库
-`chengxuan2002-droid/skill-gallery-poc-20261107`，但创建 Pages 站点返回
-`422 Your current plan does not support GitHub Pages for this repository.`。未推送内容、
-未创建 `github-pages` environment、未切换 Pages 源、未触发 workflow。当前 `origin` 仍是生产仓库
-`chengxuan2002-droid/skill-gallery`，当前分支 `codex/us-003-validate-build-publish` 未推送。
-
-核对记录：
+**状态**: 已完成（临时公开仓库）。临时仓库在私有状态下创建 Pages 返回 HTTP 422（当前计划
+不支持私有仓库 Pages），经用户授权将同一临时仓库
+`chengxuan2002-droid/skill-gallery-poc-20261107` 改为公开后继续。该仓库只包含站点、脚本、测试和 workflow
+所需文件，排除 `docs/`、`specs/`、`handoff/`、`.agents/`、`.specify/`、`AGENTS.md` 与
+`instructions.md`。为隔离 Pages 部署机制，临时仓库的 workflow 是 POC 精简版：保留
+build、artifact 校验、上传、目标判定、摘要和失败注入，移除 `setup:security`、`npm run check`
+与 `npm run security`；生产 `maintain.yml` 未修改。临时仓库当前仍为公开状态，尚未删除。
 
 | 检查 | 结果 |
 |---|---|
-| 临时私有仓库 | 已创建，空仓库；未推送任何提交 |
-| 临时仓库 Actions 权限 | `default_workflow_permissions=write` |
-| `POST /repos/chengxuan2002-droid/skill-gallery-poc-20261107/pages` | HTTP 422：当前计划不支持私有仓库 Pages |
-| `gh api repos/chengxuan2002-droid/skill-gallery/pages` | `build_type=legacy`，`source=main:/`，`status=built` |
-| `gh api repos/chengxuan2002-droid/skill-gallery/environments/github-pages` | `protection_rules=[branch_policy]` |
-| `npm run monitor:site` | 通过；首页、`assets/app.js`、`assets/style.css`、`assets/search-index.json` 均 HTTP 200 |
-| `git remote -v` | 仅配置生产仓库 `origin`；临时仓库未加入本地 remote |
+| 临时仓库 | `https://github.com/chengxuan2002-droid/skill-gallery-poc-20261107`，`main` |
+| Pages source / environment | `build_type=workflow`；`github-pages` environment `branch_policy` |
+| 目标提交 | `8c86a3972580cb8053a4843d17fd17f4d32a909e` |
+| `contentRevision` | `82afef70fa4bedfe243723263a11c75a900d433f8e35e7374f2ae747ae0d23b8` |
+| 首次 push 运行 | [42355651634](https://github.com/chengxuan2002-droid/skill-gallery-poc-20261107/actions/runs/42355651634)：build/deploy 均成功 |
+| 部署失败运行 | [42355755607](https://github.com/chengxuan2002-droid/skill-gallery-poc-20261107/actions/runs/42355755607)：build 成功；deploy 失败于 `POC deploy failure injection`，`Deploy to GitHub Pages` 跳过，`Write publish summary` 成功 |
+| 同一提交重跑 | [42355846761](https://github.com/chengxuan2002-droid/skill-gallery-poc-20261107/actions/runs/42355846761)：同一目标提交，build/deploy 均成功 |
+| 临时站点 | `https://chengxuan2002-droid.github.io/skill-gallery-poc-20261107/`；失败前、失败后、重跑后均 HTTP 200、1,417 字节，SHA-256 均为 `4B87C0B98586D551A3FB18FB899B66079CB2F7512CE2ABB286F55D19014E53F2` |
+| 失败开关 | 临时仓库变量 `POC_FAIL_DEPLOY=1` 触发失败；重跑前已删除，当前变量列表为空 |
+| artifact 校验 | `status=verified`，`content_revision` 与上表一致，`files=25`，`diagnostics=[]` |
+| 生产 Pages | 仍为 `build_type=legacy`、`source=main:/`、`status=built`，未修改 |
 
-上述探测只证明当前生产站点可读和 Pages 仍为旧源，不证明部署失败保留、同一提交重跑或
-受控环境权限。本轮未向临时仓库推送、未切换任何 Pages 源、未触发 workflow、未部署。
-
-解除条件：当前计划不支持私有仓库 Pages；需要授权临时公开测试仓库、升级计划，或继续将
-T018 记录为未运行。获得可用受控仓库后，按 [quickstart.md](../quickstart.md) 第 6 节切换
-Pages 源，注入部署失败，确认旧站可用，再按同一 commit 重跑成功，并记录运行 URL、目标 SHA、
-状态和未运行项。
+失败运行中 build job 成功、deploy job 失败，说明“已构建、部署失败”可区分；失败前后临时站点
+响应字节与摘要不变，说明旧站保留。同一目标提交在清除失败开关后重跑成功，说明重跑幂等且不依赖
+新内容提交。
 
 ## 7. 未运行与限制
 
-- T018 的受控仓库 POC-002 未运行，原因见第 6 节；不得把本记录的本地模拟当作远程发布通过。
-- 未在 Node 26.3.0/npm 11.16.0、Linux/CI 或真实 GitHub runner 上运行。
-- 未验证浏览器刷新、线上 MIME/缓存或真实回滚；这些留待受控环境验证。
+- T018 已完成受控 POC-002，但临时仓库使用精简 workflow，未在临时仓库运行完整
+  `npm run check`/`npm run security`；生产工作流仍未远程执行。
+- T018 已在 GitHub runner（Node 26.3.0/Linux）运行；T014–T017 的本地结果仍来自
+  Node 22.21.0/Windows。
+- 未验证浏览器刷新、线上 MIME/缓存或真实回滚；T018 只验证 HTTP 200、响应摘要和旧站保留。
 - T033 已在 build/deploy Step Summary 中补齐完整 RunStatus 字段，见
-  [us3-summary.md](us3-summary.md)；本记录只验证状态模型和失败保留语义，不代表远程运行通过。
+  [us3-summary.md](us3-summary.md)；本记录只验证状态模型和失败保留语义，不代表生产发布通过。
+- 临时公开仓库尚未删除；如需清理，应单独确认后删除。

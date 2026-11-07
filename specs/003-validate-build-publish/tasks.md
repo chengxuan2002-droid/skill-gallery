@@ -12,15 +12,15 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
 [技术方案](../../docs/TechnicalSolution.md)、[编程规范](../../docs/AiProgrammingGuide.md)。
 
 **Status**: 任务于 2026-11-07 生成；当前 33 项，T031/T032 为 2026-11-07 分析修订追加，
-T033 为同日 Step Summary 补齐追加，不重排既有 T001～T030。T001–T017 与 T033 已完成本地实现与验证
-（Foundational 见 [validation/foundational.md](validation/foundational.md)；US1 见
+T033 为同日 Step Summary 补齐追加，不重排既有 T001～T030。T001–T018 与 T033 已完成
+（T018 在受控临时公开仓库执行；Foundational 见 [validation/foundational.md](validation/foundational.md)；US1 见
 [validation/us3-snapshot.md](validation/us3-snapshot.md) 与
 [validation/us3-links.md](validation/us3-links.md)；US2 测试契约见
 `tests/unit/publish-status.test.js`、`tests/integration/publish-superseded.test.js` 与
 `tests/integration/publish-deploy-workflow.test.js`，恢复演练见
 [validation/us3-recovery.md](validation/us3-recovery.md)，Step Summary 见
-[validation/us3-summary.md](validation/us3-summary.md)）；T018 未运行（临时私有仓库 Pages 不受
-当前计划支持，核对见 us3-recovery.md），T019–T032 未开始。
+[validation/us3-summary.md](validation/us3-summary.md)）；T019–T032 未开始。
+T018 的受控 POC-002 结果见 [validation/us3-recovery.md](validation/us3-recovery.md) 第 6 节。
 分支 `codex/us-003-validate-build-publish`（从 US-002 分支堆叠，当前未推送、未合并 main）。
 生产 Pages 源、environment、分支保护和线上切换未修改、未发布；受控仓库不可用时按未运行记录。
 
@@ -181,14 +181,13 @@ T033 为同日 Step Summary 补齐追加，不重排既有 T001～T030。T001–
   或让部署步骤前置检查失败），确认旧 `dist/` 不变、状态可区分、同一提交重跑不新增内容提交；
   记录到 `specs/003-validate-build-publish/validation/us3-recovery.md`。
   （FR-009、NFR-004；AC-011）
-- [ ] T018 [US2] 如获授权，在受控测试仓库执行 POC-002：切换 Pages 源为 GitHub Actions，触发
+- [X] T018 [US2] 如获授权，在受控测试仓库执行 POC-002：切换 Pages 源为 GitHub Actions，触发
   部署失败（权限/环境/步骤失败），确认旧站可用，按同一 commit 重跑成功；记录运行 URL、
   目标 SHA、状态和未运行项到
   `specs/003-validate-build-publish/validation/us3-recovery.md`；未获授权或环境不可用时只记录未运行。
   （FR-009、FR-011；AC-011、AC-014）
-  **2026-11-07 状态**: 未运行；已创建临时私有仓库，但 Pages 返回 422（当前计划不支持
-  私有仓库 Pages），未推送、未切换、未部署；核对与解除条件见
-  [validation/us3-recovery.md](validation/us3-recovery.md)。
+  **2026-11-07 状态**: 已完成受控 POC-002（临时公开仓库）；运行 URL、目标 SHA、部署失败、
+  旧站保留和同一提交重跑结果见 [validation/us3-recovery.md](validation/us3-recovery.md) 第 6 节。
 
 **Checkpoint**: 失败保留、重跑、过期和恢复语义可独立验证；生产未启用。
 

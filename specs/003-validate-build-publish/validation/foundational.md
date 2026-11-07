@@ -49,5 +49,5 @@
 - T010–T013 的 US1 验收已由 [us3-snapshot.md](us3-snapshot.md) 与
   [us3-links.md](us3-links.md) 记录；T014–T016 的 US2 测试契约已完成，T017 的隔离恢复演练见
   [us3-recovery.md](us3-recovery.md)，T033 的 Step Summary 验证见
-  [us3-summary.md](us3-summary.md)；T018 的受控 POC-002 未运行（临时私有仓库 Pages 不受
-  当前计划支持），T019–T032（US2 受控验证/US3/US4/Polish）未执行。
+  [us3-summary.md](us3-summary.md)；T018 的受控 POC-002 已在临时公开仓库完成，见
+  [us3-recovery.md](us3-recovery.md) 第 6 节；T019–T032（US2 受控验证/US3/US4/Polish）未执行。

@@ -8,15 +8,15 @@
 **Input**: `specs/003-validate-build-publish/spec.md`，含四个内部切片、FR-007/009/011、
 NFR-003/004/006、AC-008/011/012/014 及生产授权边界。
 
-**Implementation Status**: T001–T017 与 T033 已完成本地实现与验证（Foundational 见
+**Implementation Status**: T001–T018 与 T033 已完成（T018 在受控临时公开仓库执行；Foundational 见
 [validation/foundational.md](validation/foundational.md)；US1 见
 [validation/us3-snapshot.md](validation/us3-snapshot.md) 与
 [validation/us3-links.md](validation/us3-links.md)；US2 测试契约见
 `tests/unit/publish-status.test.js`、`tests/integration/publish-superseded.test.js` 与
 `tests/integration/publish-deploy-workflow.test.js`，恢复演练见
 [validation/us3-recovery.md](validation/us3-recovery.md)，Step Summary 见
-[validation/us3-summary.md](validation/us3-summary.md)）；T018 未运行（临时私有仓库 Pages 不受
-当前计划支持），T019–T032 未开始。
+[validation/us3-summary.md](validation/us3-summary.md)）；T019–T032 未开始。
+T018 的受控 POC-002 结果见 [validation/us3-recovery.md](validation/us3-recovery.md) 第 6 节。
 生产 Pages 源、environment、分支保护和线上切换未修改；US-004～US-007 仍未开始。
 
 ## Summary
