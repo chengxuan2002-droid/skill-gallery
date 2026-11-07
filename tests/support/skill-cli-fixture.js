@@ -118,6 +118,36 @@ function createFakeRuns(statuses = {}) {
   };
 }
 
+function remoteHead(project) {
+  return execFileSync('git', ['-C', project.remoteDir, 'rev-parse', 'main'], {
+    encoding: 'utf8',
+  }).trim();
+}
+
+function remoteFiles(project) {
+  return execFileSync(
+    'git',
+    ['-C', project.remoteDir, 'show', '--pretty=format:', '--name-only', 'main'],
+    { encoding: 'utf8' },
+  )
+    .split(/\r?\n/)
+    .filter(Boolean)
+    .sort();
+}
+
+function remoteBytes(project, relativePath) {
+  return execFileSync('git', ['-C', project.remoteDir, 'show', `main:${relativePath}`]);
+}
+
+function remoteTree(project) {
+  return execFileSync('git', ['-C', project.remoteDir, 'ls-tree', '-r', '--name-only', 'main'], {
+    encoding: 'utf8',
+  })
+    .split(/\r?\n/)
+    .filter(Boolean)
+    .sort();
+}
+
 function readJson(root, relativePath) {
   return JSON.parse(fs.readFileSync(path.join(root, ...relativePath.split('/')), 'utf8'));
 }
@@ -127,6 +157,10 @@ module.exports = {
   createFakeSource,
   createSkillCliProject,
   readJson,
+  remoteBytes,
+  remoteFiles,
+  remoteHead,
+  remoteTree,
   sampleRecord,
   writeDirectoryCandidate,
   writeSingleCandidate,

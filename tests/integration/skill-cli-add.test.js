@@ -3,11 +3,14 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { execFileSync, spawnSync } = require('node:child_process');
+const { spawnSync } = require('node:child_process');
 const test = require('node:test');
 
 const {
   createSkillCliProject,
+  remoteBytes,
+  remoteFiles,
+  remoteHead,
   writeDirectoryCandidate,
   writeSingleCandidate,
 } = require('../support/skill-cli-fixture');
@@ -23,22 +26,6 @@ function run(project, args) {
   const lines = result.stdout.trim().split(/\r?\n/);
   assert.equal(lines.length, 1, 'stdout must be one machine-readable line');
   return { ...result, output: JSON.parse(lines[0]) };
-}
-
-function remoteHead(project) {
-  return project.git('-C', project.remoteDir, 'rev-parse', 'main');
-}
-
-function remoteFiles(project) {
-  return project
-    .git('-C', project.remoteDir, 'show', '--pretty=format:', '--name-only', 'main')
-    .split(/\r?\n/)
-    .filter(Boolean)
-    .sort();
-}
-
-function remoteFile(project, relativePath) {
-  return execFileSync('git', ['-C', project.remoteDir, 'show', `main:${relativePath}`]);
 }
 
 test('preview validates a candidate without writing or publishing', async (t) => {
@@ -80,7 +67,7 @@ test('publishing a single-file candidate stages only the skill and record', asyn
   assert.equal(result.output.commit_sha, remoteHead(project));
   assert.deepEqual(remoteFiles(project), ['catalog/cli-single.json', 'skills/cli-single.md']);
   assert.deepEqual(
-    Buffer.from(remoteFile(project, 'skills/cli-single.md'), 'utf8'),
+    Buffer.from(remoteBytes(project, 'skills/cli-single.md'), 'utf8'),
     fs.readFileSync(candidate.contentPath),
   );
   assert.equal(project.git('status', '--porcelain'), '');
