@@ -118,9 +118,9 @@ scripts/publish-check.js                # 新增：本地/CI 校验 CLI（artifa
 scripts/publish-summary.js              # 新增：Step Summary CI 入口
 tests/unit/publish.test.js              # 新增：纯函数与状态契约
 tests/unit/publish-summary.test.js      # 新增：摘要状态与脱敏
-tests/integration/publish-artifact.test.js # 新增：构建产物与失败注入
-tests/integration/publish-workflow.test.js # 新增：工作流静态断言
-tests/integration/publish-summary-workflow.test.js # 新增：摘要字段静态断言
+tests/integration/publish/publish-artifact.test.js # 新增：构建产物与失败注入
+tests/integration/publish/publish-workflow.test.js # 新增：工作流静态断言
+tests/integration/publish/publish-summary-workflow.test.js # 新增：摘要字段静态断言
 assets/                                 # 不改
 catalog/、skills/                       # 不改
 scripts/lib/build-site.js               # 不改；复用其 manifest 输出

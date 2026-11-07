@@ -9,7 +9,7 @@
   "scripts": {
     "lint": "eslint assets scripts tests eslint.config.mjs",
     "format:check": "prettier --check index.html assets/*.js assets/style.css scripts tests config .github/workflows eslint.config.mjs .prettierrc.json package.json",
-    "test": "node --test tests/unit/*.test.js tests/integration/*.test.js",
+    "test": "node --test tests/unit/*.test.js tests/integration/*.test.js tests/integration/publish/*.test.js",
     "build": "node scripts/build-index.js",
     "preview": "node scripts/preview.js",
     "monitor:site": "node scripts/check-site.js",

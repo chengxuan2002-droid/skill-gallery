@@ -6,8 +6,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const test = require('node:test');
 
-const { createPublishFixtureProject } = require('../support/publish-fixture');
-const { verifyArtifact } = require('../../scripts/lib/publish');
+const { createPublishFixtureProject } = require('../../support/publish-fixture');
+const { verifyArtifact } = require('../../../scripts/lib/publish');
 
 function assertUnchanged(before, after) {
   assert.deepEqual([...after.entries()], [...before.entries()]);

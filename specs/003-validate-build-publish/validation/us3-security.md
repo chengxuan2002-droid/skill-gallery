@@ -10,15 +10,15 @@ Gitleaks 8.30.1、Semgrep 1.183.0（版本以 `config/security-tools.json` 为�
 ## 1. 安全契约测试
 
 ```text
-node --test tests/integration/publish-security.test.js tests/integration/publish-security-workflow.test.js
+node --test tests/integration/publish/publish-security.test.js tests/integration/publish/publish-security-workflow.test.js
 ```
 
 结果：退出码 `0`；9 项通过、0 失败、0 跳过。
 
 | 文件 | 项数 | 覆盖 |
 |---|---|---|
-| `tests/integration/publish-security.test.js` | 5 | 凭证文件名、token 前缀、私钥块、越界/绝对/重复路径、内容不执行 |
-| `tests/integration/publish-security-workflow.test.js` | 4 | 最小权限、checkout 凭证、无 secret/PAT/fork 触发、摘要字段白名单 |
+| `tests/integration/publish/publish-security.test.js` | 5 | 凭证文件名、token 前缀、私钥块、越界/绝对/重复路径、内容不执行 |
+| `tests/integration/publish/publish-security-workflow.test.js` | 4 | 最小权限、checkout 凭证、无 secret/PAT/fork 触发、摘要字段白名单 |
 
 ### 1.1 产物凭证与路径边界（T019）
 

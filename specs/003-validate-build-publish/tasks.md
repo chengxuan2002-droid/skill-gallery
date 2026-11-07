@@ -16,12 +16,15 @@ T033 为同日 Step Summary 补齐追加，不重排既有 T001～T030。T001–
 （T018 在受控临时公开仓库执行；Foundational 见 [validation/foundational.md](validation/foundational.md)；US1 见
 [validation/us3-snapshot.md](validation/us3-snapshot.md) 与
 [validation/us3-links.md](validation/us3-links.md)；US2 测试契约见
-`tests/unit/publish-status.test.js`、`tests/integration/publish-superseded.test.js` 与
-`tests/integration/publish-deploy-workflow.test.js`，恢复演练见
+`tests/unit/publish-status.test.js`、`tests/integration/publish/publish-superseded.test.js` 与
+`tests/integration/publish/publish-deploy-workflow.test.js`，恢复演练见
 [validation/us3-recovery.md](validation/us3-recovery.md)，Step Summary 见
 [validation/us3-summary.md](validation/us3-summary.md)；US3 安全契约见
-`tests/integration/publish-security.test.js`、`tests/integration/publish-security-workflow.test.js` 与
+`tests/integration/publish/publish-security.test.js`、
+`tests/integration/publish/publish-security-workflow.test.js` 与
 [validation/us3-security.md](validation/us3-security.md)）；T022–T032 未开始。
+2026-11-07 已将 publish 集成测试重组到 `tests/integration/publish/`，`npm test` 同步覆盖该目录；
+历史 validation 记录保留执行时路径。
 T018 的受控 POC-002 结果见 [validation/us3-recovery.md](validation/us3-recovery.md) 第 6 节。
 分支 `codex/us-003-validate-build-publish`（从 US-002 分支堆叠，当前未推送、未合并 main）。
 生产 Pages 源、environment、分支保护和线上切换未修改、未发布；受控仓库不可用时按未运行记录。
@@ -238,7 +241,7 @@ T018 的受控 POC-002 结果见 [validation/us3-recovery.md](validation/us3-rec
 
 ### Tests for User Story 4
 
-- [ ] T023 [P] [US4] 在 `tests/integration/publish-same-run.test.js` 写结构契约：`maintain.yml`
+- [ ] T023 [P] [US4] 在 `tests/integration/publish/publish-same-run.test.js` 写结构契约：`maintain.yml`
   只有一个发布工作流，`deploy` 与 `build` 在同一运行且 `needs` 链完整；不存在依赖
   `workflow_run` 或另一次 push 的部署入口；工作流注释/结构允许 US-006 增加 `sync` job 后
   通过 `needs` 进入 build/deploy。只补同次运行结构，不重复 T005 的基础触发/权限项。

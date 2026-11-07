@@ -7,7 +7,7 @@ const os = require('node:os');
 const path = require('node:path');
 const test = require('node:test');
 
-const root = path.resolve(__dirname, '../..');
+const root = path.resolve(__dirname, '../../..');
 const script = path.join(root, 'scripts/publish-check.js');
 const currentSha = 'a'.repeat(40);
 const otherSha = 'b'.repeat(40);

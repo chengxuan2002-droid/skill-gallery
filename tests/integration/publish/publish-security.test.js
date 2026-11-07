@@ -8,10 +8,10 @@ const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 const test = require('node:test');
 
-const { createPublishFixtureProject } = require('../support/publish-fixture');
-const { verifyArtifact } = require('../../scripts/lib/publish');
+const { createPublishFixtureProject } = require('../../support/publish-fixture');
+const { verifyArtifact } = require('../../../scripts/lib/publish');
 
-const root = path.resolve(__dirname, '../..');
+const root = path.resolve(__dirname, '../../..');
 const cli = path.join(root, 'scripts/publish-check.js');
 
 function sha256(bytes) {

@@ -6,7 +6,7 @@ const path = require('node:path');
 const test = require('node:test');
 const YAML = require('yaml');
 
-const root = path.resolve(__dirname, '../..');
+const root = path.resolve(__dirname, '../../..');
 const workflowPath = path.join(root, '.github/workflows/maintain.yml');
 const workflowText = fs.readFileSync(workflowPath, 'utf8');
 const workflow = YAML.parse(workflowText);

@@ -87,7 +87,7 @@ npx ctx7@latest docs <libraryId> "单一概念的具体问题"
 | `npm ci` | 从根锁安装工程开发依赖；不进入 skills 安装 |
 | `npm run setup:security` | 需 uv/网络；将固定版本 Gitleaks、Semgrep 安装或复用在 .tools，失败非零退出 |
 | `npm run lint` / `npm run format:check` | 检查自有源码与工程文件；不修复或格式化原件 |
-| `npm test` | 仅 tests/unit/*.test.js、tests/integration/*.test.js；先准备本地扫描器，不执行收录测试 |
+| `npm test` | 仅 tests/unit/*.test.js、tests/integration/*.test.js、tests/integration/publish/*.test.js；先准备本地扫描器，不执行收录测试 |
 | `npm run security:secrets` / `npm run security:code` / `npm run security:deps` | 分别进行脱敏凭证、有限源码规则和根依赖检查 |
 | `npm run check` / `npm run security` | 汇总真实规范/测试与安全检查；失败保留非零退出码 |
 | `npm run monitor:site` | 固定读取现有站点四个地址；超时/重试与内容检查，失败非零，不执行返回内容 |

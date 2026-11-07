@@ -67,7 +67,7 @@ node scripts/publish-check.js target --target "$GITHUB_SHA" --remote "<另一个
 ## 5. 工作流静态检查
 
 ```bash
-node --test tests/integration/publish-workflow.test.js
+node --test tests/integration/publish/publish-workflow.test.js
 ```
 
 期望：
