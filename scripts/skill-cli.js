@@ -3,6 +3,7 @@
 
 const { parseArgs } = require('./lib/skill-cli/args');
 const { loadCandidate } = require('./lib/skill-cli/candidate');
+const { importCandidate } = require('./lib/skill-cli/import');
 const { exitCodeFor, serializeResult } = require('./lib/skill-cli/output');
 const { publishCandidate } = require('./lib/skill-cli/publish');
 const { replaceCandidate } = require('./lib/skill-cli/replace');
@@ -48,6 +49,16 @@ function commandResult(parsed) {
       return { ...published.outcome, errors: [] };
     }
     return previewOutcome(loaded.candidate);
+  }
+  if (parsed.command === 'import') {
+    const imported = importCandidate({
+      projectRoot: process.cwd(),
+      source: parsed.source,
+      metaPath: parsed.metaPath,
+      publish: parsed.publish,
+    });
+    if (!imported.ok) return failure(imported.diagnostics);
+    return { ...imported.outcome, errors: [] };
   }
   if (parsed.command === 'replace') {
     const replaced = replaceCandidate({
