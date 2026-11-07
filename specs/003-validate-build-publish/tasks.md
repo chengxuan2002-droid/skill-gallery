@@ -77,7 +77,7 @@ description: "US-003 校验、构建与原地址发布流水线的实施任务"
 
 ### Implementation for Foundational
 
-- [ ] T006 实现 `scripts/lib/publish.js`：`verifyArtifact(distDir)`、`evaluateDeployTarget({targetSha,
+- [X] T006 实现 `scripts/lib/publish.js`：`verifyArtifact(distDir)`、`evaluateDeployTarget({targetSha,
   remoteHead})`、`createRunStatus(input)`、`renderSummary(status, context)`；复用
   `scripts/lib/secrets.js`，诊断只含 `code`/`path`/脱敏 `message`；不新增 npm 依赖、不修改内容
   schema、不写工作区 `dist/`。完成后复验 T003/T004。
