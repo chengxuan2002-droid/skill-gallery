@@ -131,7 +131,7 @@ specs/004-manual-skill-maintenance/validation/；当前本地 npm test 为 220 �
 2026-11-08 US-005 的 T001–T022 已完成本地/受控验证：`skill-cli` 的 preview/add/import/replace/status、
 JSON/退出码、隔离 worktree、临时裸远端与 POC-002 新增/替换/状态查询证据见
 specs/005-skill-cli/validation/；当前本地 npm test 为 241 项（239 通过、0 失败、2 跳过）。
-T023 quickstart 走查待完成；生产 Pages 未切换，Agent 命令、本地构建或受控验收不等于生产发布。
+T023 quickstart 走查已完成；生产 Pages 未切换，Agent 命令、本地构建或受控验收不等于生产发布。
 首次初始化证据见 specs/001-preserve-skill-content/validation/bootstrap.md。
 2026-11-03 在 Windows 复核 T002～T010：`.gitattributes` 固定项目文本为 LF，`skills/**` 不做换行转换；
 测试夹具在 Windows 使用 junction，检查入口解析 `npm.cmd` 与扫描器 `.exe`，安装器支持 Windows zip 包但仍需网络。
