@@ -126,7 +126,52 @@ US-002 的检索、详情、分享、响应式和键盘可访问改造已完成 
   构建/发布流程；保持既有 slug、旧链接和单版本，不 force push、不清除历史。不要通过手工改
   `dist/` 或直接覆盖线上文件“恢复”。
 
-Agent CLI（US-005）、自动来源检查/调度（US-006）、ZIP 解压和站内上传后台不属于当前能力。
+自动来源检查/调度（US-006）、ZIP 解压和站内上传后台不属于当前能力；Agent CLI 见下节。
+
+### Agent 命令（skill-cli）
+
+前提：Node 26.3（本机可为 22.21）、Git 与已登录的 `gh`。命令复用现有 Git/gh 授权，
+不要把 token 写入参数、仓库或示例。
+
+```bash
+node scripts/skill-cli.js preview <path> --meta <record.json>
+node scripts/skill-cli.js add <path> --meta <record.json> [--publish] [--wait]
+node scripts/skill-cli.js import --repo owner/repository --path skills/example --ref main --meta <record.json> [--publish] [--wait]
+node scripts/skill-cli.js replace <slug> <path> --expected-revision <sha> [--meta <record.json>] [--publish] [--wait]
+node scripts/skill-cli.js status --run <run-id>
+```
+
+- `preview` 与不带 `--publish` 的 `add` 只校验并输出预览，不写入、不提交、不推送。
+- `add`/`import` 需要 `--meta`；`replace` 缺省保留原站内记录，传 `--meta` 时整体更新。
+- `--publish` 才允许远端写入；`--wait` 只能与 `--publish` 使用，只有找到对应运行才轮询，
+  否则保持 `submitted/pending`，不误报已发布。
+- `import` 只接受结构化 `owner/repository`、`path`、`ref`；不接受普通网页 URL。
+- stdout 只有一行 JSON：`status`、`slug`、`content_revision`、`content_status`、`deploy_status`、
+  `commit_sha`、`run_url`、`public_url`、`errors`；诊断只含稳定码与位置，不回显凭证或正文。
+
+| 退出码 | 含义 |
+|---|---|
+| `0` | 预览/noop/submitted/published 按要求完成 |
+| `2` | 参数、元数据或校验失败 |
+| `3` | 未授权或无写权限 |
+| `4` | 冲突（期望基线不匹配、远端变化或非 fast-forward） |
+| `5` | 来源读取失败（404/403/限流/截断/不支持） |
+| `6` | 构建或产物校验失败 |
+| `7` | 部署失败 |
+| `8` | `--wait` 等待超时（保留运行链接） |
+
+示例输出（占位值）：
+
+```json
+{"status":"submitted","slug":"example","content_revision":null,"content_status":"pending","deploy_status":"pending","commit_sha":"<COMMIT_SHA>","run_url":null,"public_url":null,"errors":[]}
+```
+
+排错：冲突时重新读取远端基线并用正确的 `--expected-revision`；来源错误检查定位是否结构化、
+是否被截断；构建/部署失败查看运行记录；等待超时保留 `run_url`，不要重复提交制造空提交。
+`status` 从运行和 job/step 派生；build 成功但 deploy 步骤跳过时为 `superseded`，未完成时为 pending。
+
+**当前边界**：真实 GitHub Actions/POC 发布与 `--wait` 轮询尚未在受控仓库完整验收；自动来源检查/
+调度、ZIP 解压、站内后台和生产 Pages 切换仍属规划。生产发布仍需单独授权。
 
 ### 当前内容与构建契约
 
@@ -137,8 +182,9 @@ Agent CLI（US-005）、自动来源检查/调度（US-006）、ZIP 解压和站
 - `npm run build` 只写 `dist/`，不写根 `assets/search-index.json`；`npm run preview` 只映射 `dist` 的 `/skill-gallery/`。成功状态是本地 `built`，不是已发布。
 - 构建事务使用 `.dist.lock/owner.json` 与 `.dist.transaction.json`。发现遗留锁时不要删除 dist、stage 或 backup；先确认原进程已退出并核对 owner 的 run_id/pid，只移除匹配锁，再重跑 `npm run build`。提交后清理失败会返回 `built` + `cleanup_status=pending`，保留记录/backup，不能当作发布成功。
 - 凭证规则 SECRET-01～04 只报告安全位置和类型；示例使用 `YOUR_*_HERE`、`<REDACTED>`、`***` 或 `$ENV`，不得写入真实凭证。标题 ID 由构建器生成；重复标题使用后缀，未知本文锚点移除 href 并提示。
-- 上传 CLI、自动更新和生产发布仍未实现；GitHub 后台手动维护见上文“手动维护（GitHub 后台）”。
-  不要让旧版根索引/直接 Pages 教程冒充当前流程。生产 Pages 的 MIME、缓存和直接资源安全仍需发布前验证。
+- `skill-cli`、自动更新和生产发布仍未完成受控/生产验收；GitHub 后台手动维护见上文，Agent 命令见
+  “Agent 命令（skill-cli）”。不要让旧版根索引/直接 Pages 教程冒充当前流程。生产 Pages 的 MIME、
+  缓存和直接资源安全仍需发布前验证。
 
 ### 检查 CI 与现站基础监测
 
