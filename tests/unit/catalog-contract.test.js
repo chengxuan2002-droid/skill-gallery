@@ -123,9 +123,13 @@ test('validates the source tracking shape without performing a request', () => {
   for (const override of [
     { provider: 'gitlab' },
     { repository: '' },
+    { repository: 'https://github.com/owner/repository' },
+    { path: '../outside' },
     { ref_policy: 'tag' },
+    { ref_policy: 'pinned', ref: 'main' },
     { ref: '' },
     { enabled: 'false' },
+    { last_synced_revision: 'main' },
     { last_synced_digest: 'not-a-digest' },
   ]) {
     const invalid = validateCatalogRecord(
