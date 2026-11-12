@@ -146,6 +146,7 @@ catalog、提交清单与索引，确认只有一个版本。
 - [ ] T020 [US4] 在受控 POC 模拟部署失败、同提交重跑和受控 revert 恢复，记录“提交成功、部署
   失败”、旧站保留、未新增内容提交与 slug/历史保持到
   `specs/006-source-auto-update/validation/us6-status.md`。（FR-009；AC-011）
+  **当前状态**：仅完成正常发布与无变化运行；部署失败注入、同提交重跑和受控 revert 未运行。
 
 **Checkpoint**: US4 可独立演示；状态不把提交成功写成部署成功。
 
