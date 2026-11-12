@@ -94,7 +94,11 @@ specs/006-source-auto-update/
 ```text
 scripts/sync-skills.js                 # 新增：检查/应用入口，参数、报告与退出码
 scripts/lib/github-source.js           # 新增/提取：GitHub 来源解析、树读取、固定 SHA
-scripts/lib/source-sync.js             # 新增：来源选择、摘要比较、许可策略、候选应用
+scripts/lib/source-license.js          # 新增：许可文件识别与摘要
+scripts/lib/source-sync.js             # 新增：运行编排与报告出口
+scripts/lib/source-sync-check.js       # 新增：来源选择、摘要比较、许可策略
+scripts/lib/source-sync-candidate.js   # 新增：来源文件到候选快照
+scripts/lib/source-sync-apply.js       # 新增：批次提交与完整替换
 scripts/lib/source-sync-report.js      # 新增：封闭报告与脱敏 Step Summary
 scripts/lib/content-store.js           # 复用：digest、snapshot、读取前后一致性
 scripts/lib/catalog-schema.js          # 复用：source_tracking 字段校验
