@@ -34,8 +34,8 @@ npm run security
 
 - lint：退出码 0。
 - format:check：所有匹配文件符合 Prettier。
-- security:secrets：334 文件，findings 0。
-- security:code：51 文件，findings 0。
+- security:secrets：338 文件，findings 0。
+- security:code：55 文件，findings 0。
 - security:deps：1 文件，findings 0。
 
 诊断只输出稳定码和位置；未输出 token、上游响应正文或原始异常。
