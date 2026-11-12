@@ -1,8 +1,8 @@
 # Skill Gallery 技术方案
 
-> 状态：关键架构决策已确认；US-001、US-002 已完成本地实现与验收（US-001 的 T041 macOS 未运行）· 版本：0.2 · 日期：2026-11-01（状态补充：2026-11-06）
-> 基线：[DemandAnalysis.md](DemandAnalysis.md) 0.2。除已注明的 US-001/US-002 实现外，其余模块、命令和流水线仍为设计；
-> M-05～M-07、上传、自动更新与生产发布尚未实现。
+> 状态：关键架构决策已确认；US-001～US-005 已完成本地/受控实现与验收（US-001 的 T041 macOS 未运行）· 版本：0.2 · 日期：2026-11-01（状态补充：2026-11-12）
+> 基线：[DemandAnalysis.md](DemandAnalysis.md) 0.2。US-001～US-005 对应模块已实现；US-006 规格、计划与 28 项 tasks 已建立，M-06、自动更新调度、POC-003 与 US-007 整体验收仍待实施。
+> 生产 Pages 已切换并由 `maintain.yml` 发布；生产 environment 审批、部署失败注入、发布后 MIME/缓存与完整生产验收未完成。
 
 本方案按“应用架构 → 管理与使用闭环 → 集成验证”展开。公开站点继续由原生 JS 和 GitHub Pages 承载，后台复用 GitHub 仓库与 Actions；站点原地址不变。Q-001～003 已由用户确认：GitHub 后台、GitHub 首版自动更新、当前单版本并保留 Git 历史。专用管理后台不属于本轮范围，未来变更需先修订 DEC-001、DEC-006。
 
@@ -43,7 +43,7 @@
 仅增加开发检查依赖：ESLint 10.14.0、@eslint/js 10.0.1、globals 17.14.0、Prettier 3.9.10、eslint-config-prettier 10.1.8；均为 MIT，精确锁入 package-lock。
 Node 内建测试显式限定受信任目录；安全检查使用独立本地 Gitleaks 8.30.1（MIT）、Semgrep CE 1.183.0（LGPL-2.1）和根 npm audit。
 Semgrep 通过 uv 的独立工具环境安装，不改变站点的 npm 包管理方式；扫描器不进入生产产物。
-此项仅支撑 NFR-003/NFR-006、DEC-005/009，不能替代 C-01/03 内容校验与业务 PoC；首次工程初始化未包含 Actions、部署及线上监控；下述提前建设授权仅覆盖只检查 CI 与现站基础监测，生产发布链仍属 US-003。
+此项仅支撑 NFR-003/NFR-006、DEC-005/009，不能替代 C-01/03 内容校验与业务 PoC；首次工程初始化未包含 Actions、部署及线上监控；下述提前建设授权仅覆盖只检查 CI 与现站基础监测，生产发布链已由 US-003 交付。
 
 2026-11-03 US-001 内部 US1/US2/US3 实现补充：T011–T024 已完成，新增 `catalog/` 四份记录、四固定路径迁移、完整 dist 构建（索引/详情/raw/ZIP/manifest/事务）、
 只读预览及前端最小适配；隔离验收见 [us1-test-contracts.md](../specs/001-preserve-skill-content/validation/us1-test-contracts.md)、
@@ -62,7 +62,17 @@ catalog schema；检索、详情、分享与可访问行为及隔离四项构建
 本机 `npm test` 为 163 项（162 通过、0 失败、1 跳过）；1,000 项/10 MiB 隔离夹具的 50 次查询 p95 为
 Chrome 39.9ms、Firefox 48.0ms、WebKit 50.0ms（候选线 200ms，非生产承诺）。功能分支
 `codex/us-002-search-detail-share` 已推送，未合并 main、未生产发布；生产 Pages 仅做只读 MIME/缓存预检，
-部署后 `.bin`/ZIP 响应、回滚与跨发布视觉回归仍未验证。
+部署后 `.bin`/ZIP 响应、回滚与跨发布视觉回归仍未验证。（该段为 US-002 时点记录；后续 US-002 分支与
+US-003～US-005 均已合并 main，生产 Pages 已切换。）
+
+2026-11-08 US-003/US-004/US-005 实现补充：发布产物校验、`maintain.yml` 与生产 Pages 切换见
+[production-pages.md](../specs/003-validate-build-publish/validation/production-pages.md)；
+手动维护与 Agent CLI 的本地/受控证据见
+[US-004 validation](../specs/004-manual-skill-maintenance/validation/)、
+[US-005 validation](../specs/005-skill-cli/validation/)。
+2026-11-12 复核本地 `npm test` 为 242 项（240 通过、0 失败、2 跳过）；生产 environment 审批、
+部署失败注入、MIME/缓存和浏览器发布后复验仍未运行。US-006（自动来源检查/调度）与 US-007（整体验收）
+尚未实现。
 
 ### 1.3 提前建设检查 CI 与现站监测（2026-11-02）
 
@@ -179,24 +189,24 @@ Git 已提交而部署失败时：仓库当前版比站点新，状态明确为 
 | C-02 | M-02 prepare/replace | 验证后候选、slug、expected_revision | candidate snapshot、digest、changes；conflict | 临时目录；FR-001、FR-008 |
 | C-03 | M-03 build | 仓库快照与基线标识 | 完整 dist/、manifest；build_failed | 全量失败不可部署；FR-004、FR-011 |
 | C-04 | M-04 read/search | 静态 schema、query/mode/filters/sort | 结果/详情；not_found/load_failed | 仅浏览器状态；FR-002、FR-003、FR-010 |
-| C-05 | M-05 CLI ingest | local 或 github 输入、meta、replace、expected_revision、dry-run/publish/wait | JSON `{slug,content_status,deploy_status,revision,run_url,public_url,errors}` | 退出码见下；FR-006 |
+| C-05 | M-05 CLI ingest | local 或 github 输入、meta、replace、expected_revision、preview/publish/wait | JSON `{status,slug,content_revision,content_status,deploy_status,commit_sha,run_url,public_url,errors}` | 退出码见下；FR-006；US-005 已实现 |
 | C-06 | M-06 check/sync | 来源配置、已同步修订/digest、触发上下文 | unchanged/updated/failed/conflict/policy_blocked，逐项诊断 | FR-008、FR-009；不直接控制前端 |
 | C-07 | M-07 publish/run | target commit、触发者、构建 artifact | run ID、deploy 状态、站点 URL | FR-005、FR-007、FR-009、FR-011 |
 
-CLI 契约拟定：`0` 操作按要求完成（preview/noop/submitted/published 按 JSON 区分）；`2` 参数或校验失败；`3` 未授权；`4` 冲突；`5` 读取来源失败；`6` 构建失败；`7` 部署失败；`8` 等待超时（操作可能继续，输出 run URL）。不得把 stdout 混入调试日志；诊断到 stderr 且脱敏。CLI 命令未实现前不能保证退出码已经可用。
+CLI 契约（US-005 已实现，入口 `scripts/skill-cli.js`，详见
+[skill-cli 契约](../specs/005-skill-cli/contracts/skill-cli.md)）：`0` 操作按要求完成（preview/noop/submitted/published 按 JSON 区分）；`2` 参数或校验失败；`3` 未授权；`4` 冲突；`5` 读取来源失败；`6` 构建失败；`7` 部署失败；`8` 等待超时（操作可能继续，输出 run URL）。不得把 stdout 混入调试日志；诊断到 stderr 且脱敏。退出码已由实现和测试覆盖。
 
-### 拟写入 README 的使用契约（规划，当前不可执行）
+### README 的使用契约（US-005 已实现）
 
 ```bash
-# 规划接口：US-005 实现并验证后，才作为正式 README 命令发布。
-node scripts/skill-cli.js add /path/to/my-skill --meta /path/to/catalog-entry.json --dry-run --json
-node scripts/skill-cli.js add /path/to/my-skill --meta /path/to/catalog-entry.json --publish --wait --json
-node scripts/skill-cli.js import --repo owner/repository --path skills/example --branch main --meta /path/to/catalog-entry.json --publish --wait --json
-node scripts/skill-cli.js replace example /path/to/new-skill --expected-revision BASE_COMMIT_SHA --publish --wait --json
-node scripts/skill-cli.js status --run RUN_ID --json
+node scripts/skill-cli.js preview <path> --meta <record.json>
+node scripts/skill-cli.js add <path> --meta <record.json> [--publish] [--wait]
+node scripts/skill-cli.js import --repo owner/repository --path skills/example --ref main --meta <record.json> [--publish] [--wait]
+node scripts/skill-cli.js replace <slug> <path> --expected-revision <sha> [--meta <record.json>] [--publish] [--wait]
+node scripts/skill-cli.js status --run <run-id>
 ```
 
-`add`/`import` 的 meta 文件包含 slug；`replace` 默认保留原有站点元数据，变更则显式提供 `--meta`。命令行的 publish 是显式远程写入意图，认证通过已有 Git/gh 环境，README 不教用户把 token 写进参数。第三方 Work Agent 若没有本地文件/命令能力，不承诺能直接上传；可提供结构化内容交给有权限执行者。
+`add`/`import` 的 meta 文件包含 slug；`replace` 默认保留原有站点元数据，变更则显式提供 `--meta`。命令行的 publish 是显式远程写入意图，认证通过已有 Git/gh 环境，README 不教用户把 token 写进参数。第三方 Work Agent 若没有本地文件/命令能力，不承诺能直接上传；可提供结构化内容交给有权限执行者。完整说明与实际输出见 [README](../README.md) 和 [US-005 契约](../specs/005-skill-cli/contracts/skill-cli.md)。
 
 授权来源导入的人工按钮可通过 GitHub Actions 的 workflow_dispatch 传 owner/repo/path/slug 等普通参数，不传文件内容或凭证。官方 `gh workflow run` 仅作为受支持触发方式，具体 workflow 输入实现后再列正式示例。
 
@@ -295,14 +305,14 @@ schemaVersion 为整数，slug/display_name/description/content_path 为非空�
 ```text
 index.html, assets/                 现有展示源文件，定向改造
 skills/                            保真原件，保持现有路径
-catalog/                           拟新增：站点记录与来源配置
-scripts/build-index.js             保留既有构建入口，升级为完整静态构建
-scripts/skill-cli.js                拟新增：M-05
-scripts/sync-skills.js              拟新增：M-06
-scripts/lib/                       拟新增：M-01、M-02、M-03、M-06、M-07 公共实现
-.github/workflows/maintain.yml      拟新增：M-07
-tests/                             拟新增：夹具、领域/集成/契约测试
-dist/                              拟生成：唯一部署目录，不手改
+catalog/                           已建立：站点记录与来源配置
+scripts/build-index.js             已实现：完整静态构建入口
+scripts/skill-cli.js               已实现：M-05 Agent CLI
+scripts/sync-skills.js             拟新增：M-06 来源检查/同步
+scripts/lib/                       已实现 M-01、M-02、M-03、M-05；M-06 待实现
+.github/workflows/maintain.yml     已实现构建/部署；US-006 增加来源检查与调度
+tests/                             已建立：夹具、领域/集成/契约测试
+dist/                              生成：唯一部署目录，不手改
 docs/                              本轮四份规划文档
 ```
 
@@ -338,7 +348,8 @@ Agent：读取 README → 检查已有凭证和参数 → dry-run → 显式 pub
 | POC-002 子路径与发布触发 | coding agent，US-003 | 本地 `/skill-gallery/` 预览可读；受控测试仓库验证自动提交后显式发布，权限不扩大 | 回到 DEC-008，真实仓库设置由维护者决定 |
 | POC-003 GitHub 固定 SHA 与许可范围 | coding agent，US-006（Q-002 已确认） | 对测试来源完整读文件和二进制，分支/Release/删除文件/限流夹具通过 | 报告不支持的来源，不静默降级抓 HTML |
 
-POC-001 已用锁定依赖完成本地夹具验证；POC-002/003 与内容发布链的远程写入、部署尚未完成。
+POC-001 已用锁定依赖完成本地夹具验证；POC-002 已完成受控远程发布、失败保留、同提交重跑与恢复验证，
+生产 Pages 已切换并成功发布；POC-003 与 US-006 的来源检查/调度尚未完成。
 NFR-002 已在 US-002 的隔离 1,000 项/10 MiB 夹具实测（p95 见
 [us2-performance.md](../specs/002-search-detail-share-redesign/validation/us2-performance.md)），不是生产网络或设备承诺。
 
@@ -359,8 +370,9 @@ NFR-002 的 1,000 项/10 MiB/50 次/p95 200ms 为统一候选口径，测法见 
 
 ## 15. 技术准备结论
 
-GitHub 管理、首版 GitHub 自动更新及 Git 历史保留已获用户确认，核心设计可按 US 依赖进入开发。
-US-001 已完成本地实现和隔离/浏览器/故障验收，US-002 已完成检索、详情、分享与可访问的本地验收；
-T041 macOS、同快照生产发布和 US-003～US-007 仍未完成。Q-004 已于 2026-11-06 确认每日 03:17
-Asia/Shanghai，但自动更新与生产调度仍待 US-006 实现/启用。最终准备度及决策状态以
+GitHub 管理、首版 GitHub 自动更新及 Git 历史保留已获用户确认，核心设计可按 US 依赖推进。
+US-001～US-005 已完成本地/受控实现与验收，生产 Pages 已切换并由 `maintain.yml` 成功发布；
+T041 macOS、US-006 自动来源检查/调度与 US-007 整体验收仍未完成。生产 environment 审批、部署失败
+注入、MIME/缓存和发布后浏览器复验也仍未运行。Q-004 已于 2026-11-06 确认每日 03:17 Asia/Shanghai，
+但自动更新与生产调度仍待 US-006 实现/启用。最终准备度及决策状态以
 [需求附录](DemandAnalysis.md#questions) 为准。

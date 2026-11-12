@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-08
 
-**Status**: Draft
+**Status**: Implemented（本地/受控验收完成并合并 main；生产 Pages 已切换，生产 environment 审批与部署失败注入未运行；见 [plan.md](plan.md)）
 
 **Input**: 用户确认进入 US-005（Agent 命令与 README）。依据上游 FR-006、FR-007、FR-009、NFR-003、
 NFR-006、AC-007、AC-008、AC-011，以及 DEC-006、Q-001 与 TechnicalSolution 3.4/C-05 已确认约束。
@@ -18,7 +18,8 @@ NFR-006、AC-007、AC-008、AC-011，以及 DEC-006、Q-001 与 TechnicalSolutio
 | FR-009 | 提交、构建、部署状态分开；失败保留旧站；按同一提交重跑 | AC-011 |
 | NFR-003/006 | 无凭证泄露、无内容执行、路径边界；README 可独立执行 | AC-008 |
 
-**本轮不做**：自动来源检查/调度（US-006）、站内后台、ZIP 解压、生产 Pages 切换、跨平台格式导出。
+**本轮不做**：自动来源检查/调度（US-006）、站内后台、ZIP 解压、跨平台格式导出；生产 Pages 切换已在
+合并后单独执行，不在本故事验收内。
 `import` 只做一次性结构化来源获取；持续跟踪与冲突矩阵由 US-006 承担。
 
 ## User Scenarios & Testing *(mandatory)*

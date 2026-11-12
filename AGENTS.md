@@ -103,7 +103,7 @@ npx ctx7@latest docs <libraryId> "单一概念的具体问题"
 （见 specs/001-preserve-skill-content/validation/us2-browser.md）；T031–T038（US3）已完成本地故障/安全验收
 （见 specs/001-preserve-skill-content/validation/us3-failures.md）；T039/T040/T042/T043 已完成
 （acceptance.md、final-review.md），T041 仅 Linux/WSL 通过、macOS 未运行（platform.md）；
-上传 CLI、自动更新与生产发布仍待后续故事。
+上传 CLI、自动更新与生产发布当时仍待后续故事（US-003～US-005 后续已完成，自动更新仍待 US-006）。
 2026-11-05 US-002 的 T001–T026 已完成本地实现、验收与文档收口。
 证据入口：specs/002-search-detail-share-redesign/validation/ 下的 us2-search、us2-detail、us2-accessibility、
 us2-performance、us2-build、us2-regression、us2-quality、us2-cross-browser、us2-production-preflight。
@@ -131,7 +131,8 @@ specs/004-manual-skill-maintenance/validation/；当前本地 npm test 为 220 �
 手动提交/本地构建需经 Actions 发布，受控验收不等于生产发布。
 2026-11-08 US-005 的 T001–T023 已完成本地/受控验证：`skill-cli` 的 preview/add/import/replace/status、
 JSON/退出码、隔离 worktree、临时裸远端与 POC-002 新增/替换/状态查询证据见
-specs/005-skill-cli/validation/；当前本地 npm test 为 241 项（239 通过、0 失败、2 跳过）。
+specs/005-skill-cli/validation/；US-005 收口时本地 npm test 为 241 项（239 通过、0 失败、2 跳过），
+2026-11-12 复核为 242 项（240 通过、0 失败、2 跳过）。
 T023 quickstart 走查已完成；生产 Pages 已切换，Agent 命令/本地构建需经 Actions 发布，
 不把本地结果当作生产发布。
 首次初始化证据见 specs/001-preserve-skill-content/validation/bootstrap.md。
@@ -167,7 +168,9 @@ T041 复选框保持未勾选，不宣称 macOS、跨平台或生产发布通过
 原进程退出并核对 run_id/pid，只移除匹配锁后重跑 `npm run build`，不得先删 dist/backup；提交后清理失败为
 `built` + `cleanup_status=pending`。凭证规则 SECRET-01～04 只报位置/类型，示例使用 `YOUR_*_HERE`、
 `<REDACTED>`、`***` 或 `$ENV`。标题 ID 由构建器生成，重复标题加后缀，未知片段移除 href 并提示。
-上传 CLI、GitHub 后台维护、自动更新和发布仍未实现；生产 Pages MIME/缓存/直接资源安全需发布前验证。
+上传 CLI、GitHub 后台维护和生产 Pages 发布已完成本地/受控验收；自动更新（US-006）仍未实现；
+US-006 的 spec、plan、data-model、contracts、quickstart、checklist 与 28 项 tasks 已建立，
+实施与 POC-003 已获授权，生产调度尚未启用；生产 Pages MIME/缓存/直接资源安全需完整发布后验证。
 首页标识或索引契约改变时同时更新 scripts/check-site.js 与相应测试；该探测不代替浏览器交互和原件下载保真验收。
 
 功能或缺陷修复先建立能识别错误行为的验证，再实现并执行适用检查；

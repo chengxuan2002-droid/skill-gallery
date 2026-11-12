@@ -58,7 +58,8 @@ US-002 的检索、详情、分享、响应式和键盘可访问改造已完成 
   不是生产网络或设备承诺。仍需补 Safari/移动实机。
 - US-002 的 T025 文档更新和 T026 最终复核已完成。2026-11-06 已推送功能分支；
   [Quality checks #42170060519](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/42170060519)
-  在 Node 26.3.0/Linux 成功；尚未合并 main。上传、自动更新和生产发布仍待后续故事。
+  在 Node 26.3.0/Linux 成功；该时点尚未合并 main，后续已合并并启用生产发布；
+  自动更新仍待 US-006。
 
 2026-11-07 US-003 的 T001–T032 与 T033 已完成本地/受控验证：发布产物校验、`publish-check.js`、
 `maintain.yml`、US1 快照/子路径、US2 状态/失败/恢复、US3 凭证/权限/匿名未授权尝试、US4 同次运行/noop、
@@ -77,9 +78,9 @@ US-002 的检索、详情、分享、响应式和键盘可访问改造已完成 
 
 2026-11-08 US-005 的 T001–T023 已完成本地/受控验证：`skill-cli` 的 preview/add/import/replace/status、
 JSON 输出与退出码、隔离 worktree、临时裸远端和 POC-002 新增/替换/状态查询证据见
-[US-005 validation](specs/005-skill-cli/validation/)；当前本地 `npm test` 为 241 项
-（239 通过、0 失败、2 跳过）。T023 quickstart 走查已完成；生产 Pages 已切换，
-Agent 命令/本地构建需经 Actions 发布，不把本地结果当作线上发布。
+[US-005 validation](specs/005-skill-cli/validation/)；US-005 收口时本地 `npm test` 为 241 项
+（239 通过、0 失败、2 跳过），2026-11-12 复核为 242 项（240 通过、0 失败、2 跳过）。T023 quickstart
+走查已完成；生产 Pages 已切换，Agent 命令/本地构建需经 Actions 发布，不把本地结果当作线上发布。
 
 本地验收使用 Windows + Node 22.21.0；声明的 Node 26.3.0/Linux 由 CI 覆盖，结果见下方 Quality checks。
 初始化按步骤验证并提交，提交不等于推送或上线。
@@ -176,8 +177,10 @@ node scripts/skill-cli.js status --run <run-id>
 是否被截断；构建/部署失败查看运行记录；等待超时保留 `run_url`，不要重复提交制造空提交。
 `status` 从运行和 job/step 派生；build 成功但 deploy 步骤跳过时为 `superseded`，未完成时为 pending。
 
-**当前边界**：真实 GitHub Actions/POC 发布与 `--wait` 轮询尚未在受控仓库完整验收；自动来源检查/
-调度、ZIP 解压、站内后台和生产 Pages 切换仍属规划。生产发布仍需单独授权。
+**当前边界**：`skill-cli` 的新增/替换/状态查询已在受控 POC-002 完成真实发布；真实 `gh` 来源导入与
+`--wait` 运行发现仍需补验。自动来源检查/调度（US-006）、ZIP 解压和站内后台尚未实现；生产 Pages
+已切换为 Actions 并成功发布，但生产 environment 审批、部署失败注入和发布后 MIME/缓存验证未运行。
+后续生产发布仍需单独授权。
 
 ### 当前内容与构建契约
 
@@ -188,9 +191,9 @@ node scripts/skill-cli.js status --run <run-id>
 - `npm run build` 只写 `dist/`，不写根 `assets/search-index.json`；`npm run preview` 只映射 `dist` 的 `/skill-gallery/`。成功状态是本地 `built`，不是已发布。
 - 构建事务使用 `.dist.lock/owner.json` 与 `.dist.transaction.json`。发现遗留锁时不要删除 dist、stage 或 backup；先确认原进程已退出并核对 owner 的 run_id/pid，只移除匹配锁，再重跑 `npm run build`。提交后清理失败会返回 `built` + `cleanup_status=pending`，保留记录/backup，不能当作发布成功。
 - 凭证规则 SECRET-01～04 只报告安全位置和类型；示例使用 `YOUR_*_HERE`、`<REDACTED>`、`***` 或 `$ENV`，不得写入真实凭证。标题 ID 由构建器生成；重复标题使用后缀，未知本文锚点移除 href 并提示。
-- `skill-cli`、自动更新和生产发布仍未完成受控/生产验收；GitHub 后台手动维护见上文，Agent 命令见
-  “Agent 命令（skill-cli）”。不要让旧版根索引/直接 Pages 教程冒充当前流程。生产 Pages 的 MIME、
-  缓存和直接资源安全仍需发布前验证。
+- `skill-cli` 已完成本地/受控验收并合并 main；自动更新（US-006）尚未实现。GitHub 后台手动维护见上文，
+  Agent 命令见“Agent 命令（skill-cli）”。不要让旧版根索引/直接 Pages 教程冒充当前流程；生产 Pages
+  已切换，MIME、缓存和直接资源安全仍需完整发布后验证。
 
 ### 检查 CI 与现站基础监测
 
@@ -231,12 +234,12 @@ quality 合并必需项仍需单独配置。
 
 ### 换电脑或更换 Code Agent
 
-US-001 的开发基线位于 `codex/development-baseline-20261102` 分支；该分支包含 US1 本地实现与 CI 补强。
-US-002 已推送到远程分支 `codex/us-002-search-detail-share`，但尚未合并 main；克隆上述基线不会包含 US-002。
-换电脑或 Agent 时应先核对当前分支、远程跟踪状态和 `.specify/feature.json`，不要把基线分支误当成 US-002。
+当前 `main` 已包含 US-001～US-005 的实现、发布配置与生产启用记录；历史开发基线仍保留在
+`codex/development-baseline-20261102` 等分支，仅作历史参考。换电脑或 Agent 时应先核对当前分支、
+远程跟踪状态和 `.specify/feature.json`，不要用旧基线分支代替当前 `main`。
 
 ```bash
-git clone --branch codex/development-baseline-20261102 https://github.com/chengxuan2002-droid/skill-gallery.git
+git clone --branch main https://github.com/chengxuan2002-droid/skill-gallery.git
 cd skill-gallery
 ```
 
@@ -244,18 +247,20 @@ cd skill-gallery
 `node_modules/`、`.tools/`、`.env*`、系统杂项和本机凭证不随仓库迁移；GitHub 写入凭证在新电脑独立授权。
 不复制旧电脑的 SSH 私钥、Agent 会话或工具执行授权来替代新环境的授权。
 
-当前功能是 `specs/002-search-detail-share-redesign`。`.specify/feature.json` 按 Spec Kit 规则保持本机忽略；
-首次在新副本运行以下命令，会检查规划文件并恢复这个本地指针：
+当前指针是 `specs/006-source-auto-update`（US-006 规格、计划与 tasks 已建立；实施尚未开始），
+`.specify/feature.json` 按 Spec Kit 规则保持本机忽略。首次在新副本运行以下命令，会检查规划文件并
+恢复这个本地指针：
 
 ```bash
-export SPECIFY_FEATURE_DIRECTORY=specs/002-search-detail-share-redesign
+export SPECIFY_FEATURE_DIRECTORY=specs/006-source-auto-update
 bash .specify/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks
 ```
 
-新 Agent 先读 [AGENTS.md](AGENTS.md)、[宪章](.specify/memory/constitution.md)、四份规范和当前功能
-[spec](specs/002-search-detail-share-redesign/spec.md)、
-[plan](specs/002-search-detail-share-redesign/plan.md)、
-[tasks](specs/002-search-detail-share-redesign/tasks.md)，再核对真实文件与验证记录。
+新 Agent 先读 [AGENTS.md](AGENTS.md)、[宪章](.specify/memory/constitution.md)、四份规范、当前功能的
+[spec](specs/006-source-auto-update/spec.md)、[plan](specs/006-source-auto-update/plan.md)、
+[tasks](specs/006-source-auto-update/tasks.md) 与
+[checklist](specs/006-source-auto-update/checklists/requirements.md)。
+US-005 的 [plan](specs/005-skill-cli/plan.md) 等已收口资料作为基线参考。
 项目级 Skills 保存在 `.agents/skills/`，Spec Kit 初始化来源记录为 1.2.5/Codex；其他 Agent 若不自动发现，
 应按其机制读取这些文件或配置入口，不能因更换工具而覆盖规范、重新生成任务或重跑 `specify init`。
 可选的 Specify CLI 及其他 Agent 适配器需在新电脑单独安装并验证；现有 Bash 检查不依赖全局 CLI。
@@ -267,7 +272,7 @@ bash .specify/scripts/bash/check-prerequisites.sh --json --require-tasks --inclu
 下文保留现有版本和历史部署说明。
 
 
-> 下一轮改造准备（2026-11-01）：[业界调研](docs/IndustryResearch.md) · [产品需求](docs/DemandAnalysis.md) · [技术方案](docs/TechnicalSolution.md) · [AI 编程规范](docs/AiProgrammingGuide.md)。四份文档描述计划，后台、上传命令和自动更新尚未实现；下文保留历史版本说明，当前命令和 US-002 行为以上方工程章节为准。
+> 下一轮改造准备（2026-11-01）：[业界调研](docs/IndustryResearch.md) · [产品需求](docs/DemandAnalysis.md) · [技术方案](docs/TechnicalSolution.md) · [AI 编程规范](docs/AiProgrammingGuide.md)。该段为 2026-11-01 时点；后续 US-003～US-005 已完成后台、上传命令与生产发布，自动更新仍待 US-006。下文保留历史版本说明，当前命令和行为以上方工程章节为准。
 
 个人 AI Agent Skill 收藏夹——统一管理、快速查找、跨平台复用、一键分享。
 
