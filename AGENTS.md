@@ -39,8 +39,8 @@
 - 复用 GitHub 仓库后台和 Actions；访客无需登录，写入仅允许管理员及授权 Agent，权限由受信任环境校验。
 - 首版自动更新覆盖 GitHub 公开仓库单文件/Skill 目录，其他来源手动维护；
   当前内容和网站仅保留一个有效版本，允许保留 Git 历史用于恢复。
-- Q-001～Q-004 已确认，不重复询问。Q-004 为每日 03:17 Asia/Shanghai；自动更新调度本身仍待 US-006
-  实现和生产启用，不能把决策确认当成已运行。容量和性能数字按需求中的候选口径验证，不写成已实测承诺。
+- Q-001～Q-004 已确认，不重复询问。Q-004 为每日 03:17 Asia/Shanghai；US-006 调度实现已完成受控验证，
+  生产启用仍待单独授权，不能把决策确认或 POC 当成已运行。容量和性能数字按需求中的候选口径验证，不写成已实测承诺。
 - 复用原生前端与静态发布结构；新增必要依赖须说明用途、核实用法并锁定版本。
   需求、架构、任务与生产发布授权分别处理；不把本地验证成功报告为线上已更新。
 
@@ -80,6 +80,7 @@ npx ctx7@latest docs <libraryId> "单一概念的具体问题"
 | `node --check scripts/build-index.js` | 构建脚本语法检查 |
 | `node --check assets/app.js` | 前端脚本语法检查 |
 | `node scripts/build-index.js` / `npm run build` | 校验 catalog/skills 并生成 dist；不写根 `assets/search-index.json`；失败保留旧 dist |
+| `node scripts/sync-skills.js [--slug <slug>] [--apply] [--push] [--json]` | 检查/应用 GitHub 来源；默认零写入，`--apply` 建批次提交，`--push` 非 force 推送；不执行上游内容 |
 | `node scripts/migrate-catalog.js --dry-run` / `--write` | 仅处理四项固定记录；先全量验证，冲突不覆盖，不导入未纳管目录 |
 | `npm run preview` | 只读预览 dist 的 `/skill-gallery/`；localhost:8000，不提供写入 |
 | `python3 -m http.server 8000` | 本地预览服务；单独运行不证明项目子路径兼容 |
@@ -168,9 +169,10 @@ T041 复选框保持未勾选，不宣称 macOS、跨平台或生产发布通过
 原进程退出并核对 run_id/pid，只移除匹配锁后重跑 `npm run build`，不得先删 dist/backup；提交后清理失败为
 `built` + `cleanup_status=pending`。凭证规则 SECRET-01～04 只报位置/类型，示例使用 `YOUR_*_HERE`、
 `<REDACTED>`、`***` 或 `$ENV`。标题 ID 由构建器生成，重复标题加后缀，未知片段移除 href 并提示。
-上传 CLI、GitHub 后台维护和生产 Pages 发布已完成本地/受控验收；自动更新（US-006）仍未实现；
-US-006 的 spec、plan、data-model、contracts、quickstart、checklist 与 28 项 tasks 已建立，
-实施与 POC-003 已获授权，生产调度尚未启用；生产 Pages MIME/缓存/直接资源安全需完整发布后验证。
+上传 CLI、GitHub 后台维护和生产 Pages 发布已完成本地/受控验收；US-006 来源检查、单版本替换、
+许可/冲突和同次发布已在功能分支实现并完成受控 POC-003，生产调度尚未启用；T020 的部署失败重跑/
+恢复仍部分未完成。2026-11-12 本地 `npm test` 为 281 项（279 通过、0 失败、2 跳过）；
+生产 Pages MIME/缓存/直接资源安全需完整发布后验证。
 首页标识或索引契约改变时同时更新 scripts/check-site.js 与相应测试；该探测不代替浏览器交互和原件下载保真验收。
 
 功能或缺陷修复先建立能识别错误行为的验证，再实现并执行适用检查；

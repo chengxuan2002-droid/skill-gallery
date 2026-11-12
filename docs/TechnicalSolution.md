@@ -1,7 +1,7 @@
 # Skill Gallery 技术方案
 
 > 状态：关键架构决策已确认；US-001～US-005 已完成本地/受控实现与验收（US-001 的 T041 macOS 未运行）· 版本：0.2 · 日期：2026-11-01（状态补充：2026-11-12）
-> 基线：[DemandAnalysis.md](DemandAnalysis.md) 0.2。US-001～US-005 对应模块已实现；US-006 规格、计划与 28 项 tasks 已建立，M-06、自动更新调度、POC-003 与 US-007 整体验收仍待实施。
+> 基线：[DemandAnalysis.md](DemandAnalysis.md) 0.2。US-001～US-005 对应模块已实现；US-006 的来源检查与同次发布已实现并完成受控 POC-003，T020 部署失败重跑/恢复与生产调度仍待完成，US-007 整体验收未开始。
 > 生产 Pages 已切换并由 `maintain.yml` 发布；生产 environment 审批、部署失败注入、发布后 MIME/缓存与完整生产验收未完成。
 
 本方案按“应用架构 → 管理与使用闭环 → 集成验证”展开。公开站点继续由原生 JS 和 GitHub Pages 承载，后台复用 GitHub 仓库与 Actions；站点原地址不变。Q-001～003 已由用户确认：GitHub 后台、GitHub 首版自动更新、当前单版本并保留 Git 历史。专用管理后台不属于本轮范围，未来变更需先修订 DEC-001、DEC-006。
@@ -349,7 +349,8 @@ Agent：读取 README → 检查已有凭证和参数 → dry-run → 显式 pub
 | POC-003 GitHub 固定 SHA 与许可范围 | coding agent，US-006（Q-002 已确认） | 对测试来源完整读文件和二进制，分支/Release/删除文件/限流夹具通过 | 报告不支持的来源，不静默降级抓 HTML |
 
 POC-001 已用锁定依赖完成本地夹具验证；POC-002 已完成受控远程发布、失败保留、同提交重跑与恢复验证，
-生产 Pages 已切换并成功发布；POC-003 与 US-006 的来源检查/调度尚未完成。
+生产 Pages 已切换并成功发布；POC-003 已完成 branch/release/pinned、两修订增删文件与真实 404 的受控验证；
+US-006 生产调度、真实 403/限流和部署失败重跑仍未完成。
 NFR-002 已在 US-002 的隔离 1,000 项/10 MiB 夹具实测（p95 见
 [us2-performance.md](../specs/002-search-detail-share-redesign/validation/us2-performance.md)），不是生产网络或设备承诺。
 

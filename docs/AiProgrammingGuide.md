@@ -1,6 +1,6 @@
 # Skill Gallery AI 编程规范
 
-> 状态：US-001～US-005 已完成本地/受控实现与验收（US-001 T041 macOS 未运行），生产 Pages 已切换；US-006 规格、计划与 28 项 tasks 已建立（实施待开始），US-007 未开始 · 版本：0.2 · 日期：2026-11-01（状态补充：2026-11-12）
+> 状态：US-001～US-005 已完成本地/受控实现与验收（US-001 T041 macOS 未运行），生产 Pages 已切换；US-006 主链路已实现并完成受控 POC-003（T020 部分未完成，生产调度未启用），US-007 未开始 · 版本：0.2 · 日期：2026-11-01（状态补充：2026-11-12）
 > 输入基线：[IndustryResearch.md](IndustryResearch.md)、[DemandAnalysis.md](DemandAnalysis.md)、[TechnicalSolution.md](TechnicalSolution.md)，均为 0.2。
 
 ## 1. 实施总览
@@ -106,7 +106,7 @@ python3 -m http.server 8000
 | 内容集成 | 保真、ZIP 解包、二进制、附件删除、迁移、恶意 Markdown | `npm test` 已可执行；US-001 内部切片的迁移、保真、ZIP、下载、故障恢复与安全夹具通过 |
 | 构建 | 干净 checkout 全量校验、静态白名单、索引/详情同快照 | `npm ci`、`npm run build` 已接入并在隔离四项项目验证；生产 Pages 已切换并由 `maintain.yml` 成功发布，完整发布后 MIME/缓存复验未运行 |
 | E2E/视觉 | 检索组合、详情、复制、窄屏、键盘和旧链接 | US-001 内部 US2/US3 的 Edge headless 浏览器与安全验收见 specs/001-preserve-skill-content/validation/us2-browser.md、us3-failures.md；US-002 的详情、可访问、跨浏览器与现站预检见 specs/002-search-detail-share-redesign/validation/；跨发布视觉回归和生产部署后验证仍未运行 |
-| 来源/发布集成 | fixed SHA、Release、限流、冲突、同次 workflow 显式部署 | US-003 发布链与 POC-002 已验，生产 Pages 已切换；US-005 的固定来源导入已用注入夹具验证，真实 `gh api` 读取待补验；US-006 来源检查/调度未实现 |
+| 来源/发布集成 | fixed SHA、Release、限流、冲突、同次 workflow 显式部署 | US-003 发布链与 POC-002 已验，生产 Pages 已切换；US-005 的固定来源导入已用注入夹具验证，真实 `gh api` 读取待补验；US-006 来源检查/同次发布已实现并完成受控 POC-003，生产调度与真实 403/限流未运行 |
 | 性能 | NFR-002 统一负载和统计方法 | US-002 已在隔离 1,000 项/10 MiB 夹具按 50 次固定查询测得 p95：Chrome 39.9ms、Firefox 48.0ms、WebKit 50.0ms（候选线 200ms）；生产网络首载未测，AC-015 口径不能变 |
 
 本次文档工作不新建或运行业务测试。未来测试按风险选择，普通文档、颜色或文案微调不机械新增测试；文件替换、权限、自动发布等必须有失败路径验证。
@@ -182,7 +182,8 @@ CI/定时配置经本地验证后，也必须在实际 GitHub runner 运行才�
 
 **状态**：规格、计划与 28 项 tasks 已建立（[spec](../specs/006-source-auto-update/spec.md)、
 [plan](../specs/006-source-auto-update/plan.md)、[tasks](../specs/006-source-auto-update/tasks.md)）；
-M-06、调度、POC-003 与生产启用待实施。
+来源检查、单版本替换、许可/冲突和同次发布已实现并完成受控 POC-003；T020 的部署失败重跑/恢复
+与生产调度启用仍待完成。
 
 输入：US-003；Q-002/003 已确认 GitHub 来源及 Git 历史保留，来源管理入口接 US-004；FR-008、FR-009、NFR-001、NFR-003、NFR-004、DEC-007、DEC-008，C-06/C-07，AC-009、AC-010、AC-011、AC-012。
 
@@ -226,7 +227,7 @@ AC-001、AC-002、AC-005、AC-012，以及 docs/TechnicalSolution.md 的 DEC-002
 
 | 产物 | 阶段/责任角色 | 完成条件 | 当前状态 |
 |---|---|---|---|
-| 四份规划文档 | 本次准备/规划 Agent | 依据、契约、任务、验收可追溯，未决明确 | 0.2 已同步四个关键决策；US-001～US-005 已实现，US-006/US-007 的设计基线待实施 |
+| 四份规划文档 | 本次准备/规划 Agent | 依据、契约、任务、验收可追溯，未决明确 | 0.2 已同步四个关键决策；US-001～US-005 已实现，US-006 主链路已实现并完成受控 POC，US-007 待实施 |
 | 原件库及图库记录 | US-001/coding agent | 迁移和保真 AC 通过 | 四份 catalog 已生成；US-001 内部 US1 迁移/保真与 US3 故障/安全验收通过；T041 macOS 未运行 |
 | 静态界面与下载 | US-001、US-002/coding agent | 搜索详情完整可用、截图和性能报告 | US-001 的最小列表/详情、复制/下载与安全取用已验收；US-002 的检索、详情、分享、可访问与隔离性能已完成本地验收，证据见 specs/002-search-detail-share-redesign/validation/；生产 Pages 已切换并由 Actions 发布，发布后浏览器/MIME/缓存复验未运行 |
 | 手动/命令维护与 README | US-004、US-005/coding agent | 两入口发布闭环与认证通过 | US-004/US-005 已完成本地/受控验收并合并 main；README 已含真实手动维护与 Agent 命令 |
@@ -262,8 +263,10 @@ AC-001、AC-002、AC-005、AC-012，以及 docs/TechnicalSolution.md 的 DEC-002
 ## 8. 启动条件
 
 当前准备度以 [需求附录](DemandAnalysis.md#questions) 为准：US-001～US-005 已完成本地/受控实现与验收，
-US-006 实施与 US-007 待推进。Q-001～Q-004 已关闭；Q-004 的每日 03:17 Asia/Shanghai 只作为 US-006
-生产调度配置，调度实现和生产启用仍待该故事。依赖版本及外部能力仍按 PoC 验证，生产配置按实际授权。
+US-006 主链路已实现并完成受控 POC-003，US-007 待推进。Q-001～Q-004 已关闭；Q-004 的每日
+03:17 Asia/Shanghai 只作为 US-006 生产调度配置，生产启用仍待单独授权。依赖版本及外部能力仍按
+PoC 验证，生产配置按实际授权。
 
-US-006 规格、计划与 28 项 tasks 已建立，下一项是实施 M-06 与 POC-003；US-003 的 POC-002 已完成。
-后续业务编码、依赖安装和发布仍需对应授权，不能因本文档或规划状态更新而自动开始。
+US-006 的 T001–T019、T021–T028 已完成本地/受控验证，T020 的部署失败重跑/恢复仍部分未完成；
+生产 `main` 的每日调度未启用。后续业务编码、依赖安装和发布仍需对应授权，不能因本文档或规划
+状态更新而自动开始。
