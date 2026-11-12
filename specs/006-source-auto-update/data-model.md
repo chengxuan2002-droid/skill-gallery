@@ -88,6 +88,7 @@ unconfigured（source_tracking=null）
 - `source_tracking.last_synced_revision`
 - `source_tracking.last_synced_digest`
 - `source_tracking.synced_at`
+- 单文件与目录形态互换时的 `content_path`（保持 `slug` 不变，且只在完整新清单通过校验后更新）
 - 适用时由来源声明的 `author`、`declared_version`、`repository_url` 等来源字段（按记录字段优先级）
 
 以下站内字段不得被同步覆盖：`display_name`、`description`、`tags`、`platforms`、`usage`、

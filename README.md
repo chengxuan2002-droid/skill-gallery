@@ -182,6 +182,63 @@ node scripts/skill-cli.js status --run <run-id>
 已切换为 Actions 并成功发布，但生产 environment 审批、部署失败注入和发布后 MIME/缓存验证未运行。
 后续生产发布仍需单独授权。
 
+### 来源自动更新（US-006）
+
+当前分支已实现来源检查、单版本替换、许可/冲突保护和同次运行发布；POC-003 与生产调度启用状态以
+[US-006 validation](specs/006-source-auto-update/validation/) 为准。生产 `main` 的每日调度在合并或
+推送前不会自动生效，启用仍需单独授权。
+
+**配置**：在 `catalog/<slug>.json` 的 `source_tracking` 中填写结构化 GitHub 来源；未配置时保持
+`null`。`enabled=false` 的来源不检查、不替换。
+
+```json
+{
+  "source_tracking": {
+    "provider": "github",
+    "repository": "owner/repository",
+    "path": "skills/example",
+    "ref_policy": "branch",
+    "ref": "main",
+    "enabled": true,
+    "last_synced_revision": null,
+    "last_synced_digest": null,
+    "synced_at": null
+  }
+}
+```
+
+- `ref_policy` 只接受 `branch`、`release`、`pinned`；最终都会解析到不可变 40 位提交。
+  `pinned` 不自动前移；`release` 选择最新非草稿、非预发布 Release，找不到时报告 unavailable。
+- `repository` 必须是 `owner/repository`，`path` 是 POSIX 相对路径；不接受网页 URL、反斜杠和越界路径。
+- 单文件来源为 `skills/<slug>.md`；目录来源为 `skills/<slug>/SKILL.md` 及附件。单文件来源从同目录
+  或仓库根读取许可文件；目录来源只认来源子树内的许可。
+
+**检查与手动应用**（在干净 checkout 中执行，使用已有 Git/gh 授权，不把 token 写入参数）：
+
+```bash
+node scripts/sync-skills.js --slug example --json
+node scripts/sync-skills.js --slug example --apply --push --report sync-report.json --summary sync-summary.md
+```
+
+- 不带 `--apply` 只检查：不写工作区、不提交、不推送；无变化为 `unchanged`，可应用候选为 `candidate`。
+- `--apply` 在隔离 worktree 中整体替换当前内容并创建一个批次提交；`--push` 以非 force 方式推送。
+- stdout 默认是可读摘要；`--json` 输出单行封闭 JSON；`--report` 写运行报告，`--summary` 追加脱敏摘要。
+- 退出码：`0` 完成（逐来源失败在报告中表达）、`2` 参数/catalog 无效、`4` 基线冲突/推送被拒绝、
+  `5` 全局来源读取失败、`6` 提交或报告写入失败。
+
+**许可、冲突与失败**：
+
+- 许可缺失或变化为 `policy_blocked`；当前内容偏离 `last_synced_digest`、远端基线前进或推送被拒绝为
+  `conflict`；截断/链接/子模块/越界/超大候选为 `failed`。这些状态都保留当前内容，不删除、不覆盖。
+- 首次启用且没有 `last_synced_digest` 时，候选与当前内容一致才建立基线；不一致返回 conflict。
+- 上游已删除的附件会被清理；站内 `display_name`、`tags`、`notes`、`usage` 等保留；不改写第三方原件。
+- 来源内容只作为数据处理，不执行其中的脚本、测试或安装依赖。
+
+**调度与恢复**：`maintain.yml` 在 UTC `17 19 * * *`（每日 03:17 Asia/Shanghai）和
+`workflow_dispatch` 的 `sync=true` 时运行同一同步入口；无变化跳过 build/deploy。手动 `sync=false`
+只按当前提交重发。平台可能延迟或跳过，不承诺准点 SLA。恢复使用受控 `git revert`/restore 提交并
+重新构建发布，保持 slug、旧链接和单版本，不 force push、不清除历史。
+
 ### 当前内容与构建契约
 
 - 原件位于 `skills/<slug>.md` 或 `skills/<slug>/SKILL.md`；`catalog/<slug>.json` 是独立站内记录。构建只读取 catalog 指向的内容，不扫描未纳管目录，不执行 Skill 脚本、测试或安装其依赖。
