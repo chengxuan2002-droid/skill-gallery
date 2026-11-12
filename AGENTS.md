@@ -136,6 +136,14 @@ specs/005-skill-cli/validation/；US-005 收口时本地 npm test 为 241 项（
 2026-11-12 复核为 242 项（240 通过、0 失败、2 跳过）。
 T023 quickstart 走查已完成；生产 Pages 已切换，Agent 命令/本地构建需经 Actions 发布，
 不把本地结果当作生产发布。
+2026-11-12 US-006 的 T001–T019、T021–T028 已完成本地/受控验证：`scripts/lib/github-source.js`、
+`scripts/lib/source-sync.js`、`scripts/lib/source-sync-report.js`、`scripts/sync-skills.js`、
+`maintain.yml` 的 sync/schedule 与同次发布；POC-003 使用源仓库
+`chengxuan2002-droid/skill-gallery-source-poc-20261112` 与消费端 POC-002，验证 branch/release/pinned、
+两修订增删文件与真实 404。证据入口：
+`specs/006-source-auto-update/validation/{preflight,us6-check,us6-apply,us6-conflict,us6-status,us6-workflow,us6-quality,us6-poc,us6-final-review,us6-quickstart}.md`。
+T020 的部署失败重跑/恢复未完成；单文件来源的许可字节变化未持久化比较；生产 `main` 调度未启用；
+2026-11-12 本地 `npm test` 为 281 项（279 通过、0 失败、2 跳过）。
 首次初始化证据见 specs/001-preserve-skill-content/validation/bootstrap.md。
 2026-11-03 在 Windows 复核 T002～T010：`.gitattributes` 固定项目文本为 LF，`skills/**` 不做换行转换；
 测试夹具在 Windows 使用 junction，检查入口解析 `npm.cmd` 与扫描器 `.exe`，安装器支持 Windows zip 包但仍需网络。
