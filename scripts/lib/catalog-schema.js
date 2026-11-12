@@ -157,10 +157,6 @@ function sourceTracking(value, slug, diagnostics) {
   if (typeof value.enabled !== 'boolean') {
     diagnose(diagnostics, 'E_SCHEMA', { slug }, 'source_tracking.enabled 必须是布尔值');
   }
-  const revision = value.last_synced_revision ?? null;
-  if (revision !== null && !isNonEmptyString(revision)) {
-    diagnose(diagnostics, 'E_SCHEMA', { slug }, 'source_tracking.last_synced_revision 不合法');
-  }
   const digest = value.last_synced_digest ?? null;
   if (digest !== null && !isDigest(digest)) {
     diagnose(diagnostics, 'E_SCHEMA', { slug }, 'source_tracking.last_synced_digest 不合法');
@@ -171,7 +167,7 @@ function sourceTracking(value, slug, diagnostics) {
   }
   return {
     ...value,
-    last_synced_revision: revision,
+    last_synced_revision: value.last_synced_revision ?? null,
     last_synced_digest: digest,
     synced_at: syncedAt,
   };

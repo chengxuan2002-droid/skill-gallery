@@ -326,6 +326,7 @@ function applyCandidates({ projectRoot, candidates, push, now, message }) {
     };
   }
   const applied = [];
+  const outcomes = [];
   const files = [];
   const records = [];
   try {
@@ -337,6 +338,7 @@ function applyCandidates({ projectRoot, candidates, push, now, message }) {
           status: 'conflict',
           error_code: 'E_CONFLICT_BASELINE',
         };
+        outcomes.push(item);
         continue;
       }
       const tracking = item.record.source_tracking;
@@ -359,13 +361,13 @@ function applyCandidates({ projectRoot, candidates, push, now, message }) {
       item.result = {
         ...item.result,
         status: 'updated',
-        resolved_revision: item.result.resolved_revision,
         content_digest: item.candidate.digest,
       };
       applied.push(item);
+      outcomes.push(item);
     }
     if (applied.length === 0) {
-      return { ok: true, changed: false, commitSha: null, results: applied };
+      return { ok: true, changed: false, commitSha: null, results: outcomes };
     }
     const commitSha = commitBatch({
       root: baseline.root,
@@ -383,12 +385,12 @@ function applyCandidates({ projectRoot, candidates, push, now, message }) {
           code: 'E_CONFLICT',
           changed: true,
           commitSha,
-          results: applied,
+          results: outcomes,
           diagnostics: [failure('E_CONFLICT', '远端基线已变化或推送被拒绝')],
         };
       }
     }
-    return { ok: true, changed: true, commitSha, results: applied };
+    return { ok: true, changed: true, commitSha, results: outcomes };
   } finally {
     baseline.cleanup();
   }
