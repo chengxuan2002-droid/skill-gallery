@@ -49,7 +49,8 @@ test('publishing stays in one workflow and one run without workflow_run chaining
   assert.ok(deploy, 'deploy job is missing');
 
   assert.deepEqual(asArray(deploy.needs), ['build']);
-  assert.equal(build.if, undefined, 'build must not be limited to one trigger');
+  assert.ok(asArray(build.needs).includes('sync'), 'build must wait for source sync');
+  assert.match(String(build.if), /needs\.sync\.result/, 'build must honor sync result');
   assert.equal(deploy.if, undefined, 'deploy must not be limited to one trigger');
 });
 
@@ -59,7 +60,8 @@ test('the workflow structure can add a sync job ahead of build without a second 
   const deploy = maintain.jobs.deploy;
 
   assert.ok(asArray(deploy.needs).includes('build'));
-  assert.doesNotMatch(String(build.if || ''), /github\.event_name/);
+  assert.ok(asArray(build.needs).includes('sync'));
+  assert.match(String(build.if), /needs\.sync\.result/);
   assert.doesNotMatch(String(deploy.if || ''), /github\.event_name/);
   assert.equal(maintain.on.workflow_dispatch !== undefined, true);
 
