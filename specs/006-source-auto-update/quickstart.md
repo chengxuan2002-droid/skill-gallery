@@ -4,8 +4,8 @@
 
 本指南只描述可执行的验证步骤；实现细节以
 [source-sync 契约](contracts/source-sync.md)、[workflow 契约](contracts/workflow-sync.md) 和
-[data-model](data-model.md) 为准。默认步骤使用隔离临时仓库与注入来源夹具；真实 GitHub 来源和
-生产调度需要单独授权。
+[data-model](data-model.md) 为准。默认步骤使用隔离临时仓库与注入来源夹具；真实 GitHub 来源写入
+仍需授权；生产调度已于 2026-11-13 启用，实际定时触发以运行记录为准。
 
 ## 1. 前置条件
 
@@ -99,5 +99,5 @@
 
 - 通过：上述场景的退出码、JSON/报告字段、提交/文件清单、失败保留和同次发布均符合契约；
   `npm test`、`npm run lint`、`npm run format:check`、`npm run security`、工作流静态检查通过。
-- 未运行项必须单独列出：真实生产调度、environment 审批、真实远端限流、生产 MIME/缓存、浏览器
-  交互或 US-007 全链路验收。不得用本地夹具通过代替这些项。
+- 未运行项必须单独列出：实际 03:17 定时触发、environment 审批、真实远端限流、生产 MIME/缓存、
+  浏览器交互或 US-007 全链路验收。不得用本地夹具通过代替这些项。
