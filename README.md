@@ -179,15 +179,16 @@ node scripts/skill-cli.js status --run <run-id>
 
 **当前边界**：`skill-cli` 的新增/替换/状态查询已在受控 POC-002 完成真实发布；真实 `gh` 来源导入与
 `--wait` 运行发现仍需补验。US-006 的来源检查、单版本替换、许可/冲突、部署失败重跑/恢复和同次发布
-已实现并完成受控 POC-003；生产 `main` 的每日调度已于 2026-11-13 启用，实际 03:17 定时触发尚未单独
-观察。生产 Pages 已切换为 Actions 并成功发布，但生产 environment 审批、部署失败注入和发布后
+已实现并完成受控 POC-003；生产 `main` 的每日调度已于 2026-11-13 启用。2026-11-14 首次 03:17 窗口
+轮询至 05:10 CST 未出现 `Maintain site` schedule run，不能声称已定时执行；下一窗口为 2026-11-15 03:17。
+生产 Pages 已切换为 Actions 并成功发布，但生产 environment 审批、部署失败注入和发布后
 MIME/缓存验证未运行。后续生产发布仍需单独授权。
 
 ### 来源自动更新（US-006）
 
 当前 `main` 已包含来源检查、单版本替换、许可/冲突保护和同次运行发布；生产调度已于 2026-11-13
 启用。push run 43421560371 的 build/deploy 成功，手动 sync run 43421951464 的 sync 成功且无变化跳过
-发布；实际 03:17 定时触发尚未单独观察。证据见
+发布；2026-11-14 首次 03:17 窗口轮询至 05:10 CST 未出现 schedule run，下一窗口为 2026-11-15 03:17。证据见
 [US-006 validation](specs/006-source-auto-update/validation/)。
 
 **配置**：在 `catalog/<slug>.json` 的 `source_tracking` 中填写结构化 GitHub 来源；未配置时保持
