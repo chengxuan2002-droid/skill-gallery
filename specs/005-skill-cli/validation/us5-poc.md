@@ -56,3 +56,9 @@
 - 未验证 environment 审批、分支保护、并发过期或部署失败重跑（US-003 已有独立证据）。
 - 未验证浏览器详情/分享/下载交互、MIME/缓存或移动端。
 - 生产 Pages 仍为 `legacy`，未切换；本记录不是生产发布验收。
+
+## 6. 后续状态（2026-11-12 同步）
+
+本记录保留 POC 时点：生产 Pages 当时仍为 `legacy`。此后生产 Pages 已切换为 GitHub Actions 并成功发布，
+见 [US-003 production-pages.md](../../003-validate-build-publish/validation/production-pages.md)；本记录
+仍只证明 POC-002 的受控发布，不替代生产发布验收。

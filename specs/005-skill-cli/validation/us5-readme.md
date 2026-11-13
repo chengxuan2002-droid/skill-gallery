@@ -37,4 +37,5 @@ node scripts/skill-cli.js status --run 1
 - 未在 Node 26.3.0/npm 11.16.0 或 Linux 复验；本机为 Node 22.21.0/npm 10.9.4。
 
 README 的已测命令、退出码与 JSON 字段与实际一致；未实现的自动更新、ZIP 解压、站内后台和生产
-切换已在 README 标记规划。
+切换在执行时已在 README 标记规划（后续生产 Pages 已切换，见
+[production-pages.md](../../003-validate-build-publish/validation/production-pages.md)）。

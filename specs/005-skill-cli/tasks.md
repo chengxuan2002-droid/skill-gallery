@@ -10,7 +10,9 @@ description: "US-005 Agent 命令维护的实施任务"
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，
 US-003 发布链与 US-004 手动维护规则。
 
-**Status**: 任务于 2026-11-08 生成；当前 23 项。T001–T023 已完成（本地/受控；生产未启用）。
+**Status**: 任务于 2026-11-08 生成；当前 23 项。T001–T023 已完成（本地/受控）并合并 main（PR #3）；
+生产 Pages 已于 2026-11-08 切换为 GitHub Actions 并成功发布；生产 environment 审批、部署失败注入
+和发布后 MIME/缓存复验未运行。
 证据入口：T001 [validation/preflight.md](validation/preflight.md)，T002–T010
 `tests/unit/skill-cli-args.test.js`、`tests/integration/skill-cli-{add,replace}.test.js`、
 `tests/support/skill-cli-fixture.js`、`scripts/lib/skill-cli/` 与
@@ -23,8 +25,8 @@ T019 [validation/us5-quality.md](validation/us5-quality.md)，T020 `README.md`/`
 T021 [validation/us5-poc.md](validation/us5-poc.md)，T022
 [validation/us5-final-review.md](validation/us5-final-review.md)，T023
 [validation/us5-quickstart.md](validation/us5-quickstart.md)。分支
-`codex/us-005-skill-cli`（从 US-004 分支堆叠，交付见 PR #3；合并前不视为生产可用）。
-生产 Pages 未启用；真实远端写入与 POC-002 操作需单独授权。
+`codex/us-005-skill-cli`（从 US-004 分支堆叠，交付见 PR #3，已合并 main）。
+生产 Pages 已切换；受控 POC-002 写入已执行，后续真实远端写入仍需单独授权。
 
 **Tests**: 宪章 IX 要求先建立能识别错误行为的验证。新增参数/退出码/JSON 单元测试与临时裸仓库
 集成测试；来源与状态查询可注入，默认测试不访问网络、不推真实远端。
@@ -116,7 +118,7 @@ T021 [validation/us5-poc.md](validation/us5-poc.md)，T022
 - [X] T020 [P] 定向更新 `README.md`、`AGENTS.md` 的 US-005 状态、可执行命令、受控结果和未完成项；
   不写未验证命令或线上成功。（NFR-006；AC-007）
 - [X] T021 在受控 POC-002 执行一次真实发布/替换/状态查询（需授权），记录运行 URL、提交 SHA、
-  JSON 状态与未运行项到 `specs/005-skill-cli/validation/us5-poc.md`；生产 Pages 未切换。
+  JSON 状态与未运行项到 `specs/005-skill-cli/validation/us5-poc.md`；执行时生产 Pages 未切换（后续已切换）。
   （FR-006、FR-009；AC-007、AC-011）
 - [X] T022 复核 `spec.md`、`contracts/` 与 `validation/`：未改内容 schema、搜索/详情前端、发布权限
   或生产 Pages；失败项与未运行项单独列出；更新 tasks/plan 状态，记录到

@@ -19,7 +19,7 @@ function jobs() {
   return Object.entries(workflow.jobs || {});
 }
 
-test('workflow and build jobs keep read-only repository permissions', () => {
+test('workflow and non-sync jobs keep read-only repository permissions', () => {
   assert.deepEqual(workflow.permissions, { contents: 'read' });
   assert.equal(workflow.env, undefined);
 
@@ -30,8 +30,10 @@ test('workflow and build jobs keep read-only repository permissions', () => {
   }
   assert.equal(build.env, undefined);
 
+  assert.deepEqual(workflow.jobs.sync.permissions, { contents: 'write' });
+
   for (const [name, job] of jobs()) {
-    if (name === 'deploy') continue;
+    if (name === 'deploy' || name === 'sync') continue;
     assert.equal(job.env, undefined, name);
     for (const [scope, access] of Object.entries(job.permissions || {})) {
       assert.notEqual(access, 'write', `${name} must not request ${scope}: write`);
@@ -73,7 +75,10 @@ test('checkouts avoid persisted credentials and no secrets or PATs are reference
 
   assert.doesNotMatch(workflowText, /\$\{\{\s*secrets\./);
   assert.doesNotMatch(workflowText, /\bsecrets\s*:/);
-  assert.doesNotMatch(workflowText, /github\.token/i);
+  assert.match(YAML.stringify(workflow.jobs.sync), /github\.token/);
+  for (const name of ['build', 'deploy']) {
+    assert.doesNotMatch(YAML.stringify(workflow.jobs[name]), /github\.token/i, name);
+  }
   assert.doesNotMatch(workflowText, /\bGH_PAT\b|\bPAT_TOKEN\b|personal[ _-]?access[ _-]?token/i);
   assert.equal(workflow.on.pull_request, undefined);
   assert.equal(workflow.on.pull_request_target, undefined);

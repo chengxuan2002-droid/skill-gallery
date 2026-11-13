@@ -20,6 +20,12 @@ function git(cwd, ...args) {
   }
 }
 
+function conflict(message) {
+  const error = new Error(message);
+  error.code = 'E_CONFLICT';
+  return error;
+}
+
 function remoteBranch(projectRoot) {
   try {
     const ref = git(projectRoot, 'symbolic-ref', '--short', 'refs/remotes/origin/HEAD');
@@ -60,6 +66,13 @@ function writeFiles(root, files, record) {
     const target = path.join(root, ...file.path.split('/'));
     fs.mkdirSync(path.dirname(target), { recursive: true });
     fs.writeFileSync(target, file.bytes);
+    if (file.executable || file.mode === '100755') {
+      try {
+        fs.chmodSync(target, 0o755);
+      } catch {
+        // Windows does not track executable bits; Git checkout remains authoritative.
+      }
+    }
   }
   const recordPath = path.join(root, 'catalog', `${record.slug}.json`);
   fs.mkdirSync(path.dirname(recordPath), { recursive: true });
@@ -83,11 +96,31 @@ function commitFiles({ root, files, record, replace = false }) {
   return git(root, 'rev-parse', 'HEAD');
 }
 
-function pushBaseline(root, branch) {
+function commitBatch({ root, files, records, replace = false, message }) {
+  const paths = new Set(files.map((file) => file.path));
+  for (const record of records) {
+    paths.add(`catalog/${record.slug}.json`);
+    if (replace) {
+      for (const tracked of trackedSkillPaths(root, record.slug)) paths.add(tracked);
+    }
+  }
+  if (paths.size === 0) return null;
+  git(root, 'add', '-A', '--', ...paths);
+  git(root, 'commit', '-q', '-m', message || 'sync: update sources');
+  return git(root, 'rev-parse', 'HEAD');
+}
+
+function pushBaseline(root, branch, { expectedHead = null } = {}) {
+  git(root, 'fetch', '--quiet', 'origin');
+  if (expectedHead) {
+    const remote = git(root, 'rev-parse', `origin/${branch}`);
+    if (remote !== expectedHead) throw conflict('远端基线已变化');
+  }
   git(root, 'push', '--quiet', 'origin', `HEAD:${branch}`);
 }
 
 module.exports = {
+  commitBatch,
   commitFiles,
   createBaseline,
   pushBaseline,

@@ -1,20 +1,21 @@
 # Implementation Plan: US-005 Agent 命令维护
 
 **Branch**: 功能标识 `005-skill-cli`；实际 Git 分支 `codex/us-005-skill-cli`
-（从 US-004 分支堆叠，交付见 PR #3）。**Date**: 2026-11-08 | **Spec**: [spec.md](spec.md)
+（从 US-004 分支堆叠，交付见 PR #3，已合并 main）。**Date**: 2026-11-08 | **Spec**: [spec.md](spec.md)
 
 **Input**: [spec.md](spec.md)，含五个内部切片、FR-006/007/009/010、NFR-003/004/006、
 AC-007/008/011 及生产授权边界。
 
 **Implementation Status**: T001–T023 已完成本地/受控验证（T021 在 POC-002 执行；证据见
-[validation/](validation/)）；生产 Pages 未启用。
+[validation/](validation/)）；已合并 main（PR #3）。生产 Pages 于 2026-11-08 切换为 GitHub Actions
+并成功发布；本故事未执行生产 environment 审批、部署失败注入或发布后 MIME/缓存复验。
 
 ## Summary
 
 在现有项目 checkout 上提供非交互 Agent 命令：本地单文件/目录或结构化 GitHub 来源的预览、
 新增、显式替换、来源导入和运行状态查询；发布在隔离工作副本中基于远端基线暂存该 Skill 相关文件，
 复用 US-003 校验/构建/发布链与 US-004 手动维护规则。输出单行 JSON 与稳定退出码，认证复用既有
-Git/gh 会话，不要求 token 参数。生产发布与 Pages 切换仍需单独授权。
+Git/gh 会话，不要求 token 参数。生产 Pages 切换已在合并后单独执行；后续生产发布仍需单独授权。
 
 ## Technical Context
 
@@ -33,7 +34,7 @@ Git/gh 会话，不要求 token 参数。生产发布与 Pages 切换仍需单�
 受控 POC-002 单独授权验证。依赖注入来源读取与运行查询，避免默认网络请求。
 
 **Target Platform**: Windows/Linux Node 26.3.0；Git 与 `gh` 为前置命令；站点仍为 GitHub Pages
-`/skill-gallery/`。生产 Pages 未切换。
+`/skill-gallery/`。生产 Pages 已切换并由 Actions 发布；本故事未做生产审批或发布后 MIME 复验。
 
 **Project Type**: 现有原生静态站点 + 构建/发布流水线 + 新增 CLI；不改前端、内容 schema 或发布权限。
 
@@ -44,8 +45,8 @@ Git/gh 会话，不要求 token 参数。生产发布与 Pages 切换仍需单�
 脚本/测试、不安装依赖；不 `git add .`、不 force push、不降低分支保护；冲突或来源失败保留当前内容；
 本地提交/构建成功不得报告为已发布；README 示例不含凭证。
 
-**Scale/Scope**: 正式内容 4 项；单文件/目录候选；不读取性能夹具。US-006 自动检查/调度、站内后台、
-ZIP 解压和生产切换不在本轮。
+**Scale/Scope**: 正式内容 4 项；单文件/目录候选；不读取性能夹具。US-006 自动检查/调度、站内后台和
+ZIP 解压不在本轮；生产 Pages 切换已在合并后单独执行。
 
 ## Constitution Check
 
@@ -143,6 +144,7 @@ quickstart 只负责可执行验证步骤。
 
 ## Planning Verification
 
-本次只读取 spec、宪章、US-003/US-004 契约与现有构建/秘密/发布模块；未修改业务实现、未运行构建、
-未触碰生产 Pages。GitHub 来源与 `gh` 用法沿用 DEC-006/TechnicalSolution 已确认边界；实施涉及
-GitHub API/CLI 具体行为时按项目规则用 Context7 或官方资料核实当前用法，再更新契约。
+本次规划复核只读取 spec、宪章、US-003/US-004 契约与现有构建/秘密/发布模块；未修改业务实现、
+未运行构建、未触碰生产 Pages（规划时点；生产切换在合并后单独执行）。GitHub 来源与 `gh` 用法沿用
+DEC-006/TechnicalSolution 已确认边界；实施涉及 GitHub API/CLI 具体行为时按项目规则用 Context7
+或官方资料核实当前用法，再更新契约。

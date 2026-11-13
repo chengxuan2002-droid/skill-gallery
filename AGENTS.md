@@ -39,8 +39,8 @@
 - 复用 GitHub 仓库后台和 Actions；访客无需登录，写入仅允许管理员及授权 Agent，权限由受信任环境校验。
 - 首版自动更新覆盖 GitHub 公开仓库单文件/Skill 目录，其他来源手动维护；
   当前内容和网站仅保留一个有效版本，允许保留 Git 历史用于恢复。
-- Q-001～Q-004 已确认，不重复询问。Q-004 为每日 03:17 Asia/Shanghai；自动更新调度本身仍待 US-006
-  实现和生产启用，不能把决策确认当成已运行。容量和性能数字按需求中的候选口径验证，不写成已实测承诺。
+- Q-001～Q-004 已确认，不重复询问。Q-004 为每日 03:17 Asia/Shanghai；US-006 调度实现已完成受控验证，
+  生产启用仍待单独授权，不能把决策确认或 POC 当成已运行。容量和性能数字按需求中的候选口径验证，不写成已实测承诺。
 - 复用原生前端与静态发布结构；新增必要依赖须说明用途、核实用法并锁定版本。
   需求、架构、任务与生产发布授权分别处理；不把本地验证成功报告为线上已更新。
 
@@ -80,6 +80,7 @@ npx ctx7@latest docs <libraryId> "单一概念的具体问题"
 | `node --check scripts/build-index.js` | 构建脚本语法检查 |
 | `node --check assets/app.js` | 前端脚本语法检查 |
 | `node scripts/build-index.js` / `npm run build` | 校验 catalog/skills 并生成 dist；不写根 `assets/search-index.json`；失败保留旧 dist |
+| `node scripts/sync-skills.js [--slug <slug>] [--apply] [--push] [--json]` | 检查/应用 GitHub 来源；默认零写入，`--apply` 建批次提交，`--push` 非 force 推送；不执行上游内容 |
 | `node scripts/migrate-catalog.js --dry-run` / `--write` | 仅处理四项固定记录；先全量验证，冲突不覆盖，不导入未纳管目录 |
 | `npm run preview` | 只读预览 dist 的 `/skill-gallery/`；localhost:8000，不提供写入 |
 | `python3 -m http.server 8000` | 本地预览服务；单独运行不证明项目子路径兼容 |
@@ -103,7 +104,7 @@ npx ctx7@latest docs <libraryId> "单一概念的具体问题"
 （见 specs/001-preserve-skill-content/validation/us2-browser.md）；T031–T038（US3）已完成本地故障/安全验收
 （见 specs/001-preserve-skill-content/validation/us3-failures.md）；T039/T040/T042/T043 已完成
 （acceptance.md、final-review.md），T041 仅 Linux/WSL 通过、macOS 未运行（platform.md）；
-上传 CLI、自动更新与生产发布仍待后续故事。
+上传 CLI、自动更新与生产发布当时仍待后续故事（US-003～US-005 后续已完成，自动更新仍待 US-006）。
 2026-11-05 US-002 的 T001–T026 已完成本地实现、验收与文档收口。
 证据入口：specs/002-search-detail-share-redesign/validation/ 下的 us2-search、us2-detail、us2-accessibility、
 us2-performance、us2-build、us2-regression、us2-quality、us2-cross-browser、us2-production-preflight。
@@ -131,9 +132,19 @@ specs/004-manual-skill-maintenance/validation/；当前本地 npm test 为 220 �
 手动提交/本地构建需经 Actions 发布，受控验收不等于生产发布。
 2026-11-08 US-005 的 T001–T023 已完成本地/受控验证：`skill-cli` 的 preview/add/import/replace/status、
 JSON/退出码、隔离 worktree、临时裸远端与 POC-002 新增/替换/状态查询证据见
-specs/005-skill-cli/validation/；当前本地 npm test 为 241 项（239 通过、0 失败、2 跳过）。
+specs/005-skill-cli/validation/；US-005 收口时本地 npm test 为 241 项（239 通过、0 失败、2 跳过），
+2026-11-12 复核为 242 项（240 通过、0 失败、2 跳过）。
 T023 quickstart 走查已完成；生产 Pages 已切换，Agent 命令/本地构建需经 Actions 发布，
 不把本地结果当作生产发布。
+2026-11-12 US-006 的 T001–T019、T021–T028 已完成本地/受控验证：`scripts/lib/github-source.js`、
+`scripts/lib/source-sync.js`、`scripts/lib/source-sync-report.js`、`scripts/sync-skills.js`、
+`maintain.yml` 的 sync/schedule 与同次发布；POC-003 使用源仓库
+`chengxuan2002-droid/skill-gallery-source-poc-20261112` 与消费端 POC-002，验证 branch/release/pinned、
+两修订增删文件与真实 404。证据入口：
+`specs/006-source-auto-update/validation/{preflight,us6-check,us6-apply,us6-conflict,us6-status,us6-workflow,us6-quality,us6-poc,us6-license,us6-final-review,us6-quickstart}.md`。
+T020 的部署失败/同提交重跑/受控 revert 已完成受控验证；单文件与目录来源的许可基线均已持久化比较；
+deploy 增加 `needs.build.result == 'success'` 条件，避免 sync 跳过时误跳过发布；生产 `main` 调度待启用；
+2026-11-12 本地 `npm test` 为 282 项（280 通过、0 失败、2 跳过）。
 首次初始化证据见 specs/001-preserve-skill-content/validation/bootstrap.md。
 2026-11-03 在 Windows 复核 T002～T010：`.gitattributes` 固定项目文本为 LF，`skills/**` 不做换行转换；
 测试夹具在 Windows 使用 junction，检查入口解析 `npm.cmd` 与扫描器 `.exe`，安装器支持 Windows zip 包但仍需网络。
@@ -167,7 +178,9 @@ T041 复选框保持未勾选，不宣称 macOS、跨平台或生产发布通过
 原进程退出并核对 run_id/pid，只移除匹配锁后重跑 `npm run build`，不得先删 dist/backup；提交后清理失败为
 `built` + `cleanup_status=pending`。凭证规则 SECRET-01～04 只报位置/类型，示例使用 `YOUR_*_HERE`、
 `<REDACTED>`、`***` 或 `$ENV`。标题 ID 由构建器生成，重复标题加后缀，未知片段移除 href 并提示。
-上传 CLI、GitHub 后台维护、自动更新和发布仍未实现；生产 Pages MIME/缓存/直接资源安全需发布前验证。
+上传 CLI、GitHub 后台维护和生产 Pages 发布已完成本地/受控验收；US-006 来源检查、单版本替换、
+许可/冲突、T020 失败重跑/恢复和同次发布已在功能分支实现并完成受控 POC-003，生产调度待启用；
+2026-11-12 本地 `npm test` 为 282 项（280 通过、0 失败、2 跳过）；生产 Pages MIME/缓存/直接资源安全需完整发布后验证。
 首页标识或索引契约改变时同时更新 scripts/check-site.js 与相应测试；该探测不代替浏览器交互和原件下载保真验收。
 
 功能或缺陷修复先建立能识别错误行为的验证，再实现并执行适用检查；

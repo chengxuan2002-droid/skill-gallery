@@ -30,8 +30,12 @@ test('maintain workflow has the required triggers, permissions, concurrency and 
   const text = fs.readFileSync(workflowPath, 'utf8');
   const workflow = readWorkflow();
 
-  assert.deepEqual(Object.keys(workflow.on).sort(), ['push', 'workflow_dispatch']);
+  assert.deepEqual(Object.keys(workflow.on).sort(), ['push', 'schedule', 'workflow_dispatch']);
   assert.deepEqual(asArray(workflow.on.push.branches), ['main']);
+  assert.deepEqual(
+    workflow.on.schedule.map((item) => item.cron),
+    ['17 19 * * *'],
+  );
   assert.equal(workflow.on.workflow_dispatch !== undefined, true);
   assert.equal(workflow.on.pull_request, undefined);
   assert.equal(workflow.on.pull_request_target, undefined);
