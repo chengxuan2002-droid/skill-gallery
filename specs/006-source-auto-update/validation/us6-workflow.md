@@ -45,9 +45,13 @@ node --test tests/integration/publish/publish-sync-workflow.test.js \
   执行，build/deploy success 且未新增内容提交。
 - `deploy` 使用 `if: always() && needs.build.result == 'success'`；workflow 测试覆盖 build 成功但 sync
   被跳过时仍运行 deploy。
-- POC 的 schedule 配置仅用于受控验证；生产 `main` 的每日调度在合并/推送前未启用，需单独授权。
+- 生产 `main` 调度已于 2026-11-13 启用（PR #6 合并 `27c6b36dcab8f654f0279a2a822f1bb6042f765e`）；
+  push run [43421560371](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/43421560371)
+  为 sync skipped、build/deploy success；手动 sync run
+  [43421951464](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/43421951464)
+  为 sync success、无变化、build/deploy skipped。
 
 ## 4. 未运行
 
-- 生产 `main` 的定时触发、environment 审批和发布后 MIME/缓存复验。
+- 实际 03:17 Asia/Shanghai 定时触发尚未单独观察；environment 审批和发布后 MIME/缓存复验仍未运行。
 - 真实部署失败后的同提交重跑与受控 revert 已见 [us6-status.md](us6-status.md)；本文件不重复其运行记录。

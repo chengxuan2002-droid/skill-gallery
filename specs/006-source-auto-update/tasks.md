@@ -11,8 +11,8 @@ description: "US-006 来源定期检查与自动替换的实施任务"
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，
 US-003 发布链、US-004 手动维护规则与 US-005 CLI 候选/工作副本基线。
 
-**Status**: 任务于 2026-11-12 生成；当前 29 项。T001–T029 已完成本地/受控验证。
-tasks 勾选不代表生产调度或 US-007 通过。
+**Status**: 任务于 2026-11-12 生成；当前 30 项。T001–T030 已完成本地/受控验证和生产启用。
+tasks 勾选不代表 US-007 整体验收通过。
 证据入口：`validation/preflight.md`、`us6-check.md`、`us6-apply.md`、`us6-conflict.md`、`us6-status.md`、
 `us6-workflow.md`、`us6-quality.md`、`us6-poc.md`、`us6-license.md`、`us6-final-review.md`、`us6-quickstart.md`。
 
@@ -192,6 +192,9 @@ catalog、提交清单与索引，确认只有一个版本。
 - [X] T029 持久化 `source_tracking.last_synced_license`（路径 + sha256）：扩展 schema、检查与 apply
   链路；补单文件/目录许可缺失、路径变化和字节变化测试；记录到
   `specs/006-source-auto-update/validation/us6-license.md`。（FR-008；AC-010、AC-012）
+- [X] T030 合并 PR #6 并启用生产 `main` 调度；验证 push run 43421560371 的 build/deploy 与手动
+  sync run 43421951464 的无变化路径，记录到 `validation/us6-workflow.md`；实际 03:17 定时触发未单独观察。
+  （FR-008、FR-009；AC-011）
 
 ## Dependencies & Execution Order
 
