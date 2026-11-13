@@ -102,6 +102,7 @@ scripts/lib/source-sync-apply.js       # 新增：批次提交与完整替换
 scripts/lib/source-sync-report.js      # 新增：封闭报告与脱敏 Step Summary
 scripts/lib/content-store.js           # 复用：digest、snapshot、读取前后一致性
 scripts/lib/catalog-schema.js          # 复用：source_tracking 字段校验
+scripts/lib/catalog-source-license.js  # 新增：last_synced_license 形状校验
 scripts/lib/skill-cli/source-github.js # 改为共享读取器的薄适配，保持 US-005 行为
 scripts/lib/skill-cli/candidate.js     # 复用：候选校验与临时目录
 scripts/lib/skill-cli/workspace.js     # 复用/扩展：显式路径暂存、批次提交、非 force 推送
