@@ -31,7 +31,8 @@ node --test tests/integration/publish/publish-sync-workflow.test.js \
 | 首次基线（源 v1） | [43208732789](https://github.com/chengxuan2002-droid/skill-gallery-poc-20261107/actions/runs/43208732789) | sync/build/deploy 均 success；提交 `0c68fed4c008` |
 | 源 v2 更新 | [43208983544](https://github.com/chengxuan2002-droid/skill-gallery-poc-20261107/actions/runs/43208983544) | sync/build/deploy 均 success；提交 `7b439a18f6d3` |
 | 无变化 | [43209635536](https://github.com/chengxuan2002-droid/skill-gallery-poc-20261107/actions/runs/43209635536) | sync success；build/deploy skipped；无新提交 |
-| push 基线 | [43208462776](https://github.com/chengxuan2002-droid/skill-gallery-poc-20261107/actions/runs/43208462776) | build success；deploy skipped；不作为同次发布通过证据 |
+| push 基线（修复前） | [43208462776](https://github.com/chengxuan2002-droid/skill-gallery-poc-20261107/actions/runs/43208462776) | build success；deploy skipped；暴露 sync 跳过时 deploy 被隐式跳过 |
+| push 修复后 | [43420037710](https://github.com/chengxuan2002-droid/skill-gallery-poc-20261107/actions/runs/43420037710) | sync skipped；build/deploy success |
 
 `sync` job 的 Step Summary 显示来源状态、提交状态、内容状态和部署状态；公开页面只显示内容结果，
 不显示 token、上游响应正文或内部异常。
@@ -39,10 +40,14 @@ node --test tests/integration/publish/publish-sync-workflow.test.js \
 ## 3. 调度说明
 
 - `17 19 * * *` 是 UTC；对应每日 03:17 Asia/Shanghai。平台延迟、跳过或停用不承诺准点 SLA。
-- 手动 `sync=false` 只按当前提交重发；本次未单独执行该路径，由工作流条件和既有 US-003 重发语义覆盖。
+- 手动 `sync=false` 只按当前提交重发；该路径已在 T020 的
+  [43420502326](https://github.com/chengxuan2002-droid/skill-gallery-poc-20261107/actions/runs/43420502326)
+  执行，build/deploy success 且未新增内容提交。
+- `deploy` 使用 `if: always() && needs.build.result == 'success'`；workflow 测试覆盖 build 成功但 sync
+  被跳过时仍运行 deploy。
 - POC 的 schedule 配置仅用于受控验证；生产 `main` 的每日调度在合并/推送前未启用，需单独授权。
 
 ## 4. 未运行
 
-- 生产 `main` 的定时触发、environment 审批、真实部署失败重跑和发布后 MIME/缓存复验。
-- push 运行中 deploy 被跳过的原因未定位；不作为通过证据，后续在 US-007 或生产启用前复核。
+- 生产 `main` 的定时触发、environment 审批和发布后 MIME/缓存复验。
+- 真实部署失败后的同提交重跑与受控 revert 已见 [us6-status.md](us6-status.md)；本文件不重复其运行记录。

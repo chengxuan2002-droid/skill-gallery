@@ -11,8 +11,8 @@ description: "US-006 来源定期检查与自动替换的实施任务"
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，
 US-003 发布链、US-004 手动维护规则与 US-005 CLI 候选/工作副本基线。
 
-**Status**: 任务于 2026-11-12 生成；当前 29 项。T001–T019、T021–T029 已完成本地/受控验证；
-T020（部署失败重跑/恢复）仅部分完成，未运行项见 `validation/`。tasks 勾选不代表生产调度或 US-007 通过。
+**Status**: 任务于 2026-11-12 生成；当前 29 项。T001–T029 已完成本地/受控验证。
+tasks 勾选不代表生产调度或 US-007 通过。
 证据入口：`validation/preflight.md`、`us6-check.md`、`us6-apply.md`、`us6-conflict.md`、`us6-status.md`、
 `us6-workflow.md`、`us6-quality.md`、`us6-poc.md`、`us6-license.md`、`us6-final-review.md`、`us6-quickstart.md`。
 
@@ -143,10 +143,10 @@ catalog、提交清单与索引，确认只有一个版本。
 - [X] T019 [US4] 完成 `scripts/lib/source-sync-report.js` 与 `scripts/sync-skills.js` 的报告输出：
   封闭 JSON、脱敏 Markdown 摘要、运行标识/触发方式/提交状态，并为 build/deploy 摘要提供
   同一 `commit_status` 与目标 SHA 输入。（FR-009；AC-011）
-- [ ] T020 [US4] 在受控 POC 模拟部署失败、同提交重跑和受控 revert 恢复，记录“提交成功、部署
+- [X] T020 [US4] 在受控 POC 模拟部署失败、同提交重跑和受控 revert 恢复，记录“提交成功、部署
   失败”、旧站保留、未新增内容提交与 slug/历史保持到
   `specs/006-source-auto-update/validation/us6-status.md`。（FR-009；AC-011）
-  **当前状态**：仅完成正常发布与无变化运行；部署失败注入、同提交重跑和受控 revert 未运行。
+  **结果**：部署失败/旧站保留、同提交重跑、受控 revert 恢复均已完成，见 `validation/us6-status.md`。
 
 **Checkpoint**: US4 可独立演示；状态不把提交成功写成部署成功。
 
