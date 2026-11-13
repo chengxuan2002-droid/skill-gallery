@@ -203,6 +203,7 @@ Actions 并成功发布，但生产 environment 审批、部署失败注入和�
     "enabled": true,
     "last_synced_revision": null,
     "last_synced_digest": null,
+    "last_synced_license": null,
     "synced_at": null
   }
 }
@@ -229,8 +230,11 @@ node scripts/sync-skills.js --slug example --apply --push --report sync-report.j
 
 **许可、冲突与失败**：
 
-- 许可缺失或变化为 `policy_blocked`；当前内容偏离 `last_synced_digest`、远端基线前进或推送被拒绝为
-  `conflict`；截断/链接/子模块/越界/超大候选为 `failed`。这些状态都保留当前内容，不删除、不覆盖。
+- 许可缺失或变化为 `policy_blocked`；成功同步会把许可路径与字节摘要写入
+  `source_tracking.last_synced_license`，后续检查优先比较该基线。旧记录无基线时，目录来源回退比较
+  当前内容许可；单文件来源在首次 apply 时建立基线。当前内容偏离 `last_synced_digest`、远端基线
+  前进或推送被拒绝为 `conflict`；截断/链接/子模块/越界/超大候选为 `failed`。这些状态都保留当前
+  内容，不删除、不覆盖。
 - 首次启用且没有 `last_synced_digest` 时，候选与当前内容一致才建立基线；不一致返回 conflict。
 - 上游已删除的附件会被清理；站内 `display_name`、`tags`、`notes`、`usage` 等保留；不改写第三方原件。
 - 来源内容只作为数据处理，不执行其中的脚本、测试或安装依赖。

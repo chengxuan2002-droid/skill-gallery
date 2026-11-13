@@ -11,10 +11,10 @@ description: "US-006 来源定期检查与自动替换的实施任务"
 **Prerequisites**: [AGENTS.md](../../AGENTS.md)、[宪章](../../.specify/memory/constitution.md) 1.0.0，
 US-003 发布链、US-004 手动维护规则与 US-005 CLI 候选/工作副本基线。
 
-**Status**: 任务于 2026-11-12 生成；当前 28 项。T001–T019、T021–T028 已完成本地/受控验证；
+**Status**: 任务于 2026-11-12 生成；当前 29 项。T001–T019、T021–T029 已完成本地/受控验证；
 T020（部署失败重跑/恢复）仅部分完成，未运行项见 `validation/`。tasks 勾选不代表生产调度或 US-007 通过。
 证据入口：`validation/preflight.md`、`us6-check.md`、`us6-apply.md`、`us6-conflict.md`、`us6-status.md`、
-`us6-workflow.md`、`us6-quality.md`、`us6-poc.md`、`us6-final-review.md`、`us6-quickstart.md`。
+`us6-workflow.md`、`us6-quality.md`、`us6-poc.md`、`us6-license.md`、`us6-final-review.md`、`us6-quickstart.md`。
 
 **Tests**: 宪章 IX 要求先建立能识别错误行为的验证。默认测试使用注入来源读取器、临时 Git 仓库和
 临时裸远端，不访问真实 GitHub、不执行上游脚本、不推送真实远端。
@@ -189,6 +189,9 @@ catalog、提交清单与索引，确认只有一个版本。
 - [X] T028 在干净副本按 [quickstart.md](quickstart.md) 复核命令、退出码、报告字段和失败路径，
   记录结果与偏差到 `specs/006-source-auto-update/validation/us6-quickstart.md`。
   （NFR-006；AC-011）
+- [X] T029 持久化 `source_tracking.last_synced_license`（路径 + sha256）：扩展 schema、检查与 apply
+  链路；补单文件/目录许可缺失、路径变化和字节变化测试；记录到
+  `specs/006-source-auto-update/validation/us6-license.md`。（FR-008；AC-010、AC-012）
 
 ## Dependencies & Execution Order
 

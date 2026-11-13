@@ -74,16 +74,18 @@ node scripts/sync-skills.js --help
 - 只写目标 Skill 的原件与 `catalog/<slug>.json`；整体替换，删除旧清单外文件；不使用
   `git add .`、不 reset/clean 用户工作区、不 force push。
 - 一次运行的有效变更合并为一个批次提交；`git commit` 只包含本次目标路径。
-- 成功提交后更新 `source_tracking.last_synced_revision`、`last_synced_digest`、`synced_at`；
-  站内显示名、标签、备注、用法、分类和来源配置不被覆盖。
+- 成功提交后更新 `source_tracking.last_synced_revision`、`last_synced_digest`、`last_synced_license`、
+  `synced_at`；站内显示名、标签、备注、用法、分类和来源配置不被覆盖。
 - 无变化不创建提交；相同修订/相同内容重复运行幂等。
 - `--push` 前重新读取远端基线；远端前进、非 fast-forward 或分支保护拒绝返回 conflict，不降低保护。
 
 ## 5. 许可与冲突
 
-- 启用的自动来源必须从同一修订的来源子树找到许可文件；仓库根/其他目录许可只作人工参考，
-  不自动视为该子树适用许可；否则 policy_blocked。
-- 候选许可路径变化或字节变化返回 policy_blocked，并记录许可状态；不自动假定仓库整体授权。
+- 目录来源必须从同一修订的来源子树找到许可文件；单文件来源从同目录或仓库根读取；其他目录的许可
+  只作人工参考，不自动视为适用许可；否则 policy_blocked。
+- 成功同步后记录 `source_tracking.last_synced_license`（路径与 sha256）；后续检查优先比较该基线，
+  候选许可路径或字节变化返回 policy_blocked，并记录许可状态；不自动假定仓库整体授权。
+- 旧记录无 `last_synced_license` 时，目录来源回退比较当前内容许可；单文件来源在首次 apply 时建立基线。
 - 当前内容摘要偏离 `last_synced_digest` 返回 conflict；管理员可恢复跟踪或转手动维护。
 - `last_synced_digest` 为空时，候选与当前内容一致可建立基线；不一致返回 conflict，不静默覆盖。
 - 任何冲突/阻断都保留当前内容、当前站点和 Git 历史。

@@ -141,9 +141,9 @@ T023 quickstart 走查已完成；生产 Pages 已切换，Agent 命令/本地�
 `maintain.yml` 的 sync/schedule 与同次发布；POC-003 使用源仓库
 `chengxuan2002-droid/skill-gallery-source-poc-20261112` 与消费端 POC-002，验证 branch/release/pinned、
 两修订增删文件与真实 404。证据入口：
-`specs/006-source-auto-update/validation/{preflight,us6-check,us6-apply,us6-conflict,us6-status,us6-workflow,us6-quality,us6-poc,us6-final-review,us6-quickstart}.md`。
-T020 的部署失败重跑/恢复未完成；单文件来源的许可字节变化未持久化比较；生产 `main` 调度未启用；
-2026-11-12 本地 `npm test` 为 281 项（279 通过、0 失败、2 跳过）。
+`specs/006-source-auto-update/validation/{preflight,us6-check,us6-apply,us6-conflict,us6-status,us6-workflow,us6-quality,us6-poc,us6-license,us6-final-review,us6-quickstart}.md`。
+T020 的部署失败重跑/恢复未完成；单文件与目录来源的许可基线均已持久化比较；生产 `main` 调度未启用；
+2026-11-12 本地 `npm test` 为 282 项（280 通过、0 失败、2 跳过）。
 首次初始化证据见 specs/001-preserve-skill-content/validation/bootstrap.md。
 2026-11-03 在 Windows 复核 T002～T010：`.gitattributes` 固定项目文本为 LF，`skills/**` 不做换行转换；
 测试夹具在 Windows 使用 junction，检查入口解析 `npm.cmd` 与扫描器 `.exe`，安装器支持 Windows zip 包但仍需网络。
@@ -179,7 +179,7 @@ T041 复选框保持未勾选，不宣称 macOS、跨平台或生产发布通过
 `<REDACTED>`、`***` 或 `$ENV`。标题 ID 由构建器生成，重复标题加后缀，未知片段移除 href 并提示。
 上传 CLI、GitHub 后台维护和生产 Pages 发布已完成本地/受控验收；US-006 来源检查、单版本替换、
 许可/冲突和同次发布已在功能分支实现并完成受控 POC-003，生产调度尚未启用；T020 的部署失败重跑/
-恢复仍部分未完成。2026-11-12 本地 `npm test` 为 281 项（279 通过、0 失败、2 跳过）；
+恢复仍部分未完成。2026-11-12 本地 `npm test` 为 282 项（280 通过、0 失败、2 跳过）；
 生产 Pages MIME/缓存/直接资源安全需完整发布后验证。
 首页标识或索引契约改变时同时更新 scripts/check-site.js 与相应测试；该探测不代替浏览器交互和原件下载保真验收。
 

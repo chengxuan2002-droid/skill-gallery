@@ -10,7 +10,7 @@
 | 共享 GitHub 读取 | branch/release/pinned、固定 SHA、完整树、mode、限制、许可、错误码 | `scripts/lib/github-source.js`、[us6-check.md](us6-check.md) |
 | 检查链路 | 零写入、unchanged/candidate、幂等、逐来源隔离 | `scripts/lib/source-sync.js`、[us6-check.md](us6-check.md) |
 | 单版本替换 | 完整替换、旧附件删除、站内字段保留、单文件/目录互换 | `scripts/lib/source-sync.js`、[us6-apply.md](us6-apply.md) |
-| 许可与冲突 | 缺失/变化阻断、本地修改/基线前进 conflict、失败保留 | [us6-conflict.md](us6-conflict.md) |
+| 许可与冲突 | 许可路径/摘要基线、缺失/变化阻断、本地修改/基线前进 conflict、失败保留 | [us6-conflict.md](us6-conflict.md)、[us6-license.md](us6-license.md) |
 | 报告与状态 | 封闭字段、提交/内容/部署分离、脱敏摘要 | `scripts/lib/source-sync-report.js`、[us6-status.md](us6-status.md) |
 | 调度与同次发布 | schedule/dispatch、sync 唯一写 job、build/deploy target SHA | `.github/workflows/maintain.yml`、[us6-workflow.md](us6-workflow.md) |
 | 运行说明 | 来源配置、检查/应用、许可/冲突、调度与恢复 | `README.md` |
@@ -19,8 +19,9 @@
 
 - 实现单文件↔目录互换时必须更新 `content_path`；已在 [data-model.md](../data-model.md) 的
   `ContentRecord` 允许字段中记录，保持 slug 不变。该字段只在完整候选通过校验后更新。
-- 单文件来源的许可从来源文件同目录或仓库根读取；目录来源只认来源子树。该解释写入 README，
-  未新增公开 schema 字段。
+- 单文件来源的许可从来源文件同目录或仓库根读取；目录来源只认来源子树。成功同步后
+  `source_tracking.last_synced_license` 持久化许可路径与 sha256；旧记录无基线时目录来源回退当前内容
+  许可，单文件在首次 apply 建立基线。该可选字段已更新 data-model、source-sync 契约与 README。
 - 没有新增 npm 依赖、数据库、前端入口或第二条发布 workflow。
 
 ## 3. 未完成 / 未运行
@@ -28,9 +29,6 @@
 - **T020 仅部分完成**：未在 POC 注入部署失败、未执行部署失败后的同提交重跑和受控 revert 恢复；
   只有无变化 dispatch 与 automatic build/deploy 成功证据。US-003 的旧站保留证据不能替代本故事
   自动提交后的同链路验证。
-- **单文件来源的许可变化检测缺口**：单文件技能内容不拥有许可文件，当前实现会要求候选在同一目录
-  或仓库根存在许可，但没有持久化许可路径/摘要用于比较后续字节变化；目录来源已完整比较当前内容
-  中的许可文件。若后续要求单文件来源也阻断许可变化，需要扩展 schema 或明确单文件许可策略。
 - 真实 403、限流等待、真实截断树、真实子模块/符号链接和真实二进制下载逐字节对比未运行。
 - 生产 `main` 的每日调度、environment 审批、发布后 MIME/缓存未验证；POC 的 schedule 配置不等于
   生产启用。

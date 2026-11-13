@@ -14,6 +14,7 @@ node --test tests/unit/source-sync-state.test.js
 
 - 目录来源缺少许可 → `policy_blocked` / `E_LICENSE_MISSING`，当前内容保留。
 - 许可字节变化 → `policy_blocked` / `E_LICENSE_CHANGED`。
+- 单文件首次 apply 写入 `last_synced_license`；后续许可字节变化 → `policy_blocked` / `E_LICENSE_CHANGED`。
 - 当前内容偏离 `last_synced_digest` → `conflict` / `E_CONFLICT_LOCAL`，不覆盖本地修改。
 - 首次启用且候选与当前内容不同 → `conflict` / `E_CONFLICT_BASELINE`。
 - 首次启用且候选与当前内容相同 → 只提交来源基线字段。
@@ -33,9 +34,9 @@ CRLF，而源提交与 GitHub Blob 为 LF；许可摘要因此不同，检查返
 Git 历史保持；诊断只输出稳定错误码和路径。POC 的 `missing-poc` 真实 404 返回
 `E_SOURCE_NOT_FOUND`，没有删除或覆盖现有内容。
 
-**已知缺口**：单文件来源没有可比较的当前许可文件；实现会要求候选存在许可，但不持久化许可摘要，
-因此单文件许可字节变化不会被检测。目录来源已完整覆盖该比较，缺口记录在
-[us6-final-review.md](us6-final-review.md)。
+**许可基线**：`source_tracking.last_synced_license` 保存最近成功同步的许可路径与 sha256；单文件和目录
+来源都优先按该基线比较。旧记录无基线时，目录来源回退当前内容许可；单文件在首次 apply 时建立基线。
+完整证据见 [us6-license.md](us6-license.md)。
 
 ## 4. 未运行
 

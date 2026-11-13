@@ -17,6 +17,7 @@
 | `enabled` | boolean | 仅 true 时参与定时/手动检查 |
 | `last_synced_revision` | string \| null | 最近成功替换的来源修订 |
 | `last_synced_digest` | string \| null | 最近成功替换的内容摘要，覆盖完整文件清单 |
+| `last_synced_license` | `{path, sha256}` \| null | 最近成功同步的许可路径与字节摘要；缺失为 null |
 | `synced_at` | ISO 8601 带时区 \| null | 最近成功替换时间；不因无变化检查刷新 |
 
 状态：
@@ -30,7 +31,9 @@ unconfigured（source_tracking=null）
 
 - `last_checked_at` 不属于持久化字段；每次运行的检查时间只进入运行报告，避免无变化检查制造提交。
 - `last_synced_digest` 与当前内容摘要不一致时视为本地修改冲突。
-- 首次启用且无 `last_synced_digest` 时，不允许静默覆盖已有内容；候选与当前内容一致可建立基线，
+- 许可基线以 `last_synced_license.path/sha256` 为准；缺失或变化时 `policy_blocked`。旧记录为 null 时，
+  目录来源回退比较当前内容许可；单文件首次 apply 时写入基线。
+- 首次启用且无 `last_synced_digest` 时，不允许静默覆盖已有内容；候选与当前内容一致可建立基线；
   否则返回 conflict。
 
 ## 2. CandidateSnapshot
@@ -87,6 +90,7 @@ unconfigured（source_tracking=null）
 
 - `source_tracking.last_synced_revision`
 - `source_tracking.last_synced_digest`
+- `source_tracking.last_synced_license`
 - `source_tracking.synced_at`
 - 单文件与目录形态互换时的 `content_path`（保持 `slug` 不变，且只在完整新清单通过校验后更新）
 - 适用时由来源声明的 `author`、`declared_version`、`repository_url` 等来源字段（按记录字段优先级）

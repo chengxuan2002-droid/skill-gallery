@@ -9,7 +9,7 @@
 npm test
 ```
 
-结果：**281 项，279 通过，0 失败，2 跳过**。跳过项为当前环境无法创建符号链接的既有测试，不是
+结果：**282 项，280 通过，0 失败，2 跳过**。跳过项为当前环境无法创建符号链接的既有测试，不是
 US-006 新增功能通过。
 
 新增覆盖：
@@ -19,7 +19,8 @@ US-006 新增功能通过。
 - `tests/unit/catalog-contract.test.js`：`source_tracking` 结构化字段边界。
 - `tests/integration/source-sync-check.test.js`：检查零写入、noop/candidate、失败隔离。
 - `tests/integration/source-sync-apply.test.js`：完整替换、增删附件、单文件/目录互换、幂等。
-- `tests/integration/source-sync-conflict.test.js`：许可、本地修改、基线冲突、非法候选、推送拒绝。
+- `tests/integration/source-sync-conflict.test.js`：许可、本地修改、基线冲突、非法候选、推送拒绝；
+  含单文件 `last_synced_license` 建立与后续许可变化阻断。
 - `tests/integration/publish/publish-sync-workflow.test.js`：schedule/dispatch/权限/target SHA/无第二条发布链。
 
 ## 2. 静态检查与安全
@@ -34,7 +35,7 @@ npm run security
 
 - lint：退出码 0。
 - format:check：所有匹配文件符合 Prettier。
-- security:secrets：338 文件，findings 0。
+- security:secrets：339 文件，findings 0。
 - security:code：55 文件，findings 0。
 - security:deps：1 文件，findings 0。
 
