@@ -48,6 +48,7 @@ function applyCandidates({ projectRoot, candidates, push, now, message }) {
           ...tracking,
           last_synced_revision: item.result.resolved_revision,
           last_synced_digest: item.candidate.digest,
+          last_synced_license: item.candidate.license ?? null,
           synced_at: now,
         },
       };

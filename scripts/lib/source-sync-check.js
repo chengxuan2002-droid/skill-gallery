@@ -158,6 +158,8 @@ function checkRecord({ projectRoot, record, reader, now }) {
   const currentLicense = findLicense(
     new Map(current.snapshot.files.map((file) => [file.path, file.bytes])),
   );
+  const persistedLicense = tracking.last_synced_license ?? null;
+  const baselineLicense = persistedLicense ?? currentLicense;
   const candidateLicense = prepared.candidate.license;
   if (!candidateLicense) {
     return {
@@ -172,9 +174,9 @@ function checkRecord({ projectRoot, record, reader, now }) {
     };
   }
   if (
-    currentLicense &&
-    (currentLicense.path !== candidateLicense.path ||
-      currentLicense.sha256 !== candidateLicense.sha256)
+    baselineLicense &&
+    (baselineLicense.path !== candidateLicense.path ||
+      baselineLicense.sha256 !== candidateLicense.sha256)
   ) {
     return {
       result: resultFor(record, 'policy_blocked', {

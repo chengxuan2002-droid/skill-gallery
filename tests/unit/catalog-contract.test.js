@@ -119,6 +119,34 @@ test('validates the source tracking shape without performing a request', () => {
   };
   const valid = validateCatalogRecord(record({ source_tracking: validTracking }));
   assert.equal(valid.ok, true, JSON.stringify(valid.diagnostics));
+  assert.equal(valid.record.source_tracking.last_synced_license, null);
+
+  const validLicense = validateCatalogRecord(
+    record({
+      source_tracking: {
+        ...validTracking,
+        last_synced_license: { path: 'LICENSE', sha256: 'a'.repeat(64) },
+      },
+    }),
+  );
+  assert.equal(validLicense.ok, true, JSON.stringify(validLicense.diagnostics));
+  assert.deepEqual(validLicense.record.source_tracking.last_synced_license, {
+    path: 'LICENSE',
+    sha256: 'a'.repeat(64),
+  });
+
+  for (const value of [
+    'LICENSE',
+    { path: '../LICENSE', sha256: 'a'.repeat(64) },
+    { path: 'LICENSE', sha256: 'not-a-digest' },
+    { path: 'LICENSE', sha256: 'a'.repeat(64), extra: true },
+  ]) {
+    const invalid = validateCatalogRecord(
+      record({ source_tracking: { ...validTracking, last_synced_license: value } }),
+    );
+    assert.equal(invalid.ok, false, JSON.stringify(value));
+    assert.ok(codes(invalid).includes('E_SCHEMA'), JSON.stringify(value));
+  }
 
   for (const override of [
     { provider: 'gitlab' },

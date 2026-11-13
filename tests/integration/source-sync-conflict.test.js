@@ -21,6 +21,43 @@ const {
 const NOW = '2026-11-12T19:17:00+08:00';
 const NEXT = 'b'.repeat(40);
 
+test('single-file license changes are blocked after the first baseline', (t) => {
+  const project = createSourceSyncProject(t);
+  const skill = writeSkill(project, 'example');
+  writeCatalog(project, skill.record);
+  project.initRemote();
+  const content = main('example');
+  const reader = fakeReader({
+    revision: NEXT,
+    files: { 'example.md': Buffer.from(content) },
+    licenseFiles: { LICENSE: Buffer.from('MIT\n') },
+  });
+  const first = runSync({
+    projectRoot: project.root,
+    reader,
+    apply: true,
+    push: true,
+    now: NOW,
+  });
+  assert.equal(first.exitCode, 0, JSON.stringify(first.report));
+  project.git('pull', '--ff-only', 'origin', 'main');
+  const persisted = JSON.parse(project.remoteShow('catalog/example.json'));
+  assert.equal(persisted.source_tracking.last_synced_license.path, 'LICENSE');
+
+  const checked = checkSources({
+    projectRoot: project.root,
+    now: NOW,
+    reader: fakeReader({
+      revision: NEXT,
+      files: { 'example.md': Buffer.from(content) },
+      licenseFiles: { LICENSE: Buffer.from('Apache-2.0\n') },
+    }),
+  });
+  assert.equal(checked.results[0].status, 'policy_blocked');
+  assert.equal(checked.results[0].error_code, 'E_LICENSE_CHANGED');
+  assert.equal(checked.results[0].license_status, 'changed');
+});
+
 test('missing license blocks replacement and keeps current content', (t) => {
   const { project, skill } = syncedProject(t, { directory: true });
   const head = project.remoteHead();

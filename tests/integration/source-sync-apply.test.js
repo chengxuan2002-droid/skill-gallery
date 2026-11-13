@@ -75,6 +75,8 @@ test('apply replaces a directory, removes deleted attachments and keeps site met
   assert.equal(remote.declared_version, '1.0.0');
   assert.equal(remote.source_tracking.last_synced_revision, NEXT);
   assert.equal(remote.source_tracking.last_synced_digest, synced.report.sources[0].content_digest);
+  assert.equal(remote.source_tracking.last_synced_license.path, 'LICENSE');
+  assert.match(remote.source_tracking.last_synced_license.sha256, /^[0-9a-f]{64}$/);
   assert.equal(remote.source_tracking.synced_at, NOW);
 
   const names = project.remoteFiles();
@@ -108,6 +110,8 @@ test('apply detects content changes when the declared version is unchanged', (t)
   const remote = remoteJson(project, 'catalog/example.json');
   assert.equal(remote.declared_version, '1.0.0');
   assert.equal(remote.source_tracking.last_synced_digest, synced.report.sources[0].content_digest);
+  assert.equal(remote.source_tracking.last_synced_license.path, 'LICENSE');
+  assert.match(remote.source_tracking.last_synced_license.sha256, /^[0-9a-f]{64}$/);
   assert.equal(project.remoteShow('skills/example.md').includes('Same version, new body'), true);
 });
 
