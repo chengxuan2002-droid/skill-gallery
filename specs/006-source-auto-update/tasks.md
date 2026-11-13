@@ -172,7 +172,7 @@ catalog、提交清单与索引，确认只有一个版本。
   代码路径、无变化跳过 build/deploy、手动重发当前快照；记录运行 URL 与未运行项到
   `specs/006-source-auto-update/validation/us6-workflow.md`。（FR-008、FR-009；AC-011）
 
-**Checkpoint**: US5 可独立演示；生产调度启用仍单独授权。
+**Checkpoint**: US5 可独立演示；生产调度已于 2026-11-13 启用（T030）。
 
 ## Phase 8: Polish & Cross-Cutting Concerns
 
@@ -255,5 +255,5 @@ Setup → Foundational → US1 检查 → US2 完整替换 → US3 许可/冲突
 
 - 不执行 `skills/` 中任何脚本或测试，不安装其依赖；来源内容只作为数据处理。
 - 不新增 npm 依赖；Git/`gh` 为文档化前置命令；不改公开搜索/详情/schema。
-- 生产 `main` 的每日调度启用不在默认任务授权内；POC-003 不替代生产调度或发布验收。
+- 生产 `main` 的每日调度已启用；实际定时触发仍需观察，POC-003 不替代生产调度或发布验收。
 - 凭证只在 `sync` job 的受限步骤使用；报告、摘要、日志和 README 不出现 token、响应正文或原始异常。
