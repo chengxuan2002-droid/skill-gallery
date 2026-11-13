@@ -97,6 +97,7 @@ test('sync feeds the same run into build and deploy by target SHA', () => {
   assert.match(String(build.if), /needs\.sync\.result/);
   assert.match(String(build.if), /changed/);
   assert.match(String(deploy.needs), /build/);
+  assert.match(String(deploy.if), /needs\.build\.result == 'success'/);
 
   const buildCheckout = steps(build).find((step) =>
     String(step.uses || '').startsWith('actions/checkout@'),
