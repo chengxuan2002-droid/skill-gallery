@@ -133,7 +133,7 @@ JSON 输出与退出码、隔离 worktree、临时裸远端和 POC-002 新增/�
   构建/发布流程；保持既有 slug、旧链接和单版本，不 force push、不清除历史。不要通过手工改
   `dist/` 或直接覆盖线上文件“恢复”。
 
-自动来源检查/调度（US-006）已在当前功能分支实现并完成受控 POC，生产调度尚未启用；ZIP 解压和站内上传后台不属于当前能力；Agent CLI 见下节。
+自动来源检查/调度（US-006）已实现并完成受控 POC，生产 `main` 调度已于 2026-11-13 启用；ZIP 解压和站内上传后台不属于当前能力；Agent CLI 见下节。
 
 ### Agent 命令（skill-cli）
 
@@ -178,16 +178,17 @@ node scripts/skill-cli.js status --run <run-id>
 `status` 从运行和 job/step 派生；build 成功但 deploy 步骤跳过时为 `superseded`，未完成时为 pending。
 
 **当前边界**：`skill-cli` 的新增/替换/状态查询已在受控 POC-002 完成真实发布；真实 `gh` 来源导入与
-`--wait` 运行发现仍需补验。US-006 的来源检查、单版本替换、许可/冲突和同次发布已实现并完成受控
-POC-003；生产 `main` 的每日调度尚未启用，部署失败重跑/恢复仍未完整演练。生产 Pages 已切换为
-Actions 并成功发布，但生产 environment 审批、部署失败注入和发布后 MIME/缓存验证未运行。
-后续生产发布仍需单独授权。
+`--wait` 运行发现仍需补验。US-006 的来源检查、单版本替换、许可/冲突、部署失败重跑/恢复和同次发布
+已实现并完成受控 POC-003；生产 `main` 的每日调度已于 2026-11-13 启用，实际 03:17 定时触发尚未单独
+观察。生产 Pages 已切换为 Actions 并成功发布，但生产 environment 审批、部署失败注入和发布后
+MIME/缓存验证未运行。后续生产发布仍需单独授权。
 
 ### 来源自动更新（US-006）
 
-当前分支已实现来源检查、单版本替换、许可/冲突保护和同次运行发布；POC-003 与生产调度启用状态以
-[US-006 validation](specs/006-source-auto-update/validation/) 为准。生产 `main` 的每日调度在合并或
-推送前不会自动生效，启用仍需单独授权。
+当前 `main` 已包含来源检查、单版本替换、许可/冲突保护和同次运行发布；生产调度已于 2026-11-13
+启用。push run 43421560371 的 build/deploy 成功，手动 sync run 43421951464 的 sync 成功且无变化跳过
+发布；实际 03:17 定时触发尚未单独观察。证据见
+[US-006 validation](specs/006-source-auto-update/validation/)。
 
 **配置**：在 `catalog/<slug>.json` 的 `source_tracking` 中填写结构化 GitHub 来源；未配置时保持
 `null`。`enabled=false` 的来源不检查、不替换。
@@ -253,8 +254,8 @@ node scripts/sync-skills.js --slug example --apply --push --report sync-report.j
 - `npm run build` 只写 `dist/`，不写根 `assets/search-index.json`；`npm run preview` 只映射 `dist` 的 `/skill-gallery/`。成功状态是本地 `built`，不是已发布。
 - 构建事务使用 `.dist.lock/owner.json` 与 `.dist.transaction.json`。发现遗留锁时不要删除 dist、stage 或 backup；先确认原进程已退出并核对 owner 的 run_id/pid，只移除匹配锁，再重跑 `npm run build`。提交后清理失败会返回 `built` + `cleanup_status=pending`，保留记录/backup，不能当作发布成功。
 - 凭证规则 SECRET-01～04 只报告安全位置和类型；示例使用 `YOUR_*_HERE`、`<REDACTED>`、`***` 或 `$ENV`，不得写入真实凭证。标题 ID 由构建器生成；重复标题使用后缀，未知本文锚点移除 href 并提示。
-- `skill-cli` 已完成本地/受控验收并合并 main；US-006 自动更新已在功能分支实现并完成受控 POC，
-  生产调度未启用。GitHub 后台手动维护见上文，Agent 命令见“Agent 命令（skill-cli）”。不要让旧版根索引/直接 Pages 教程冒充当前流程；生产 Pages
+- `skill-cli` 已完成本地/受控验收并合并 main；US-006 自动更新已实现并合并 main，生产调度已启用。
+  GitHub 后台手动维护见上文，Agent 命令见“Agent 命令（skill-cli）”。不要让旧版根索引/直接 Pages 教程冒充当前流程；生产 Pages
   已切换，MIME、缓存和直接资源安全仍需完整发布后验证。
 
 ### 检查 CI 与现站基础监测
@@ -309,7 +310,7 @@ cd skill-gallery
 `node_modules/`、`.tools/`、`.env*`、系统杂项和本机凭证不随仓库迁移；GitHub 写入凭证在新电脑独立授权。
 不复制旧电脑的 SSH 私钥、Agent 会话或工具执行授权来替代新环境的授权。
 
-当前指针是 `specs/006-source-auto-update`（US-006 规格、计划与 tasks 已建立；实施尚未开始），
+当前指针是 `specs/006-source-auto-update`（US-006 规格、计划与 tasks 已完成；生产调度已启用），
 `.specify/feature.json` 按 Spec Kit 规则保持本机忽略。首次在新副本运行以下命令，会检查规划文件并
 恢复这个本地指针：
 

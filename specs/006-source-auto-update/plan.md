@@ -6,8 +6,8 @@
 **Input**: [spec.md](spec.md)，含 FR-008/009/007、NFR-001/003/004、AC-009/010/011/012、
 DEC-007/008、Q-002/003/004 及 US-003/004/005 已验收基线。
 
-**Implementation Status**: Implemented locally/controlled（2026-11-12）；T001–T019、T021–T029 完成，
-T020 的部署失败重跑/恢复部分未完成；生产调度未启用。
+**Implementation Status**: Implemented and merged（2026-11-13）；T001–T030 完成，生产 `main` 调度已启用；
+实际 03:17 定时触发尚未单独观察。
 
 ## Summary
 
