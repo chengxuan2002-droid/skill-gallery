@@ -19,7 +19,7 @@ npm run check
 |---|---|
 | `npm run lint` | 退出码 0 |
 | `npm run format:check` | 退出码 0；所有匹配文件使用 Prettier 风格 |
-| `npm test` | 282 项：280 通过、0 失败、2 跳过 |
+| `npm test` | 286 项：284 通过、0 失败、2 跳过 |
 
 `npm test` 覆盖单元、集成、发布/同步 workflow、状态模型、保真、路径/凭证、不可信内容、来源
 检查/应用/冲突/许可、调度和回滚语义。2 项跳过为环境限制（符号链接创建不可用/基线红测），不计为失败。
@@ -32,7 +32,7 @@ npm run security
 
 | 检查 | 文件数 | 发现数 | 退出码 |
 |---|---|---|---|
-| `security:secrets` | 355 | 0 | 0 |
+| `security:secrets` | 362 | 0 | 0 |
 | `security:code` | 56 | 0 | 0 |
 | `security:deps` | 1 | 0 | 0 |
 

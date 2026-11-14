@@ -150,8 +150,8 @@ node scripts/skill-cli.js status --run <run-id>
 
 - `preview` 与不带 `--publish` 的 `add` 只校验并输出预览，不写入、不提交、不推送。
 - `add`/`import` 需要 `--meta`；`replace` 缺省保留原站内记录，传 `--meta` 时整体更新。
-- `--publish` 才允许远端写入；`--wait` 只能与 `--publish` 使用，只有找到对应运行才轮询，
-  否则保持 `submitted/pending`，不误报已发布。
+- `--publish` 才允许远端写入；`--wait` 只能与 `--publish` 使用，推送后最多等待 60 秒发现对应
+  `maintain.yml` 运行，找到后轮询到终态；仍未发现则保持 `submitted/pending`，不误报已发布。
 - `import` 只接受结构化 `owner/repository`、`path`、`ref`；不接受普通网页 URL。
 - stdout 只有一行 JSON：`status`、`slug`、`content_revision`、`content_status`、`deploy_status`、
   `commit_sha`、`run_url`、`public_url`、`errors`；诊断只含稳定码与位置，不回显凭证或正文。
@@ -178,12 +178,13 @@ node scripts/skill-cli.js status --run <run-id>
 `status` 从运行和 job/step 派生；build 成功但 deploy 步骤跳过时为 `superseded`，未完成时为 pending。
 
 **当前边界**：`skill-cli` 的新增/替换/状态查询已在受控 POC-002 完成真实发布；真实 `gh` 来源导入与
-`--wait` 运行发现仍需补验。US-006 的来源检查、单版本替换、许可/冲突、部署失败重跑/恢复和同次发布
-已实现并完成受控 POC-003；生产 `main` 的每日调度已于 2026-11-13 启用。2026-11-14 首次 03:17 窗口
-轮询至 05:10 CST 前未出现；08:19 CST 出现延迟 schedule run 43533439066（sync success，build/deploy skipped）；
-下一窗口为 2026-11-15 03:17。
-生产 Pages 已切换为 Actions 并成功发布，但生产 environment 审批、部署失败注入和发布后
-MIME/缓存验证未运行。后续生产发布仍需单独授权。
+`--wait` 运行发现已于 2026-11-14 用 POC-002/POC-003 补验，详见
+[us5-real-gh.md](specs/005-skill-cli/validation/us5-real-gh.md)。US-006 的来源检查、单版本替换、
+许可/冲突、部署失败重跑/恢复和同次发布已实现并完成受控 POC-003；生产 `main` 的每日调度已于
+2026-11-13 启用。2026-11-14 首次 03:17 窗口轮询至 05:10 CST 前未出现；08:19 CST 出现延迟
+schedule run 43533439066（sync success，build/deploy skipped）；下一窗口为 2026-11-15 03:17。
+生产 Pages 已切换为 Actions 并成功发布；生产 environment 审批、部署失败/旧站保留和 MIME/缓存
+基础头已于 2026-11-14 补验，CDN/强刷与生产真实来源仍未验证。后续生产发布仍需单独授权。
 
 ### 来源自动更新（US-006）
 
@@ -258,11 +259,11 @@ US-007 的验收矩阵与证据已建立，当前是**有条件验收/交接**�
   `demo-001.md`～`demo-003.md`、`fixed-address.md`、`fidelity.md`、`security.md`、`handoff.md`）。
 - 已补验：T041 的 GitHub-hosted macOS runner（run `43588719771`）、生产 environment 审批
   （run `43587421323`）、生产部署失败/旧站保留（run `43588024409`）与恢复、MIME/缓存基础头、
-  一次真实 403；分支 push 的 [Quality checks #43609150035](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/43609150035)
-  在 Node 26.3/Linux 通过（282 项 281 通过、0 失败、1 跳过）。仍未运行/未验证：US-005 真实
-  `gh api`/`--wait`、真实 source-sync 429、真实截断/子模块/符号链接、POC 二进制逐字节下载、
-  Safari/移动实机/读屏器、2026-11-15 03:17 窗口；生产 `source_tracking` 仍为 `null`，Demo-002
-  不是生产自动更新。
+  一次真实 403、US-005 真实 `gh api` 导入与 `--wait`（POC runs `43612050209`、`43612262185`；
+  POC 二进制 URL 逐字节一致）；分支 push 的 [Quality checks #43609150035](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/43609150035)
+  在 Node 26.3/Linux 通过（282 项 281 通过、0 失败、1 跳过）。仍未运行/未验证：真实 source-sync
+  429、真实截断/子模块/符号链接、Safari/移动实机/读屏器、CDN/强刷、2026-11-15 03:17 窗口；
+  生产 `source_tracking` 仍为 `null`，Demo-002 不是生产自动更新。
 - 恢复入口：手动维护/替换/下架按上文“替换、下架与恢复”；来源/调度恢复使用受控 `git revert`/
   restore 提交并重新构建发布，保持 slug、旧链接和单版本，不 force push。完整缺口和补验方式见
   [residual-gaps.md](specs/007-overall-acceptance/validation/residual-gaps.md)。

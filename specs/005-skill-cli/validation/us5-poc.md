@@ -62,3 +62,15 @@
 本记录保留 POC 时点：生产 Pages 当时仍为 `legacy`。此后生产 Pages 已切换为 GitHub Actions 并成功发布，
 见 [US-003 production-pages.md](../../003-validate-build-publish/validation/production-pages.md)；本记录
 仍只证明 POC-002 的受控发布，不替代生产发布验收。
+
+## 7. 2026-11-14 真实 gh/--wait 补验
+
+在 POC-002（临时取消归档）和 POC-003（归档只读）执行真实 `gh api` 导入：
+
+- 修复 `source-github.fetchSource` 默认 reader 缺失；
+- 第一次发布 `us5-real-import` 提交 `19bf63c...`，运行 `43612050209` 后成功；
+- 修复运行发现后，`us5-real-wait` 提交 `1017dd4...`，`--wait` 返回 published，run `43612262185`；
+- 目标 5 个文件与来源逐字节一致，POC 站点 `contentRevision=31baae8c...`；
+- POC-002 随后重新归档。
+
+详见 [us5-real-gh.md](us5-real-gh.md)。

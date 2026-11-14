@@ -31,10 +31,19 @@
 | 始终 pending | `status=pending`、`timeout=true`、`E_TIMEOUT`、退出码 `8` |
 | 超时/失败/过期 | 均不输出 `published`；保留 `run_url`（固定对象中的运行链接） |
 
-## 3. 未运行与限制
+## 3. 真实 POC-002 运行与 --wait 发现（2026-11-14 补验）
 
-- 未查询真实 POC-002 运行或 `gh run view`；默认读取器字段（`status/conclusion/jobs/headSha/url`）
-  仍需在 T021 或受控环境验证。
+详见 [us5-real-gh.md](us5-real-gh.md)：
+
+- 真实 `gh run view`/`gh run list` 查询 POC-002 运行成功；
+- 第一次发布后立即查询运行未出现，命令返回 submitted/pending；约 16 秒后运行才出现；
+- 修复后 `waitForPublishedRun` 在 60 秒内每 5 秒发现对应提交的运行，再交给 `waitForRun`；
+- 第二次真实发布 `us5-real-wait` 的 `--wait` 返回 `published`/`built`/`published`，run
+  `43612262185`；`status --run` 同样返回 published。
+
+## 4. 未运行与限制
+
 - 状态由 job/step 结论派生，不读取 Step Summary；若未来工作流增加新的跳过原因，需先更新契约。
-- `--wait` 只有找到对应提交的运行时才轮询；本地裸远端或 gh 不可用会保留 submitted/pending。
-- 未在 Node 26.3.0/npm 11.16.0 或 Linux 复验；本机为 Node 22.21.0/npm 10.9.4。
+- `--wait` 不是无限等待：发现超时 60 秒，运行轮询默认 15 分钟；gh/网络不可用仍会保留
+  submitted/pending。
+- 本机为 Node 22.21.0/Windows；Node 26.3.0/Linux 的完整测试由 CI 覆盖。
