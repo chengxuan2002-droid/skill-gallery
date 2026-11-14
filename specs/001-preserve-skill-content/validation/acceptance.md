@@ -58,14 +58,19 @@ Windows Node 22 构建的 contentRevision 与本记录不同，因为运行时�
 
 ## 未运行与残留风险
 
-- **T041 macOS 未运行**；Linux/WSL 已通过，但 T041 仍不完整，不能称 macOS 验证通过。
-  2026-11-04 用户确认将该缺口记录为未验证并据此收口 US-001 本地交付；T041 不标记为通过。
+- **T041 macOS（2026-11-04 历史状态）**：当时未运行；Linux/WSL 已通过，但 T041 仍不完整，
+  不能称 macOS 验证通过。2026-11-04 用户确认将该缺口记录为未验证并据此收口 US-001 本地交付；
+  T041 当时不标记为通过。
+- **2026-11-14 补验**：GitHub-hosted macOS runner run `43588719771` 通过（282 项：281 通过、
+  0 失败、1 跳过；安全 0 发现；contentRevision `faa0f345...` 与生产一致），T041 的 macOS 未运行
+  缺口关闭；仍不宣称所有 macOS 硬件/文件系统变体通过。详见 [platform.md](platform.md)。
 - 未验证生产 GitHub Pages 的 MIME、缓存、直接资源响应头、授权恢复或部署回滚；这些属于 US-003/发布前门禁。
 - 未实现/未验证上传 CLI、GitHub 后台维护、自动更新、发布和 Q-004 调度。
 - Windows 本地已安装固定 Gitleaks/Semgrep，`npm test` 为 138/137/0/1，`security:secrets` 与 `security:code` 无发现；
   依赖审计仍 `AUDIT_UNAVAILABLE`。干净 Linux 副本未装扫描器，仍有 2 项失败；CI 本次未推送，不能用本地结果冒充远程全部通过。
 - NFR-002 的 1,000 项/10 MiB/p95 与 NFR-005 的完整 360/768/1440、键盘/读屏/多浏览器验收未执行。
-- Windows 不保留 POSIX 执行位；Linux WSL 的 ZIP 模式已验证，macOS 未验证；未测试断电/强杀和网络文件系统。
+- Windows 不保留 POSIX 执行位；Linux WSL 的 ZIP 模式已验证；macOS 已由 GitHub-hosted runner
+  补验（run `43588719771`），仍不覆盖所有硬件/文件系统变体；未测试断电/强杀和网络文件系统。
 - 两次 rename 的短暂间隙仍存在；恢复依赖 C-03 锁/事务记录和人工核对。
 
 ## 追溯

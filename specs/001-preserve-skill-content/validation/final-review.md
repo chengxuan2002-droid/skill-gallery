@@ -63,3 +63,11 @@ Windows 不保留 POSIX 执行位（工作区显示 0666）；Linux WSL 上 `cre
 结论：本地内容保真、US1/US2/US3 取用与故障保护、Polish 的可复现/文档/验收证据已具备；但 T041 macOS、
 生产发布前检查及后续维护/自动更新未完成，不能宣称 US-001 完整交付或原地址已更新。
 按 2026-11-04 用户决定，T041 作为已记录的未验证缺口收口本地交付，不改变上述门禁。
+
+## 2026-11-14 更新
+
+T041 的 macOS 缺口已由 GitHub-hosted `macos-latest` runner run
+[43588719771](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/43588719771) 补验：
+Node 26.3.0、`npm run check` 282 项（281 通过、0 失败、1 跳过）、安全扫描 0 发现、构建
+contentRevision `faa0f345...` 与生产一致；ZIP/模式/二进制/rename/回滚/中断恢复测试通过。该缺口
+关闭，但不宣称所有 macOS 硬件/文件系统变体、生产 MIME/缓存或自动更新已完成；上述历史记录保留。

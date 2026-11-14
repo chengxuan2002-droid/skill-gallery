@@ -150,9 +150,17 @@ deploy 增加 `needs.build.result == 'success'` 条件，避免 sync 跳过时�
 轮询至 05:10 CST 前未出现；08:19 CST 出现延迟 schedule run 43533439066（sync success，build/deploy skipped）；
 下一窗口为 2026-11-15 03:17。
 2026-11-14 US-007 的 spec、plan 与 22 项 tasks 已建立，`.specify/feature.json` 指向
-`specs/007-overall-acceptance`；验收尚未开始。Demo-002 接受 POC-003 受控证据，US-007 可带未运行项
-进入验收但不判定整包通过。
-2026-11-12 本地 `npm test` 为 282 项（280 通过、0 失败、2 跳过）。
+`specs/007-overall-acceptance`。T001–T022 已执行：矩阵、Demo-001～003、固定地址/浏览器证据、保真、
+安全、残留缺口、干净副本交接、汇总检查和最终复核。Demo-001～003 均为受控通过，当前是有条件
+验收/交接，不判定整包通过。T041 macOS runner、生产 environment 审批、生产部署失败注入和
+MIME/缓存基础头已补验（run `43588719771`、`43587421323`、`43588024409`）；US-005 真实
+`gh api`/`--wait`、真实 source-sync 429、截断/子模块/符号链接、POC 二进制字节对比和
+Safari/移动实机仍未运行；生产 `source_tracking` 仍为 `null`。Demo-002 接受 POC-003 受控证据；
+证据与补验方式见 `specs/007-overall-acceptance/validation/` 和 `residual-gaps.md`。恢复入口保持受控 `git revert`/
+restore 提交并重新构建发布，不手工改 `dist/` 或直接覆盖线上文件。
+2026-11-12 本地 `npm test` 为 282 项（280 通过、0 失败、2 跳过）；2026-11-14 `npm run check`
+复核仍为 282 项，`npm run security` 为 0 发现。2026-11-14 GitHub-hosted macOS runner run
+`43588719771` 为 282 项（281 通过、0 失败、1 跳过），安全 0 发现，构建 revision `faa0f345...`。
 首次初始化证据见 specs/001-preserve-skill-content/validation/bootstrap.md。
 2026-11-03 在 Windows 复核 T002～T010：`.gitattributes` 固定项目文本为 LF，`skills/**` 不做换行转换；
 测试夹具在 Windows 使用 junction，检查入口解析 `npm.cmd` 与扫描器 `.exe`，安装器支持 Windows zip 包但仍需网络。

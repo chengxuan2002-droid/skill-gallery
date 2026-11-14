@@ -10,7 +10,9 @@ description: "US-007 整体验收与交接任务"
 **Prerequisites**: US-001～US-006 已完成的本地/受控证据；生产 Pages 与 US-006 调度已启用；
 用户已确认 Demo-002 可接受 POC-003 受控证据，且 US-007 可带未运行项进入验收但不判定整包通过。
 
-**Status**: 任务于 2026-11-14 生成；当前 22 项。T001–T007 已完成基线、矩阵骨架、证据索引和 Demo-001；其余未执行。
+**Status**: 任务于 2026-11-14 生成；当前 22 项。T001–T022 已执行；2026-11-14 补验生产
+environment/部署失败、MIME/缓存基础头、真实 403 和 macOS runner；结论仍为有条件验收/交接，
+剩余子项见 `validation/residual-gaps.md`，不判定整包通过。
 
 **Tests**: 验收以只读检查和受控复验为主；不执行 `skills/` 内脚本，不写生产内容，不把未运行项
 计为通过。
@@ -59,13 +61,13 @@ description: "US-007 整体验收与交接任务"
 
 **Independent Test**: 复核 branch/release/pinned、v1→v2、许可变化阻断、无变化和同次发布运行。
 
-- [ ] T008 [US2] 复核 `specs/006-source-auto-update/validation/` 的 POC-003、许可基线、T020 和
+- [X] T008 [US2] 复核 `specs/006-source-auto-update/validation/` 的 POC-003、许可基线、T020 和
   `us6-workflow` 证据；在 `validation/demo-002.md` 标注“受控通过”，不写成生产自动更新。
   （AC-009/AC-010/AC-011）
-- [ ] T009 [US2] 读取生产 catalog 和 `Maintain site` 运行：确认 `source_tracking` 当前为
+- [X] T009 [US2] 读取生产 catalog 和 `Maintain site` 运行：确认 `source_tracking` 当前为
   `null`、2026-11-14 延迟 schedule run `43533439066` 为 sync success/build-deploy skipped；
   记录“配置已启用、实际来源未配置、准点未承诺”。（AC-011/AC-014）
-- [ ] T010 [US2] 更新 `acceptance-matrix.md` 的 Demo-002 和 AC-009/AC-010 状态；明确受控证据与
+- [X] T010 [US2] 更新 `acceptance-matrix.md` 的 Demo-002 和 AC-009/AC-010 状态；明确受控证据与
   生产自动更新的区别。 （AC-009/AC-011）
 
 ## Phase 5: User Story 3 — 失败、冲突到恢复（Priority: P1）
@@ -74,11 +76,11 @@ description: "US-007 整体验收与交接任务"
 
 **Independent Test**: 复核 POC-002/003 的失败矩阵、部署失败、同提交重跑和受控 revert。
 
-- [ ] T011 [US3] 复核来源 404、非法候选、许可变化、本地冲突和并发过期的测试/POC 证据；
+- [X] T011 [US3] 复核来源 404、非法候选、许可变化、本地冲突和并发过期的测试/POC 证据；
   记录逐项状态与当前版本保留，写入 `validation/demo-003.md`。（AC-010/AC-012）
-- [ ] T012 [US3] 复核部署失败/旧站保留、同提交重跑、受控 revert 的 run ID 和内容 revision；
+- [X] T012 [US3] 复核部署失败/旧站保留、同提交重跑、受控 revert 的 run ID 和内容 revision；
   明确真实 403/限流未运行，不伪造远程结果。 （AC-011）
-- [ ] T013 [US3] 更新 `acceptance-matrix.md` 的 Demo-003 和 AC-010/AC-011/AC-012 状态。
+- [X] T013 [US3] 更新 `acceptance-matrix.md` 的 Demo-003 和 AC-010/AC-011/AC-012 状态。
   （AC-010～AC-012）
 
 ## Phase 6: User Story 4 — 固定地址、旧链接与浏览器可达（Priority: P2）
@@ -88,11 +90,11 @@ description: "US-007 整体验收与交接任务"
 **Independent Test**: 读取生产首页/索引/详情/原件/ZIP、旧 `#/skill/<slug>` 和 `/skill-gallery/`
 资源；复核既有浏览器证据并标注未运行设备。
 
-- [ ] T014 [US4] 检查生产首页、索引、详情、原件和 ZIP 的 200/内容/路径；检查旧详情和列表链接；
+- [X] T014 [US4] 检查生产首页、索引、详情、原件和 ZIP 的 200/内容/路径；检查旧详情和列表链接；
   记录到 `validation/fixed-address.md`。（AC-005/AC-014）
-- [ ] T015 [US4] 复核 US-002 的 360/768/1440、明暗主题、键盘和减少动效证据；Safari/移动实机
+- [X] T015 [US4] 复核 US-002 的 360/768/1440、明暗主题、键盘和减少动效证据；Safari/移动实机
   未运行单独列出。 （AC-013/AC-015）
-- [ ] T016 [US4] 复核原件/附件/二进制/许可/相对路径和 ZIP 清单，记录到 `validation/fidelity.md`。
+- [X] T016 [US4] 复核原件/附件/二进制/许可/相对路径和 ZIP 清单，记录到 `validation/fidelity.md`。
   （AC-001/AC-002/AC-004）
 
 ## Phase 7: User Story 5 — 交接与未运行项（Priority: P2）
@@ -101,21 +103,21 @@ description: "US-007 整体验收与交接任务"
 
 **Independent Test**: 从干净 checkout 按 README 执行可行命令；核对矩阵、未运行项和恢复说明。
 
-- [ ] T017 [US5] 在 `validation/security.md` 复核凭证、路径/URL、上游脚本执行和公开产物白名单；
+- [X] T017 [US5] 在 `validation/security.md` 复核凭证、路径/URL、上游脚本执行和公开产物白名单；
   重新运行 `npm run security`，记录结果。 （AC-008/AC-012）
-- [ ] T018 [US5] 在 `validation/residual-gaps.md` 逐项列出 T041 macOS、US-005 真实 `gh api`/`--wait`、
+- [X] T018 [US5] 在 `validation/residual-gaps.md` 逐项列出 T041 macOS、US-005 真实 `gh api`/`--wait`、
   生产 environment 审批、生产部署失败注入、MIME/缓存、真实 403/限流；每项写影响和补验方式。
   （AC-001～AC-015）
-- [ ] T019 [US5] 按 README 在干净副本复核 preview/发布/状态/恢复命令与退出码；记录偏差到
+- [X] T019 [US5] 按 README 在干净副本复核 preview/发布/状态/恢复命令与退出码；记录偏差到
   `validation/handoff.md`。 （AC-007/AC-011）
-- [ ] T020 [US5] 更新 README/AGENTS 的 US-007 状态、已验收/未运行项和恢复入口；不宣称整包完成。
+- [X] T020 [US5] 更新 README/AGENTS 的 US-007 状态、已验收/未运行项和恢复入口；不宣称整包完成。
   （AC-011/AC-014）
 
 ## Phase 8: Polish & Final Review
 
-- [ ] T021 [P] 运行 `npm run check`、`npm run security` 和必要的工作流静态检查；记录实际命令、
+- [X] T021 [P] 运行 `npm run check`、`npm run security` 和必要的工作流静态检查；记录实际命令、
   数量、退出码和未运行项。 （NFR-003/NFR-006）
-- [ ] T022 对照 `spec.md`、`plan.md`、`acceptance-matrix.md` 和全部 validation 做最终复核；
+- [X] T022 对照 `spec.md`、`plan.md`、`acceptance-matrix.md` 和全部 validation 做最终复核；
   更新 tasks/plan 状态，写 `validation/final-review.md`；未运行项不得计入通过。
   （AC-001～AC-015）
 

@@ -59,3 +59,20 @@
 - 真实 403/限流、T041 macOS、US-005 真实 `gh`/`--wait`、生产 environment/部署失败注入/MIME 缓存
   仍未运行，需在 `residual-gaps.md` 中保留。
 - 状态变更只能由后续验收任务写入，并附证据；不得用本索引替代实测。
+
+## 6. US-007 本次新增证据
+
+| 任务 | 证据 | 结果 |
+|---|---|---|
+| T008–T010 | `demo-002.md` | POC-003 受控通过；生产来源为空 |
+| T011–T013 | `demo-003.md` | 失败/冲突/恢复受控通过；49 项定向测试 |
+| T014–T015 | `fixed-address.md`、`remote-errors.md` | 生产固定地址/详情/raw/ZIP、MIME/缓存头只读复核；真实 403 观察 |
+| T016 | `fidelity.md` | 原件/附件/ZIP/模式逐字节复核；4/4 distribution 测试 |
+| 补验 | `production-environment.md` | 生产 environment 审批、部署失败/旧站保留/恢复 |
+| 补验 | `macos-ci.md` | GitHub-hosted macOS runner `43588719771`；T041 补验 |
+| T017 | `security.md` | `npm run security` 0 发现；27 项安全/路径测试 |
+| T018 | `residual-gaps.md` | 未运行项、影响与补验方式 |
+| T019 | `handoff.md` | 干净 worktree 命令与退出码 |
+| T020 | README、AGENTS.md | US-007 状态/未运行项/恢复入口 |
+| T021 | `quality.md` | `npm run check` 282 项；`npm run security` 通过 |
+| T022 | `final-review.md` | 有条件验收/交接，不宣称整包通过 |

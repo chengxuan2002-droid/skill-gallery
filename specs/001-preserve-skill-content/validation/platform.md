@@ -1,7 +1,8 @@
 # 跨平台 ZIP 与恢复验证
 
-日期：2026-11-04。范围：T041。映射 FR-004、FR-011，NFR-001、NFR-006，DEC-002、DEC-009，
-AC-002、AC-012。仅记录实际运行的平台；macOS 未运行，不能把本文件当作跨平台全部通过。
+日期：2026-11-04；2026-11-14 补充 macOS runner。范围：T041。映射 FR-004、FR-011，NFR-001、
+NFR-006，DEC-002、DEC-009，AC-002、AC-012。仅记录实际运行的平台；macOS 已由 GitHub-hosted
+runner 补验，仍不把本文件当作所有 macOS 硬件/文件系统变体通过。
 
 ## 环境
 
@@ -9,7 +10,7 @@ AC-002、AC-012。仅记录实际运行的平台；macOS 未运行，不能把�
 |---|---|---|
 | Windows 11 | Node 22.21.0 / npm 10.9.4 | 既有 Windows 测试与浏览器验收；非声明基线 |
 | WSL2 Ubuntu 24.04（Linux 5.15.167.4-microsoft-standard-WSL2） | Node 26.3.0 / npm 11.16.0 | Linux 定向与全量测试、构建 |
-| macOS | 无可用环境 | **未运行** |
+| GitHub-hosted `macos-latest` | Node 26.3.0 / npm 11.16.0 | 2026-11-14 全量测试、安全扫描、构建；run `43588719771` |
 
 Linux Node 26.3.0 官方二进制在 WSL 中需要 `libatomic.so.1`；使用 Ubuntu `libatomic1` 包解出库并设置
 `LD_LIBRARY_PATH`，未修改系统包或项目依赖。Windows 与 Linux 的 contentRevision 不同：
@@ -34,12 +35,22 @@ Windows 不保留 POSIX 执行位；Windows 的 ZIP 模式只按当前平台源�
 
 ## macOS
 
-当前没有 macOS 主机、远程 runner 或获授权的远程写入。未运行 macOS 上的 ZIP 路径/模式、二进制、
-rename/回滚和中断恢复测试；**T041 保持未完成**。不能根据 Linux/WSL 或 Windows 结果声称 macOS 通过。
+2026-11-14 在用户授权的临时分支 `codex/us7-macos-check` 上，用 GitHub-hosted `macos-latest`
+runner 补验；临时 workflow 只用于本次检查，运行后删除分支：
 
-2026-11-04 用户确认：将 macOS 缺口记录为**未验证**，并据此收口 US-001 本地交付。
-T041 复选框继续保持未勾选，不作为通过项；后续获得 macOS 环境时仍需补测，
-本次收口不改变“未验证跨平台、未生产发布”的结论。
+- run：[43588719771](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/43588719771)
+- 环境：macOS runner、Node `26.3.0`、npm `11.16.0`
+- `npm run setup:security`：Gitleaks 8.30.1 / Semgrep 1.183.0 通过
+- `npm run check`：282 项，281 通过、0 失败、1 跳过
+- `npm run security`：secrets 350、code 56、deps 1；findings 0
+- `npm run build`：`built`、`cleanup_status=complete`，contentRevision
+  `faa0f345a85673f60fda1d4cb3b61594b242ae631ab89b264387eec6875c429a`（与生产一致）
+- ZIP 路径/0644-0755/二进制/rename/回滚/中断恢复：由 `npm test` 的 distribution、
+  reproducibility、build-recovery、build-failures 测试覆盖并通过
+- macOS runner 上符号链接相关测试实际执行，未出现 Windows 的不可用跳过
+
+这是 GitHub-hosted macOS 虚拟机，不是物理 Mac；T041 的“未运行 macOS”缺口已关闭，但不宣称所有
+macOS 硬件、文件系统或版本变体均已覆盖。2026-11-04 的历史收口记录仍保留，作为此前的未验证状态。
 
 ## 限制
 

@@ -5,7 +5,9 @@
 **Input**: [spec.md](spec.md)，含 FR-001～FR-011、NFR-001～NFR-006、Demo-001～003、
 AC-001～AC-015、US-001～US-006 基线及宪章 1.0.0。
 
-**Implementation Status**: Planned。仅验收与文档交接，不新增业务功能。
+**Implementation Status**: 有条件验收/交接（2026-11-14）。T001–T022 已执行；Demo-001～003 为受控通过；
+生产 environment/部署失败、MIME/缓存基础头、真实 403 和 macOS runner 已补验；剩余子项见
+`validation/residual-gaps.md`，不判定整包通过。
 
 ## Summary
 
@@ -114,4 +116,5 @@ specs/007-overall-acceptance/
 
 规划读取了 `specs/007-overall-acceptance/spec.md`、宪章、四份 0.2 文档、US-001～US-006 的
 spec/plan/tasks/validation、当前 `main`、POC-002/003 运行记录和生产状态；未执行生产写入、未切换
-生产配置。下一步由 tasks.md 驱动验收，不自动扩大生产发布授权。
+生产配置。T001–T022 已由 tasks.md 驱动执行，最终结论为有条件验收/交接（见 `validation/final-review.md`），
+不自动扩大生产发布授权。
