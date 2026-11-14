@@ -180,7 +180,8 @@ node scripts/skill-cli.js status --run <run-id>
 **当前边界**：`skill-cli` 的新增/替换/状态查询已在受控 POC-002 完成真实发布；真实 `gh` 来源导入与
 `--wait` 运行发现仍需补验。US-006 的来源检查、单版本替换、许可/冲突、部署失败重跑/恢复和同次发布
 已实现并完成受控 POC-003；生产 `main` 的每日调度已于 2026-11-13 启用。2026-11-14 首次 03:17 窗口
-轮询至 05:10 CST 未出现 `Maintain site` schedule run，不能声称已定时执行；下一窗口为 2026-11-15 03:17。
+轮询至 05:10 CST 前未出现；08:19 CST 出现延迟 schedule run 43533439066（sync success，build/deploy skipped）；
+下一窗口为 2026-11-15 03:17。
 生产 Pages 已切换为 Actions 并成功发布，但生产 environment 审批、部署失败注入和发布后
 MIME/缓存验证未运行。后续生产发布仍需单独授权。
 
@@ -188,7 +189,7 @@ MIME/缓存验证未运行。后续生产发布仍需单独授权。
 
 当前 `main` 已包含来源检查、单版本替换、许可/冲突保护和同次运行发布；生产调度已于 2026-11-13
 启用。push run 43421560371 的 build/deploy 成功，手动 sync run 43421951464 的 sync 成功且无变化跳过
-发布；2026-11-14 首次 03:17 窗口轮询至 05:10 CST 未出现 schedule run，下一窗口为 2026-11-15 03:17。证据见
+发布；2026-11-14 首次 03:17 窗口轮询至 05:10 CST 前未出现；08:19 CST 出现延迟 schedule run 43533439066（sync success，build/deploy skipped），下一窗口为 2026-11-15 03:17。证据见
 [US-006 validation](specs/006-source-auto-update/validation/)。
 
 **配置**：在 `catalog/<slug>.json` 的 `source_tracking` 中填写结构化 GitHub 来源；未配置时保持
@@ -311,20 +312,20 @@ cd skill-gallery
 `node_modules/`、`.tools/`、`.env*`、系统杂项和本机凭证不随仓库迁移；GitHub 写入凭证在新电脑独立授权。
 不复制旧电脑的 SSH 私钥、Agent 会话或工具执行授权来替代新环境的授权。
 
-当前指针是 `specs/006-source-auto-update`（US-006 规格、计划与 tasks 已完成；生产调度已启用），
+当前指针是 `specs/007-overall-acceptance`（US-007 规格、计划与 tasks 已建立；验收尚未开始），
 `.specify/feature.json` 按 Spec Kit 规则保持本机忽略。首次在新副本运行以下命令，会检查规划文件并
 恢复这个本地指针：
 
 ```bash
-export SPECIFY_FEATURE_DIRECTORY=specs/006-source-auto-update
+export SPECIFY_FEATURE_DIRECTORY=specs/007-overall-acceptance
 bash .specify/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks
 ```
 
 新 Agent 先读 [AGENTS.md](AGENTS.md)、[宪章](.specify/memory/constitution.md)、四份规范、当前功能的
-[spec](specs/006-source-auto-update/spec.md)、[plan](specs/006-source-auto-update/plan.md)、
-[tasks](specs/006-source-auto-update/tasks.md) 与
-[checklist](specs/006-source-auto-update/checklists/requirements.md)。
-US-005 的 [plan](specs/005-skill-cli/plan.md) 等已收口资料作为基线参考。
+[spec](specs/007-overall-acceptance/spec.md)、[plan](specs/007-overall-acceptance/plan.md)、
+[tasks](specs/007-overall-acceptance/tasks.md) 与
+[checklist](specs/007-overall-acceptance/checklists/requirements.md)。
+US-006 的 [plan](specs/006-source-auto-update/plan.md) 等已收口资料作为基线参考。
 项目级 Skills 保存在 `.agents/skills/`，Spec Kit 初始化来源记录为 1.2.5/Codex；其他 Agent 若不自动发现，
 应按其机制读取这些文件或配置入口，不能因更换工具而覆盖规范、重新生成任务或重跑 `specify init`。
 可选的 Specify CLI 及其他 Agent 适配器需在新电脑单独安装并验证；现有 Bash 检查不依赖全局 CLI。

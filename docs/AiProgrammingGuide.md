@@ -1,6 +1,6 @@
 # Skill Gallery AI 编程规范
 
-> 状态：US-001～US-005 已完成本地/受控实现与验收（US-001 T041 macOS 未运行），生产 Pages 已切换；US-006 主链路已实现并完成受控 POC-003（T020 已完成，生产调度已启用；2026-11-14 首次 03:17 窗口轮询至 05:10 CST 未出现 schedule run），US-007 未开始 · 版本：0.2 · 日期：2026-11-01（状态补充：2026-11-14）
+> 状态：US-001～US-005 已完成本地/受控实现与验收（US-001 T041 macOS 未运行），生产 Pages 已切换；US-006 主链路已实现并完成受控 POC-003（T020 已完成，生产调度已启用；2026-11-14 首次 03:17 窗口轮询至 05:10 CST 前未出现；08:19 CST 出现延迟 schedule run 43533439066（sync success，build/deploy skipped）），US-007 规格/计划/tasks 已建立、验收未开始 · 版本：0.2 · 日期：2026-11-01（状态补充：2026-11-14）
 > 输入基线：[IndustryResearch.md](IndustryResearch.md)、[DemandAnalysis.md](DemandAnalysis.md)、[TechnicalSolution.md](TechnicalSolution.md)，均为 0.2。
 
 ## 1. 实施总览
@@ -35,7 +35,7 @@ US-002、US-004、US-005、US-006 → US-007 整体验收
 
 ## 2. 编程工具与项目匹配
 
-采用 Spec-Kit 1.2.5 的 Codex Skills 集成，继续引用本轮文档稳定 ID。后续将需求映射 spec、技术映射 plan、项目约束映射 constitution、US 拆成 tasks；派生文档引用四份主文档及其版本，行为变化同步上游，不能用工具模板覆盖本轮业务决定。上述为初始化阶段状态；宪章 1.0.0、当前 spec/plan/tasks 及 US-001～US-005 已在此后完成本地/受控实现与验收，US-006 已实现并启用生产调度，US-007 尚未开始。
+采用 Spec-Kit 1.2.5 的 Codex Skills 集成，继续引用本轮文档稳定 ID。后续将需求映射 spec、技术映射 plan、项目约束映射 constitution、US 拆成 tasks；派生文档引用四份主文档及其版本，行为变化同步上游，不能用工具模板覆盖本轮业务决定。上述为初始化阶段状态；宪章 1.0.0、当前 spec/plan/tasks 及 US-001～US-005 已在此后完成本地/受控实现与验收，US-006 已实现并启用生产调度，US-007 的 spec/plan/tasks 已建立、验收尚未开始。
 
 实际执行的初始化命令如下，保留现有 Shell 脚本模式。`--force` 会合并或覆盖工具管理路径；本次执行前已在项目外备份，并对照检查业务文件与已有文档。
 
@@ -106,7 +106,7 @@ python3 -m http.server 8000
 | 内容集成 | 保真、ZIP 解包、二进制、附件删除、迁移、恶意 Markdown | `npm test` 已可执行；US-001 内部切片的迁移、保真、ZIP、下载、故障恢复与安全夹具通过 |
 | 构建 | 干净 checkout 全量校验、静态白名单、索引/详情同快照 | `npm ci`、`npm run build` 已接入并在隔离四项项目验证；生产 Pages 已切换并由 `maintain.yml` 成功发布，完整发布后 MIME/缓存复验未运行 |
 | E2E/视觉 | 检索组合、详情、复制、窄屏、键盘和旧链接 | US-001 内部 US2/US3 的 Edge headless 浏览器与安全验收见 specs/001-preserve-skill-content/validation/us2-browser.md、us3-failures.md；US-002 的详情、可访问、跨浏览器与现站预检见 specs/002-search-detail-share-redesign/validation/；跨发布视觉回归和生产部署后验证仍未运行 |
-| 来源/发布集成 | fixed SHA、Release、限流、冲突、同次 workflow 显式部署 | US-003 发布链与 POC-002 已验，生产 Pages 已切换；US-005 的固定来源导入已用注入夹具验证，真实 `gh api` 读取待补验；US-006 来源检查/同次发布已实现并完成受控 POC-003，生产调度已启用但 2026-11-14 首次 03:17 窗口未出现 schedule run；真实 403/限流未运行 |
+| 来源/发布集成 | fixed SHA、Release、限流、冲突、同次 workflow 显式部署 | US-003 发布链与 POC-002 已验，生产 Pages 已切换；US-005 的固定来源导入已用注入夹具验证，真实 `gh api` 读取待补验；US-006 来源检查/同次发布已实现并完成受控 POC-003，生产调度已启用但 2026-11-14 首次 03:17 窗口轮询至 05:10 CST 前未出现；08:19 CST 出现延迟 schedule run 43533439066（sync success，build/deploy skipped）；真实 403/限流未运行 |
 | 性能 | NFR-002 统一负载和统计方法 | US-002 已在隔离 1,000 项/10 MiB 夹具按 50 次固定查询测得 p95：Chrome 39.9ms、Firefox 48.0ms、WebKit 50.0ms（候选线 200ms）；生产网络首载未测，AC-015 口径不能变 |
 
 本次文档工作不新建或运行业务测试。未来测试按风险选择，普通文档、颜色或文案微调不机械新增测试；文件替换、权限、自动发布等必须有失败路径验证。
@@ -183,8 +183,7 @@ CI/定时配置经本地验证后，也必须在实际 GitHub runner 运行才�
 **状态**：规格、计划与 30 项 tasks 已建立（[spec](../specs/006-source-auto-update/spec.md)、
 [plan](../specs/006-source-auto-update/plan.md)、[tasks](../specs/006-source-auto-update/tasks.md)）；
 来源检查、单版本替换、许可/冲突、T020 失败重跑/恢复和同次发布已实现并完成受控 POC-003；
-生产 `main` 调度已于 2026-11-13 启用；2026-11-14 首次 03:17 窗口轮询至 05:10 CST 未出现
-`Maintain site` schedule run，下一窗口为 2026-11-15 03:17。
+生产 `main` 调度已于 2026-11-13 启用；2026-11-14 首次 03:17 窗口轮询至 05:10 CST 前未出现；08:19 CST 出现延迟 schedule run 43533439066（sync success，build/deploy skipped），下一窗口为 2026-11-15 03:17。
 
 输入：US-003；Q-002/003 已确认 GitHub 来源及 Git 历史保留，来源管理入口接 US-004；FR-008、FR-009、NFR-001、NFR-003、NFR-004、DEC-007、DEC-008，C-06/C-07，AC-009、AC-010、AC-011、AC-012。
 
@@ -196,7 +195,9 @@ CI/定时配置经本地验证后，也必须在实际 GitHub runner 运行才�
 
 ### US-007：整体验收与交接
 
-**状态**：未开始；依赖 US-006 完成，并需逐项标注未运行项。
+**状态**：规格、计划与 22 项 tasks 已建立（[spec](../specs/007-overall-acceptance/spec.md)、
+[plan](../specs/007-overall-acceptance/plan.md)、[tasks](../specs/007-overall-acceptance/tasks.md)）；
+验收尚未开始；需逐项标注未运行项，且不得把未运行计为通过。
 
 输入：全部已完成故事和需求唯一 AC/Demo 清单。按 Demo-001～003 验证：手动/命令维护到取用、上游升级到单一新版、失败到恢复。逐项标通过、失败、未运行，不把未运行计为通过。
 
@@ -269,6 +270,7 @@ US-006 已完成受控 POC-003 并启用生产调度，US-007 待推进。Q-001�
 PoC 验证，生产配置按实际授权。
 
 US-006 的 T001–T030 已完成本地/受控验证；生产 `main` 的每日调度已启用，2026-11-14 首次 03:17 窗口
-未出现 schedule run，下一窗口为 2026-11-15 03:17。
+轮询至 05:10 CST 前未出现；08:19 CST 出现延迟 schedule run 43533439066（sync success，build/deploy
+skipped），下一窗口为 2026-11-15 03:17。
 后续业务编码、依赖安装和发布仍需对应授权，不能因本文档或规划
 状态更新而自动开始。

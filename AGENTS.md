@@ -40,8 +40,7 @@
 - 首版自动更新覆盖 GitHub 公开仓库单文件/Skill 目录，其他来源手动维护；
   当前内容和网站仅保留一个有效版本，允许保留 Git 历史用于恢复。
 - Q-001～Q-004 已确认，不重复询问。Q-004 为每日 03:17 Asia/Shanghai；US-006 调度实现已完成受控验证，
-  生产 `main` 调度已于 2026-11-13 启用（PR #6）。2026-11-14 首次 03:17 窗口轮询至 05:10 CST 未出现
-  `Maintain site` 的 schedule run；不能把决策确认、配置或 POC 当成已运行。
+  生产 `main` 调度已于 2026-11-13 启用（PR #6）。2026-11-14 首次 03:17 窗口轮询至 05:10 CST 前未出现；08:19 CST 出现延迟 schedule run 43533439066（sync success，build/deploy skipped）；不能把决策确认、配置或 POC 当成已运行。
   容量和性能数字按需求中的候选口径验证，不写成已实测承诺。
 - 复用原生前端与静态发布结构；新增必要依赖须说明用途、核实用法并锁定版本。
   需求、架构、任务与生产发布授权分别处理；不把本地验证成功报告为线上已更新。
@@ -148,7 +147,11 @@ T020 的部署失败/同提交重跑/受控 revert 已完成受控验证；单�
 deploy 增加 `needs.build.result == 'success'` 条件，避免 sync 跳过时误跳过发布。PR #6 合并为
 `27c6b36dcab8f654f0279a2a822f1bb6042f765e`；生产 push run 43421560371 的 build/deploy 成功，
 手动 sync run 43421951464 的 sync 成功且无变化跳过发布；生产调度已启用。2026-11-14 首次 03:17 窗口
-轮询至 05:10 CST 未观察到 `Maintain site` schedule run，不能声称已定时执行；下一窗口为 2026-11-15 03:17。
+轮询至 05:10 CST 前未出现；08:19 CST 出现延迟 schedule run 43533439066（sync success，build/deploy skipped）；
+下一窗口为 2026-11-15 03:17。
+2026-11-14 US-007 的 spec、plan 与 22 项 tasks 已建立，`.specify/feature.json` 指向
+`specs/007-overall-acceptance`；验收尚未开始。Demo-002 接受 POC-003 受控证据，US-007 可带未运行项
+进入验收但不判定整包通过。
 2026-11-12 本地 `npm test` 为 282 项（280 通过、0 失败、2 跳过）。
 首次初始化证据见 specs/001-preserve-skill-content/validation/bootstrap.md。
 2026-11-03 在 Windows 复核 T002～T010：`.gitattributes` 固定项目文本为 LF，`skills/**` 不做换行转换；

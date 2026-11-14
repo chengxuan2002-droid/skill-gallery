@@ -194,7 +194,7 @@ catalog、提交清单与索引，确认只有一个版本。
   `specs/006-source-auto-update/validation/us6-license.md`。（FR-008；AC-010、AC-012）
 - [X] T030 合并 PR #6 并启用生产 `main` 调度；验证 push run 43421560371 的 build/deploy 与手动
   sync run 43421951464 的无变化路径，记录到 `validation/us6-workflow.md`；2026-11-14 首次 03:17 窗口
-  轮询至 05:10 CST 未出现 schedule run，下一窗口为 2026-11-15 03:17。
+  轮询至 05:10 CST 前未出现，08:19 CST 出现延迟 schedule run 43533439066，下一窗口为 2026-11-15 03:17。
   （FR-008、FR-009；AC-011）
 
 ## Dependencies & Execution Order

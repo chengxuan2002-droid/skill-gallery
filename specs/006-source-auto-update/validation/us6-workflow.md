@@ -53,7 +53,7 @@ node --test tests/integration/publish/publish-sync-workflow.test.js \
 
 ## 4. 未运行
 
-- 2026-11-14 首次 03:17 Asia/Shanghai 窗口轮询至 05:10 CST，未出现 `Maintain site` 的 schedule run；
-  同期只有 `Site availability` 的 schedule 运行。不能声称已定时执行，下一窗口为 2026-11-15 03:17。
+- 2026-11-14 首次 03:17 Asia/Shanghai 窗口轮询至 05:10 CST 前未出现；08:19 CST 出现延迟
+  schedule run 43533439066（sync success、build/deploy skipped），下一窗口为 2026-11-15 03:17。
 - environment 审批和发布后 MIME/缓存复验仍未运行。
 - 真实部署失败后的同提交重跑与受控 revert 已见 [us6-status.md](us6-status.md)；本文件不重复其运行记录。
