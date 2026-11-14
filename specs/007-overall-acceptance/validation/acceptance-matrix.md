@@ -9,7 +9,7 @@
 
 | ID | 验收点 | 关联 | US-007 状态 | 证据入口 | 备注 |
 |---|---|---|---|---|---|
-| Demo-001 | 手动/Agent 维护到检索、详情、复制、下载 | US-001、US-005；AC-001/008/012/015 | 未运行 | `specs/001-preserve-skill-content/validation/acceptance.md`、`specs/004-manual-skill-maintenance/validation/manual-add.md`、`specs/005-skill-cli/validation/us5-add.md` | 待 T004–T007 |
+| Demo-001 | 手动/Agent 维护到检索、详情、复制、下载 | US-001、US-005；AC-001/008/012/015 | 受控通过 | `specs/007-overall-acceptance/validation/demo-001.md`、`fidelity.md`；`specs/004-manual-skill-maintenance/validation/manual-add.md`、`specs/005-skill-cli/validation/us5-add.md` | 手动/CLI/生产数据已验证；浏览器复制未重跑 |
 | Demo-002 | 来源 v1→v2 自动更新、单版本、旧附件清理 | US-006、US-007；AC-009/011/014 | 未运行 | `specs/006-source-auto-update/validation/us6-poc.md`、`us6-license.md`、`us6-workflow.md`；run `43533439066` | 可标“受控通过”；待 T008–T010 |
 | Demo-003 | 404/冲突/非法候选/部署失败→状态→修复/恢复 | US-003、US-007；AC-008/010/012/014 | 未运行 | `specs/003-validate-build-publish/validation/us3-recovery.md`、`specs/006-source-auto-update/validation/us6-status.md` | 待 T011–T013 |
 
@@ -18,12 +18,12 @@
 | ID | 验收点摘要 | 关联 | US-007 状态 | 证据入口 | 备注 |
 |---|---|---|---|---|---|
 | AC-001 | 数据与迁移：四项 slug/附件保持，非法批次非零退出 | FR-001、FR-011 | 未运行 | `specs/001-preserve-skill-content/validation/acceptance.md`、`us1-migration.md`、`tests/integration/migration.test.js` | 待 T003 索引 |
-| AC-002 | 原件/目录包保真：路径、字节、未知字段、许可 | FR-001、FR-004、NFR-001 | 未运行 | `specs/001-preserve-skill-content/validation/acceptance.md`、`tests/integration/distribution.test.js`、`tests/unit/render-archive-poc.test.js` | 待 T016 |
-| AC-003 | 搜索：精准/模糊/多维筛选/排序/分享恢复 | FR-002 | 未运行 | `specs/002-search-detail-share-redesign/validation/us2-search.md`、`tests/unit/search-core.test.js` | 待 T003 |
-| AC-004 | 详情：功能/用法/原文/版本/作者/缺失提示 | FR-003 | 未运行 | `specs/002-search-detail-share-redesign/validation/us2-detail.md` | 待 T003 |
-| AC-005 | 旧 hash 链接/替换后读取新版/复制失败提示 | FR-004 | 未运行 | `specs/002-search-detail-share-redesign/validation/us2-detail.md`、`tests/unit/share-link.test.js` | 待 T014 |
-| AC-006 | GitHub 后台手动上传/替换/下架/非法批次 | FR-005 | 未运行 | `specs/004-manual-skill-maintenance/validation/manual-add.md`、`manual-replace-remove-recovery.md`、`manual-failures.md` | 待 T004 |
-| AC-007 | Agent 预览/提交/重复/替换/状态/退出码 | FR-006、NFR-006 | 未运行 | `specs/005-skill-cli/validation/us5-add.md`、`us5-replace.md`、`us5-status.md`、`us5-quickstart.md` | 待 T005/T019 |
+| AC-002 | 原件/目录包保真：路径、字节、未知字段、许可 | FR-001、FR-004、NFR-001 | 通过 | `specs/007-overall-acceptance/validation/fidelity.md`、`specs/001-preserve-skill-content/validation/acceptance.md`、`tests/integration/distribution.test.js` | 生产 raw/ZIP 已逐字节核对 |
+| AC-003 | 搜索：精准/模糊/多维筛选/排序/分享恢复 | FR-002 | 受控通过 | `specs/002-search-detail-share-redesign/validation/us2-search.md`、`tests/unit/search-core.test.js` | 16 项搜索/列表/分享测试通过；未重跑生产浏览器 |
+| AC-004 | 详情：功能/用法/原文/版本/作者/缺失提示 | FR-003 | 受控通过 | `specs/007-overall-acceptance/validation/demo-001.md`、`specs/002-search-detail-share-redesign/validation/us2-detail.md` | 生产 JSON 字段与下载入口已核对；视觉复用 US-002 |
+| AC-005 | 旧 hash 链接/替换后读取新版/复制失败提示 | FR-004 | 受控通过 | `specs/002-search-detail-share-redesign/validation/us2-detail.md`、`tests/unit/share-link.test.js` | 复制失败提示由单测覆盖；未重跑真实剪贴板 |
+| AC-006 | GitHub 后台手动上传/替换/下架/非法批次 | FR-005 | 通过 | `specs/007-overall-acceptance/validation/demo-001.md`、`specs/004-manual-skill-maintenance/validation/manual-add.md` | 7 项手动维护测试通过 |
+| AC-007 | Agent 预览/提交/重复/替换/状态/退出码 | FR-006、NFR-006 | 通过 | `specs/007-overall-acceptance/validation/demo-001.md`、`specs/005-skill-cli/validation/us5-add.md` | 28 项 CLI/状态测试通过 |
 | AC-008 | 访客只读、未授权无写入、无凭证回显 | FR-007 | 未运行 | `specs/003-validate-build-publish/validation/us3-security.md`、`specs/006-source-auto-update/validation/us6-final-review.md`、`tests/integration/publish/publish-security.test.js` | 待 T017 |
 | AC-009 | 自动替换：slug/单版本/增删附件/站内备注 | FR-008、NFR-001 | 未运行 | `specs/006-source-auto-update/validation/us6-apply.md`、`us6-poc.md` | 可标“受控通过” |
 | AC-010 | 失败与冲突：404/限流/非法/许可/本地修改/重跑 | FR-008、FR-009、NFR-004 | 未运行 | `specs/006-source-auto-update/validation/us6-conflict.md`、`us6-check.md` | 真实 403/限流未运行 |

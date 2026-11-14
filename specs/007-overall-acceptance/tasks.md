@@ -10,7 +10,7 @@ description: "US-007 整体验收与交接任务"
 **Prerequisites**: US-001～US-006 已完成的本地/受控证据；生产 Pages 与 US-006 调度已启用；
 用户已确认 Demo-002 可接受 POC-003 受控证据，且 US-007 可带未运行项进入验收但不判定整包通过。
 
-**Status**: 任务于 2026-11-14 生成；当前 22 项。T001–T003 已完成基线、矩阵骨架与证据索引；其余未执行。
+**Status**: 任务于 2026-11-14 生成；当前 22 项。T001–T007 已完成基线、矩阵骨架、证据索引和 Demo-001；其余未执行。
 
 **Tests**: 验收以只读检查和受控复验为主；不执行 `skills/` 内脚本，不写生产内容，不把未运行项
 计为通过。
@@ -42,15 +42,15 @@ description: "US-007 整体验收与交接任务"
 **Independent Test**: 在隔离副本完成一次手动新增/替换和一次 CLI preview/add，再从公开站点或
 本地 dist 走完整取用链路。
 
-- [ ] T004 [US1] 在隔离副本执行手动单文件/目录新增、替换、下架，核对 slug、旧附件清理、
+- [X] T004 [US1] 在隔离副本执行手动单文件/目录新增、替换、下架，核对 slug、旧附件清理、
   站内字段保留和失败批次旧站保留；记录到 `validation/demo-001.md`。（AC-001/AC-005/AC-006）
-- [ ] T005 [US1] 按 README 执行 `skill-cli` preview/add/import/replace/status，核对零写入、
+- [X] T005 [US1] 按 README 执行 `skill-cli` preview/add/import/replace/status，核对零写入、
   目标路径提交、JSON/退出码和冲突；记录命令与结果到 `validation/demo-001.md`。
   （AC-007/AC-011）
-- [ ] T006 [US1] 从生产站点或本地 dist 检查检索、详情、复制和下载；下载原件/ZIP 后逐路径、
+- [X] T006 [US1] 从生产站点或本地 dist 检查检索、详情、复制和下载；下载原件/ZIP 后逐路径、
   逐字节核对，记录到 `validation/demo-001.md` 与 `validation/fidelity.md`。
   （AC-002/AC-004/AC-005）
-- [ ] T007 [US1] 更新 `acceptance-matrix.md` 的 Demo-001 和对应 AC 状态；失败/未运行项必须
+- [X] T007 [US1] 更新 `acceptance-matrix.md` 的 Demo-001 和对应 AC 状态；失败/未运行项必须
   保留原因，不得计为通过。 （AC-001～AC-008）
 
 ## Phase 4: User Story 2 — 上游升级到单一新版（Priority: P1）

@@ -8,11 +8,11 @@
 
 | 故事 | 主要 validation | 关键运行/测试 |
 |---|---|---|
-| US-001 | `specs/001-preserve-skill-content/validation/acceptance.md`、`us1-migration.md`、`us1-test-contracts.md`、`us2-browser.md`、`us3-failures.md`、`final-review.md`、`platform.md` | `tests/integration/migration.test.js`、`tests/integration/distribution.test.js`、`tests/integration/untrusted-content.test.js`；T041 macOS 未运行 |
+| US-001 | `specs/001-preserve-skill-content/validation/acceptance.md`、`us1-migration.md`、`us1-test-contracts.md`、`us2-browser.md`、`us3-failures.md`、`final-review.md`、`platform.md`；`specs/007-overall-acceptance/validation/demo-001.md`、`fidelity.md` | `tests/integration/migration.test.js`、`tests/integration/distribution.test.js`、`tests/integration/untrusted-content.test.js`；T041 macOS 未运行 |
 | US-002 | `specs/002-search-detail-share-redesign/validation/us2-search.md`、`us2-detail.md`、`us2-accessibility.md`、`us2-cross-browser.md`、`us2-performance.md`、`us2-regression.md`、`us2-build.md`、`us2-final-review.md` | `tests/unit/search-core.test.js`、`tests/unit/list-view.test.js`、`tests/unit/share-link.test.js`、`tests/unit/app-*.test.js` |
 | US-003 | `specs/003-validate-build-publish/validation/us3-snapshot.md`、`us3-links.md`、`us3-same-run.md`、`us3-recovery.md`、`us3-security.md`、`us3-summary.md`、`us3-regression.md`、`production-pages.md` | POC-002 runs `42355651634`、`42355755607`、`42355846761`、`42377824309`、`42377905399`；生产 `42396936423`、`42397297833` |
-| US-004 | `specs/004-manual-skill-maintenance/validation/manual-add.md`、`manual-replace-remove-recovery.md`、`manual-failures.md`、`admin-entry.md`、`manual-final-review.md` | `tests/integration/manual-maintenance.test.js`、`tests/integration/invalid-batch.test.js` |
-| US-005 | `specs/005-skill-cli/validation/us5-add.md`、`us5-replace.md`、`us5-import.md`、`us5-status.md`、`us5-readme.md`、`us5-quickstart.md`、`us5-poc.md`、`us5-final-review.md` | POC-002 runs `42395342747`、`42395444891`；真实 `gh api`/`--wait` 未补验 |
+| US-004 | `specs/004-manual-skill-maintenance/validation/manual-add.md`、`manual-replace-remove-recovery.md`、`manual-failures.md`、`admin-entry.md`、`manual-final-review.md`；`specs/007-overall-acceptance/validation/demo-001.md` | `tests/integration/manual-maintenance.test.js`、`tests/integration/invalid-batch.test.js` |
+| US-005 | `specs/005-skill-cli/validation/us5-add.md`、`us5-replace.md`、`us5-import.md`、`us5-status.md`、`us5-readme.md`、`us5-quickstart.md`、`us5-poc.md`、`us5-final-review.md`；`specs/007-overall-acceptance/validation/demo-001.md` | POC-002 runs `42395342747`、`42395444891`；真实 `gh api`/`--wait` 未补验 |
 | US-006 | `specs/006-source-auto-update/validation/preflight.md`、`us6-check.md`、`us6-apply.md`、`us6-conflict.md`、`us6-license.md`、`us6-status.md`、`us6-workflow.md`、`us6-poc.md`、`us6-quality.md`、`us6-final-review.md`、`us6-quickstart.md` | POC-003 runs 见下；生产 push `43421560371`、`43450476280`、`43509219426`；手动 sync `43421951464`；延迟 schedule `43533439066` |
 
 ## 2. POC 与生产运行索引
@@ -44,7 +44,16 @@
 | 生产站点只读 | `https://chengxuan2002-droid.github.io/skill-gallery/`、`assets/search-index.json` | 首页 200、4 项、revision `faa0f345...` |
 | 发布目标检查 | `node scripts/publish-check.js target/artifact` | 见 US-003 validation |
 
-## 4. 使用规则
+## 4. Demo-001 本次证据
+
+| 任务 | 命令/检查 | 结果 | 证据 |
+|---|---|---|---|
+| T004 手动维护 | `node --test tests/integration/manual-maintenance.test.js` | 7/7 通过 | `demo-001.md` |
+| T005 Agent CLI | `add`/`replace`/`import`/`status`/`args` 测试 | 28/28 通过 | `demo-001.md` |
+| T006 公开取用 | 生产首页/索引/详情/raw/ZIP 只读检查 | 4 项；raw/ZIP 字节一致 | `demo-001.md`、`fidelity.md` |
+| T006 搜索/复制 | `search-core`、`list-view`、`share-link` 单测 | 16/16 通过；浏览器未重跑 | `demo-001.md` |
+
+## 5. 使用规则
 
 - 本索引只指向已有证据；不能把“有文件”当作“已通过”。
 - 真实 403/限流、T041 macOS、US-005 真实 `gh`/`--wait`、生产 environment/部署失败注入/MIME 缓存
