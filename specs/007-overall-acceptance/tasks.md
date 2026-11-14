@@ -10,7 +10,7 @@ description: "US-007 整体验收与交接任务"
 **Prerequisites**: US-001～US-006 已完成的本地/受控证据；生产 Pages 与 US-006 调度已启用；
 用户已确认 Demo-002 可接受 POC-003 受控证据，且 US-007 可带未运行项进入验收但不判定整包通过。
 
-**Status**: 任务于 2026-11-14 生成；当前 22 项；尚未执行，所有复选框保持未勾选。
+**Status**: 任务于 2026-11-14 生成；当前 22 项。T001/T002 已完成基线与矩阵骨架；其余未执行。
 
 **Tests**: 验收以只读检查和受控复验为主；不执行 `skills/` 内脚本，不写生产内容，不把未运行项
 计为通过。
@@ -25,9 +25,9 @@ description: "US-007 整体验收与交接任务"
 
 ## Phase 1: Setup — 基线与矩阵骨架
 
-- [ ] T001 [P] 记录验收前置状态：分支/HEAD、Node/npm、生产 Pages revision、最新部署 run、
+- [X] T001 [P] 记录验收前置状态：分支/HEAD、Node/npm、生产 Pages revision、最新部署 run、
   US-006 调度状态、POC-002/003 可用性；写入 `specs/007-overall-acceptance/validation/preflight.md`。
-- [ ] T002 [P] 在 `specs/007-overall-acceptance/validation/acceptance-matrix.md` 建立
+- [X] T002 [P] 在 `specs/007-overall-acceptance/validation/acceptance-matrix.md` 建立
   AC-001～AC-015、Demo-001～003、US-001～006 矩阵骨架；状态只允许“通过/受控通过/未运行/失败”。
 
 ## Phase 2: Foundational — 证据索引
