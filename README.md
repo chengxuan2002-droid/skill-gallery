@@ -260,8 +260,8 @@ US-007 的验收矩阵与证据已建立，当前是**有条件验收/交接**�
 - 已补验：T041 的 GitHub-hosted macOS runner（run `43588719771`）、生产 environment 审批
   （run `43587421323`）、生产部署失败/旧站保留（run `43588024409`）与恢复、MIME/缓存基础头、
   一次真实 403、US-005 真实 `gh api` 导入与 `--wait`（POC runs `43612050209`、`43612262185`；
-  POC 二进制 URL 逐字节一致）；分支 push 的 [Quality checks #43609150035](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/43609150035)
-  在 Node 26.3/Linux 通过（282 项 281 通过、0 失败、1 跳过）。仍未运行/未验证：真实 source-sync
+  POC 二进制 URL 逐字节一致）；分支 push 的 [Quality checks #43613336137](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/43613336137)
+  在 Node 26.3/Linux 通过（286 项 285 通过、0 失败、1 跳过）。仍未运行/未验证：真实 source-sync
   429、真实截断/子模块/符号链接、Safari/移动实机/读屏器、CDN/强刷、2026-11-15 03:17 窗口；
   生产 `source_tracking` 仍为 `null`，Demo-002 不是生产自动更新。
 - 恢复入口：手动维护/替换/下架按上文“替换、下架与恢复”；来源/调度恢复使用受控 `git revert`/
