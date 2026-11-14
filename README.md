@@ -180,7 +180,8 @@ node scripts/skill-cli.js status --run <run-id>
 **当前边界**：`skill-cli` 的新增/替换/状态查询已在受控 POC-002 完成真实发布；真实 `gh` 来源导入与
 `--wait` 运行发现仍需补验。US-006 的来源检查、单版本替换、许可/冲突、部署失败重跑/恢复和同次发布
 已实现并完成受控 POC-003；生产 `main` 的每日调度已于 2026-11-13 启用。2026-11-14 首次 03:17 窗口
-轮询至 05:10 CST 未出现 `Maintain site` schedule run，不能声称已定时执行；下一窗口为 2026-11-15 03:17。
+轮询至 05:10 CST 前未出现；08:19 CST 出现延迟 schedule run 43533439066（sync success，build/deploy skipped）；
+下一窗口为 2026-11-15 03:17。
 生产 Pages 已切换为 Actions 并成功发布，但生产 environment 审批、部署失败注入和发布后
 MIME/缓存验证未运行。后续生产发布仍需单独授权。
 
@@ -188,7 +189,7 @@ MIME/缓存验证未运行。后续生产发布仍需单独授权。
 
 当前 `main` 已包含来源检查、单版本替换、许可/冲突保护和同次运行发布；生产调度已于 2026-11-13
 启用。push run 43421560371 的 build/deploy 成功，手动 sync run 43421951464 的 sync 成功且无变化跳过
-发布；2026-11-14 首次 03:17 窗口轮询至 05:10 CST 未出现 schedule run，下一窗口为 2026-11-15 03:17。证据见
+发布；2026-11-14 首次 03:17 窗口轮询至 05:10 CST 前未出现；08:19 CST 出现延迟 schedule run 43533439066（sync success，build/deploy skipped），下一窗口为 2026-11-15 03:17。证据见
 [US-006 validation](specs/006-source-auto-update/validation/)。
 
 **配置**：在 `catalog/<slug>.json` 的 `source_tracking` 中填写结构化 GitHub 来源；未配置时保持
@@ -246,6 +247,26 @@ node scripts/sync-skills.js --slug example --apply --push --report sync-report.j
 只按当前提交重发。平台可能延迟或跳过，不承诺准点 SLA。恢复使用受控 `git revert`/restore 提交并
 重新构建发布，保持 slug、旧链接和单版本，不 force push、不清除历史。
 
+### 整体验收与交接（US-007）
+
+US-007 的验收矩阵与证据已建立，当前是**有条件验收/交接**，不宣称整包通过：
+
+- Demo-001（手动/CLI 维护到检索/详情/复制/下载）、Demo-002（POC-003 v1→v2 单版本/许可/无变化）、
+  Demo-003（404/冲突/许可/部署失败/同提交重跑/受控 revert）均为“受控通过”。
+- 生产固定地址、首页/索引/详情/raw/ZIP 与旧 hash 链接已只读复核；ZIP 清单、字节和 0755/0644
+  模式与本地原件一致。证据入口：`specs/007-overall-acceptance/validation/`（`acceptance-matrix.md`、
+  `demo-001.md`～`demo-003.md`、`fixed-address.md`、`fidelity.md`、`security.md`、`handoff.md`）。
+- 已补验：T041 的 GitHub-hosted macOS runner（run `43588719771`）、生产 environment 审批
+  （run `43587421323`）、生产部署失败/旧站保留（run `43588024409`）与恢复、MIME/缓存基础头、
+  一次真实 403；分支 push 的 [Quality checks #43609150035](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/43609150035)
+  在 Node 26.3/Linux 通过（282 项 281 通过、0 失败、1 跳过）。仍未运行/未验证：US-005 真实
+  `gh api`/`--wait`、真实 source-sync 429、真实截断/子模块/符号链接、POC 二进制逐字节下载、
+  Safari/移动实机/读屏器、2026-11-15 03:17 窗口；生产 `source_tracking` 仍为 `null`，Demo-002
+  不是生产自动更新。
+- 恢复入口：手动维护/替换/下架按上文“替换、下架与恢复”；来源/调度恢复使用受控 `git revert`/
+  restore 提交并重新构建发布，保持 slug、旧链接和单版本，不 force push。完整缺口和补验方式见
+  [residual-gaps.md](specs/007-overall-acceptance/validation/residual-gaps.md)。
+
 ### 当前内容与构建契约
 
 - 原件位于 `skills/<slug>.md` 或 `skills/<slug>/SKILL.md`；`catalog/<slug>.json` 是独立站内记录。构建只读取 catalog 指向的内容，不扫描未纳管目录，不执行 Skill 脚本、测试或安装其依赖。
@@ -255,7 +276,8 @@ node scripts/sync-skills.js --slug example --apply --push --report sync-report.j
 - `npm run build` 只写 `dist/`，不写根 `assets/search-index.json`；`npm run preview` 只映射 `dist` 的 `/skill-gallery/`。成功状态是本地 `built`，不是已发布。
 - 构建事务使用 `.dist.lock/owner.json` 与 `.dist.transaction.json`。发现遗留锁时不要删除 dist、stage 或 backup；先确认原进程已退出并核对 owner 的 run_id/pid，只移除匹配锁，再重跑 `npm run build`。提交后清理失败会返回 `built` + `cleanup_status=pending`，保留记录/backup，不能当作发布成功。
 - 凭证规则 SECRET-01～04 只报告安全位置和类型；示例使用 `YOUR_*_HERE`、`<REDACTED>`、`***` 或 `$ENV`，不得写入真实凭证。标题 ID 由构建器生成；重复标题使用后缀，未知本文锚点移除 href 并提示。
-- `skill-cli` 已完成本地/受控验收并合并 main；US-006 自动更新已实现并合并 main，生产调度已启用。
+- `skill-cli` 已完成本地/受控验收并合并 main；US-006 自动更新已实现并合并 main，生产调度已启用；
+  US-007 验收矩阵与证据已建立，当前为有条件验收/交接。
   GitHub 后台手动维护见上文，Agent 命令见“Agent 命令（skill-cli）”。不要让旧版根索引/直接 Pages 教程冒充当前流程；生产 Pages
   已切换，MIME、缓存和直接资源安全仍需完整发布后验证。
 
@@ -298,7 +320,8 @@ quality 合并必需项仍需单独配置。
 
 ### 换电脑或更换 Code Agent
 
-当前 `main` 已包含 US-001～US-005 的实现、发布配置与生产启用记录；历史开发基线仍保留在
+当前 `main` 已包含 US-001～US-006 的实现、发布配置与生产启用记录；US-007 的验收矩阵、证据和
+未运行项在 `specs/007-overall-acceptance/validation/`。历史开发基线仍保留在
 `codex/development-baseline-20261102` 等分支，仅作历史参考。换电脑或 Agent 时应先核对当前分支、
 远程跟踪状态和 `.specify/feature.json`，不要用旧基线分支代替当前 `main`。
 
@@ -311,20 +334,20 @@ cd skill-gallery
 `node_modules/`、`.tools/`、`.env*`、系统杂项和本机凭证不随仓库迁移；GitHub 写入凭证在新电脑独立授权。
 不复制旧电脑的 SSH 私钥、Agent 会话或工具执行授权来替代新环境的授权。
 
-当前指针是 `specs/006-source-auto-update`（US-006 规格、计划与 tasks 已完成；生产调度已启用），
+当前指针是 `specs/007-overall-acceptance`（US-007 验收矩阵与证据已建立；有条件验收，未宣称整包通过），
 `.specify/feature.json` 按 Spec Kit 规则保持本机忽略。首次在新副本运行以下命令，会检查规划文件并
 恢复这个本地指针：
 
 ```bash
-export SPECIFY_FEATURE_DIRECTORY=specs/006-source-auto-update
+export SPECIFY_FEATURE_DIRECTORY=specs/007-overall-acceptance
 bash .specify/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks
 ```
 
 新 Agent 先读 [AGENTS.md](AGENTS.md)、[宪章](.specify/memory/constitution.md)、四份规范、当前功能的
-[spec](specs/006-source-auto-update/spec.md)、[plan](specs/006-source-auto-update/plan.md)、
-[tasks](specs/006-source-auto-update/tasks.md) 与
-[checklist](specs/006-source-auto-update/checklists/requirements.md)。
-US-005 的 [plan](specs/005-skill-cli/plan.md) 等已收口资料作为基线参考。
+[spec](specs/007-overall-acceptance/spec.md)、[plan](specs/007-overall-acceptance/plan.md)、
+[tasks](specs/007-overall-acceptance/tasks.md) 与
+[checklist](specs/007-overall-acceptance/checklists/requirements.md)。
+US-006 的 [plan](specs/006-source-auto-update/plan.md) 等已收口资料作为基线参考。
 项目级 Skills 保存在 `.agents/skills/`，Spec Kit 初始化来源记录为 1.2.5/Codex；其他 Agent 若不自动发现，
 应按其机制读取这些文件或配置入口，不能因更换工具而覆盖规范、重新生成任务或重跑 `specify init`。
 可选的 Specify CLI 及其他 Agent 适配器需在新电脑单独安装并验证；现有 Bash 检查不依赖全局 CLI。
@@ -336,7 +359,7 @@ US-005 的 [plan](specs/005-skill-cli/plan.md) 等已收口资料作为基线参
 下文保留现有版本和历史部署说明。
 
 
-> 下一轮改造准备（2026-11-01）：[业界调研](docs/IndustryResearch.md) · [产品需求](docs/DemandAnalysis.md) · [技术方案](docs/TechnicalSolution.md) · [AI 编程规范](docs/AiProgrammingGuide.md)。该段为 2026-11-01 时点；后续 US-003～US-005 已完成后台、上传命令与生产发布，自动更新仍待 US-006。下文保留历史版本说明，当前命令和行为以上方工程章节为准。
+> 下一轮改造准备（2026-11-01）：[业界调研](docs/IndustryResearch.md) · [产品需求](docs/DemandAnalysis.md) · [技术方案](docs/TechnicalSolution.md) · [AI 编程规范](docs/AiProgrammingGuide.md)。该段为 2026-11-01 时点；后续 US-003～US-005 已完成后台、上传命令与生产发布，US-006 已完成受控验证并启用生产调度，US-007 为有条件验收/交接。下文保留历史版本说明，当前命令和行为以上方工程章节为准。
 
 个人 AI Agent Skill 收藏夹——统一管理、快速查找、跨平台复用、一键分享。
 
