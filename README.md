@@ -258,9 +258,11 @@ US-007 的验收矩阵与证据已建立，当前是**有条件验收/交接**�
   `demo-001.md`～`demo-003.md`、`fixed-address.md`、`fidelity.md`、`security.md`、`handoff.md`）。
 - 已补验：T041 的 GitHub-hosted macOS runner（run `43588719771`）、生产 environment 审批
   （run `43587421323`）、生产部署失败/旧站保留（run `43588024409`）与恢复、MIME/缓存基础头、
-  一次真实 403。仍未运行/未验证：US-005 真实 `gh api`/`--wait`、真实 source-sync 429、真实
-  截断/子模块/符号链接、POC 二进制逐字节下载、Safari/移动实机/读屏器、2026-11-15 03:17 窗口；
-  生产 `source_tracking` 仍为 `null`，Demo-002 不是生产自动更新。
+  一次真实 403；分支 push 的 [Quality checks #43609150035](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/43609150035)
+  在 Node 26.3/Linux 通过（282 项 281 通过、0 失败、1 跳过）。仍未运行/未验证：US-005 真实
+  `gh api`/`--wait`、真实 source-sync 429、真实截断/子模块/符号链接、POC 二进制逐字节下载、
+  Safari/移动实机/读屏器、2026-11-15 03:17 窗口；生产 `source_tracking` 仍为 `null`，Demo-002
+  不是生产自动更新。
 - 恢复入口：手动维护/替换/下架按上文“替换、下架与恢复”；来源/调度恢复使用受控 `git revert`/
   restore 提交并重新构建发布，保持 slug、旧链接和单版本，不 force push。完整缺口和补验方式见
   [residual-gaps.md](specs/007-overall-acceptance/validation/residual-gaps.md)。

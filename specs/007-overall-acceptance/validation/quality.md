@@ -66,3 +66,17 @@ GitHub-hosted `macos-latest` run `43588719771`（2026-11-14）使用 Node 26.3.0
   `production-environment.md`、`fixed-address.md`、`remote-errors.md`）；真实 source-sync 429、
   Safari/移动实机和 CDN/强刷仍未运行；见 `residual-gaps.md`。
 - `npm ci` 只更新被忽略的本地依赖目录，不改变锁文件或站点内容。
+
+## 6. Node 26.3 / Linux Quality checks
+
+| 项 | 值 |
+|---|---|
+| 分支 | `codex/us-007-overall-acceptance` |
+| 提交 | `ee3339a6efedf17b1024f0e95af62a45b4cb5914` |
+| run | [43609150035](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/43609150035) |
+| runner | `ubuntu-24.04`，Node 26.3.0/npm 11.16.0 |
+| 结果 | success |
+
+- `npm run check`：282 项，281 通过、0 失败、1 跳过；lint/format 通过。
+- `npm run security`：secrets 360、code 56、deps 1，findings 0。
+- 该运行由分支 push 触发，结果为 Linux/Node 26.3 的远程 CI 证据；不代表生产部署或真实来源更新。

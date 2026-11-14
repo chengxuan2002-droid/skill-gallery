@@ -44,6 +44,7 @@
 |---|---|
 | `npm run check` | 退出码 0；lint/format 通过；282 项测试：280 通过、0 失败、2 跳过 |
 | `npm run security` | 退出码 0；secrets 355、code 56、deps 1，findings 0 |
+| Node 26.3/Linux Quality checks | run `43609150035` success；282 项 281 通过/0 失败/1 跳过；security 0 发现 |
 | 49 项来源/冲突/安全定向测试 | 49/49 通过 |
 | 27 项发布安全/路径/不可信内容测试 | 27/27 通过 |
 | `node --test tests/integration/distribution.test.js` | 4/4 通过；二进制/许可/空目录/mode |

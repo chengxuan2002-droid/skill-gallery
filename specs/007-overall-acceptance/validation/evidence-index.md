@@ -74,5 +74,5 @@
 | T018 | `residual-gaps.md` | 未运行项、影响与补验方式 |
 | T019 | `handoff.md` | 干净 worktree 命令与退出码 |
 | T020 | README、AGENTS.md | US-007 状态/未运行项/恢复入口 |
-| T021 | `quality.md` | `npm run check` 282 项；`npm run security` 通过 |
+| T021 | `quality.md` | 本地 `npm run check` 282 项；Node 26.3/Linux run `43609150035` 通过；`npm run security` 0 发现 |
 | T022 | `final-review.md` | 有条件验收/交接，不宣称整包通过 |

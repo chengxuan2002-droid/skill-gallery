@@ -160,7 +160,9 @@ Safari/移动实机仍未运行；生产 `source_tracking` 仍为 `null`。Demo-
 restore 提交并重新构建发布，不手工改 `dist/` 或直接覆盖线上文件。
 2026-11-12 本地 `npm test` 为 282 项（280 通过、0 失败、2 跳过）；2026-11-14 `npm run check`
 复核仍为 282 项，`npm run security` 为 0 发现。2026-11-14 GitHub-hosted macOS runner run
-`43588719771` 为 282 项（281 通过、0 失败、1 跳过），安全 0 发现，构建 revision `faa0f345...`。
+`43588719771` 为 282 项（281 通过、0 失败、1 跳过），安全 0 发现，构建 revision `faa0f345...`；
+分支 push 的 [Quality checks #43609150035](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/43609150035)
+在 Node 26.3/Linux 通过（282 项 281 通过、0 失败、1 跳过，安全 0 发现）。
 首次初始化证据见 specs/001-preserve-skill-content/validation/bootstrap.md。
 2026-11-03 在 Windows 复核 T002～T010：`.gitattributes` 固定项目文本为 LF，`skills/**` 不做换行转换；
 测试夹具在 Windows 使用 junction，检查入口解析 `npm.cmd` 与扫描器 `.exe`，安装器支持 Windows zip 包但仍需网络。
