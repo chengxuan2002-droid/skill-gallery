@@ -1,8 +1,8 @@
 # Skill Gallery 技术方案
 
-> 状态：关键架构决策已确认；US-001～US-005 已完成本地/受控实现与验收（US-001 的 T041 macOS 未运行）· 版本：0.2 · 日期：2026-11-01（状态补充：2026-11-12）
-> 基线：[DemandAnalysis.md](DemandAnalysis.md) 0.2。US-001～US-005 对应模块已实现；US-006 的来源检查、T020 失败重跑/恢复与同次发布已实现并完成受控 POC-003，生产调度已于 2026-11-13 启用；US-007 的 spec、plan 与 tasks 已建立，整体验收未开始。
-> 生产 Pages 已切换并由 `maintain.yml` 发布；生产 environment 审批、部署失败注入、发布后 MIME/缓存与完整生产验收未完成。
+> 状态：关键架构决策已确认；US-001～US-006 已实现/受控验收，US-007 为有条件验收 · 版本：0.2 · 日期：2026-11-01（状态补充：2026-11-15）
+> 基线：[DemandAnalysis.md](DemandAnalysis.md) 0.2。US-001～US-006 对应模块已实现；US-006 的来源检查、T020 失败重跑/恢复与同次发布已实现并完成受控 POC-003，生产调度已于 2026-11-13 启用；US-007 的 T001–T022 已执行，当前为有条件验收/交接。
+> 生产 Pages 已切换并由 `maintain.yml` 发布；T041 macOS runner、生产 environment 审批、部署失败/旧站保留、MIME/缓存基础头、真实 403 和 US-005 真实 `gh`/`--wait` 已补验；CDN/强刷、真实 source-sync 429/截断、设备项和生产真实来源等剩余缺口见 `specs/007-overall-acceptance/validation/residual-gaps.md`。
 
 本方案按“应用架构 → 管理与使用闭环 → 集成验证”展开。公开站点继续由原生 JS 和 GitHub Pages 承载，后台复用 GitHub 仓库与 Actions；站点原地址不变。Q-001～003 已由用户确认：GitHub 后台、GitHub 首版自动更新、当前单版本并保留 Git 历史。专用管理后台不属于本轮范围，未来变更需先修订 DEC-001、DEC-006。
 
@@ -71,8 +71,14 @@ US-003～US-005 均已合并 main，生产 Pages 已切换。）
 [US-004 validation](../specs/004-manual-skill-maintenance/validation/)、
 [US-005 validation](../specs/005-skill-cli/validation/)。
 2026-11-12 复核本地 `npm test` 为 242 项（240 通过、0 失败、2 跳过）；生产 environment 审批、
-部署失败注入、MIME/缓存和浏览器发布后复验仍未运行。US-006（自动来源检查/调度）与 US-007（整体验收）
-尚未实现。
+部署失败注入、MIME/缓存和浏览器发布后复验当时仍未运行。US-006（自动来源检查/调度）与 US-007
+（整体验收）在该时点尚未实现；后续状态见下条 2026-11-15 补充。
+
+2026-11-15 状态补充：US-006 的来源检查、单版本替换、许可/冲突、失败重跑与生产调度已实现并启用；
+US-007 的 T001–T022 已执行，Demo-001～003 受控通过、US-005 通过，当前为有条件验收/交接。T041
+macOS runner、生产 environment 审批、部署失败/旧站保留、MIME/缓存基础头、真实 403 和 US-005 真实
+`gh`/`--wait` 已补验；真实 source-sync 429、真实截断/子模块/符号链接、Safari/移动实机、CDN/强刷、
+2026-11-15 调度窗口和生产真实来源等仍未关闭，详见 `residual-gaps.md`。
 
 ### 1.3 提前建设检查 CI 与现站监测（2026-11-02）
 
@@ -308,9 +314,9 @@ skills/                            保真原件，保持现有路径
 catalog/                           已建立：站点记录与来源配置
 scripts/build-index.js             已实现：完整静态构建入口
 scripts/skill-cli.js               已实现：M-05 Agent CLI
-scripts/sync-skills.js             拟新增：M-06 来源检查/同步
-scripts/lib/                       已实现 M-01、M-02、M-03、M-05；M-06 待实现
-.github/workflows/maintain.yml     已实现构建/部署；US-006 增加来源检查与调度
+scripts/sync-skills.js             已实现：M-06 来源检查/同步
+scripts/lib/                       已实现 M-01、M-02、M-03、M-05、M-06（含 source-sync/github-source 等）
+.github/workflows/maintain.yml     已实现构建/部署、来源检查与调度；生产调度已启用
 tests/                             已建立：夹具、领域/集成/契约测试
 dist/                              生成：唯一部署目录，不手改
 docs/                              本轮四份规划文档
@@ -350,7 +356,7 @@ Agent：读取 README → 检查已有凭证和参数 → dry-run → 显式 pub
 
 POC-001 已用锁定依赖完成本地夹具验证；POC-002 已完成受控远程发布、失败保留、同提交重跑与恢复验证，
 生产 Pages 已切换并成功发布；POC-003 已完成 branch/release/pinned、两修订增删文件、真实 404、部署失败重跑/恢复的受控验证；
-US-006 生产调度已启用，真实 403/限流未运行。
+US-006 生产调度已启用；真实 403 已观察，真实 source-sync 429 和真实截断/子模块/符号链接仍未运行。
 NFR-002 已在 US-002 的隔离 1,000 项/10 MiB 夹具实测（p95 见
 [us2-performance.md](../specs/002-search-detail-share-redesign/validation/us2-performance.md)），不是生产网络或设备承诺。
 
@@ -372,8 +378,10 @@ NFR-002 的 1,000 项/10 MiB/50 次/p95 200ms 为统一候选口径，测法见 
 ## 15. 技术准备结论
 
 GitHub 管理、首版 GitHub 自动更新及 Git 历史保留已获用户确认，核心设计可按 US 依赖推进。
-US-001～US-005 已完成本地/受控实现与验收，生产 Pages 已切换并由 `maintain.yml` 成功发布；
-T041 macOS 与 US-007 整体验收仍未完成。生产 environment 审批、部署失败注入、MIME/缓存和发布后浏览器
-复验也仍未运行。Q-004 已于 2026-11-06 确认每日 03:17 Asia/Shanghai，US-006 生产调度已于 2026-11-13
-启用，实际定时触发以运行记录为准。最终准备度及决策状态以
-[需求附录](DemandAnalysis.md#questions) 为准。
+US-001～US-006 已完成本地/受控实现与验收，生产 Pages 已切换并由 `maintain.yml` 成功发布；US-007
+的 T001–T022 已执行，当前为有条件验收/交接。T041 macOS runner、生产 environment 审批、部署失败/
+旧站保留、MIME/缓存基础头、真实 403 和 US-005 真实 `gh`/`--wait` 已补验；CDN/强刷、真实 source-sync
+429/截断、Safari/移动实机、2026-11-15 调度窗口和生产真实来源仍未关闭，详见
+`specs/007-overall-acceptance/validation/residual-gaps.md`。Q-004 已于 2026-11-06 确认每日 03:17
+Asia/Shanghai，US-006 生产调度已于 2026-11-13 启用，实际定时触发以运行记录为准。最终准备度及决策
+状态以[需求附录](DemandAnalysis.md#questions)为准。
