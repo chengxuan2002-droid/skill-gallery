@@ -12,7 +12,7 @@
 | US-002 | `specs/002-search-detail-share-redesign/validation/us2-search.md`、`us2-detail.md`、`us2-accessibility.md`、`us2-cross-browser.md`、`us2-performance.md`、`us2-regression.md`、`us2-build.md`、`us2-final-review.md` | `tests/unit/search-core.test.js`、`tests/unit/list-view.test.js`、`tests/unit/share-link.test.js`、`tests/unit/app-*.test.js` |
 | US-003 | `specs/003-validate-build-publish/validation/us3-snapshot.md`、`us3-links.md`、`us3-same-run.md`、`us3-recovery.md`、`us3-security.md`、`us3-summary.md`、`us3-regression.md`、`production-pages.md` | POC-002 runs `42355651634`、`42355755607`、`42355846761`、`42377824309`、`42377905399`；生产 `42396936423`、`42397297833` |
 | US-004 | `specs/004-manual-skill-maintenance/validation/manual-add.md`、`manual-replace-remove-recovery.md`、`manual-failures.md`、`admin-entry.md`、`manual-final-review.md`；`specs/007-overall-acceptance/validation/demo-001.md` | `tests/integration/manual-maintenance.test.js`、`tests/integration/invalid-batch.test.js` |
-| US-005 | `specs/005-skill-cli/validation/us5-add.md`、`us5-replace.md`、`us5-import.md`、`us5-status.md`、`us5-readme.md`、`us5-quickstart.md`、`us5-poc.md`、`us5-final-review.md`；`specs/007-overall-acceptance/validation/demo-001.md` | POC-002 runs `42395342747`、`42395444891`；真实 `gh api`/`--wait` 未补验 |
+| US-005 | `specs/005-skill-cli/validation/us5-add.md`、`us5-replace.md`、`us5-import.md`、`us5-status.md`、`us5-readme.md`、`us5-quickstart.md`、`us5-poc.md`、`us5-real-gh.md`、`us5-final-review.md`；`specs/007-overall-acceptance/validation/demo-001.md` | POC-002 runs `42395342747`、`42395444891`、`43612050209`、`43612262185`；真实 `gh api`/`--wait` 已补验 |
 | US-006 | `specs/006-source-auto-update/validation/preflight.md`、`us6-check.md`、`us6-apply.md`、`us6-conflict.md`、`us6-license.md`、`us6-status.md`、`us6-workflow.md`、`us6-poc.md`、`us6-quality.md`、`us6-final-review.md`、`us6-quickstart.md` | POC-003 runs 见下；生产 push `43421560371`、`43450476280`、`43509219426`；手动 sync `43421951464`；延迟 schedule `43533439066` |
 
 ## 2. POC 与生产运行索引
@@ -21,6 +21,8 @@
 |---|---|---|---|
 | US-005 POC-002 新增 | `42395342747` | submitted → published | `005-skill-cli/validation/us5-poc.md` |
 | US-005 POC-002 替换 | `42395444891` | submitted → published | 同上 |
+| US-005 真实导入 | `43612050209` | `us5-real-import` 提交 `19bf63c...`；build/deploy success | `005-skill-cli/validation/us5-real-gh.md` |
+| US-005 真实 `--wait` | `43612262185` | `us5-real-wait` 提交 `1017dd4...`；published | 同上 |
 | US-006 基线同步 | `43208732789` | sync/build/deploy success；提交 `0c68fed4c008` | `006-source-auto-update/validation/us6-workflow.md` |
 | US-006 v2 替换 | `43208983544` | sync/build/deploy success；提交 `7b439a18f6d3` | 同上 |
 | US-006 无变化 | `43209635536` | sync success；build/deploy skipped | 同上 |
@@ -38,9 +40,9 @@
 
 | 检查 | 入口 | 最近结果 |
 |---|---|---|
-| 单元/集成测试 | `npm test`（`tests/unit/*.test.js`、`tests/integration/*.test.js`、`tests/integration/publish/*.test.js`） | 282 项：280 通过、0 失败、2 跳过 |
+| 单元/集成测试 | `npm test`（`tests/unit/*.test.js`、`tests/integration/*.test.js`、`tests/integration/publish/*.test.js`） | 286 项：284 通过、0 失败、2 跳过 |
 | Lint/格式 | `npm run lint`、`npm run format:check` | 最近通过 |
-| 凭证/源码/依赖 | `npm run security` | secrets 340、code 56、deps 1，findings 0 |
+| 凭证/源码/依赖 | `npm run security` | secrets 362、code 56、deps 1，findings 0 |
 | 生产站点只读 | `https://chengxuan2002-droid.github.io/skill-gallery/`、`assets/search-index.json` | 首页 200、4 项、revision `faa0f345...` |
 | 发布目标检查 | `node scripts/publish-check.js target/artifact` | 见 US-003 validation |
 
@@ -57,7 +59,7 @@
 
 - 本索引只指向已有证据；不能把“有文件”当作“已通过”。
 - 真实 403/限流、T041 macOS、US-005 真实 `gh`/`--wait`、生产 environment/部署失败注入/MIME 缓存
-  仍未运行，需在 `residual-gaps.md` 中保留。
+  的已关闭/未运行状态以 `residual-gaps.md` 为准；关闭项仍需保留证据链接。
 - 状态变更只能由后续验收任务写入，并附证据；不得用本索引替代实测。
 
 ## 6. US-007 本次新增证据
@@ -74,5 +76,5 @@
 | T018 | `residual-gaps.md` | 未运行项、影响与补验方式 |
 | T019 | `handoff.md` | 干净 worktree 命令与退出码 |
 | T020 | README、AGENTS.md | US-007 状态/未运行项/恢复入口 |
-| T021 | `quality.md` | 本地 `npm run check` 282 项；Node 26.3/Linux run `43609150035` 通过；`npm run security` 0 发现 |
+| T021 | `quality.md` | 本地 `npm run check` 286 项；US-005 分支 run `43613336137` 在 Node 26.3/Linux 通过（286 项 285/0/1）；`npm run security` 0 发现 |
 | T022 | `final-review.md` | 有条件验收/交接，不宣称整包通过 |

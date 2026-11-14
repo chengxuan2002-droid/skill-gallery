@@ -33,11 +33,19 @@
 
 来源失败未产生提交或写入；诊断只含稳定码与位置，不回显文件内容或凭证。
 
-## 3. 未运行与限制
+## 3. 真实 gh api 导入（2026-11-14 补验）
 
-- 默认 `gh api` 读取器未做真实网络调用；分支/Release/pinned 解析与 Git Trees/Blobs 字段仍需在
-  受控来源（T021 或后续）验证。
+在 POC-002 目标仓库和 POC-003 来源仓库执行真实导入，详见 [us5-real-gh.md](us5-real-gh.md)：
+
+- 发现并修复 `source-github.fetchSource` 未默认创建 `createGhReader()` 的问题；
+- 真实 preview 成功，`content_revision=b2dbc03c...`，工作区无写入；
+- 真实发布 `us5-real-wait` 提交 `1017dd4...`，运行 `43612262185` build/deploy success；
+  目标 5 个文件与来源逐字节一致，catalog slug/content_path/source_type 正确；
+- 目标 POC 站点 manifest `contentRevision=31baae8c...`，包含 8 项 Skill。
+
+## 4. 未运行与限制
+
 - `release` 策略的最新 Release 解析未单独演练；普通网页 URL 已由校验拒绝。
-- 未覆盖 403/429/超时的真实响应，只覆盖注入的错误路径。
-- 未调用 GitHub Actions 或 POC-002；`content_status`/`deploy_status` 保持 pending。
-- 未在 Node 26.3.0/npm 11.16.0 或 Linux 复验；本机为 Node 22.21.0/npm 10.9.4。
+- 未覆盖真实 403/429/超时的响应，只覆盖注入的错误路径。
+- 真实导入在 POC-002/POC-003 受控仓库执行，不代表生产来源或生产发布。
+- 本机为 Node 22.21.0/Windows；Node 26.3.0/Linux 的完整测试由 CI 覆盖。

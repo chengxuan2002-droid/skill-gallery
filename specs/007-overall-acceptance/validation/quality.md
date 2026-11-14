@@ -19,7 +19,7 @@ npm run check
 |---|---|
 | `npm run lint` | 退出码 0 |
 | `npm run format:check` | 退出码 0；所有匹配文件使用 Prettier 风格 |
-| `npm test` | 282 项：280 通过、0 失败、2 跳过 |
+| `npm test` | 286 项：284 通过、0 失败、2 跳过 |
 
 `npm test` 覆盖单元、集成、发布/同步 workflow、状态模型、保真、路径/凭证、不可信内容、来源
 检查/应用/冲突/许可、调度和回滚语义。2 项跳过为环境限制（符号链接创建不可用/基线红测），不计为失败。
@@ -32,7 +32,7 @@ npm run security
 
 | 检查 | 文件数 | 发现数 | 退出码 |
 |---|---|---|---|
-| `security:secrets` | 355 | 0 | 0 |
+| `security:secrets` | 362 | 0 | 0 |
 | `security:code` | 56 | 0 | 0 |
 | `security:deps` | 1 | 0 | 0 |
 
@@ -80,3 +80,17 @@ GitHub-hosted `macos-latest` run `43588719771`（2026-11-14）使用 Node 26.3.0
 - `npm run check`：282 项，281 通过、0 失败、1 跳过；lint/format 通过。
 - `npm run security`：secrets 360、code 56、deps 1，findings 0。
 - 该运行由分支 push 触发，结果为 Linux/Node 26.3 的远程 CI 证据；不代表生产部署或真实来源更新。
+
+## 7. US-005 真实导入分支 CI
+
+| 项 | 值 |
+|---|---|
+| 分支 | `codex/us5-real-import` |
+| 提交 | `cd8b332f26c41349dd3d79e647b43ffe9fa2dcab` |
+| run | [43613336137](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/43613336137) |
+| runner | `ubuntu-24.04`，Node 26.3.0/npm 11.16.0 |
+| 结果 | success |
+
+- `npm run check`：286 项，285 通过、0 失败、1 跳过；lint/format 通过。
+- `npm run security`：secrets 362、code 56、deps 1，findings 0。
+- 覆盖新增的默认 gh reader 和 `waitForPublishedRun` 回归测试；不代表生产来源或生产发布。

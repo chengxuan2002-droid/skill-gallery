@@ -7,7 +7,7 @@ const { importCandidate } = require('./lib/skill-cli/import');
 const { exitCodeFor, serializeResult } = require('./lib/skill-cli/output');
 const { publishCandidate } = require('./lib/skill-cli/publish');
 const { replaceCandidate } = require('./lib/skill-cli/replace');
-const { createGhRunReader, statusOutcome, waitForRun } = require('./lib/skill-cli/status');
+const { createGhRunReader, statusOutcome, waitForPublishedRun } = require('./lib/skill-cli/status');
 
 function failure(errors) {
   return {
@@ -39,15 +39,13 @@ function previewOutcome(candidate) {
 
 async function waitForPublished(outcome) {
   if (!outcome.commit_sha) return outcome;
-  let runId;
-  try {
-    runId = createGhRunReader().findByCommit(outcome.commit_sha);
-  } catch {
-    return outcome;
-  }
-  if (!runId) return outcome;
-  const waited = await waitForRun({ runId, reader: createGhRunReader() });
-  return waited.outcome;
+  const reader = createGhRunReader();
+  const waited = await waitForPublishedRun({
+    commitSha: outcome.commit_sha,
+    findRun: reader.findByCommit,
+    reader,
+  });
+  return waited ?? outcome;
 }
 
 async function publishOutcome(published, wait) {

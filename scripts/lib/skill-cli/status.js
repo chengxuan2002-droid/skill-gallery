@@ -110,6 +110,34 @@ async function waitForRun({
   }
 }
 
+async function waitForPublishedRun({
+  commitSha,
+  findRun,
+  wait = waitForRun,
+  reader,
+  discoveryTimeoutMs = 60000,
+  discoveryIntervalMs = 5000,
+  now = () => Date.now(),
+  sleep = defaultSleep,
+}) {
+  if (!commitSha) return null;
+  const deadline = now() + discoveryTimeoutMs;
+  for (;;) {
+    let runId;
+    try {
+      runId = findRun(commitSha);
+    } catch {
+      return null;
+    }
+    if (runId) {
+      const waited = await wait({ runId, reader });
+      return waited.outcome;
+    }
+    if (now() >= deadline) return null;
+    await sleep(discoveryIntervalMs);
+  }
+}
+
 function createGhRunReader() {
   function runView(runId) {
     const raw = execFileSync(
@@ -159,4 +187,10 @@ function createGhRunReader() {
   };
 }
 
-module.exports = { createGhRunReader, deriveRunStatus, statusOutcome, waitForRun };
+module.exports = {
+  createGhRunReader,
+  deriveRunStatus,
+  statusOutcome,
+  waitForPublishedRun,
+  waitForRun,
+};

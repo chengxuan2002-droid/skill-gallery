@@ -54,9 +54,11 @@ published；诊断只含稳定码与位置。
 
 ## 4. 未运行与剩余风险
 
-- 默认 `gh api` 来源读取与 release 策略未做真实网络验证；`import` 只在注入来源下验收。
-- `--wait` 在 push 后立即查询可能尚未发现运行，按文档返回 `submitted/pending`；POC 替换后手动
-  `status` 才得到 published。若要求“等待必达发布”，需增加运行发现重试并更新契约。
+- 默认 `gh api` 来源读取已在 2026-11-14 用 POC-002/POC-003 真实补验；`release` 策略仍未单独
+  做真实网络演练。见 [us5-real-gh.md](us5-real-gh.md)。
+- `--wait` 的运行发现延迟已修复：推送后 60 秒内每 5 秒发现对应 `maintain.yml` 运行，再轮询到
+  终态；首次真实发布仍记录了修复前 returned submitted/pending 的偏差，第二次真实发布得到
+  published。
 - 生产 Pages 未切换；没有生产发布、environment 审批或线上回滚验证（后续已切换，见第 6 节）。
 - 未验证浏览器详情/分享/下载、MIME/缓存或移动端。
 - 未在 Node 26.3.0/npm 11.16.0 或 Linux 本地复验；受控运行由 GitHub runner 覆盖。
@@ -75,4 +77,14 @@ US-005 的本地与受控范围完整：预览、新增、替换/冲突、来源
 本记录保留 2026-11-08 复核时点。此后 US-005 已推送并合并 main（PR #3），生产 Pages 已于
 2026-11-08 切换为 GitHub Actions 并成功发布，证据见
 [US-003 production-pages.md](../../003-validate-build-publish/validation/production-pages.md)。
-真实 `gh api` 来源导入和 `--wait` 运行发现仍未补验；本记录不因此改写为生产验收通过。
+真实 `gh api` 来源导入和 `--wait` 运行发现已于 2026-11-14 补验（见 [us5-real-gh.md](us5-real-gh.md)）；
+本记录仍不把 POC 结果改写为生产来源或生产发布验收。
+
+## 7. 2026-11-14 补验更新
+
+- 修复 `source-github.fetchSource` 默认 reader 缺失；真实 preview/publish 可执行。
+- 修复 `--wait` 运行发现：新增 `waitForPublishedRun`，60 秒发现窗口、5 秒间隔。
+- 真实 `us5-real-wait` 导入提交 `1017dd4...`，run `43612262185`，`--wait` 返回
+  published/built/published；目标文件与来源逐字节一致。
+- 新增 4 项回归测试（默认 reader、显式 reader、延迟发现、发现超时/gh 失败）。
+- POC-002 测试后重新归档；未写生产仓库。

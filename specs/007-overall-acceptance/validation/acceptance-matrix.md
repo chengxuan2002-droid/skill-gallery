@@ -43,17 +43,18 @@
 | US-002 | 搜索、详情、分享、可访问 | 受控通过 | `specs/002-search-detail-share-redesign/validation/us2-final-review.md` |
 | US-003 | 校验、构建、固定地址发布 | 受控通过 | `specs/007-overall-acceptance/validation/production-environment.md`、`specs/003-validate-build-publish/validation/us3-final-review.md`、`production-pages.md` |
 | US-004 | GitHub 后台手动维护 | 受控通过 | `specs/004-manual-skill-maintenance/validation/manual-final-review.md` |
-| US-005 | Agent CLI 与 README | 受控通过 | `specs/005-skill-cli/validation/us5-final-review.md`、`us5-poc.md` |
+| US-005 | Agent CLI 与 README | 通过 | `specs/005-skill-cli/validation/us5-real-gh.md`、`us5-final-review.md`、`us5-poc.md` |
 | US-006 | 来源检查、自动替换、状态与调度 | 受控通过 | `specs/006-source-auto-update/validation/us6-final-review.md`、`us6-poc.md` |
 
 故事状态的未运行子项：US-001 物理 Mac 变体；US-002 Safari/移动实机；US-003 CDN/浏览器强刷；
-US-004 真实后台 UI/浏览器复制；US-005 真实 `gh api`/`--wait`；US-006 生产真实来源/后续调度窗口。
-均不计为通过，详见 `residual-gaps.md`。
+US-004 真实后台 UI/浏览器复制；US-006 生产真实来源/后续调度窗口。均不计为通过，详见
+`residual-gaps.md`。US-005 的真实 `gh api`/`--wait` 已补验（`us5-real-gh.md`）。
 
 ## 4. 初始缺口登记（待后续任务关闭或保留）
 
 - T041 macOS 已由 GitHub-hosted runner `43588719771` 补验；物理 Mac/所有 macOS 变体未覆盖。
-- US-005 真实 `gh api` 导入与 `--wait` 运行发现未补验（`specs/005-skill-cli/validation/us5-final-review.md`）。
+- US-005 真实 `gh api` 导入与 `--wait` 运行发现已补验（`specs/005-skill-cli/validation/us5-real-gh.md`）；
+  `release` 策略真实网络演练仍未运行。
 - 生产 environment 审批和部署失败注入已补验并恢复；MIME/缓存基础头已复核，CDN/强刷未运行。
 - 真实 source-sync 403（已观察一次真实 403）和 429（未触发）、真实截断/子模块/符号链接、
   二进制下载逐字节对比未运行。

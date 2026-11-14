@@ -6,6 +6,7 @@ const test = require('node:test');
 const {
   deriveRunStatus,
   statusOutcome,
+  waitForPublishedRun,
   waitForRun,
 } = require('../../scripts/lib/skill-cli/status');
 
@@ -173,4 +174,58 @@ test('waitForRun stops at terminal states and times out without reporting publis
   assert.equal(timedOut.outcome.status, 'pending');
   assert.equal(timedOut.outcome.errors[0].code, 'E_TIMEOUT');
   assert.notEqual(timedOut.outcome.status, 'published');
+});
+
+test('waitForPublishedRun discovers a delayed run before waiting', async () => {
+  let clock = 0;
+  let attempts = 0;
+  const result = await waitForPublishedRun({
+    commitSha: 'a'.repeat(40),
+    findRun: () => {
+      attempts += 1;
+      return attempts < 3 ? null : '42';
+    },
+    wait: async ({ runId }) => {
+      assert.equal(runId, '42');
+      return { timeout: false, outcome: { status: 'published' } };
+    },
+    discoveryTimeoutMs: 100,
+    discoveryIntervalMs: 10,
+    now: () => clock,
+    sleep: async (ms) => {
+      clock += ms;
+    },
+  });
+
+  assert.equal(attempts, 3);
+  assert.equal(result.status, 'published');
+});
+
+test('waitForPublishedRun gives up when discovery times out or gh fails', async () => {
+  let clock = 0;
+  const timedOut = await waitForPublishedRun({
+    commitSha: 'a'.repeat(40),
+    findRun: () => null,
+    discoveryTimeoutMs: 30,
+    discoveryIntervalMs: 10,
+    now: () => clock,
+    sleep: async (ms) => {
+      clock += ms;
+    },
+  });
+  assert.equal(timedOut, null);
+
+  const failed = await waitForPublishedRun({
+    commitSha: 'a'.repeat(40),
+    findRun: () => {
+      throw new Error('gh failed');
+    },
+    discoveryTimeoutMs: 100,
+    discoveryIntervalMs: 10,
+    now: () => clock,
+    sleep: async (ms) => {
+      clock += ms;
+    },
+  });
+  assert.equal(failed, null);
 });

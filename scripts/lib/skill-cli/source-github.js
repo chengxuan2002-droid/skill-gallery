@@ -27,7 +27,7 @@ function adapt(result) {
   };
 }
 
-function fetchSource({ source, reader } = {}) {
+function fetchSource({ source, reader = shared.createGhReader() } = {}) {
   return adapt(shared.fetchSource({ source: normalize(source), reader }));
 }
 
