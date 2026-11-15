@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# 统一入口：从任意工作目录调用都能定位到技能根目录。
+# 用法: bash bin/douyin2md <子命令> [参数]
+set -euo pipefail
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+exec env PYTHONPATH="$ROOT${PYTHONPATH:+:$PYTHONPATH}" python3 -m douyin2md "$@"

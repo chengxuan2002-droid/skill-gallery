@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "douyin2md"
+version = "2.0.0"
+description = "Agent Skill: 抖音视频与本地音视频转带时间戳的 Markdown 文稿"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "chengxuan" }]
+keywords = ["agent-skill", "douyin", "transcription", "markdown", "asr"]
+dependencies = [
+  "yt-dlp>=2024.1.1",
+]
+
+[project.optional-dependencies]
+local = [
+  "sherpa-onnx>=1.10.0",
+  "numpy>=1.24",
+]
+browser = [
+  "playwright>=1.40",
+  "browser-cookie3>=0.19",
+]
+all = [
+  "sherpa-onnx>=1.10.0",
+  "numpy>=1.24",
+  "playwright>=1.40",
+  "browser-cookie3>=0.19",
+]
+dev = [
+  "pytest>=7.0",
+]
+
+[project.scripts]
+douyin2md = "douyin2md.cli:main"
+
+[tool.setuptools]
+packages = ["douyin2md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

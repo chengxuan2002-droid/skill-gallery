@@ -1,0 +1,7 @@
+# 批量输入示例：每行一个抖音链接，或整段分享文案（脚本会自动提取其中的链接）
+# 以 # 开头的行会被忽略；空行忽略；重复链接自动去重且保持原顺序。
+# 把下面两行换成真实链接后运行：
+#   bash bin/douyin2md batch examples/urls.txt -o ./notes
+#
+# https://v.douyin.com/REPLACE_ME_1/
+# 7.43 KJi:/ U@y.TY 复制此链接 https://v.douyin.com/REPLACE_ME_2/ 打开抖音
