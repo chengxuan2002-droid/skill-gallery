@@ -73,6 +73,7 @@
 
 - MIME/缓存基础头已复核；CDN 边缘缓存清除和浏览器强刷后的资源一致性未运行。
 - 真实 source-sync 429（已观察一次真实 403；429 未触发）、真实截断树/子模块/符号链接。
+- US-005 `release` 策略的真实网络演练（branch 导入已通过；release/pinned 主要由 US-006 POC 覆盖）。
 - Safari 实机、移动实机、读屏器语音；真实浏览器复制/下载交互。
 - 生产真实来源自动更新（生产 `source_tracking` 仍全部为 `null`）。
 - 物理 Mac、所有 macOS 硬件/文件系统变体（GitHub-hosted macOS runner 已通过）。
@@ -95,6 +96,7 @@ US-007 的验收矩阵、证据、交接材料和恢复入口已建立；Demo-00
 证据，质量与安全检查通过；生产 MIME/缓存基础头、真实 403、生产 environment 审批、生产部署失败
 注入、GitHub-hosted macOS runner、US-005 真实 `gh api`/`--wait` 和 POC 二进制 URL 已补验；2026-11-15
 03:17 窗口已观察到延迟 schedule run `43650813672`（06:58 CST，sync success，build/deploy skipped，
-无内容变化）。由于仍有真实 source-sync 429、真实截断/子模块/符号链接、Safari/移动实机、CDN/强刷、
-生产真实来源、US-004 独立维护者从零复跑/生产回滚等未运行项，**本次仍为有条件验收/交接，不宣称
-US-007 整包通过，也不宣称生产自动更新已发生**。后续按 `residual-gaps.md` 补验并重新评估。
+无内容变化）。由于仍有真实 source-sync 429、真实截断/子模块/符号链接、US-005 `release` 策略真实
+网络演练、Safari/移动实机、CDN/强刷、生产真实来源、US-004 独立维护者从零复跑/生产回滚等未运行项，
+**本次仍为有条件验收/交接，不宣称 US-007 整包通过，也不宣称生产自动更新已发生**。后续按
+`residual-gaps.md` 补验并重新评估。
