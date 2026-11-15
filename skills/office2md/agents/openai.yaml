@@ -1,0 +1,4 @@
+interface:
+  display_name: "Office to Markdown"
+  short_description: "Convert Office docs to Markdown with semantic enhancements"
+  default_prompt: "Use $office2md to convert this document to Markdown with semantic post-processing and a conversion report."

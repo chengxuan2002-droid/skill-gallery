@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "slug": "office2md",
+  "display_name": "office2md",
+  "description": "基于 Microsoft markitdown 将 Office、PDF、HTML、图片、音视频等文件转换为 Markdown，支持语义后处理与转换报告。",
+  "content_path": "skills/office2md/SKILL.md",
+  "declared_version": "1.0.1",
+  "tags": [],
+  "platforms": [],
+  "allowed_dot_paths": [],
+  "source_tracking": null
+}
