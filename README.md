@@ -182,7 +182,8 @@ node scripts/skill-cli.js status --run <run-id>
 [us5-real-gh.md](specs/005-skill-cli/validation/us5-real-gh.md)。US-006 的来源检查、单版本替换、
 许可/冲突、部署失败重跑/恢复和同次发布已实现并完成受控 POC-003；生产 `main` 的每日调度已于
 2026-11-13 启用。2026-11-14 首次 03:17 窗口轮询至 05:10 CST 前未出现；08:19 CST 出现延迟
-schedule run 43533439066（sync success，build/deploy skipped）；下一窗口为 2026-11-15 03:17。
+schedule run 43533439066（sync success，build/deploy skipped）；2026-11-15 窗口延迟至 06:58 CST
+（run 43650813672，sync success、build/deploy skipped）；下一窗口为 2026-11-16 03:17。
 生产 Pages 已切换为 Actions 并成功发布；生产 environment 审批、部署失败/旧站保留和 MIME/缓存
 基础头已于 2026-11-14 补验，CDN/强刷与生产真实来源仍未验证。后续生产发布仍需单独授权。
 
@@ -190,7 +191,7 @@ schedule run 43533439066（sync success，build/deploy skipped）；下一窗口
 
 当前 `main` 已包含来源检查、单版本替换、许可/冲突保护和同次运行发布；生产调度已于 2026-11-13
 启用。push run 43421560371 的 build/deploy 成功，手动 sync run 43421951464 的 sync 成功且无变化跳过
-发布；2026-11-14 首次 03:17 窗口轮询至 05:10 CST 前未出现；08:19 CST 出现延迟 schedule run 43533439066（sync success，build/deploy skipped），下一窗口为 2026-11-15 03:17。证据见
+发布；2026-11-14 首次 03:17 窗口轮询至 05:10 CST 前未出现；08:19 CST 出现延迟 schedule run 43533439066；2026-11-15 窗口延迟至 06:58 CST（run 43650813672）；两次均 sync success、build/deploy skipped，下一窗口为 2026-11-16 03:17。证据见
 [US-006 validation](specs/006-source-auto-update/validation/)。
 
 **配置**：在 `catalog/<slug>.json` 的 `source_tracking` 中填写结构化 GitHub 来源；未配置时保持
@@ -260,10 +261,12 @@ US-007 的验收矩阵与证据已建立，当前是**有条件验收/交接**�
 - 已补验：T041 的 GitHub-hosted macOS runner（run `43588719771`）、生产 environment 审批
   （run `43587421323`）、生产部署失败/旧站保留（run `43588024409`）与恢复、MIME/缓存基础头、
   一次真实 403、US-005 真实 `gh api` 导入与 `--wait`（POC runs `43612050209`、`43612262185`；
-  POC 二进制 URL 逐字节一致）；分支 push 的 [Quality checks #43613336137](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/43613336137)
+  POC 二进制 URL 逐字节一致）、2026-11-15 03:17 窗口的延迟 schedule run `43650813672`（06:58 CST，
+  sync success、build/deploy skipped）；分支 push 的 [Quality checks #43613336137](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/43613336137)
   在 Node 26.3/Linux 通过（286 项 285 通过、0 失败、1 跳过）。仍未运行/未验证：真实 source-sync
-  429、真实截断/子模块/符号链接、Safari/移动实机/读屏器、CDN/强刷、2026-11-15 03:17 窗口；
-  生产 `source_tracking` 仍为 `null`，Demo-002 不是生产自动更新。
+  429、真实截断/子模块/符号链接、Safari/移动实机/读屏器、CDN/强刷、US-004 独立维护者从零复跑和
+  生产回滚；生产 `source_tracking` 仍为 `null`，Demo-002 不是生产自动更新。下一调度窗口为
+  2026-11-16 03:17 CST，实际触发以运行记录为准。
 - 恢复入口：手动维护/替换/下架按上文“替换、下架与恢复”；来源/调度恢复使用受控 `git revert`/
   restore 提交并重新构建发布，保持 slug、旧链接和单版本，不 force push。完整缺口和补验方式见
   [residual-gaps.md](specs/007-overall-acceptance/validation/residual-gaps.md)。

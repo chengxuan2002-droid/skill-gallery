@@ -319,8 +319,9 @@ M1：US-001、US-002，演示完整读取与取用；M2：US-003、US-004、US-0
 **实施状态（2026-11-15）：** US-001～US-006 已完成本地/受控实现与验收并合并 main，生产 Pages 已切换；
 US-001 的 T041 macOS 已由 GitHub-hosted runner 补验（物理 Mac/所有变体仍未覆盖）。US-006 的来源检查、
 单版本替换、许可/冲突、T020 失败重跑/恢复和同次发布已实现并完成受控 POC-003；生产调度已于 2026-11-13
-启用，2026-11-14 首次 03:17 窗口延迟至 08:19 CST（sync success，build/deploy skipped），下一窗口为
-2026-11-15 03:17。US-007 的 T001–T022 已执行，Demo-001～003 为受控通过，US-005 为通过，当前为有条件
+启用，2026-11-14 首次 03:17 窗口延迟至 08:19 CST（run 43533439066，sync success、build/deploy
+skipped），2026-11-15 窗口延迟至 06:58 CST（run 43650813672，sync success、build/deploy skipped）；
+下一窗口为 2026-11-16 03:17。US-007 的 T001–T022 已执行，Demo-001～003 为受控通过，US-005 为通过，当前为有条件
 验收/交接；剩余真实 source-sync 429、真实截断/子模块/符号链接、Safari/移动实机、CDN/强刷、
 生产真实来源等缺口见
 `specs/007-overall-acceptance/validation/residual-gaps.md`。依赖版本、发布权限与外部集成由对应 PoC

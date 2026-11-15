@@ -20,7 +20,8 @@
 | Safari/移动实机/读屏器 | `us2-accessibility.md`、`us2-cross-browser.md` 仅 Chrome/Firefox/WebKit（Windows） | 真实 Safari、触摸手势和读屏器语音未验证 | 在 Safari/移动设备运行 360/768/1440、明暗主题、键盘/触摸和减少动效；记录设备 |
 | 真实浏览器复制/下载 | `us2-detail.md` 主要为本地夹具；本次未重跑真实剪贴板/下载交互 | 复制失败提示和浏览器下载行为可能受权限/浏览器差异影响 | 在至少一个真实浏览器执行复制成功/失败、raw/ZIP 下载并核对文件 |
 | 生产未授权写尝试 | `us3-security.md` 为 POC 匿名 401；生产未重跑 | 生产仓库/fork/受限身份的写拒绝未观察 | 在获授权范围用未认证请求尝试 dispatch/写，核对 401/403 与无副作用；禁止使用凭证 |
-| 2026-11-15 03:17 窗口 | 2026-11-14 只有延迟 run `43533439066`；下一窗口未到 | 不能把一次延迟触发写成每日准点 SLA | 2026-11-15 后查看 `maintain.yml` schedule 运行，记录实际触发时间、sync/build/deploy 结果 |
+| US-004 独立维护者从零复跑/生产回滚 | `specs/004-manual-skill-maintenance/validation/manual-final-review.md` 仍注明独立维护者从零复跑和生产回滚演练未运行；`AiProgrammingGuide.md` 当前状态同 | 真实后台 UI/独立操作和生产回滚未验证；不影响已完成的受控发布证据 | 由独立维护者按 README 从干净环境执行新增/替换/下架/恢复；生产回滚需单独授权 |
+| 2026-11-15 03:17 窗口（已观察） | run `43650813672`：schedule，实际 2026-11-15 06:58:11 CST（延迟约 3h41m），sync success、build/deploy skipped；生产 revision `faa0f345...`、`source_tracking` 仍为 `null` | 只证明延迟触发且无来源时不发布；不等于准点 SLA 或生产自动更新 | 继续观察 2026-11-16 03:17 及配置真实来源后的运行 |
 | 生产真实来源自动更新 | 四项 catalog `source_tracking` 均为 `null`；Demo-002 仅 POC-003 | 生产自动检查/替换、单版本和许可基线未实际发生 | 获授权后配置一个真实公开来源，观察 check/apply/同次发布；在此之前只能写“受控通过” |
 
 ## 2. 其他限制
@@ -30,4 +31,7 @@
   生产真实来源配置仍涉及生产写入，必须单独授权。
 - US-005 真实 `gh api`/`--wait` 和 POC 二进制 URL 对比已关闭（见
   `specs/005-skill-cli/validation/us5-real-gh.md`）；`release` 策略真实网络演练仍未运行。
+- 2026-11-15 03:17 窗口已观察到延迟 schedule run `43650813672`（06:58 CST，sync success、
+  build/deploy skipped）；这证明调度可触发，但不承诺下一窗口准点，也不等于生产自动更新。
+- US-004 的独立维护者从零复跑和生产回滚仍作为单独验证项保留。
 - 未运行项不进入通过计数；最终结论仍是“有条件/未完成”，不是整包通过。

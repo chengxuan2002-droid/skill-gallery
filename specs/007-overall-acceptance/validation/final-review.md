@@ -63,7 +63,8 @@
 | POC run `43420335014` | sync/build success，deploy failure；旧站保留 |
 | POC run `43420502326` | 同提交重跑，build/deploy success；无新内容提交 |
 | POC run `43420712186` | 受控 revert，恢复线上 revision，历史未改写 |
-| 生产 schedule run `43533439066` | 延迟触发（08:19 CST），sync success，build/deploy skipped |
+| 生产 schedule run `43533439066` | 2026-11-14 延迟触发（08:19 CST），sync success，build/deploy skipped |
+| 生产 schedule run `43650813672` | 2026-11-15 06:58 CST（03:17 窗口延迟约 3h41m），sync success，build/deploy skipped；production revision `faa0f345...` |
 | 干净副本命令 | preview/add/status/build/preview 服务/publish-check/revert 的实际退出码见 `handoff.md` |
 
 ## 4. 未运行项与影响
@@ -73,9 +74,9 @@
 - MIME/缓存基础头已复核；CDN 边缘缓存清除和浏览器强刷后的资源一致性未运行。
 - 真实 source-sync 429（已观察一次真实 403；429 未触发）、真实截断树/子模块/符号链接。
 - Safari 实机、移动实机、读屏器语音；真实浏览器复制/下载交互。
-- 2026-11-15 03:17 CST 调度窗口。
 - 生产真实来源自动更新（生产 `source_tracking` 仍全部为 `null`）。
 - 物理 Mac、所有 macOS 硬件/文件系统变体（GitHub-hosted macOS runner 已通过）。
+- US-004 独立维护者从零复跑和生产回滚演练（`manual-final-review.md` 仍标注未运行）。
 
 影响和补验方式见 `residual-gaps.md`。这些缺口影响关键 AC 的完整性，因此最终结论只能是
 有条件验收/交接，不是整包通过。
@@ -92,7 +93,8 @@
 
 US-007 的验收矩阵、证据、交接材料和恢复入口已建立；Demo-001～003 的主链路和失败/恢复路径有可追溯
 证据，质量与安全检查通过；生产 MIME/缓存基础头、真实 403、生产 environment 审批、生产部署失败
-注入、GitHub-hosted macOS runner、US-005 真实 `gh api`/`--wait` 和 POC 二进制 URL 已补验。由于仍有
-真实 source-sync 429、真实截断/子模块/符号链接、Safari/移动实机、CDN/强刷、2026-11-15 调度窗口和
-生产真实来源等未运行项，**本次仍为有条件验收/交接，不宣称 US-007 整包通过，也不宣称生产自动更新
-已发生**。后续按 `residual-gaps.md` 补验并重新评估。
+注入、GitHub-hosted macOS runner、US-005 真实 `gh api`/`--wait` 和 POC 二进制 URL 已补验；2026-11-15
+03:17 窗口已观察到延迟 schedule run `43650813672`（06:58 CST，sync success，build/deploy skipped，
+无内容变化）。由于仍有真实 source-sync 429、真实截断/子模块/符号链接、Safari/移动实机、CDN/强刷、
+生产真实来源、US-004 独立维护者从零复跑/生产回滚等未运行项，**本次仍为有条件验收/交接，不宣称
+US-007 整包通过，也不宣称生产自动更新已发生**。后续按 `residual-gaps.md` 补验并重新评估。

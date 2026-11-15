@@ -106,7 +106,7 @@ python3 -m http.server 8000
 | 内容集成 | 保真、ZIP 解包、二进制、附件删除、迁移、恶意 Markdown | `npm test` 已可执行；US-001 内部切片的迁移、保真、ZIP、下载、故障恢复与安全夹具通过 |
 | 构建 | 干净 checkout 全量校验、静态白名单、索引/详情同快照 | `npm ci`、`npm run build` 已接入并在隔离四项项目验证；生产 Pages 已切换并由 `maintain.yml` 成功发布；MIME/缓存基础头已复核，CDN/强刷和发布后浏览器复验未运行 |
 | E2E/视觉 | 检索组合、详情、复制、窄屏、键盘和旧链接 | US-001 内部 US2/US3 的 Edge headless 浏览器与安全验收见 specs/001-preserve-skill-content/validation/us2-browser.md、us3-failures.md；US-002 的详情、可访问、跨浏览器与现站预检见 specs/002-search-detail-share-redesign/validation/；跨发布视觉回归和生产部署后验证仍未运行 |
-| 来源/发布集成 | fixed SHA、Release、限流、冲突、同次 workflow 显式部署 | US-003 发布链与 POC-002 已验，生产 Pages 已切换；US-005 真实 `gh api` 导入与 `--wait` 已补验（run `43612050209`、`43612262185`）；US-006 来源检查/同次发布已实现并完成受控 POC-003，生产调度已启用；2026-11-14 首次窗口延迟至 08:19 CST（run 43533439066，sync success、build/deploy skipped）；真实 403 已观察，真实 source-sync 429 和真实截断/子模块/符号链接未运行 |
+| 来源/发布集成 | fixed SHA、Release、限流、冲突、同次 workflow 显式部署 | US-003 发布链与 POC-002 已验，生产 Pages 已切换；US-005 真实 `gh api` 导入与 `--wait` 已补验（run `43612050209`、`43612262185`）；US-006 来源检查/同次发布已实现并完成受控 POC-003，生产调度已启用；2026-11-14 首次窗口延迟至 08:19 CST（run 43533439066），2026-11-15 窗口延迟至 06:58 CST（run 43650813672），两次均 sync success、build/deploy skipped；真实 403 已观察，真实 source-sync 429 和真实截断/子模块/符号链接未运行 |
 | 性能 | NFR-002 统一负载和统计方法 | US-002 已在隔离 1,000 项/10 MiB 夹具按 50 次固定查询测得 p95：Chrome 39.9ms、Firefox 48.0ms、WebKit 50.0ms（候选线 200ms）；生产网络首载未测，AC-015 口径不能变 |
 
 本次文档工作不新建或运行业务测试。未来测试按风险选择，普通文档、颜色或文案微调不机械新增测试；文件替换、权限、自动发布等必须有失败路径验证。
@@ -187,8 +187,9 @@ POC-002/POC-003 补验（run `43612050209`、`43612262185`，见 `us5-real-gh.md
 [plan](../specs/006-source-auto-update/plan.md)、[tasks](../specs/006-source-auto-update/tasks.md)）；
 来源检查、单版本替换、许可/冲突、T020 失败重跑/恢复和同次发布已实现并完成受控 POC-003；
 生产 `main` 调度已于 2026-11-13 启用；2026-11-14 首次 03:17 窗口延迟至 08:19 CST，run
-43533439066（sync success，build/deploy skipped），下一窗口为 2026-11-15 03:17。真实 source-sync
-429、真实截断/子模块/符号链接等仍未关闭，见 `residual-gaps.md`。
+43533439066（sync success，build/deploy skipped）；2026-11-15 窗口延迟至 06:58 CST，run 43650813672
+（sync success，build/deploy skipped）；下一窗口为 2026-11-16 03:17。真实 source-sync 429、
+真实截断/子模块/符号链接等仍未关闭，见 `residual-gaps.md`。
 
 输入：US-003；Q-002/003 已确认 GitHub 来源及 Git 历史保留，来源管理入口接 US-004；FR-008、FR-009、NFR-001、NFR-003、NFR-004、DEC-007、DEC-008，C-06/C-07，AC-009、AC-010、AC-011、AC-012。
 
@@ -202,9 +203,10 @@ POC-002/POC-003 补验（run `43612050209`、`43612262185`，见 `us5-real-gh.md
 
 **状态**：T001–T022 已执行（[spec](../specs/007-overall-acceptance/spec.md)、
 [plan](../specs/007-overall-acceptance/plan.md)、[tasks](../specs/007-overall-acceptance/tasks.md)）；
-Demo-001～003 为受控通过，US-005 为通过，当前为有条件验收/交接。真实 source-sync 429、真实截断/
-子模块/符号链接、Safari/移动实机、CDN/强刷、2026-11-15 调度窗口和生产真实来源等仍未关闭，
-见 `residual-gaps.md`；不得把未运行项计为通过。
+Demo-001～003 为受控通过，US-005 为通过，当前为有条件验收/交接。2026-11-15 03:17 窗口已观察到
+延迟 run 43650813672（06:58 CST，sync success、build/deploy skipped）；真实 source-sync 429、
+真实截断/子模块/符号链接、Safari/移动实机、CDN/强刷、生产真实来源和 US-004 独立维护者/生产回滚
+等仍未关闭，见 `residual-gaps.md`；不得把未运行项计为通过。
 
 输入：全部已完成故事和需求唯一 AC/Demo 清单。按 Demo-001～003 验证：手动/命令维护到取用、上游升级到单一新版、失败到恢复。逐项标通过、失败、未运行，不把未运行计为通过。
 
@@ -278,6 +280,7 @@ Q-004 的每日 03:17 Asia/Shanghai 已作为 US-006 生产调度启用，实际
 
 US-006 的 T001–T030 已完成本地/受控验证；生产 `main` 的每日调度已启用，2026-11-14 首次 03:17 窗口
 轮询至 05:10 CST 前未出现；08:19 CST 出现延迟 schedule run 43533439066（sync success，build/deploy
-skipped），下一窗口为 2026-11-15 03:17。
+skipped）；2026-11-15 窗口延迟至 06:58 CST（run 43650813672，同样 skip build/deploy），下一窗口为
+2026-11-16 03:17。
 后续业务编码、依赖安装和发布仍需对应授权，不能因本文档或规划
 状态更新而自动开始。

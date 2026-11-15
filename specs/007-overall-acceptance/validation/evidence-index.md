@@ -13,7 +13,7 @@
 | US-003 | `specs/003-validate-build-publish/validation/us3-snapshot.md`、`us3-links.md`、`us3-same-run.md`、`us3-recovery.md`、`us3-security.md`、`us3-summary.md`、`us3-regression.md`、`production-pages.md` | POC-002 runs `42355651634`、`42355755607`、`42355846761`、`42377824309`、`42377905399`；生产 `42396936423`、`42397297833` |
 | US-004 | `specs/004-manual-skill-maintenance/validation/manual-add.md`、`manual-replace-remove-recovery.md`、`manual-failures.md`、`admin-entry.md`、`manual-final-review.md`；`specs/007-overall-acceptance/validation/demo-001.md` | `tests/integration/manual-maintenance.test.js`、`tests/integration/invalid-batch.test.js` |
 | US-005 | `specs/005-skill-cli/validation/us5-add.md`、`us5-replace.md`、`us5-import.md`、`us5-status.md`、`us5-readme.md`、`us5-quickstart.md`、`us5-poc.md`、`us5-real-gh.md`、`us5-final-review.md`；`specs/007-overall-acceptance/validation/demo-001.md` | POC-002 runs `42395342747`、`42395444891`、`43612050209`、`43612262185`；真实 `gh api`/`--wait` 已补验 |
-| US-006 | `specs/006-source-auto-update/validation/preflight.md`、`us6-check.md`、`us6-apply.md`、`us6-conflict.md`、`us6-license.md`、`us6-status.md`、`us6-workflow.md`、`us6-poc.md`、`us6-quality.md`、`us6-final-review.md`、`us6-quickstart.md` | POC-003 runs 见下；生产 push `43421560371`、`43450476280`、`43509219426`；手动 sync `43421951464`；延迟 schedule `43533439066` |
+| US-006 | `specs/006-source-auto-update/validation/preflight.md`、`us6-check.md`、`us6-apply.md`、`us6-conflict.md`、`us6-license.md`、`us6-status.md`、`us6-workflow.md`、`us6-poc.md`、`us6-quality.md`、`us6-final-review.md`、`us6-quickstart.md` | POC-003 runs 见下；生产 push `43421560371`、`43450476280`、`43509219426`；手动 sync `43421951464`；延迟 schedule `43533439066`、`43650813672` |
 
 ## 2. POC 与生产运行索引
 
@@ -35,6 +35,7 @@
 | 生产 push | `43421560371` | sync skipped；build/deploy success | `us6-workflow.md` |
 | 生产手动 sync | `43421951464` | sync success；无变化；build/deploy skipped | 同上 |
 | 生产延迟 schedule | `43533439066` | sync success；build/deploy skipped；08:19 CST | 同上 |
+| 生产延迟 schedule | `43650813672` | sync success；build/deploy skipped；2026-11-15 06:58 CST | 同上；`residual-gaps.md` |
 
 ## 3. 测试与安全检查入口
 
