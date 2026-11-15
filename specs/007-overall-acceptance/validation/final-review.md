@@ -37,7 +37,7 @@
 | 安全 | `security.md`；`tests/integration/publish/publish-security.test.js`、`tests/unit/path-attacks.test.js` |
 | 汇总检查 | `quality.md` |
 | 交接 | `handoff.md`、`residual-gaps.md` |
-| 文档状态 | README 的 US-007 章节、AGENTS.md 的 US-007 段落 |
+| 文档状态 | README 的“开发与验收/用 Agent 维护 Skill”章节、AGENTS.md 的 US-007 段落 |
 
 ## 3. 实际验证命令与结果
 
