@@ -260,7 +260,8 @@ npm run preview
   非预发布 Release。
 - 单文件来源为 `skills/<slug>.md`；目录来源为 `skills/<slug>/SKILL.md` 及附件。
 - 成功替换只保留一个当前版本，上游删除的附件会从详情、索引和 ZIP 中移除。
-- 许可缺失/变化会阻断；当前内容偏离 `last_synced_digest` 或远端基线前进会 conflict；失败保留当前版。
+- 许可缺失/变化会阻断；目录来源优先使用子树许可，子树没有时回退仓库根 `LICENSE/NOTICE`。
+  当前内容偏离 `last_synced_digest` 或远端基线前进会 conflict；失败保留当前版。
 
 手动检查与应用：
 
@@ -273,8 +274,9 @@ node scripts/sync-skills.js --slug example --apply --push --report sync-report.j
 `5` 全局来源读取失败、`6` 提交或报告写入失败。
 
 `maintain.yml` 每日 03:17 Asia/Shanghai 运行同一 sync 入口；平台可能延迟或跳过，不承诺准点 SLA。
-手动 `sync=false` 只按当前提交重发，`sync=true` 执行来源检查。生产当前 `source_tracking` 均为
-`null`，即自动更新已具备但尚未配置真实来源。
+手动 `sync=false` 只按当前提交重发，`sync=true` 执行来源检查。生产 `sepia` 已配置
+`source_tracking`（`Nanako0129/sepia`、`skills/sepia`、`branch main`）；首次检查为 `unchanged`，
+等待下一次 apply 建立同步基线。其余 catalog 仍为 `null`，不会自动更新。
 
 ### Agent CLI（管理员）
 
@@ -464,8 +466,8 @@ A：站点提供原件、目录 ZIP、原文复制和分享链接，不提供平
 
 **Q：自动更新现在就在生产运行吗？**
 
-A：生产调度已启用，但当前 4 项 catalog 的 `source_tracking` 为 `null`，因此没有真实来源可更新；
-配置来源并完成首次基线后才会检查/替换。Demo-002 的自动更新证据来自受控 POC。
+A：生产调度已启用；当前只有 `sepia` 配置了 `source_tracking`，首次检查结果为 `unchanged`，等待
+下一次 apply 建立基线；其余 6 项仍为 `null`。Demo-002 的自动更新证据来自受控 POC。
 
 **Q：Agent 可以帮我上传/更新吗？**
 

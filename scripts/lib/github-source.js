@@ -212,6 +212,17 @@ function createGhReader({ execute = defaultExec, timeoutMs = 30_000, retries = 3
         );
         licenseModes.set(entry.path, entry.mode ?? '100644');
       }
+    } else if (!findLicense(files)) {
+      for (const entry of tree.tree ?? []) {
+        if (entry.type !== 'blob' || entry.mode === '120000' || entry.mode === '160000') continue;
+        if (entry.path.includes('/') || !LICENSE_PATTERN.test(entry.path)) continue;
+        const blob = ghApi(`repos/${source.repository}/git/blobs/${entry.sha}`);
+        licenseFiles.set(
+          entry.path,
+          Buffer.from(blob.content, blob.encoding === 'base64' ? 'base64' : 'utf8'),
+        );
+        licenseModes.set(entry.path, entry.mode ?? '100644');
+      }
     }
     return { ok: true, revision, files, modes, licenseFiles, licenseModes };
   }

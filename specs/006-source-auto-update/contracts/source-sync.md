@@ -81,8 +81,9 @@ node scripts/sync-skills.js --help
 
 ## 5. 许可与冲突
 
-- 目录来源必须从同一修订的来源子树找到许可文件；单文件来源从同目录或仓库根读取；其他目录的许可
-  只作人工参考，不自动视为适用许可；否则 policy_blocked。
+- 目录来源优先从同一修订的来源子树读取许可文件；子树没有时回退读取仓库根 `LICENSE*`/`COPYING*`/
+  `NOTICE*`；单文件来源从同目录或仓库根读取；其他目录的许可只作人工参考，不自动视为适用许可；
+  仍找不到则 policy_blocked。
 - 成功同步后记录 `source_tracking.last_synced_license`（路径与 sha256）；后续检查优先比较该基线，
   候选许可路径或字节变化返回 policy_blocked，并记录许可状态；不自动假定仓库整体授权。
 - 旧记录无 `last_synced_license` 时，目录来源回退比较当前内容许可；单文件来源在首次 apply 时建立基线。

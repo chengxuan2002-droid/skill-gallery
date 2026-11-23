@@ -36,14 +36,15 @@
 | 生产手动 sync | `43421951464` | sync success；无变化；build/deploy skipped | 同上 |
 | 生产延迟 schedule | `43533439066` | sync success；build/deploy skipped；08:19 CST | 同上 |
 | 生产延迟 schedule | `43650813672` | sync success；build/deploy skipped；2026-11-15 06:58 CST | 同上；`residual-gaps.md` |
+| sepia source_tracking 只读检查 | `local`（2026-11-23） | unchanged；license present；revision `0eb11d6...`；等待 apply 基线 | `specs/006-source-auto-update/validation/sepia-source-config.md` |
 
 ## 3. 测试与安全检查入口
 
 | 检查 | 入口 | 最近结果 |
 |---|---|---|
-| 单元/集成测试 | `npm test`（`tests/unit/*.test.js`、`tests/integration/*.test.js`、`tests/integration/publish/*.test.js`） | 286 项：284 通过、0 失败、2 跳过 |
+| 单元/集成测试 | `npm test`（`tests/unit/*.test.js`、`tests/integration/*.test.js`、`tests/integration/publish/*.test.js`） | 287 项：285 通过、0 失败、2 跳过 |
 | Lint/格式 | `npm run lint`、`npm run format:check` | 最近通过 |
-| 凭证/源码/依赖 | `npm run security` | secrets 362、code 56、deps 1，findings 0 |
+| 凭证/源码/依赖 | `npm run security` | secrets 424、code 56、deps 1，findings 0 |
 | 生产站点只读 | `https://chengxuan2002-droid.github.io/skill-gallery/`、`assets/search-index.json` | 首页 200、4 项、revision `faa0f345...` |
 | 发布目标检查 | `node scripts/publish-check.js target/artifact` | 见 US-003 validation |
 
@@ -77,5 +78,5 @@
 | T018 | `residual-gaps.md` | 未运行项、影响与补验方式 |
 | T019 | `handoff.md` | 干净 worktree 命令与退出码 |
 | T020 | README、AGENTS.md | US-007 状态/未运行项/恢复入口 |
-| T021 | `quality.md` | 本地 `npm run check` 286 项；US-005 分支 run `43613336137` 在 Node 26.3/Linux 通过（286 项 285/0/1）；`npm run security` 0 发现 |
+| T021 | `quality.md` | 本地 `npm run check` 287 项；US-005 分支 run `43613336137` 在 Node 26.3/Linux 通过（286 项 285/0/1）；`npm run security` 0 发现 |
 | T022 | `final-review.md` | 有条件验收/交接，不宣称整包通过 |
