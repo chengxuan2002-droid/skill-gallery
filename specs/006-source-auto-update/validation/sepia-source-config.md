@@ -1,9 +1,10 @@
-# Sepia 生产来源配置与只读检查
+# Sepia 生产来源配置与首次基线
 
 **日期**: 2026-11-23（Asia/Shanghai）
-**范围**: 为生产 `sepia` 配置 `source_tracking`，并验证目录来源的仓库根 LICENSE 回退；不写生产内容。
-**结论**: 配置通过只读检查。`sepia` 与上游 `Nanako0129/sepia` 的 `skills/sepia` 内容一致，检查为
-`unchanged`、`license_status=present`，等待下一次 apply 建立同步基线。
+**范围**: 为生产 `sepia` 配置 `source_tracking`，验证目录来源的仓库根 LICENSE 回退，并通过手动
+`maintain.yml` dispatch 建立首次同步基线。
+**结论**: 配置与首次基线均完成。`sepia` 与上游 `Nanako0129/sepia` 的 `skills/sepia` 内容一致，
+只读检查为 `unchanged`/`license_status=present`；基线 run `45160746326` 写入 catalog 同步字段。
 
 ## 1. 配置
 
@@ -45,9 +46,22 @@ node scripts/sync-skills.js --slug sepia --json
 
 没有写入、提交或推送。上游 `skills/sepia` 的 20 个文件 blob SHA 与生产 `skills/sepia` 全部一致。
 
-## 3. 后续
+## 3. 首次基线
 
-- 下一次 `maintain.yml` schedule 或授权的手动 `--apply --push` 会写入首次同步基线
-  （`last_synced_revision/digest/license`），不改变当前内容。
-- 其余 6 个 catalog 仍为 `source_tracking: null`，不会自动更新。
-- 需要继续观察首次基线提交、后续上游变更、许可变化和失败保留。
+```bash
+gh workflow run maintain.yml --ref main -f sync=true
+```
+
+- run：`45160746326`（workflow_dispatch，2026-11-23 18:57 CST）
+- jobs：sync success、build success、deploy success
+- 同步提交：`25123a423cb610ed60641ed66308f05d79a7117d`（`sync: update sepia`）
+- catalog 写入：revision `0eb11d6...`、digest `785e07...`、
+  license `LICENSE`/`7d3d6c...`、`synced_at=2026-11-23T10:57:39.827Z`
+- 生产 revision：`ed8abb5...`；首页 200，7 项 Skill
+- 内容未变化；只写入来源基线字段
+
+## 4. 后续
+
+- 下一次 `maintain.yml` schedule 会按基线检查上游变化；其余 6 个 catalog 仍为
+  `source_tracking: null`，不会自动更新。
+- 需要继续观察上游真实变更、许可变化、冲突/失败保留和实际替换发布。

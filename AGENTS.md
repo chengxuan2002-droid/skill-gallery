@@ -158,8 +158,9 @@ MIME/缓存基础头已补验（run `43588719771`、`43587421323`、`43588024409
 `gh api` 导入与 `--wait` 已用 POC runs `43612050209`、`43612262185` 补验，POC 二进制 URL
 逐字节一致（见 `specs/005-skill-cli/validation/us5-real-gh.md`）。schedule 已连续观察；2026-11-23
 run `45087926651`（08:17 CST）sync success、build/deploy skipped。生产 `sepia` 已配置
-`source_tracking`（`Nanako0129/sepia`、`skills/sepia`、branch `main`），首次只读检查为
-`unchanged`/`license present`，等待下一次 apply 建立基线；其余 6 项仍为 `null`。真实 source-sync
+`source_tracking`（`Nanako0129/sepia`、`skills/sepia`、branch `main`），并通过手动 run
+`45160746326` 建立首次基线（sync 提交 `25123a4...`，revision/digest/license 已写入）；其余 6 项仍为
+`null`。真实 source-sync
 429、截断/子模块/符号链接、Safari/移动实机、CDN/强刷、US-004 独立维护者从零复跑/生产回滚仍未运行；
 下一窗口为 2026-11-24 03:17。
 Demo-002 接受 POC-003 受控证据；

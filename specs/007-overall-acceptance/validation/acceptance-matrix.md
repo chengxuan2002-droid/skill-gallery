@@ -5,7 +5,8 @@
 最终复核后为有条件验收/交接；2026-11-14 补验生产 environment/部署失败、MIME/缓存基础头、真实 403
 和 macOS runner；2026-11-15 补验 US-005 真实 `gh`/`--wait`、POC 二进制 URL 和延迟 schedule run
 `43650813672`；2026-11-23 为 `sepia` 配置 `source_tracking`，只读检查 unchanged/license present，
-等待下一次 apply 建立基线。剩余子项见 `residual-gaps.md`，仍不判定整包通过。
+并通过手动 run `45160746326` 建立首次基线（sync 提交 `25123a4...`）。剩余子项见 `residual-gaps.md`，
+仍不判定整包通过。
 **状态口径**: 只允许 `通过`、`受控通过`、`未运行`、`失败`。未运行不得计为通过。
 **Demo-002 口径**: 用户已确认 POC-003 受控证据可作为“受控通过”；不得写成生产自动更新已发生。
 
@@ -14,7 +15,7 @@
 | ID | 验收点 | 关联 | US-007 状态 | 证据入口 | 备注 |
 |---|---|---|---|---|---|
 | Demo-001 | 手动/Agent 维护到检索、详情、复制、下载 | US-001、US-005；AC-001/008/012/015 | 受控通过 | `specs/007-overall-acceptance/validation/demo-001.md`、`fidelity.md`；`specs/004-manual-skill-maintenance/validation/manual-add.md`、`specs/005-skill-cli/validation/us5-add.md` | 手动/CLI/生产数据已验证；浏览器复制未重跑 |
-| Demo-002 | 来源 v1→v2 自动更新、单版本、旧附件清理 | US-006、US-007；AC-009/011/014 | 受控通过 | `specs/007-overall-acceptance/validation/demo-002.md`、`specs/006-source-auto-update/validation/us6-poc.md`、`us6-license.md`、`us6-status.md`、`us6-workflow.md`；run `43533439066` | POC-003 受控证据；生产 `sepia` 已配置 source_tracking，首次检查 unchanged，等待 apply 基线；其余 6 项仍为 null |
+| Demo-002 | 来源 v1→v2 自动更新、单版本、旧附件清理 | US-006、US-007；AC-009/011/014 | 受控通过 | `specs/007-overall-acceptance/validation/demo-002.md`、`specs/006-source-auto-update/validation/us6-poc.md`、`us6-license.md`、`us6-status.md`、`us6-workflow.md`；run `43533439066` | POC-003 受控证据；生产 `sepia` 已配置 source_tracking 并建立基线（run 45160746326）；其余 6 项仍为 null |
 | Demo-003 | 404/冲突/非法候选/部署失败→状态→修复/恢复 | US-003、US-007；AC-008/010/012/014 | 受控通过 | `specs/007-overall-acceptance/validation/demo-003.md`、`production-environment.md`、`specs/003-validate-build-publish/validation/us3-recovery.md`、`specs/006-source-auto-update/validation/us6-status.md`、`us6-conflict.md` | POC/隔离 + 49 项定向测试；生产 environment/部署失败已补验；真实 429/限流未运行 |
 
 ## 2. AC 逐项矩阵
@@ -61,8 +62,8 @@ schedule run `43650813672` 已作为延迟触发证据观察。
 - 生产 environment 审批和部署失败注入已补验并恢复；MIME/缓存基础头已复核，CDN/强刷未运行。
 - 真实 source-sync 403（已观察一次真实 403）和 429（未触发）、真实截断/子模块/符号链接未运行；
   POC 二进制 URL 已逐字节核对。
-- 生产 `sepia` 已配置 `source_tracking`（`Nanako0129/sepia`、`skills/sepia`、branch main），首次
-  只读检查 unchanged/license present，等待下一次 apply 基线；其余 6 项仍为 null。Demo-002 仍写
+- 生产 `sepia` 已配置 `source_tracking`（`Nanako0129/sepia`、`skills/sepia`、branch main），并通过
+  run `45160746326` 建立基线；尚未观察上游真实变更后的自动替换；其余 6 项仍为 null。Demo-002 仍写
   “受控通过”，生产实际内容更新未发生。
 - 2026-11-15 03:17 窗口已观察到延迟 schedule run `43650813672`（06:58 CST，sync success、
   build/deploy skipped）；下一窗口为 2026-11-24 03:17，不承诺准点或生产自动更新。
