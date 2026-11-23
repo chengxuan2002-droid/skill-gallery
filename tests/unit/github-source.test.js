@@ -77,6 +77,38 @@ test('fetchSource returns immutable revision, bytes, modes and license', () => {
   assert.equal(result.license.path, 'LICENSE');
 });
 
+test('createGhReader falls back to a repository root license for directory sources', () => {
+  const skill = Buffer.from('---\nname: example\n---\n\n# Example\n');
+  const license = Buffer.from('MIT\n');
+  const execute = (requestPath) => {
+    if (requestPath.endsWith('/git/ref/heads/main')) return { object: { sha: SHA_A } };
+    if (requestPath.includes('/git/trees/')) {
+      return {
+        truncated: false,
+        tree: [
+          { path: 'skills/example', type: 'tree', mode: '040000' },
+          { path: 'skills/example/SKILL.md', type: 'blob', sha: '1'.repeat(40), mode: '100644' },
+          { path: 'LICENSE', type: 'blob', sha: '2'.repeat(40), mode: '100644' },
+        ],
+      };
+    }
+    if (requestPath.endsWith(`/git/blobs/${'1'.repeat(40)}`)) {
+      return { content: skill.toString('base64'), encoding: 'base64' };
+    }
+    if (requestPath.endsWith(`/git/blobs/${'2'.repeat(40)}`)) {
+      return { content: license.toString('base64'), encoding: 'base64' };
+    }
+    throw new Error(`unexpected request ${requestPath}`);
+  };
+  const gh = createGhReader({ execute });
+  const result = fetchSource({ source: source(), reader: gh });
+
+  assert.equal(result.ok, true, JSON.stringify(result.diagnostics));
+  assert.equal(result.files.has('SKILL.md'), true);
+  assert.equal(result.license.path, 'LICENSE');
+  assert.equal(result.license.sha256, findLicense(new Map([['LICENSE', license]])).sha256);
+});
+
 test('fetchSource rejects truncated trees and links or submodules', () => {
   const truncated = fetchSource({
     source: source(),

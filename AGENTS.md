@@ -148,23 +148,25 @@ deploy 增加 `needs.build.result == 'success'` 条件，避免 sync 跳过时�
 `27c6b36dcab8f654f0279a2a822f1bb6042f765e`；生产 push run 43421560371 的 build/deploy 成功，
 手动 sync run 43421951464 的 sync 成功且无变化跳过发布；生产调度已启用。2026-11-14 首次 03:17 窗口
 轮询至 05:10 CST 前未出现；08:19 CST 出现延迟 schedule run 43533439066（sync success，build/deploy skipped）；
-2026-11-15 窗口延迟至 06:58 CST（run 43650813672，同样 sync success、build/deploy skipped），下一窗口
-为 2026-11-16 03:17。
+2026-11-15 窗口延迟至 06:58 CST（run 43650813672，同样 sync success、build/deploy skipped），
+2026-11-23 窗口延迟至 08:17 CST（run 45087926651）；下一窗口为 2026-11-24 03:17。
 2026-11-14 US-007 的 spec、plan 与 22 项 tasks 已建立，`.specify/feature.json` 指向
 `specs/007-overall-acceptance`。T001–T022 已执行：矩阵、Demo-001～003、固定地址/浏览器证据、保真、
 安全、残留缺口、干净副本交接、汇总检查和最终复核。Demo-001～003 均为受控通过，当前是有条件
 验收/交接，不判定整包通过。T041 macOS runner、生产 environment 审批、生产部署失败注入和
 MIME/缓存基础头已补验（run `43588719771`、`43587421323`、`43588024409`）；US-005 真实
 `gh api` 导入与 `--wait` 已用 POC runs `43612050209`、`43612262185` 补验，POC 二进制 URL
-逐字节一致（见 `specs/005-skill-cli/validation/us5-real-gh.md`）。2026-11-15 03:17 窗口的延迟
-schedule run `43650813672`（06:58 CST）sync success、build/deploy skipped，已作为触发证据记录。
-真实 source-sync 429、截断/子模块/符号链接、Safari/移动实机、CDN/强刷、US-004 独立维护者从零
-复跑/生产回滚仍未运行；生产 `source_tracking` 仍为 `null`；下一窗口为 2026-11-16 03:17。
+逐字节一致（见 `specs/005-skill-cli/validation/us5-real-gh.md`）。schedule 已连续观察；2026-11-23
+run `45087926651`（08:17 CST）sync success、build/deploy skipped。生产 `sepia` 已配置
+`source_tracking`（`Nanako0129/sepia`、`skills/sepia`、branch `main`），首次只读检查为
+`unchanged`/`license present`，等待下一次 apply 建立基线；其余 6 项仍为 `null`。真实 source-sync
+429、截断/子模块/符号链接、Safari/移动实机、CDN/强刷、US-004 独立维护者从零复跑/生产回滚仍未运行；
+下一窗口为 2026-11-24 03:17。
 Demo-002 接受 POC-003 受控证据；
 证据与补验方式见 `specs/007-overall-acceptance/validation/` 和 `residual-gaps.md`。恢复入口保持受控 `git revert`/
 restore 提交并重新构建发布，不手工改 `dist/` 或直接覆盖线上文件。
 2026-11-12 本地 `npm test` 为 282 项（280 通过、0 失败、2 跳过）；2026-11-14 `npm run check`
-复核为 286 项（284 通过、0 失败、2 跳过），`npm run security` 为 0 发现。2026-11-14 GitHub-hosted macOS runner run
+复核为 287 项（285 通过、0 失败、2 跳过），`npm run security` 为 0 发现。2026-11-14 GitHub-hosted macOS runner run
 `43588719771` 为 282 项（281 通过、0 失败、1 跳过），安全 0 发现，构建 revision `faa0f345...`；
 US-005 分支 push 的 [Quality checks #43613336137](https://github.com/chengxuan2002-droid/skill-gallery/actions/runs/43613336137)
 在 Node 26.3/Linux 通过（286 项 285 通过、0 失败、1 跳过，安全 0 发现）。

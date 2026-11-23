@@ -320,10 +320,11 @@ M1：US-001、US-002，演示完整读取与取用；M2：US-003、US-004、US-0
 US-001 的 T041 macOS 已由 GitHub-hosted runner 补验（物理 Mac/所有变体仍未覆盖）。US-006 的来源检查、
 单版本替换、许可/冲突、T020 失败重跑/恢复和同次发布已实现并完成受控 POC-003；生产调度已于 2026-11-13
 启用，2026-11-14 首次 03:17 窗口延迟至 08:19 CST（run 43533439066，sync success、build/deploy
-skipped），2026-11-15 窗口延迟至 06:58 CST（run 43650813672，sync success、build/deploy skipped）；
-下一窗口为 2026-11-16 03:17。US-007 的 T001–T022 已执行，Demo-001～003 为受控通过，US-005 为通过，当前为有条件
-验收/交接；剩余真实 source-sync 429、真实截断/子模块/符号链接、Safari/移动实机、CDN/强刷、
-生产真实来源等缺口见
+skipped），2026-11-15 窗口延迟至 06:58 CST（run 43650813672），2026-11-23 窗口延迟至 08:17 CST
+（run 45087926651）；下一窗口为 2026-11-24 03:17。US-007 的 T001–T022 已执行，Demo-001～003 为受控通过，
+US-005 为通过，当前为有条件验收/交接；生产 `sepia` 已配置 source_tracking，首次只读检查 unchanged、
+等待 apply 建立基线，其余 6 项仍为 null。剩余真实 source-sync 429、真实截断/子模块/符号链接、
+Safari/移动实机、CDN/强刷、其他生产来源等缺口见
 `specs/007-overall-acceptance/validation/residual-gaps.md`。依赖版本、发布权限与外部集成由对应 PoC
 验证；实施状态不代表已关闭未运行项或扩大生产发布范围。
 

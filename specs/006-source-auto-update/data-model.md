@@ -31,8 +31,9 @@ unconfigured（source_tracking=null）
 
 - `last_checked_at` 不属于持久化字段；每次运行的检查时间只进入运行报告，避免无变化检查制造提交。
 - `last_synced_digest` 与当前内容摘要不一致时视为本地修改冲突。
-- 许可基线以 `last_synced_license.path/sha256` 为准；缺失或变化时 `policy_blocked`。旧记录为 null 时，
-  目录来源回退比较当前内容许可；单文件首次 apply 时写入基线。
+- 许可基线以 `last_synced_license.path/sha256` 为准；缺失或变化时 `policy_blocked`。目录来源优先读取
+  来源子树许可，子树没有时回退仓库根许可；旧记录为 null 时目录来源回退比较当前内容许可；单文件首次
+  apply 时写入基线。
 - 首次启用且无 `last_synced_digest` 时，不允许静默覆盖已有内容；候选与当前内容一致可建立基线；
   否则返回 conflict。
 
