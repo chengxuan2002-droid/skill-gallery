@@ -79,8 +79,8 @@ US-007 的 T001–T022 已执行，Demo-001～003 受控通过、US-005 通过�
 macOS runner、生产 environment 审批、部署失败/旧站保留、MIME/缓存基础头、真实 403 和 US-005 真实
 `gh`/`--wait` 已补验；2026-11-15 03:17 窗口已观察到延迟 schedule run `43650813672`（06:58 CST，
 sync success、build/deploy skipped，无内容变化）。生产 `sepia` 已配置 `source_tracking`
-（`Nanako0129/sepia`、`skills/sepia`、branch main），首次只读检查 unchanged/license present，等待
-首次 apply 建立基线；其余 6 项仍为 `null`。真实 source-sync 429、真实截断/子模块/符号链接、
+（`Nanako0129/sepia`、`skills/sepia`、branch main），已通过手动 run `45160746326` 建立首次基线
+（sync 提交 `25123a4...`）；其余 6 项仍为 `null`。真实 source-sync 429、真实截断/子模块/符号链接、
 Safari/移动实机、CDN/强刷、其他生产来源和 US-004 独立维护者/生产回滚等仍未关闭，详见
 `residual-gaps.md`。
 
@@ -386,7 +386,7 @@ US-001～US-006 已完成本地/受控实现与验收，生产 Pages 已切换�
 的 T001–T022 已执行，当前为有条件验收/交接。T041 macOS runner、生产 environment 审批、部署失败/
 旧站保留、MIME/缓存基础头、真实 403 和 US-005 真实 `gh`/`--wait` 已补验；2026-11-15 03:17 窗口已
 观察到延迟 run `43650813672`（06:58 CST，sync success、build/deploy skipped）。生产 `sepia` 已配置
-`source_tracking`，首次只读检查 unchanged/license present，等待首次 apply 基线；其余 6 项仍为
+`source_tracking`，并通过手动 run `45160746326` 建立基线（sync 提交 `25123a4...`）；其余 6 项仍为
 `null`。CDN/强刷、真实 source-sync 429/截断、Safari/移动实机、其他生产来源和 US-004 独立维护者/
 生产回滚仍未关闭，详见 `specs/007-overall-acceptance/validation/residual-gaps.md`。Q-004 已于 2026-11-06 确认每日 03:17
 Asia/Shanghai，US-006 生产调度已于 2026-11-13 启用，实际定时触发以运行记录为准。最终准备度及决策

@@ -36,7 +36,7 @@
 | 生产手动 sync | `43421951464` | sync success；无变化；build/deploy skipped | 同上 |
 | 生产延迟 schedule | `43533439066` | sync success；build/deploy skipped；08:19 CST | 同上 |
 | 生产延迟 schedule | `43650813672` | sync success；build/deploy skipped；2026-11-15 06:58 CST | 同上；`residual-gaps.md` |
-| sepia source_tracking 只读检查 | `local`（2026-11-23） | unchanged；license present；revision `0eb11d6...`；等待 apply 基线 | `specs/006-source-auto-update/validation/sepia-source-config.md` |
+| sepia source_tracking 首次基线 | run `45160746326`（2026-11-23） | sync/build/deploy success；同步提交 `25123a4...`；revision/digest/license 已写入 | `specs/006-source-auto-update/validation/sepia-source-config.md` |
 
 ## 3. 测试与安全检查入口
 

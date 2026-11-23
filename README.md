@@ -274,9 +274,43 @@ node scripts/sync-skills.js --slug example --apply --push --report sync-report.j
 `5` 全局来源读取失败、`6` 提交或报告写入失败。
 
 `maintain.yml` 每日 03:17 Asia/Shanghai 运行同一 sync 入口；平台可能延迟或跳过，不承诺准点 SLA。
-手动 `sync=false` 只按当前提交重发，`sync=true` 执行来源检查。生产 `sepia` 已配置
-`source_tracking`（`Nanako0129/sepia`、`skills/sepia`、`branch main`）；首次检查为 `unchanged`，
-等待下一次 apply 建立同步基线。其余 catalog 仍为 `null`，不会自动更新。
+手动 `sync=false` 只按当前提交重发，`sync=true` 执行来源检查。生产 `sepia` 已在手动 run
+45160746326 建立首次基线（revision `0eb11d6...`、digest `785e07...`、license `LICENSE`）；
+每日 schedule 会继续检查上游变化。其余 6 项仍为 `null`，不会自动更新。
+
+### 新增 GitHub 来源 Skill 的配置步骤
+
+以下是新增一个 GitHub 来源 Skill 的推荐流程：
+
+1. 添加上游对应的原件和 catalog：
+   - 单文件：`skills/<slug>.md`；
+   - 目录：`skills/<slug>/SKILL.md` 及附件；
+   - `catalog/<slug>.json` 填写 `schemaVersion`、`slug`、`display_name`、`description`、
+     `content_path`，并按需补 `tags`、`platforms`、`author`、`repository_url`、`license`、
+     `declared_version`。
+2. 在 catalog 中加入上面的 `source_tracking` 模板：
+   - `repository` 必须是 `owner/repository`；
+   - `path` 是上游 POSIX 相对路径；
+   - `ref_policy` 使用 `branch`、`release` 或 `pinned`；
+   - 首次配置保持 `last_synced_*` 为 `null`，由后续 apply 自动写入。
+3. 让本地内容与上游一致：
+   - 推荐用 `skill-cli import` 从同一来源导入并发布；
+   - 或手工复制上游 `SKILL.md`/附件后，用 `node scripts/sync-skills.js --slug <slug> --json`
+     做只读检查。
+4. 只读检查应看到 `status: unchanged`、`license_status: present` 和上游不可变 SHA；
+   如果内容不同，首次检查会返回 `conflict`/`E_CONFLICT_BASELINE`，不要强行覆盖，先对齐内容。
+5. 提交 catalog/原件，走 PR；Quality checks 通过后合并。
+6. 建立基线：
+   - 等待下一次每日 schedule；或
+   - 授权执行一次 `maintain.yml` 手动 dispatch（`sync=true`）。
+   成功后 catalog 的 `last_synced_revision`、`last_synced_digest`、`last_synced_license`、
+   `synced_at` 会被写入；内容不变时不应改写 Skill 原件。
+7. 后续按状态处理：上游变化为 `candidate`（授权 apply 后单版本替换）；无变化为 `unchanged`；
+   许可缺失/变化为 `policy_blocked`；本地修改或基线前进为 `conflict`；404/403/429/截断为 `failed`。
+
+补充边界：默认同步器只能读取公开 GitHub 来源；其他私有仓库需要单独授权和凭证方案。目录来源的
+许可优先取子树，子树没有时回退仓库根 `LICENSE/NOTICE`；仍缺失则阻断。同步只处理内容，不执行
+上游脚本、测试或依赖安装。
 
 ### Agent CLI（管理员）
 
@@ -466,8 +500,8 @@ A：站点提供原件、目录 ZIP、原文复制和分享链接，不提供平
 
 **Q：自动更新现在就在生产运行吗？**
 
-A：生产调度已启用；当前只有 `sepia` 配置了 `source_tracking`，首次检查结果为 `unchanged`，等待
-下一次 apply 建立基线；其余 6 项仍为 `null`。Demo-002 的自动更新证据来自受控 POC。
+A：生产调度已启用；`sepia` 已配置 `source_tracking` 并通过手动 run `45160746326` 建立首次基线，
+之后每日 schedule 检查上游变化；其余 6 项仍为 `null`。Demo-002 的自动更新证据来自受控 POC。
 
 **Q：Agent 可以帮我上传/更新吗？**
 

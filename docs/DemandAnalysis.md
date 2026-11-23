@@ -322,8 +322,8 @@ US-001 的 T041 macOS 已由 GitHub-hosted runner 补验（物理 Mac/所有变�
 启用，2026-11-14 首次 03:17 窗口延迟至 08:19 CST（run 43533439066，sync success、build/deploy
 skipped），2026-11-15 窗口延迟至 06:58 CST（run 43650813672），2026-11-23 窗口延迟至 08:17 CST
 （run 45087926651）；下一窗口为 2026-11-24 03:17。US-007 的 T001–T022 已执行，Demo-001～003 为受控通过，
-US-005 为通过，当前为有条件验收/交接；生产 `sepia` 已配置 source_tracking，首次只读检查 unchanged、
-等待 apply 建立基线，其余 6 项仍为 null。剩余真实 source-sync 429、真实截断/子模块/符号链接、
+US-005 为通过，当前为有条件验收/交接；生产 `sepia` 已配置 source_tracking，并通过手动 run
+45160746326 建立基线，其余 6 项仍为 null。剩余真实 source-sync 429、真实截断/子模块/符号链接、
 Safari/移动实机、CDN/强刷、其他生产来源等缺口见
 `specs/007-overall-acceptance/validation/residual-gaps.md`。依赖版本、发布权限与外部集成由对应 PoC
 验证；实施状态不代表已关闭未运行项或扩大生产发布范围。
