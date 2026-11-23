@@ -27,10 +27,13 @@
     "ref_policy": "branch",
     "ref": "main",
     "enabled": true,
-    "last_synced_revision": null,
-    "last_synced_digest": null,
-    "last_synced_license": null,
-    "synced_at": null
+    "last_synced_revision": "0eb11d6c64c962fcc35f596c167c6e38045d6cb8",
+    "last_synced_digest": "785e07ec8e706945c6c325c2272846ca6b774fcef61ab7f48cf9687b3e98629e",
+    "last_synced_license": {
+      "path": "LICENSE",
+      "sha256": "7d3d6cf8de8f5ffe1b161b86c35e7286cfacf7f55d17b2a5c52efdad21a79df3"
+    },
+    "synced_at": "2026-11-23T10:57:39.827Z"
   },
   "repository_url": "https://github.com/Nanako0129/sepia",
   "author": "Nanako Tsai",
