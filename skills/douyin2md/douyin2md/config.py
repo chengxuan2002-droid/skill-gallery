@@ -37,6 +37,11 @@ DEFAULTS: Dict[str, Any] = {
     "keep_audio": False,
     "no_timestamps": False,
     "no_frontmatter": False,
+    "ocr": False,                 # 视频号封面 OCR（可选，默认关闭）
+    "ocr_backend": "auto",
+    "ocr_min_confidence": 0.8,
+    "no_capture_fallback": False,  # 抖音直连失败时自动浏览器拦截兜底（默认开启）
+    "force_capture": False,       # 抖音跳过 yt-dlp，直接浏览器拦截
 }
 
 STRING_ENV = {
@@ -56,6 +61,9 @@ BOOL_ENV = {
     "DOUYIN2MD_KEEP_AUDIO": "keep_audio",
     "DOUYIN2MD_NO_TIMESTAMPS": "no_timestamps",
     "DOUYIN2MD_NO_FRONTMATTER": "no_frontmatter",
+    "DOUYIN2MD_OCR": "ocr",
+    "DOUYIN2MD_NO_CAPTURE_FALLBACK": "no_capture_fallback",
+    "DOUYIN2MD_FORCE_CAPTURE": "force_capture",
 }
 
 SECRET_ENV = ("SILICONFLOW_API_KEY", "OPENAI_API_KEY")

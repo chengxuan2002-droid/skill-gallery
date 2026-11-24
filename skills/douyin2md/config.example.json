@@ -12,5 +12,10 @@
   "api_base": "",
   "keep_audio": false,
   "no_timestamps": false,
-  "no_frontmatter": false
+  "no_frontmatter": false,
+  "ocr": false,
+  "ocr_backend": "auto",
+  "ocr_min_confidence": 0.8,
+  "no_capture_fallback": false,
+  "force_capture": false
 }

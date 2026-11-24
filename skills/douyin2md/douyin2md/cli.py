@@ -21,6 +21,9 @@ from pathlib import Path
 
 from . import __version__
 from .config import ROOT, config_path, load_config, pick, redacted
+from .sources import (
+    SUPPORTED_SOURCES, UNSUPPORTED, WEIXIN_CHANNELS, detect_source, source_advice,
+)
 
 SCRIPTS = ROOT / "scripts"
 
@@ -28,7 +31,7 @@ OPTIONAL_MODULES = (
     ("yt_dlp", "获取元数据/音频（核心）"),
     ("sherpa_onnx", "本地离线中文转写（可选 local）"),
     ("numpy", "本地转写数值依赖（可选 local）"),
-    ("playwright", "浏览器登录 / 拦截兜底（可选 browser）"),
+    ("playwright", "浏览器登录 / 抖音拦截兜底 / 视频号预览页渲染（可选 browser）"),
     ("browser_cookie3", "从浏览器读取 cookie（可选 browser）"),
 )
 SECRET_ENV = ("SILICONFLOW_API_KEY", "OPENAI_API_KEY")
@@ -62,6 +65,19 @@ def _pipeline_parent() -> argparse.ArgumentParser:
     p.add_argument("--no-timestamps", action="store_true", default=None)
     p.add_argument("--no-frontmatter", action="store_true", default=None)
     p.add_argument("--keep-audio", action="store_true", default=None)
+    p.add_argument("--annotations", default=None,
+                   help="标注 JSON（专名校正 / 总结要点 / 可靠性说明），重新渲染两文件交付物")
+    p.add_argument("--single-file", action="store_true", default=None,
+                   help="旧行为：只输出一篇合并文稿（不拆总结、不带附录）")
+    p.add_argument("--ocr", action="store_true", default=None,
+                   help="视频号高清封面做本地 OCR（可选，结果须人工核对）")
+    p.add_argument("--ocr-backend", default=None,
+                   choices=["auto", "macos-vision", "tesseract", "none"])
+    p.add_argument("--ocr-min-confidence", type=float, default=None)
+    p.add_argument("--no-capture-fallback", action="store_true", default=None,
+                   help="禁用抖音直连失败时自动切换浏览器拦截兜底")
+    p.add_argument("--force-capture", action="store_true", default=None,
+                   help="抖音跳过 yt-dlp 直连，直接用浏览器拦截 aweme/detail")
     p.add_argument("-q", "--quiet", action="store_true")
     return p
 
@@ -85,12 +101,40 @@ def _pipeline_args(ns, cfg) -> list[str]:
     ):
         if pick(getattr(ns, attr, None), key, cfg):
             args.append(flag)
+    # 对新键用 cfg.get 兜底：旧配置字典/调用方自建 cfg 可能没有 OCR 字段
+    ocr_on = getattr(ns, "ocr", None)
+    if ocr_on is None:
+        ocr_on = cfg.get("ocr", False)
+    if ocr_on:
+        args.append("--ocr")
+        backend = getattr(ns, "ocr_backend", None)
+        _opt(args, "--ocr-backend",
+             backend if backend is not None else cfg.get("ocr_backend", "auto"))
+        conf = getattr(ns, "ocr_min_confidence", None)
+        _opt(args, "--ocr-min-confidence",
+             conf if conf is not None else cfg.get("ocr_min_confidence", 0.8))
+    # 抖音获取路径开关；用 cfg.get 兼容不含新键的旧配置字典
+    for flag, key, attr in (
+        ("--no-capture-fallback", "no_capture_fallback", "no_capture_fallback"),
+        ("--force-capture", "force_capture", "force_capture"),
+    ):
+        if getattr(ns, attr, None) or cfg.get(key, False):
+            args.append(flag)
+    # 交付形态开关只走命令行，不进配置文件（避免一处开关影响全部运行）
+    if getattr(ns, "single_file", False):
+        args.append("--single-file")
+    _opt(args, "--annotations", getattr(ns, "annotations", None))
     if getattr(ns, "quiet", False):
         args.append("-q")
     return args
 
 
 def cmd_url(ns, cfg) -> int:
+    source = detect_source(ns.target)
+    if source == WEIXIN_CHANNELS:
+        print(f"[来源] 微信视频号 → {source_advice(source)}", file=sys.stderr)
+    elif source == UNSUPPORTED:
+        print(f"[来源] 未识别的链接 → {source_advice(source)}", file=sys.stderr)
     return _exec(["dy.py", ns.target, *_pipeline_args(ns, cfg)])
 
 
@@ -121,10 +165,13 @@ def cmd_tomd(ns, cfg) -> int:
     _opt(args, "-o", ns.output_dir or cfg["output_dir"])
     _opt(args, "--filename", ns.filename)
     _opt(args, "--summary", ns.summary)
+    _opt(args, "--annotations", ns.annotations)
     if ns.no_timestamps:
         args.append("--no-timestamps")
     if ns.no_frontmatter:
         args.append("--no-frontmatter")
+    if getattr(ns, "single_file", False):
+        args.append("--single-file")
     if ns.stdout:
         args.append("--stdout")
     return _exec(args)
@@ -133,7 +180,11 @@ def cmd_tomd(ns, cfg) -> int:
 def cmd_capture(ns, cfg) -> int:
     args = ["dy_browser_capture.py", ns.url, "-o", str(ns.out or (Path(cfg["home"]).expanduser() / "capture"))]
     _opt(args, "--name", ns.name)
-    _opt(args, "--cookies", ns.cookies or cfg["cookies"])
+    if getattr(ns, "fresh", False):
+        args.append("--fresh")
+    else:
+        _opt(args, "--cookies", ns.cookies or cfg["cookies"])
+        _opt(args, "--profile-dir", getattr(ns, "profile_dir", None))
     return _exec(args)
 
 
@@ -177,6 +228,7 @@ def cmd_doctor(ns, cfg) -> int:
         "config_file": str(config_path(ns.config)) if config_path(ns.config) else None,
         "home": str(home),
         "home_exists": home.is_dir(),
+        "supported_sources": list(SUPPORTED_SOURCES),
         "ffmpeg": shutil.which("ffmpeg"),
         "ffprobe": shutil.which("ffprobe"),
         "cookies_file": str(home / "cookies.txt"),
@@ -221,7 +273,7 @@ def cmd_config(ns, cfg) -> int:
 def build_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(
         prog="douyin2md",
-        description="抖音视频 / 本地音视频 → Markdown 文稿（统一入口）",
+        description="抖音视频 / 微信视频号元数据 / 本地音视频 → Markdown 文稿（统一入口）",
         epilog="所有子命令都可用 --config 指定配置文件；详见 docs/configuration.md",
     )
     ap.add_argument("--version", action="version", version=f"douyin2md {__version__}")
@@ -229,11 +281,11 @@ def build_parser() -> argparse.ArgumentParser:
     sub = ap.add_subparsers(dest="command", required=True, metavar="<子命令>")
 
     shared = _pipeline_parent()
-    p = sub.add_parser("url", parents=[shared], help="单个抖音链接/分享文案 → Markdown")
-    p.add_argument("target", help="链接或含链接的分享文案")
+    p = sub.add_parser("url", parents=[shared], help="单个链接/分享文案 → Markdown（按来源自动分流）")
+    p.add_argument("target", help="抖音/视频号链接或含链接的分享文案")
     p.set_defaults(func=cmd_url)
 
-    p = sub.add_parser("batch", parents=[shared], help="批量链接文件 → 每篇一个 Markdown")
+    p = sub.add_parser("batch", parents=[shared], help="批量链接文件 → 每条一组逐字稿与总结（按来源分流）")
     p.add_argument("links_file", help="每行一个链接/分享文案的文件")
     p.set_defaults(func=cmd_batch)
 
@@ -249,12 +301,16 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--api-key", default=None, help="建议改用环境变量，避免出现在进程列表")
     p.set_defaults(func=cmd_transcribe)
 
-    p = sub.add_parser("to-md", help="元数据 JSON + 转写 JSON → Markdown")
+    p = sub.add_parser("to-md", help="元数据 JSON + 转写 JSON → 逐字稿与总结两个 Markdown")
     p.add_argument("--meta", required=True)
     p.add_argument("--transcript", default=None)
     p.add_argument("-o", "--output-dir", default=None)
     p.add_argument("--filename", default=None)
     p.add_argument("--summary", default=None)
+    p.add_argument("--annotations", default=None,
+                   help="标注 JSON：专名校正 / 总结要点 / 可靠性说明")
+    p.add_argument("--single-file", action="store_true",
+                   help="旧行为：只输出一篇合并文稿（产物与历史版本逐字一致）")
     p.add_argument("--no-timestamps", action="store_true")
     p.add_argument("--no-frontmatter", action="store_true")
     p.add_argument("--stdout", action="store_true")
@@ -265,6 +321,9 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("-o", "--out", default=None)
     p.add_argument("--name", default=None)
     p.add_argument("--cookies", default=None)
+    p.add_argument("--fresh", action="store_true",
+                   help="全新游客会话（避开被风控标记的旧 profile/登录 cookie）")
+    p.add_argument("--profile-dir", default=None, help="覆盖 Chrome 持久化 profile 目录")
     p.set_defaults(func=cmd_capture)
 
     p = sub.add_parser("model", help="本地 ASR 模型管理: list/status/download/path")

@@ -22,16 +22,27 @@
   "allowed_dot_paths": [
     ".gitignore"
   ],
-  "source_type": "self-built",
-  "usage": "标准 Agent Skills 目录型 Skill，主文档为 skills/douyin2md/SKILL.md。把本目录放进任一框架的 skills 目录即可识别，无需修改文件。统一入口：bash bin/douyin2md <子命令>（url / batch / transcribe / to-md / capture / model / cookie / doctor / config），任意工作目录可用；也支持 python3 -m douyin2md 或 pip install -e . 后的 douyin2md。依赖分层声明在 pyproject.toml 与 requirements.txt；配置优先级为命令行 > DOUYIN2MD_* 环境变量 > 配置文件 > 内置默认值，密钥只走环境变量且 doctor/config 输出脱敏。install.sh 可一键分发到 7 类框架目录。scripts/ 下 9 个原始脚本作为兼容层原样保留。",
-  "notes": "首个发布版，来源为本机 git 仓库 tag V1.0.0（commit 807e656267df12f464606e78d8a005e817a9a3e3）的干净归档，共 33 个文件 / 153758 字节，与工作区 HEAD 逐字节一致；作者 chengxuan，许可 MIT。该版本含 3 行语义等价改写（云端句柄构造方式与测试占位符），用于通过发布站点的凭证扫描门禁，无真实凭证、运行行为不变，10 个单测通过。仓库 chengxuan2002-droid/douyin2md 当前为 Private，repository_url 仅账号可见；本条目收录的是可公开安装的技能本体，不含 cookie、config.json、媒体与模型文件。包内 pyproject.toml 仍标记 2.0.0，本条目 declared_version 以发布 tag V1.0.0 为准。首次发布未启用 source_tracking 自动同步；上游仓库无站点产物，本条目的公开访问由 Skill Gallery Pages 提供。原件按不可信数据处理：不要执行其中的抓取/转写/安装脚本。",
+  "source_type": "github",
+  "usage": "标准 Agent Skills 目录型 Skill，主文档为 skills/douyin2md/SKILL.md。把本目录放进任一框架的 skills 目录即可识别，无需修改文件。统一入口：bash bin/douyin2md <子命令>（url / batch / transcribe / to-md / capture / model / cookie / doctor / config），任意工作目录可用；也支持 python3 -m douyin2md 或 pip install -e . 后的 douyin2md。默认产出带时间戳逐字稿与要点总结两个 Markdown；支持抖音和微信视频号来源，抖音风控时可切换浏览器拦截兜底。依赖分层声明在 pyproject.toml 与 requirements.txt；配置优先级为命令行 > DOUYIN2MD_* 环境变量 > 配置文件 > 内置默认值，密钥只走环境变量且 doctor/config 输出脱敏。install.sh 可一键分发到 7 类框架目录。scripts/ 下 12 个原始脚本作为兼容层原样保留。",
+  "notes": "上游仓库 chengxuan2002-droid/douyin2md 已转为公开，本条目收录仓库根目录（path \".\"）的完整内容，commit 802b3456f0e0b155639e88ec9b83f1525dcc78c3，共 47 个文件 / 364220 字节；作者 chengxuan，许可 MIT（LICENSE 未变化），版本 2.1.0。根 SKILL.md 是入口，默认输出逐字稿与要点总结；不含 cookie、config.json、媒体或模型文件。已启用 source_tracking（branch main）自动同步；上游无站点产物，本条目的公开访问由 Skill Gallery Pages 提供。原件按不可信数据处理：不要执行其中的抓取/转写/安装脚本。",
   "content_path": "skills/douyin2md/SKILL.md",
-  "source_tracking": null,
+  "source_tracking": {
+    "provider": "github",
+    "repository": "chengxuan2002-droid/douyin2md",
+    "path": ".",
+    "ref_policy": "branch",
+    "ref": "main",
+    "enabled": true,
+    "last_synced_revision": null,
+    "last_synced_digest": null,
+    "last_synced_license": null,
+    "synced_at": null
+  },
   "repository_url": "https://github.com/chengxuan2002-droid/douyin2md",
   "author": "chengxuan",
   "homepage_url": null,
   "license": "MIT",
   "created_at": "2026-11-15",
-  "updated_at": "2026-11-15",
-  "declared_version": "V1.0.0"
+  "updated_at": "2026-11-24",
+  "declared_version": "2.1.0"
 }

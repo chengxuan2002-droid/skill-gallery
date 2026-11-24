@@ -17,9 +17,9 @@
 
 ## 安装位置对照表
 
-仓库地址：`git@github.com:chengxuan2002-droid/douyin2md.git`（Private，需账号权限），
-下表的 `<repo>` 即指它；HTTPS 备选为
-`https://github.com/chengxuan2002-droid/douyin2md.git`。
+仓库地址：`https://github.com/chengxuan2002-droid/douyin2md.git`（Public，可匿名 clone，
+无需账号权限），下表的 `<repo>` 即指它；SSH 备选为
+`git@github.com:chengxuan2002-droid/douyin2md.git`。
 
 | 框架 | 用户级 skills 目录 | 安装命令 |
 | --- | --- | --- |
@@ -37,7 +37,7 @@
 `bash install.sh --target codex,claude,workbuddy --skip-deps`。
 `--dry-run` 可先预览，`--uninstall` 可移除。
 
-> 私有仓库：clone 需要该 GitHub 账号的访问权限；公开分享时把仓库可见性改为 Public 即可。
+> 公开仓库：可匿名 clone，无需账号权限；如需私有化，在 GitHub 仓库设置里改回 Private 即可。
 
 ## 触发方式
 
