@@ -80,8 +80,17 @@ function writeFiles(root, files, record) {
 }
 
 function trackedSkillPaths(root, slug) {
-  return git(root, 'ls-files', '--', `skills/${slug}.md`, `skills/${slug}`)
-    .split(/\r?\n/)
+  return git(
+    root,
+    '-c',
+    'core.quotepath=false',
+    'ls-files',
+    '-z',
+    '--',
+    `skills/${slug}.md`,
+    `skills/${slug}`,
+  )
+    .split('\0')
     .filter(Boolean);
 }
 

@@ -40,6 +40,7 @@ test('replace keeps metadata and removes attachments deleted from the new conten
     display_name: 'Original Pack',
   });
   fs.writeFileSync(path.join(candidate.contentPath, 'references/old.md'), '# Old\n\nRemove me.\n');
+  fs.writeFileSync(path.join(candidate.contentPath, 'references/备注.md'), '# 备注\n\n保留。\n');
   const added = run(project, [
     'add',
     candidate.contentPath,
@@ -68,7 +69,12 @@ test('replace keeps metadata and removes attachments deleted from the new conten
     remoteTree(project).filter(
       (item) => item.startsWith('skills/cli-pack') || item === 'catalog/cli-pack.json',
     ),
-    ['catalog/cli-pack.json', 'skills/cli-pack/SKILL.md', 'skills/cli-pack/references/note.md'],
+    [
+      'catalog/cli-pack.json',
+      'skills/cli-pack/SKILL.md',
+      'skills/cli-pack/references/note.md',
+      'skills/cli-pack/references/备注.md',
+    ],
   );
   assert.equal(remoteJson(project, 'catalog/cli-pack.json').display_name, 'Original Pack');
   assert.match(remoteBytes(project, 'skills/cli-pack/SKILL.md').toString('utf8'), /Replaced body/);

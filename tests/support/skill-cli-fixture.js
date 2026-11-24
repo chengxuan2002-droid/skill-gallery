@@ -134,7 +134,16 @@ function remoteHead(project) {
 function remoteFiles(project) {
   return execFileSync(
     'git',
-    ['-C', project.remoteDir, 'show', '--pretty=format:', '--name-only', 'main'],
+    [
+      '-c',
+      'core.quotepath=false',
+      '-C',
+      project.remoteDir,
+      'show',
+      '--pretty=format:',
+      '--name-only',
+      'main',
+    ],
     { encoding: 'utf8' },
   )
     .split(/\r?\n/)
@@ -147,9 +156,11 @@ function remoteBytes(project, relativePath) {
 }
 
 function remoteTree(project) {
-  return execFileSync('git', ['-C', project.remoteDir, 'ls-tree', '-r', '--name-only', 'main'], {
-    encoding: 'utf8',
-  })
+  return execFileSync(
+    'git',
+    ['-c', 'core.quotepath=false', '-C', project.remoteDir, 'ls-tree', '-r', '--name-only', 'main'],
+    { encoding: 'utf8' },
+  )
     .split(/\r?\n/)
     .filter(Boolean)
     .sort();
