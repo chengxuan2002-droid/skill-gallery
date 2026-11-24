@@ -121,6 +121,12 @@ test('validates the source tracking shape without performing a request', () => {
   assert.equal(valid.ok, true, JSON.stringify(valid.diagnostics));
   assert.equal(valid.record.source_tracking.last_synced_license, null);
 
+  const rootPath = validateCatalogRecord(
+    record({ source_tracking: { ...validTracking, path: '.' } }),
+  );
+  assert.equal(rootPath.ok, true, JSON.stringify(rootPath.diagnostics));
+  assert.equal(rootPath.record.source_tracking.path, '.');
+
   const validLicense = validateCatalogRecord(
     record({
       source_tracking: {

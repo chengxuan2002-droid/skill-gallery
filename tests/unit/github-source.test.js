@@ -40,6 +40,7 @@ function mainFile() {
 
 test('validateSource accepts structured branch, release and pinned sources', () => {
   assert.equal(validateSource(source()), null);
+  assert.equal(validateSource(source({ path: '.' })), null);
   assert.equal(validateSource(source({ ref_policy: 'release', ref: 'latest' })), null);
   assert.equal(validateSource(source({ ref_policy: 'pinned', ref: SHA_A })), null);
 });
@@ -74,6 +75,42 @@ test('fetchSource returns immutable revision, bytes, modes and license', () => {
   assert.equal(result.revision, SHA_A);
   assert.equal(result.files.get('SKILL.md').toString('utf8').includes('# Example'), true);
   assert.equal(result.modes.get('SKILL.md'), '100644');
+  assert.equal(result.license.path, 'LICENSE');
+});
+
+test('createGhReader selects repository root files for path "."', () => {
+  const skill = Buffer.from('---\nname: example\n---\n\n# Example\n');
+  const license = Buffer.from('MIT\n');
+  const nested = Buffer.from('# Nested\n');
+  const execute = (requestPath) => {
+    if (requestPath.endsWith('/git/ref/heads/main')) return { object: { sha: SHA_A } };
+    if (requestPath.includes('/git/trees/')) {
+      return {
+        truncated: false,
+        tree: [
+          { path: 'docs', type: 'tree', mode: '040000' },
+          { path: 'SKILL.md', type: 'blob', sha: '1'.repeat(40), mode: '100644' },
+          { path: 'docs/guide.md', type: 'blob', sha: '2'.repeat(40), mode: '100644' },
+          { path: 'LICENSE', type: 'blob', sha: '3'.repeat(40), mode: '100644' },
+        ],
+      };
+    }
+    if (requestPath.endsWith(`/git/blobs/${'1'.repeat(40)}`)) {
+      return { content: skill.toString('base64'), encoding: 'base64' };
+    }
+    if (requestPath.endsWith(`/git/blobs/${'2'.repeat(40)}`)) {
+      return { content: nested.toString('base64'), encoding: 'base64' };
+    }
+    if (requestPath.endsWith(`/git/blobs/${'3'.repeat(40)}`)) {
+      return { content: license.toString('base64'), encoding: 'base64' };
+    }
+    throw new Error(`unexpected request ${requestPath}`);
+  };
+  const gh = createGhReader({ execute });
+  const result = fetchSource({ source: source({ path: '.' }), reader: gh });
+
+  assert.equal(result.ok, true, JSON.stringify(result.diagnostics));
+  assert.deepEqual([...result.files.keys()].sort(), ['LICENSE', 'SKILL.md', 'docs/guide.md']);
   assert.equal(result.license.path, 'LICENSE');
 });
 

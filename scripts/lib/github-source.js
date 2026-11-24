@@ -29,6 +29,10 @@ function isSafePath(value) {
   return normalizeRelativePath(value).ok;
 }
 
+function isRootPath(value) {
+  return value === '.';
+}
+
 function validateSource(source) {
   if (!source || typeof source !== 'object') {
     return diagnostic('E_SCHEMA', '来源配置必须是对象');
@@ -39,8 +43,8 @@ function validateSource(source) {
   if (typeof source.repository !== 'string' || !/^[^/\s]+\/[^/\s]+$/.test(source.repository)) {
     return diagnostic('E_SCHEMA', 'repository 必须是 owner/repository', source.repository ?? null);
   }
-  if (!isSafePath(source.path)) {
-    return diagnostic('E_SCHEMA', 'path 必须是安全的 POSIX 相对路径', source.path ?? null);
+  if (!isRootPath(source.path) && !isSafePath(source.path)) {
+    return diagnostic('E_SCHEMA', 'path 必须是安全的 POSIX 相对路径或 .', source.path ?? null);
   }
   const policy = source.ref_policy ?? 'branch';
   if (!REF_POLICIES.has(policy)) {
@@ -166,6 +170,11 @@ function createGhReader({ execute = defaultExec, timeoutMs = 30_000, retries = 3
   }
 
   function selectEntries(tree, sourcePath) {
+    if (isRootPath(sourcePath)) {
+      return tree
+        .filter((entry) => entry.type === 'blob')
+        .map((entry) => ({ path: entry.path, entry }));
+    }
     const prefix = sourcePath.replace(/\/+$/, '');
     const exact = tree.find((entry) => entry.path === prefix);
     if (exact && exact.type === 'blob') {

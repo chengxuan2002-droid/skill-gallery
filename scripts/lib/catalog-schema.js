@@ -133,7 +133,7 @@ function sourceTracking(value, slug, diagnostics) {
       'source_tracking.repository 必须是 owner/repository',
     );
   }
-  if (isNonEmptyString(value.path)) {
+  if (isNonEmptyString(value.path) && value.path !== '.') {
     const normalized = normalizeRelativePath(value.path);
     if (!normalized.ok) {
       diagnose(
