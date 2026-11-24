@@ -280,7 +280,7 @@ README 说明人工运行和启用步骤，不通过空提交规避停用策略�
 }
 ```
 
-schemaVersion 为整数，slug/display_name/description/content_path 为非空字符串；tags/platforms 为字符串数组；可选说明、网址、日期、许可和跟踪结果允许 null（具体必填规则按操作区分）；enabled 为布尔；source_tracking 可为 null。时间戳 synced_at 使用带时区 ISO 8601，日期字段 YYYY-MM-DD。example 的空许可和 disabled 表示尚未满足自动开源发布前提，不能直接当有效发布 fixture。图库记录 `updated_at` 表示站内记录或内容最近实质变化日，不因无变化检查刷新。
+schemaVersion 为整数，slug/display_name/description/content_path 为非空字符串；tags/platforms 为字符串数组；可选说明、网址、日期、许可和跟踪结果允许 null（具体必填规则按操作区分）；enabled 为布尔；source_tracking 可为 null。`source_tracking.path` 为 `"."` 时表示仓库根目录，根目录必须直接包含 `SKILL.md`；其他值必须是安全的 POSIX 子目录路径。时间戳 synced_at 使用带时区 ISO 8601，日期字段 YYYY-MM-DD。example 的空许可和 disabled 表示尚未满足自动开源发布前提，不能直接当有效发布 fixture。图库记录 `updated_at` 表示站内记录或内容最近实质变化日，不因无变化检查刷新。
 
 ### 9.2 派生静态契约
 

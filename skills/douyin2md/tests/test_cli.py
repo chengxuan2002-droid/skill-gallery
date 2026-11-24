@@ -67,6 +67,28 @@ class CliTest(unittest.TestCase):
         self.assertIn("--no-timestamps", args)
         self.assertNotIn("--no-frontmatter", args)
 
+    def test_pipeline_args_forward_annotations_and_single_file(self):
+        from douyin2md.cli import _pipeline_args
+        from douyin2md.config import DEFAULTS
+        ns = build_parser().parse_args(
+            ["url", "https://example.invalid/x", "--annotations", "./ann.json", "--single-file"])
+        args = _pipeline_args(ns, dict(DEFAULTS))
+        self.assertIn("--annotations", args)
+        self.assertIn("./ann.json", args)
+        self.assertIn("--single-file", args)
+
+    def test_to_md_forwards_bundle_flags(self):
+        from douyin2md.cli import cmd_tomd
+        ns = build_parser().parse_args(
+            ["to-md", "--meta", "m.json", "--annotations", "a.json", "--single-file"])
+        with mock.patch("douyin2md.cli._exec", return_value=0) as ex:
+            cmd_tomd(ns, {"output_dir": "./notes"})
+        argv = ex.call_args[0][0]
+        self.assertEqual(argv[0], "dy_tomd.py")
+        self.assertIn("--annotations", argv)
+        self.assertIn("a.json", argv)
+        self.assertIn("--single-file", argv)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "douyin2md"
-version = "2.0.0"
-description = "Agent Skill: 抖音视频与本地音视频转带时间戳的 Markdown 文稿"
+version = "2.1.0"
+description = "Agent Skill: 抖音视频与本地音视频转带时间戳的逐字稿与要点总结（两个 Markdown）"
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }

@@ -259,6 +259,7 @@ npm run preview
 - `ref_policy` 支持 `branch`、`release`、`pinned`；`pinned` 不自动前移，`release` 取最新非草稿、
   非预发布 Release。
 - 单文件来源为 `skills/<slug>.md`；目录来源为 `skills/<slug>/SKILL.md` 及附件。
+- `path` 为 `"."` 表示仓库根目录，根目录必须直接包含 `SKILL.md`；其他值为 POSIX 子目录路径。
 - 成功替换只保留一个当前版本，上游删除的附件会从详情、索引和 ZIP 中移除。
 - 许可缺失/变化会阻断；目录来源优先使用子树许可，子树没有时回退仓库根 `LICENSE/NOTICE`。
   当前内容偏离 `last_synced_digest` 或远端基线前进会 conflict；失败保留当前版。
@@ -290,7 +291,7 @@ node scripts/sync-skills.js --slug example --apply --push --report sync-report.j
      `declared_version`。
 2. 在 catalog 中加入上面的 `source_tracking` 模板：
    - `repository` 必须是 `owner/repository`；
-   - `path` 是上游 POSIX 相对路径；
+   - `path` 是上游 POSIX 相对路径；Skill 位于仓库根时使用 `"."`；
    - `ref_policy` 使用 `branch`、`release` 或 `pinned`；
    - 首次配置保持 `last_synced_*` 为 `null`，由后续 apply 自动写入。
 3. 让本地内容与上游一致：

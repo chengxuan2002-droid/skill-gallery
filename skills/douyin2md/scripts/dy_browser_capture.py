@@ -6,6 +6,7 @@
   python3 dy_browser_capture.py <视频长链或短链> [-o 输出目录] [--name 文件前缀]
   python3 dy_browser_capture.py https://www.douyin.com/video/7653031071289773355 \
       -o /path/to/.artifacts_adv --name adv
+  python3 dy_browser_capture.py <长链> --no-download   # 只保存 detail.json
 
 说明:
   - 传短链会自动解析出 aweme_id 并拼成长链（解析需绕过本机 MITM 代理：env -u http_proxy ...）
@@ -15,7 +16,7 @@
   <out>/<aweme_id>.detail.json   原始 detail JSON（含 desc、video、subtitle 等）
   <out>/<name>.mp4               视频文件
 """
-import os, sys, re, json, argparse, subprocess, shutil, importlib
+import os, sys, re, json, argparse, subprocess, shutil, importlib, tempfile
 from pathlib import Path
 
 REQUIRED = ("playwright",)          # 本脚本硬依赖
@@ -153,6 +154,12 @@ def main():
     ap.add_argument("-o", "--out", default=str(Path.home() / "Downloads" / "dy_capture"))
     ap.add_argument("--name", default=None, help="输出 mp4 文件名前缀，默认用 aweme_id")
     ap.add_argument("--cookies", default=str(MERGED))
+    ap.add_argument("--no-download", action="store_true",
+                    help="只拦截并保存 detail.json，不下载 mp4（供 --no-audio 复用）")
+    ap.add_argument("--fresh", action="store_true",
+                    help="使用全新临时 Chrome 会话且不预置 cookie（游客态，最不易触发验证码中间页）")
+    ap.add_argument("--profile-dir", default=None,
+                    help="覆盖默认 Chrome 持久化 profile 目录")
     args = ap.parse_args()
     ensure_interpreter()
 
@@ -162,23 +169,33 @@ def main():
     print(f"目标: {URL}")
 
     from playwright.sync_api import sync_playwright
-    cookies = load_netscape(args.cookies)
-    print(f"加载 {len(cookies)} 条 cookie")
+    cookies = [] if args.fresh else load_netscape(args.cookies)
+    print(f"加载 {len(cookies)} 条 cookie" + ("（--fresh 游客态）" if args.fresh else ""))
+
+    tmp_profile = None
+    if args.fresh:
+        tmp_profile = tempfile.mkdtemp(prefix="dy2md-fresh-")
+        profile_dir = tmp_profile
+    else:
+        profile_dir = args.profile_dir or str(Path.home() / ".douyin2md" / "cap-profile")
+    Path(profile_dir).mkdir(parents=True, exist_ok=True)
 
     captured = {"detail": None, "play_url": None}
+    ok = False
     with sync_playwright() as p:
         ctx = p.chromium.launch_persistent_context(
-            user_data_dir=str(Path.home() / ".douyin2md" / "cap-profile"),
+            user_data_dir=str(profile_dir),
             headless=True, channel="chrome",
             args=["--no-sandbox", "--disable-blink-features=AutomationControlled"],
             user_agent=UA,
             viewport={"width": 1440, "height": 900}, locale="zh-CN",
         )
         ctx.add_init_script("Object.defineProperty(navigator,'webdriver',{get:()=>undefined})")
-        try:
-            ctx.add_cookies(cookies)
-        except Exception as e:
-            print("add_cookies 警告:", e)
+        if cookies:
+            try:
+                ctx.add_cookies(cookies)
+            except Exception as e:
+                print("add_cookies 警告:", e)
 
         def on_response(resp):
             u = resp.url
@@ -195,7 +212,11 @@ def main():
         page = ctx.pages[0] if ctx.pages else ctx.new_page()
         page.goto(URL, wait_until="domcontentloaded", timeout=60000)
         page.wait_for_timeout(6000)
-        print(f"  页面标题: {page.title()[:60]!r}")
+        title = page.title()
+        print(f"  页面标题: {title[:60]!r}")
+        if ("验证码" in title or "中间页" in title) and not captured["detail"]:
+            print("  [risk] 命中验证码中间页：当前会话已被风控标记，"
+                  "建议改用 --fresh（全新游客会话）")
         for _ in range(2):
             try:
                 page.click("video", timeout=5000)
@@ -203,6 +224,7 @@ def main():
                 pass
             page.wait_for_timeout(5000)
 
+        ok = bool(captured["detail"])
         if captured["detail"]:
             aweme = captured["detail"].get("aweme_detail") or captured["detail"].get("awemeDetail") or {}
             aweme_id = aweme.get("aweme_id", "unknown")
@@ -226,7 +248,9 @@ def main():
 
         ctx.close()
 
-    if captured["play_url"]:
+    if args.no_download:
+        print("  --no-download: 已跳过视频下载（detail.json 仍已保存）")
+    elif captured["play_url"]:
         mp4 = OUT / f"{name}.mp4"
         print("下载视频中 ...")
         cmd = [
@@ -242,7 +266,12 @@ def main():
     else:
         print("  无 play_url，跳过下载")
 
-    return 0
+    if tmp_profile:
+        shutil.rmtree(tmp_profile, ignore_errors=True)
+    if not ok:
+        print("  [risk] 未取得 aweme/detail（常见于验证码中间页）；"
+              "可加 --fresh 用全新游客会话重试")
+    return 0 if ok else 3
 
 
 if __name__ == "__main__":

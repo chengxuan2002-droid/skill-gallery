@@ -1,0 +1,55 @@
+{
+  "_comment": "标注 JSON 模板：agent 依据逐字稿填写后，用 `to-md --annotations <本文件>` 重新渲染两个交付文件。脚本只渲染，不补写内容；未知键会被忽略。at 用 mm:ss 或 hh:mm:ss。",
+  "corrections": [
+    {
+      "original": "桑德voice",
+      "corrected": "SenseVoice",
+      "evidence": "官方仓库 README 拼写（仅在用外部资料定案时填写）"
+    }
+  ],
+  "summary": {
+    "one_line": "一句话概括（可选）",
+    "topic": [
+      {
+        "label": "核心话题",
+        "text": "核心话题是什么",
+        "at": "00:00"
+      },
+      {
+        "label": "核心观点",
+        "text": "传达了哪些核心观点",
+        "at": "00:12"
+      }
+    ],
+    "methods": [
+      {
+        "name": "方法名（关键技术 / 实现思路 / 论证方式）",
+        "at": "00:40",
+        "points": [
+          {
+            "text": "一条要点只讲一件事，压缩成判断句",
+            "at": "00:52"
+          }
+        ]
+      }
+    ]
+  },
+  "reliability": {
+    "conclusions": [
+      {
+        "text": "关键结论 → 对应时间节点",
+        "at": "00:52"
+      }
+    ],
+    "notes": [
+      {
+        "kind": "需澄清",
+        "text": "同音误识、口误、平台缺失信息等需要说明的地方",
+        "at": "00:52"
+      }
+    ],
+    "external_sources": [
+      "逐字稿之外的核对来源（仅限确认专名拼写）"
+    ]
+  }
+}
