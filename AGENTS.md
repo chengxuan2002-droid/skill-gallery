@@ -159,10 +159,12 @@ MIME/缓存基础头已补验（run `43588719771`、`43587421323`、`43588024409
 逐字节一致（见 `specs/005-skill-cli/validation/us5-real-gh.md`）。schedule 已连续观察；2026-11-23
 run `45087926651`（08:17 CST）sync success、build/deploy skipped。生产 `sepia` 已配置
 `source_tracking`（`Nanako0129/sepia`、`skills/sepia`、branch `main`），并通过手动 run
-`45160746326` 建立首次基线（sync 提交 `25123a4...`，revision/digest/license 已写入）；其余 6 项仍为
-`null`。真实 source-sync
+`45160746326` 建立首次基线（sync 提交 `25123a4...`，revision/digest/license 已写入）。2026-11-24
+生产 `douyin2md` 已使用仓库根来源（`path: "."`、branch `main`），更新到上游 2.1.0 并在手动 run
+`45345462657` 建立基线（sync 提交 `8fb8d41...`，revision `802b345...`、digest `3105a7c...`、
+license `LICENSE`）；其余 5 项仍为 `null`。真实 source-sync
 429、截断/子模块/符号链接、Safari/移动实机、CDN/强刷、US-004 独立维护者从零复跑/生产回滚仍未运行；
-下一窗口为 2026-11-24 03:17。
+下一窗口为 2026-11-25 03:17。
 Demo-002 接受 POC-003 受控证据；
 证据与补验方式见 `specs/007-overall-acceptance/validation/` 和 `residual-gaps.md`。恢复入口保持受控 `git revert`/
 restore 提交并重新构建发布，不手工改 `dist/` 或直接覆盖线上文件。

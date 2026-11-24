@@ -37,15 +37,16 @@
 | 生产延迟 schedule | `43533439066` | sync success；build/deploy skipped；08:19 CST | 同上 |
 | 生产延迟 schedule | `43650813672` | sync success；build/deploy skipped；2026-11-15 06:58 CST | 同上；`residual-gaps.md` |
 | sepia source_tracking 首次基线 | run `45160746326`（2026-11-23） | sync/build/deploy success；同步提交 `25123a4...`；revision/digest/license 已写入 | `specs/006-source-auto-update/validation/sepia-source-config.md` |
+| douyin2md source_tracking 首次基线 | run `45345462657`（2026-11-24） | 仓库根来源（`path: "."`）；上游 2.1.0（`802b345...`，47 个文件）；sync/build/deploy success；同步提交 `8fb8d41...`；revision/digest/license 已写入 | `specs/006-source-auto-update/validation/douyin2md-source-config.md` |
 
 ## 3. 测试与安全检查入口
 
 | 检查 | 入口 | 最近结果 |
 |---|---|---|
-| 单元/集成测试 | `npm test`（`tests/unit/*.test.js`、`tests/integration/*.test.js`、`tests/integration/publish/*.test.js`） | 287 项：285 通过、0 失败、2 跳过 |
+| 单元/集成测试 | `npm test`（`tests/unit/*.test.js`、`tests/integration/*.test.js`、`tests/integration/publish/*.test.js`） | 288 项：286 通过、0 失败、2 跳过 |
 | Lint/格式 | `npm run lint`、`npm run format:check` | 最近通过 |
-| 凭证/源码/依赖 | `npm run security` | secrets 424、code 56、deps 1，findings 0 |
-| 生产站点只读 | `https://chengxuan2002-droid.github.io/skill-gallery/`、`assets/search-index.json` | 首页 200、4 项、revision `faa0f345...` |
+| 凭证/源码/依赖 | `npm run security` | secrets 439、code 56、deps 1，findings 0 |
+| 生产站点只读 | `https://chengxuan2002-droid.github.io/skill-gallery/`、`assets/search-index.json` | 首页 200、7 项、revision `2acbbad...` |
 | 发布目标检查 | `node scripts/publish-check.js target/artifact` | 见 US-003 validation |
 
 ## 4. Demo-001 本次证据

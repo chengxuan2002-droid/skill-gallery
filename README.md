@@ -277,7 +277,9 @@ node scripts/sync-skills.js --slug example --apply --push --report sync-report.j
 `maintain.yml` 每日 03:17 Asia/Shanghai 运行同一 sync 入口；平台可能延迟或跳过，不承诺准点 SLA。
 手动 `sync=false` 只按当前提交重发，`sync=true` 执行来源检查。生产 `sepia` 已在手动 run
 45160746326 建立首次基线（revision `0eb11d6...`、digest `785e07...`、license `LICENSE`）；
-每日 schedule 会继续检查上游变化。其余 6 项仍为 `null`，不会自动更新。
+生产 `douyin2md` 已使用仓库根来源（`path: "."`）并在 run 45345462657 建立基线（sync 提交
+`8fb8d41...`、revision `802b345...`、digest `3105a7c...`）。每日 schedule 会继续检查上游变化；
+其余 5 项仍为 `null`，不会自动更新。
 
 ### 新增 GitHub 来源 Skill 的配置步骤
 
@@ -502,7 +504,8 @@ A：站点提供原件、目录 ZIP、原文复制和分享链接，不提供平
 **Q：自动更新现在就在生产运行吗？**
 
 A：生产调度已启用；`sepia` 已配置 `source_tracking` 并通过手动 run `45160746326` 建立首次基线，
-之后每日 schedule 检查上游变化；其余 6 项仍为 `null`。Demo-002 的自动更新证据来自受控 POC。
+`douyin2md` 已使用仓库根来源并在 run `45345462657` 建立基线，之后每日 schedule 检查上游变化；
+其余 5 项仍为 `null`。Demo-002 的自动更新证据来自受控 POC。
 
 **Q：Agent 可以帮我上传/更新吗？**
 
