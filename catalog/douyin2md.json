@@ -33,10 +33,13 @@
     "ref_policy": "branch",
     "ref": "main",
     "enabled": true,
-    "last_synced_revision": null,
-    "last_synced_digest": null,
-    "last_synced_license": null,
-    "synced_at": null
+    "last_synced_revision": "802b3456f0e0b155639e88ec9b83f1525dcc78c3",
+    "last_synced_digest": "3105a7c503cf1f5c643d3e4c4593f8b9c8081ef3e97e560e22b17848f7dcca0f",
+    "last_synced_license": {
+      "path": "LICENSE",
+      "sha256": "f6ef080eadb2ae3fbadd23e92c2e9f79e603f4b61122253ec892bfaaeb7e7382"
+    },
+    "synced_at": "2026-11-24T07:07:07.404Z"
   },
   "repository_url": "https://github.com/chengxuan2002-droid/douyin2md",
   "author": "chengxuan",
