@@ -22,16 +22,17 @@
 | 生产未授权写尝试 | `us3-security.md` 为 POC 匿名 401；生产未重跑 | 生产仓库/fork/受限身份的写拒绝未观察 | 在获授权范围用未认证请求尝试 dispatch/写，核对 401/403 与无副作用；禁止使用凭证 |
 | US-004 独立维护者从零复跑/生产回滚 | `specs/004-manual-skill-maintenance/validation/manual-final-review.md` 仍注明独立维护者从零复跑和生产回滚演练未运行；`AiProgrammingGuide.md` 当前状态同 | 真实后台 UI/独立操作和生产回滚未验证；不影响已完成的受控发布证据 | 由独立维护者按 README 从干净环境执行新增/替换/下架/恢复；生产回滚需单独授权 |
 | 2026-11-15 03:17 窗口（已观察） | run `43650813672`：schedule，实际 2026-11-15 06:58:11 CST（延迟约 3h41m），sync success、build/deploy skipped；当时生产 revision `faa0f345...`、`source_tracking` 仍为 `null` | 只证明延迟触发且无来源时不发布；不等于准点 SLA 或生产自动更新 | 继续观察 2026-11-24 03:17 及 sepia 配置后的运行 |
-| 生产真实来源自动更新（sepia 已建立基线） | `catalog/sepia.json` 已指向 `Nanako0129/sepia`、`skills/sepia`、`branch main`；手动 run `45160746326` 已建立基线（sync 提交 `25123a4...`，revision/digest/license 已写入）；其余 6 项仍为 `null` | 生产自动检查已启用并完成首次基线，尚未观察上游真实变更后的替换；其他 Skill 仍不会自动更新 | 观察下一次 schedule 与上游真实变更；保持许可/冲突失败保留 |
+| 生产真实来源自动更新（sepia/douyin2md 已建立基线） | `catalog/sepia.json` 已指向 `Nanako0129/sepia`、`skills/sepia`、`branch main`；手动 run `45160746326` 已建立基线（sync 提交 `25123a4...`，revision/digest/license 已写入）；`catalog/douyin2md.json` 已指向 `chengxuan2002-droid/douyin2md` 仓库根（`path: "."`）、`branch main`；手动 run `45345462657` 已建立基线（sync 提交 `8fb8d41...`，revision `802b345...`、digest `3105a7c...`、license `LICENSE`）；其余 5 项仍为 `null` | 生产自动检查已启用并完成两次首次基线，尚未观察上游真实变更后的替换；其他 Skill 仍不会自动更新 | 观察下一次 schedule 与上游真实变更；保持许可/冲突失败保留 |
 
 ## 2. 其他限制
 
 - Node 22.21.0/Windows 为本次本机环境；Node 26.3.0/Linux 与 macOS runner 以 CI/runner 为准。
 - 生产 environment 审批和部署失败注入已完成受控演练并恢复设置（见 `production-environment.md`）；
-  sepia 的 `source_tracking` 已完成首次基线（run `45160746326`）；后续上游变更仍按许可/冲突规则处理。
+  sepia 的 `source_tracking` 已完成首次基线（run `45160746326`）；douyin2md 已完成仓库根来源基线和
+  上游 2.1.0 更新（run `45345462657`）；后续上游变更仍按许可/冲突规则处理。
 - US-005 真实 `gh api`/`--wait` 和 POC 二进制 URL 对比已关闭（见
   `specs/005-skill-cli/validation/us5-real-gh.md`）；`release` 策略真实网络演练仍未运行。
 - 2026-11-15 03:17 窗口已观察到延迟 schedule run `43650813672`（06:58 CST，sync success、
-  build/deploy skipped）；下一窗口为 2026-11-24 03:17，仍不承诺准点或生产自动更新。
+  build/deploy skipped）；下一窗口为 2026-11-25 03:17，仍不承诺准点或生产自动更新。
 - US-004 的独立维护者从零复跑和生产回滚仍作为单独验证项保留。
 - 未运行项不进入通过计数；最终结论仍是“有条件/未完成”，不是整包通过。

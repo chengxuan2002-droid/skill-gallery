@@ -188,8 +188,9 @@ POC-002/POC-003 补验（run `43612050209`、`43612262185`，见 `us5-real-gh.md
 来源检查、单版本替换、许可/冲突、T020 失败重跑/恢复和同次发布已实现并完成受控 POC-003；
 生产 `main` 调度已于 2026-11-13 启用；2026-11-14 首次 03:17 窗口延迟至 08:19 CST，run
 43533439066（sync success，build/deploy skipped）；2026-11-15 窗口延迟至 06:58 CST，run 43650813672；
-2026-11-23 窗口延迟至 08:17 CST，run 45087926651；下一窗口为 2026-11-24 03:17。生产 `sepia` 已配置
-`source_tracking`，并通过手动 run 45160746326 建立基线；其余 6 项仍为 `null`。真实 source-sync 429、
+2026-11-23 窗口延迟至 08:17 CST，run 45087926651；下一窗口为 2026-11-25 03:17。生产 `sepia` 已配置
+`source_tracking`，并通过手动 run 45160746326 建立基线；生产 `douyin2md` 已使用仓库根来源并在
+run 45345462657 建立基线；其余 5 项仍为 `null`。真实 source-sync 429、
 真实截断/子模块/符号链接等仍未关闭，见 `residual-gaps.md`。
 
 输入：US-003；Q-002/003 已确认 GitHub 来源及 Git 历史保留，来源管理入口接 US-004；FR-008、FR-009、NFR-001、NFR-003、NFR-004、DEC-007、DEC-008，C-06/C-07，AC-009、AC-010、AC-011、AC-012。
@@ -206,7 +207,8 @@ POC-002/POC-003 补验（run `43612050209`、`43612262185`，见 `us5-real-gh.md
 [plan](../specs/007-overall-acceptance/plan.md)、[tasks](../specs/007-overall-acceptance/tasks.md)）；
 Demo-001～003 为受控通过，US-005 为通过，当前为有条件验收/交接。2026-11-15 03:17 窗口已观察到
 延迟 run 43650813672（06:58 CST，sync success、build/deploy skipped）；生产 `sepia` 已配置
-`source_tracking`，并通过手动 run 45160746326 建立基线；其余 6 项仍为 `null`。真实 source-sync 429、
+`source_tracking`，并通过手动 run 45160746326 建立基线；生产 `douyin2md` 已使用仓库根来源并在
+run 45345462657 建立基线；其余 5 项仍为 `null`。真实 source-sync 429、
 真实截断/子模块/符号链接、Safari/移动实机、CDN/强刷、其他生产来源和
 US-004 独立维护者/生产回滚等仍未关闭，见 `residual-gaps.md`；不得把未运行项计为通过。
 

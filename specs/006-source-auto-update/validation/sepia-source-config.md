@@ -62,6 +62,6 @@ gh workflow run maintain.yml --ref main -f sync=true
 
 ## 4. 后续
 
-- 下一次 `maintain.yml` schedule 会按基线检查上游变化；其余 6 个 catalog 仍为
+- 下一次 `maintain.yml` schedule 会按基线检查上游变化；当时其余 6 个 catalog 仍为
   `source_tracking: null`，不会自动更新。
 - 需要继续观察上游真实变更、许可变化、冲突/失败保留和实际替换发布。

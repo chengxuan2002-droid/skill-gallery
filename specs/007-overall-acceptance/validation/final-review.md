@@ -66,6 +66,7 @@
 | 生产 schedule run `43533439066` | 2026-11-14 延迟触发（08:19 CST），sync success，build/deploy skipped |
 | 生产 schedule run `43650813672` | 2026-11-15 06:58 CST（03:17 窗口延迟约 3h41m），sync success，build/deploy skipped；production revision `faa0f345...` |
 | sepia source_tracking | 只读检查 `unchanged`/`license present`；手动 run `45160746326` 建立基线，sync 提交 `25123a4...`；revision `0eb11d6...`、digest 与 license 已写入 |
+| douyin2md source_tracking | 仓库根来源（`path: "."`、branch main）；上游 2.1.0（commit `802b345...`，47 个文件）；手动 run `45345462657` 建立基线，sync 提交 `8fb8d41...`；revision `802b345...`、digest `3105a7c...`、license `LICENSE` 已写入 |
 | 干净副本命令 | preview/add/status/build/preview 服务/publish-check/revert 的实际退出码见 `handoff.md` |
 
 ## 4. 未运行项与影响
@@ -76,8 +77,8 @@
 - 真实 source-sync 429（已观察一次真实 403；429 未触发）、真实截断树/子模块/符号链接。
 - US-005 `release` 策略的真实网络演练（branch 导入已通过；release/pinned 主要由 US-006 POC 覆盖）。
 - Safari 实机、移动实机、读屏器语音；真实浏览器复制/下载交互。
-- 生产真实来源自动更新：`sepia` 已通过 run `45160746326` 建立首次基线，但尚未观察上游真实变更后的
-  自动替换；其余 6 项仍为 `null`。
+- 生产真实来源自动更新：`sepia` 已通过 run `45160746326`、`douyin2md` 已通过 run `45345462657`
+  建立首次基线，但尚未观察上游真实变更后的自动替换；其余 5 项仍为 `null`。
 - 物理 Mac、所有 macOS 硬件/文件系统变体（GitHub-hosted macOS runner 已通过）。
 - US-004 独立维护者从零复跑和生产回滚演练（`manual-final-review.md` 仍标注未运行）。
 
