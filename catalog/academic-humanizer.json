@@ -34,10 +34,13 @@
     "ref_policy": "branch",
     "ref": "main",
     "enabled": true,
-    "last_synced_revision": null,
-    "last_synced_digest": null,
-    "last_synced_license": null,
-    "synced_at": null
+    "last_synced_revision": "94b88b23703bed7df507acae7d6d5876209a0cdf",
+    "last_synced_digest": "a0e944f2bfe55973a8e0194dc0131c2068d578a762144d9e90c11caa80e5477f",
+    "last_synced_license": {
+      "path": "LICENSE",
+      "sha256": "95201f07cd5d4454f205a53a65337cbe00298a4d21a4e68a1fc516958e7cdaf9"
+    },
+    "synced_at": "2026-11-25T14:41:37.493Z"
   },
   "repository_url": "https://github.com/AIScientists-Dev/academic-humanizer",
   "author": "AIScientists-Dev",
