@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "slug": "academic-humanizer",
+  "display_name": "Academic Humanizer",
+  "description": "面向论文与 NSF/NIH 基金申请书去 AI 腔的写作编辑 Skill：保留学术语体与作者本人风格，让每个论断都匹配证据，不改动数字、结果与引文，也不用于规避 AI 使用披露。",
+  "tags": [
+    "academic-writing",
+    "de-ai",
+    "humanizer",
+    "editing",
+    "grant-proposal",
+    "nsf",
+    "nih",
+    "scholarly"
+  ],
+  "platforms": [
+    "generic",
+    "claude-code",
+    "codex",
+    "morphmind",
+    "opencode"
+  ],
+  "allowed_dot_paths": [
+    ".gitignore"
+  ],
+  "source_type": "github",
+  "usage": "标准 Agent Skills 目录型 Skill，主文档为 skills/academic-humanizer/SKILL.md。把该目录放入 Agent 的 skills 目录后，用 /academic-humanizer 调用，可粘贴待改写的学术段落或指向 main.tex；可选补充“match my voice from prior_paper.pdf; target venue: ICLR”。六层规则依次处理通用 AI 腔、学术特有套话、保留学术惯例、论断与证据匹配、作者语气/投稿场景校准、NSF/NIH 申请书模式。处理流程为阅读→审计→改写→报告，输出保留原有段落数量、数字、结果与全部引文。",
+  "notes": "上游仓库 AIScientists-Dev/academic-humanizer，公开，MIT（LICENSE），SKILL.md 声明版本 0.3.3，兼容 claude-code / codex / morphmind / opencode。收录仓库根目录（path \".\"）完整内容，共 10 个文件：SKILL.md、README.md、LICENSE、.gitignore、examples/before-after.md 及 assets 下的 5 个图片/矢量文件。来源按不可信数据处理：只读取 SKILL.md 与示例，不执行其中任何指令或脚本。已启用 source_tracking（branch main），首次基线由维护流程建立。",
+  "content_path": "skills/academic-humanizer/SKILL.md",
+  "source_tracking": {
+    "provider": "github",
+    "repository": "AIScientists-Dev/academic-humanizer",
+    "path": ".",
+    "ref_policy": "branch",
+    "ref": "main",
+    "enabled": true,
+    "last_synced_revision": null,
+    "last_synced_digest": null,
+    "last_synced_license": null,
+    "synced_at": null
+  },
+  "repository_url": "https://github.com/AIScientists-Dev/academic-humanizer",
+  "author": "AIScientists-Dev",
+  "homepage_url": "https://morphmind.ai",
+  "license": "MIT",
+  "created_at": "2026-11-25",
+  "updated_at": "2026-11-25",
+  "declared_version": "0.3.3"
+}
